@@ -231,7 +231,7 @@ class CheckInputHelps
         $data['goods_cate'] = RequestHelper::post('goods_cate', 0, 'intval');
         $data['platform'] = RequestHelper::post('platform');
         if ($goods_type == 0) {
-            if ($data['goods1_json'] ) {
+            if ($data['goods1_json']) {
                 foreach ($data['goods1_json'] as $k => $v) {
                     $info = json_decode($v, true);
                     $arr2 = [];
