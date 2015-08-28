@@ -49,6 +49,7 @@ class SuppliersController extends BaseController
      */
     public function actionIndex()
     {
+
         $supplier = new SupplierInfo();
         $supplier_good = new SupplierGood();
         $log_model = new Log();//日志
