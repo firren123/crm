@@ -28,7 +28,7 @@ $this->title = '管理商品出库订单明细';
             <th colspan="9">商品明细</th>
         </tr>
         <tr>
-            <th width="10%">行号</th>
+            <th width="10%">商品ID</th>
             <th>物品名称</th>
             <th>规格类型</th>
             <th>出库数量</th>
@@ -43,7 +43,7 @@ $this->title = '管理商品出库订单明细';
                 ?>
                 <tr class="order_list">
 
-                    <td width="10%"><?= $item['id'];?></td>
+                    <td width="10%"><?= $item['good_id'];?></td>
                     <td class=""><?= $item['good_name'];?></td>
                     <td><?= $item['attr_value'];?></td>
                     <td><?= $item['num'];?></td>
