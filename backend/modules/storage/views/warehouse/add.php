@@ -123,7 +123,7 @@ $form = ActiveForm::begin([
                 'json'
             );
         });
-        //验证库房编号是否存在
+        /*//验证库房编号是否存在
         $(".sn_num").keyup(function(){
             var sn = $.trim($(this).closest("div").find(".sn_num").val());
             if(sn != '') {
@@ -141,12 +141,13 @@ $form = ActiveForm::begin([
                     }
                 });
             }
-        })
+        })*/
 
         //点击提交
         $(".save").click(function(){
             var city = $("#warehouse-city_id option:selected").val();
             var dist = $("#warehouse-district_id option:selected").val();
+            var sn = $.trim($(".sn_num").val());
             if(city == '' || city == 0){
                 var d = dialog({
                     title: '提示',
@@ -158,7 +159,23 @@ $form = ActiveForm::begin([
                 d.showModal();
                 return false;
             }
-            $("#login-form").submit();
+
+
+            $.getJSON('/storage/warehouse/check', {'sn': sn}, function (data) {
+                if (data.status == 1) {
+                    var d = dialog({
+                        title: '提示',
+                        content: '库房编号已经存在！！！',
+                        okValue: '确定',
+                        ok: function () {
+                        }
+                    })
+                    d.showModal();
+                    return false;
+                }
+                $("#login-form").submit();
+            });
+
         })
     });
 
