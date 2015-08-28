@@ -49,6 +49,7 @@ class SuppliersController extends BaseController
      */
     public function actionIndex()
     {
+
         $supplier = new SupplierInfo();
         $supplier_good = new SupplierGood();
         $log_model = new Log();//日志
@@ -185,7 +186,7 @@ class SuppliersController extends BaseController
     public function warename()
     {
         $model = new Warehouse();
-        $where = ['>', 'id', 0];
+        $where = ['and', ['>', 'id', 0], ['=', 'status', 2]];
         $list = $model->getList($where, 'name,sn', "id desc");
         if (empty($list)) {
             $list = array();

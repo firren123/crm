@@ -163,7 +163,7 @@ class StorageOutController extends BaseController
     public function warename()
     {
         $model = new Warehouse();
-        $where = ['>', 'id', 0];
+        $where = ['and', ['>', 'id', 0], ['=', 'status', 2]];
         $list = $model->getList($where, 'name,sn', "id desc");
         if (empty($list)) {
             $list = array();
