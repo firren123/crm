@@ -132,10 +132,11 @@ class SuppliersController extends BaseController
                     if (!empty($info_data)) {
                         foreach ($info_data as $v) {
                             $v['supplier_id'] = $supplier_id;
+                            $v['storage_sn'] = RequestHelper::post('depots', '', 'trim');
                             $supplier_good->insertInfo($v);
 
                             //日志
-                            $goods = "供应商入库关联商品>商品ID:".$v['good_id'].",关联入库单ID:".$v['supplier_id'].",商品名称:".$v['good_name'].",商品单价:".$v['price'].",商品数量:".$v['num'];
+                            $goods = "供应商入库关联商品>商品ID:".$v['good_id'].",关联入库单ID:".$v['supplier_id'].",商品名称:".$v['good_name'].",商品单价:".$v['price'].",商品数量:".$v['num'].",库房编码:".$v['storage_sn'];
                             $log_model->recordLog($goods, 8);
                         }
                     }
