@@ -230,6 +230,9 @@ class CheckInputHelps
         $data['goods1_json'] = RequestHelper::post('goods1_json', array(), '');
         $data['goods_cate'] = RequestHelper::post('goods_cate', 0, 'intval');
         $data['platform'] = RequestHelper::post('platform');
+        $data['start_time'] = RequestHelper::post('start_time');
+        $data['end_time'] = RequestHelper::post('end_time');
+        $productModel = new Product();
         if ($goods_type == 0) {
             if ($data['goods1_json']) {
                 foreach ($data['goods1_json'] as $k => $v) {
@@ -252,15 +255,23 @@ class CheckInputHelps
             return array(200, $arr);
         } elseif ($goods_type == 1) {
             foreach ($shop as $kk => $vv) {
-                $arr2 = [];
-                $arr[$key]['shop_id'] = $vv['shop_id'];
-                $arr[$key]['activity_id'] = $insert_id;
-                $arr[$key]['cat_id'] = $data['goods_cate'];
-                $arr2['platform'] = implode(',', $data['platform']);
-                $arr[$key]['activity_temp'] = json_encode($arr2);
-                $key++;
+                $product_arr = $productModel->getList(['cate_first_id' => $data['goods_cate']],"id,origin_price,total_num");
+                foreach($product_arr as $kkk => $vvv){
+                    $arr2 = [];
+                    $arr[$key]['shop_id'] = $vv['shop_id'];
+                    $arr[$key]['activity_id'] = $insert_id;
+                    $arr[$key]['product_id'] = $vvv['id'];
+                    $arr2['start_time'] = $data['start_time'];
+                    $arr2['end_time'] = $data['end_time'];
+                    $arr2['price'] = $vvv['origin_price'];
+                    $arr2['day_confine_num'] = $vvv['total_num'];
+                    $arr2['platform'] = implode(',', $data['platform']);
+                    $arr[$key]['activity_temp'] = json_encode($arr2);
+                    $key++;
+                }
+
             }
-            return array(201, $arr);
+            return array(200, $arr);
 
         }
         return array(100, '添加商家商品库信息不正确');

@@ -270,11 +270,7 @@ class ActivityController extends BaseController
                     $ShopProductModel->updateInfo($k, array('shop_id' => $k['shop_id'], 'product_id' => $k['product_id']));
                 }
             }
-            if ($shopProduct[0] == 201) {
-                foreach ($shopProduct[1] as $k) {
-                    $ShopProductModel->updateInfo($k, array('shop_id' => $k['shop_id'], 'cat_id' => $k['cat_id']));
-                }
-            }
+
             //添加商品
             $data3 = CheckInputHelps::activityAddGoods($_POST, $insert_id);
             if ($data3[0] == 100) {
@@ -363,7 +359,7 @@ class ActivityController extends BaseController
                     $ActivityShopModel->insertInfo($k);
                 }
 
-                //添加商家库
+
                 $shopProduct = CheckInputHelps::activityEditShopProduct($_POST, $id, $data2[1]);
 
                 if ($shopProduct[0] == 100) {
@@ -372,8 +368,11 @@ class ActivityController extends BaseController
                 $ShopProductModel = new ShopProduct();
                 //删除商家库
                 $ShopProductModel->updateInfo(['activity_id' => 0, 'activity_temp' => ''], ['activity_id' => $id]);
-                foreach ($shopProduct[1] as $k) {
-                    $ShopProductModel->updateInfo($k, array('shop_id' => $k['shop_id'], 'product_id' => $k['product_id']));
+                //添加商家库
+                if ($shopProduct[0] == 200) {
+                    foreach ($shopProduct[1] as $k) {
+                        $ShopProductModel->updateInfo($k, array('shop_id' => $k['shop_id'], 'product_id' => $k['product_id']));
+                    }
                 }
 
                 //添加商品
