@@ -93,6 +93,7 @@ var dataremark = new Array();
      $("#sub").click(function(){
 
          var depots = $.trim($("#depots option:selected").val());
+         var depots = $.trim($("#depots option:selected").val());
          var explain = $.trim($("#explain").val());
 
          var d = dialog({title:"提示",
