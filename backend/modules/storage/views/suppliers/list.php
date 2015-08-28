@@ -64,6 +64,7 @@ $this->title = '管理采购入库订单';
             <th>入库单号</th>
             <!--<th>商品摘要</th>-->
             <th>供应商</th>
+            <th>仓库名称</th>
             <th>入库时间</th>
             <th>入库说明</th>
             <th>操作</th>
@@ -78,6 +79,7 @@ $this->title = '管理采购入库订单';
                     <td width="10%"><?= $item['id'];?></td>
                     <td><?= $item['code'];?></td>
                     <td><?= $item['supplier_name'];?></td>
+                    <td><?= $item['storage_name'];?></td>
                     <td><?=$item['create_time']?></td>
                     <td><?=$item['remark']?></td>
                     <td><a href="/storage/suppliers/view?id=<?=$item['id'];?>">查看</td>

@@ -69,7 +69,7 @@ $this->title = '管理出库订单';
         <tr>
             <th width="10%">行号</th>
             <th>出库单号</th>
-            <!--<th>商品摘要</th>-->
+            <th>仓库名称</th>
             <th>出库原因</th>
             <th>出库说明</th>
             <th>出库时间</th>
@@ -84,6 +84,7 @@ $this->title = '管理出库订单';
 
                     <td width="10%"><?= $item['id'];?></td>
                     <td><?= $item['code'];?></td>
+                    <td><?=$item['name'];?></td>
                     <td>
                         <?php
                         if($item['status'] == 1){

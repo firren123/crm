@@ -105,6 +105,7 @@ $form = ActiveForm::begin([
     <input type="hidden" id="info_num" name="info_num" value="">
     <input type="hidden" id="info_sum" name="info_sum" value="">
     <input type="hidden" id="info_bar_code" name="info_bar_code" value="">
+    <input type="hidden" id="info_storage_sn" name="info_storage_sn" value="">
     <input type="hidden" id="info_remark" name="info_remark" value="">
 </div>
     <table class="table table-bordered table-hover" style="margin-top: 10px">
