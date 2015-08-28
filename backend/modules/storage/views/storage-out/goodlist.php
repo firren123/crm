@@ -60,6 +60,7 @@ use yii\widgets\LinkPager;
                             </td>
                             <td class="sum" style="text-align:center;">0</td>
                             <td class="bar_code" style="display:none;text-align:center;"><?=$item['bar_code']?></td>
+                            <td class="storage_sn" style="display:none;text-align:center;"><?=$item['storage_sn']?></td>
                             <td style="text-align:center;">
                                 <textarea type="text" class="remark"></textarea>
                             </td>
@@ -132,6 +133,7 @@ use yii\widgets\LinkPager;
             var price = $.trim($(this).parent().closest("tr").find(".pric").val());
             var num = $.trim($(this).parent().closest("tr").find(".number").val());
             var id = $.trim($(this).parent().closest("tr").find(".goodid").text());
+            var sn = $.trim($(this).parent().closest("tr").find(".storage_sn").text());
 
             var num_reg = /^[1-9]\d*$/;
             if (isNaN(num)) {
@@ -158,7 +160,7 @@ use yii\widgets\LinkPager;
                 return false;
             }
 
-            $.getJSON('/storage/storage-out/stock', {'id': id}, function (data) {
+            $.getJSON('/storage/storage-out/stock', {'id': id,'sn':sn}, function (data) {
                 var stock = parseInt(data['info']);
                 var conter = "出库数量不能大于库存("+stock+"件)";
                 if((num-stock)>0){
@@ -188,6 +190,7 @@ use yii\widgets\LinkPager;
             var remark = $.trim($(this).parent().closest("tr").find(".remark").val());
             var sum = $.trim($(this).parent().closest("tr").find(".sum").text());
             var bar_code = $.trim($(this).parent().closest("tr").find(".bar_code").text());
+            var storage_sn = $.trim($(this).parent().closest("tr").find(".storage_sn").text());
 
             if(id == '')
             {
@@ -252,6 +255,7 @@ use yii\widgets\LinkPager;
             d.remark = remark;
             d.sum = sum;
             d.bar_code = bar_code;
+            d.storage_sn = storage_sn;
             suppliers.goods(d,this);
             $(this).parent().closest("tr").find(".tj").text("已添加");
 

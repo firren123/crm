@@ -58,6 +58,17 @@ $form = ActiveForm::begin([
         </td>
     </tr>
     <tr>
+        <th width="20%"><span class="red">*</span>选择仓库</th>
+        <td colspan="5" width="80%">
+            <select id="depots" name="depots">
+                <option value="">请选择仓库</option>
+                <?php foreach($ware as $item):?>
+                    <option value="<?=$item['sn']?>"><?=$item['name']?></option>
+                <?php endforeach;?>
+            </select>
+        </td>
+    </tr>
+    <tr>
         <th width="20%"><span class="red">*</span>出库说明</th>
         <td colspan="5" width="80%">
             <textarea id="explain" name="explain" placeholder='请填写入库说明'></textarea>
@@ -94,6 +105,7 @@ $form = ActiveForm::begin([
     <input type="hidden" id="info_num" name="info_num" value="">
     <input type="hidden" id="info_sum" name="info_sum" value="">
     <input type="hidden" id="info_bar_code" name="info_bar_code" value="">
+    <input type="hidden" id="info_storage_sn" name="info_storage_sn" value="">
     <input type="hidden" id="info_remark" name="info_remark" value="">
 </div>
     <table class="table table-bordered table-hover" style="margin-top: 10px">
