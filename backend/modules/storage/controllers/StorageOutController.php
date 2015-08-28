@@ -20,6 +20,7 @@ use backend\models\i500m\Log;
 use backend\models\i500m\StorageOut;
 use backend\models\i500m\StorageOutGood;
 use backend\models\i500m\SupplierGood;
+use backend\models\i500m\Warehouse;
 use common\helpers\RequestHelper;
 use backend\controllers\BaseController;
 use yii\data\Pagination;
@@ -123,7 +124,7 @@ class StorageOutController extends BaseController
             }
         }
 
-        return $this->render('index', ['data' => '']);
+        return $this->render('index', ['data' => '', 'ware' => $this->warename()]);
     }
 
     /**
@@ -151,6 +152,22 @@ class StorageOutController extends BaseController
         $res = array('k'=>$code);
         return $res['k'];
     }
+
+    /**
+     * 仓库id和name
+     * @return array
+     */
+    public function warename()
+    {
+        $model = new Warehouse();
+        $where = ['>', 'id', 0];
+        $list = $model->getList($where, 'name,sn', "id desc");
+        if (empty($list)) {
+            $list = array();
+        }
+        return $list;
+    }
+
     /**
      * 添加商品
      * @return array
