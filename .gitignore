@@ -9,4 +9,8 @@ phpunit.phar
 # runtime
 /backend/runtime
 /console/runtime
+
 backend/web/assets
+
+#osx
+.DS_Store
