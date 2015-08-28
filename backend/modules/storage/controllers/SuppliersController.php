@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 下载页面
+ * 供应商出库
  *
  * PHP Version 5
  *
@@ -293,7 +293,7 @@ class SuppliersController extends BaseController
         if (!empty($time_two)) {
             $where[] = ['<=', 'create_time', $time_two];
         }
-        $files = "id,supplier_name,code,create_time,remark";
+        $files = "id,supplier_name,code,create_time,remark,storage_name";
         $list = $supplier->getPageList($where, $files, 'id desc', $page, $page_size);
         $count = $supplier->getCount($where);
 
@@ -364,12 +364,16 @@ class SuppliersController extends BaseController
     {
         $page_size = 10;
         $page = RequestHelper::get('page', 1, 'intval');
+        $sn = RequestHelper::get('sn', '', 'trim');
         $sup_good = new SupplierGood();
         $stor_out_good = new StorageOutGood();
         $where = ['!=', 'good_id', 0];
-        $sup_list = $sup_good->getPage($where, 'id,sum(num) as total,good_name,good_id,bar_code,attr_value', 'good_id', 'id desc', $page, $page_size);
+        if (!empty($sn)) {
+            $where = ['and', ['!=', 'good_id', 0], ['=', 'storage_sn', $sn]];
+        }
+        $sup_list = $sup_good->getPage($where, 'id,sum(num) as total,good_name,good_id,bar_code,attr_value,storage_sn', 'good_id', 'id desc', $page, $page_size);
 
-        $stor_list = $stor_out_good->getAll($where, 'id,sum(num) as total,good_id', 'good_id', 'id desc');
+        $stor_list = $stor_out_good->getAll($where, 'id,sum(num) as total,good_id,storage_sn', 'good_id', 'id desc');
 
         if (empty($sup_list)) {
             $sup_list = array();
@@ -395,7 +399,9 @@ class SuppliersController extends BaseController
             'count' => $count,
             'pages'=> $pages,
             'page_count' => $page_count,
-            'data'=>$list
+            'data'=>$list,
+            'sn'=>$sn,
+            'ware' => $this->warename()
         );
         return $this->render('storage', $data);
     }
