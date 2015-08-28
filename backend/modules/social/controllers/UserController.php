@@ -24,6 +24,7 @@ use backend\models\i500m\Province;
 use backend\models\social\Post;
 use backend\models\social\User;
 use backend\models\social\UserInfo;
+use common\helpers\CurlHelper;
 use common\helpers\FastDFSHelper;
 use common\helpers\RequestHelper;
 use yii\data\Pagination;
@@ -154,6 +155,8 @@ class UserController extends BaseController
                 if ($result==true) {
                     $user_result = $user_model->insertInfo($data);
                     if ($user_result) {
+                        $url = "/user/login/register?username=".$data['mobile'];
+                        CurlHelper::get($url, 'server');
                         $data['create_time'] = date("Y-m-d H:i:s");
                         return $this->redirect("/social/user");
                     }
