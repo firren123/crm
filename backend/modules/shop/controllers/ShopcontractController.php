@@ -65,6 +65,12 @@ class ShopcontractController extends BaseController
         6 =>'每月1次',
         7 =>'每月2次'
     ];
+    public $business_scope_data = [
+        1 =>'日用百货',
+        2 =>'工艺美术品',
+        3 =>'文教用品',
+        4 =>'副食品',
+    ];
     /**
      * 简介：商家合同列表
      * @author  weitonghe@iyangpin.com
@@ -260,6 +266,7 @@ class ShopcontractController extends BaseController
         $ShopManage_model_result = $ShopManage_model->insertOneData($ShopManageMsg);  //将经营信息插入到经营信息表里
         if ($ShopManage_model_result) {
             $this->_addOa($ShopContractMsg, $ShopManageMsg);
+            exit('success');
             return $this->success('商家合同添加操作成功！', 'index');
         } else {
             return $this->error('商家合同添加操作失败！', 'add');
@@ -471,8 +478,16 @@ class ShopcontractController extends BaseController
         $info['data_68'] = CommonHelper::utf8ToGbk($data_info['contacts']);  //测试联系人
         $info['data_67'] = CommonHelper::utf8ToGbk($data_info['contacts_umber']);  //测试联系电话
         $info['data_66'] = CommonHelper::utf8ToGbk($ShopManageMsg['business_name']);  //测试经营名称
-        $info['data_65'] = CommonHelper::utf8ToGbk($ShopManageMsg['business_name']);  //测试经营范围
-        $info['data_64'] = CommonHelper::utf8ToGbk($ShopManageMsg['business_name']);  //测试实际经营范围  待定字段
+        $info['data_65'] = CommonHelper::utf8ToGbk(implode(',',$this->business_scope_data));  //测试经营范围
+        $scope = '';
+        foreach ($this->business_scope_data as $k => $v){
+            $pos = strpos($ShopManageMsg['business_scope'],"$k");
+            if($pos === false){
+            }else{
+                $scope .= $v .',';
+            }
+        }
+        $info['data_64'] = CommonHelper::utf8ToGbk($scope);  //测试实际经营范围  待定字段
         $info['data_63'] = CommonHelper::utf8ToGbk($ShopManageMsg['business_address']); //测试经营地址
         $info['data_59'] = CommonHelper::utf8ToGbk($data_info['common_contacts_name']);  //测试联系人
         $info['data_60'] = CommonHelper::utf8ToGbk($data_info['common_contacts_job']);  //测试职务
@@ -483,7 +498,9 @@ class ShopcontractController extends BaseController
         $info['data_55'] = CommonHelper::utf8ToGbk($data_info['community_name']); //测试所在社区名称
         $info['data_53'] = CommonHelper::utf8ToGbk($this->account_type_data[$data_info['account_type']]);   //测试账户类型
         $info['data_52'] = CommonHelper::utf8ToGbk($data_info['bank_name']);  //测试开户银行
-        $info['data_51'] = CommonHelper::utf8ToGbk($data_info['bank_city']);  //测试所在城市
+        $cityModel = new City();
+        $city = $cityModel->getInfo(['id'=>$data_info['bank_city']]);
+        $info['data_51'] = CommonHelper::utf8ToGbk($city['name']);  //测试所在城市
         $info['data_50'] = CommonHelper::utf8ToGbk($data_info['bank_branch']);  //测试开户支行
         $info['data_49'] = CommonHelper::utf8ToGbk($data_info['bank_number']);  //测试银行卡号
         $info['data_48'] = CommonHelper::utf8ToGbk($data_info['bankcard_username']);  //测试开户名称
@@ -491,6 +508,7 @@ class ShopcontractController extends BaseController
         $info['data_42'] = CommonHelper::utf8ToGbk($data_info['service_charge']==0?'固定服务费用':'服务佣金');  //测试服务费用
         $info['data_44'] = CommonHelper::utf8ToGbk($data_info['start_time']);  //2015-08-10开始时间
         $info['data_45'] = CommonHelper::utf8ToGbk($data_info['end_time']); //2015-08-14结束时间
+        $info['data_93'] = CommonHelper::utf8ToGbk($ShopManageMsg['contract_id']);  // //2015-08-14结束时间
         $businessModel = new Business();
         $business = $businessModel->getInfo(['id'=>$data_info['counterman']]);
         $info['data_46'] = CommonHelper::utf8ToGbk($business['name']); //测试业务员
@@ -507,10 +525,41 @@ class ShopcontractController extends BaseController
         $data['ARCHIVE'] = 0;       //是否归档(0-否,1-是)
         $data['work_level'] = 0;    //工作等级 0-普通 1-重要 2-紧急
 
+        //flow_run_prcs
+        $data2 = [];
+        $data2['RUN_ID'] = $run_id;
+        $data2['PRCS_ID'] = '1';  //流程实例步骤ID
+        $data2['USER_ID'] = 'BJ1013';  //用户ID
+        $data2['PRCS_TIME'] = $new_time; //工作接收时间
+        $data2['DELIVER_TIME'] = '0000-00-00 00:00:00'; //工作转交/办结时间
+        $data2['PRCS_FLAG'] = '2';   //步骤状态(1-未接收,2-办理中,3-转交下一步，下一步经办人无人接收,4-已办结,5-自由流程预设步骤,6-已挂起,)
+        $data2['FLOW_PRCS'] = '1';   //步骤ID[设计流程中的步骤号]
+        $data2['OP_FLAG'] = '1' ;     //是否主办(0-经办,1-主办)
+        $data2['TOP_FLAG'] = '0';   //主办人选项(0-指定主办人,1-先接收者主办,2-无主办人会签,)
+        $data2['PARENT'] = '0';    //上一步流程FLOW_PRCS
+        $data2['CHILD_RUN'] = '0';  //子流程的流程实例ID
+        $data2['TIME_OUT'] = '';  //待定
+        $data2['FREE_ITEM'] = '';  //步骤可写字段[仅自由流程且只有主办人生效]
+        $data2['TIME_OUT_TEMP'] = '';  //待定
+        $data2['OTHER_USER'] = '';   //工作委托用户ID串
+        $data2['TIME_OUT_FLAG'] = '0'; //是否超时(1-超时,其他-不超时)
+        $data2['CREATE_TIME'] = $new_time;   //工作创建时间
+        $data2['FROM_USER'] = '';    //工作移交用户ID
+        $data2['ACTIVE_TIME'] = '0000-00-00 00:00:00';   //取消挂起的时间
+        $data2['COMMENT'] = '';      //批注
+        $data2['PRCS_DEPT'] = '43';     //超时统计查询增加部门
+        $data2['PARENT_PRCS_ID'] = 0;  //上一步流程PRCS_ID
+        $data2['BACK_PRCS_ID'] = 0;    //返回步骤PRCS_ID标志
+        $data2['BACK_FLOW_PRCS'] = 0;  //返回步骤FLOW_PRCS标志
+        $data2['TIME_OUT_ATTEND'] = 0;  //是否排除工作时段按排班类型(0-否,1-是)
+        $data2['TIME_OUT_TYPE'] = '1';    //超时计算方法(0-本步骤接收后开始计时,1-上一步骤转交后开始计时 )
+        $data2['RUN_PRCS_NAME'] = '';
+        $data2['RUN_PRCS_ID'] = '';
         $transaction = $connection->beginTransaction();
         try {
             $connection->createCommand()->insert('flow_data_160', $info)->execute();
             $connection->createCommand()->insert('flow_run', $data)->execute();
+            $connection->createCommand()->insert('flow_run_prcs', $data2)->execute();
             $transaction->commit();
         } catch (Exception $e) {
             $transaction->rollBack();
