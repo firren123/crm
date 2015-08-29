@@ -1,11 +1,15 @@
 # phpstorm project files
-.idea
+.idea/
 # windows thumbnail cache
 Thumbs.db
 # composer vendor dir
-/vendor
+
 # phpunit itseif is not needed
 phpunit.phar
 # runtime
-/backend/runtime
-/console/runtime
+runtime/
+/*/web/assets/
+
+# mac
+.DS_Store
+
