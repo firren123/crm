@@ -77,6 +77,7 @@ class PostController extends BaseController
         $forumModel = new Forum();
         $forum_list = $forumModel->getList(1, "id,pid");
         $forum_ids = CommonHelper::getChildCateId($forum_list, $forum_id);
+        $forum_ids = array_merge($forum_ids,array($forum_id));
         if ($forum_id != 0) {
             $cond['forum_id'] = $forum_ids;
         }
