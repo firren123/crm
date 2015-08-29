@@ -25,13 +25,18 @@ use backend\models\i500m\Activity;
 use backend\models\i500m\ActivityGift;
 use backend\models\i500m\ActivityProduct;
 use backend\models\i500m\ActivityShop;
+use backend\models\i500m\City;
 use backend\models\i500m\CouponType;
+use backend\models\i500m\District;
 use backend\models\i500m\Province;
 use backend\models\i500m\Category;
 use backend\models\i500m\ManageType;
 use backend\models\i500m\PaySite;
 use backend\models\i500m\Product;
 use backend\models\i500m\Shop;
+use backend\models\shop\ShopActivity;
+use backend\models\shop\ShopActivityGift;
+use backend\models\shop\ShopActivityProduct;
 use backend\models\shop\ShopProduct;
 use common\helpers\CheckInputHelps;
 use common\helpers\CommonHelper;
@@ -703,4 +708,190 @@ class ActivityController extends BaseController
         $list = $CouponTypeModel->getList($where, "type_id,type_name", "type_id", $andWhere);
         return $list;
     }
+
+    /**
+     * 查看参与的所有商家
+     * @return array
+     */
+    public function actionActivityView()
+    {
+        $id = RequestHelper::get('id', 0, 'intval');
+        $page = RequestHelper::get('page', 1, 'intval');
+        $page_size = $this->size;
+        if (0 == $id) {
+            return $this->error("访问错误！！！", "/goods/activity/list");
+        }
+        $act_shop = new ActivityShop();
+        $province = new Province();
+        $city = new City();
+        $district = new District();
+        $shop = new Shop();
+        $type = new ManageType();
+
+        $where = ['=', 'activity_id', $id];
+        $list = $act_shop->getPageList($where, 'id,activity_id,shop_id', 'id desc', $page, $page_size);
+
+        if (empty($list)) {
+            $list = array();
+        }
+        $count = $act_shop->getCount($where);
+        $page_count = $count;
+        if ($count > 0 && $page_size > 0) {
+            $page_count = ceil($count / $page_size);
+        }
+        foreach ($list as $v) {
+            $shop_where = ['=', 'id', $v['shop_id']];
+            $shop_name = $shop->getOneRecord($shop_where, '', 'shop_name,manage_type,province,city,district');
+
+            if (!empty($shop_name)) {
+
+                $type_where = ['=', 'id', $shop_name['manage_type']];
+                $type_name = $type->getOneRecord($type_where, '', 'name');
+                if (!empty($type_name)) {
+                    $v['m_name'] = $type_name['name'];
+                }
+                $p_where = ['=', 'id', $shop_name['province']];
+                $p_name = $province->getOneRecord($p_where, '', 'name');
+                if (!empty($p_name)) {
+                    $v['p_name'] = $p_name['name'];
+                }
+
+                $c_where = ['=', 'id', $shop_name['city']];
+                $c_name = $city->getOneRecord($c_where, '', 'name');
+                if (!empty($c_name)) {
+                    $v['c_name'] = $c_name['name'];
+                }
+
+                $d_where = ['=', 'id', $shop_name['district']];
+                $d_name = $district->getOneRecord($d_where, '', 'name');
+                if (!empty($d_name)) {
+                    $v['d_name'] = $d_name['name'];
+                }
+                $v['shop_name'] = $shop_name['shop_name'];
+            }
+            $info[] = $v;
+        }
+
+        $pages = new Pagination(['totalCount' => $count, 'pageSize' => $page_size]);//分页
+
+        $data = array(
+            'count' => $count,
+            'pages'=> $pages,
+            'page_count' => $page_count,
+            'data' => $info,
+        );
+        return $this->render('activity-view', $data);
+    }
+
+    /**
+     * 商家活动列表
+     * @return array
+     */
+    public function actionActivityShop()
+    {
+        $page       = RequestHelper::get('page', 1, 'intval');
+        $id       = RequestHelper::get('id', 0, 'intval');
+        $name       = RequestHelper::get('name', '', 'trim');
+        $pageSize   = 10;
+        $date = date("Y-m-d H:i:s", time());
+        $activity = new ShopActivity();
+        $shop = new Shop();
+        $condition = ['>', 'id', 0];
+        $filed = "id,name,subtitle,type,shop_id,start_time,
+                  end_time,stop_remark,describe,images,status,meet_amount,sort";
+        $desc = "id desc";
+        $list = $activity->getPageList($condition, $filed, $desc, $page, $pageSize);
+        if (empty($list)) {
+            return $this->error('暂无活动！！！', '/activity/index');
+        }
+        $info = array();
+        foreach ($list as $v) {
+            $s_where = ['=', 'id', $v['shop_id']];
+            $shop_name = $shop->getOneRecord($s_where, '', 'shop_name');
+            if (empty($shop_name)) {
+                $shop_name['shop_name'] = "";
+            }
+            $v['shop_name'] = $shop_name['shop_name'];
+            if ($v['start_time'] > $date) {
+                $v['status_name'] = "未开始";
+            }
+            if ($v['start_time'] < $date && $v['end_time'] > $date) {
+                $v['status_name'] = "进行中";
+            }
+            if ($v['end_time'] < $date) {
+                $v['status_name'] = "已结束";
+            }
+            $info[] = $v;
+        }
+
+        $count       = $activity->getCount($condition);
+
+        $page_count = $count;
+        if ($count > 0 && $pageSize > 0) {
+            $page_count = ceil($count / $pageSize);
+        }
+        $pages = new Pagination(['totalCount' => $count, 'pageSize' => $pageSize]);
+
+        $data = array(
+            'id' => $id,
+            'name' => $name,
+            'data' => $info,
+            'count' => $count,
+            'pages'=> $pages,
+            'page_count' => $page_count
+        );
+        return $this->render('shopactivity', $data);
+    }
+
+    /**
+     * 商家活动详情
+     * @return array
+     */
+    public function actionLookShop()
+    {
+        $id = RequestHelper::get('id', 0, 'intval');
+        $shop_id = RequestHelper::get('shopid', 0, 'intval');
+        $pageSize   = 10;
+        $page       = RequestHelper::get('page', 1, 'intval');
+        $where = [];
+        if ($id != 0 && $shop_id != 0) {
+            $where = ['and', ['=', 'activity_id', $id], ['=', 'shop_id', $shop_id]];
+        }
+
+        $act_shop = new ShopActivityProduct();
+        $gift = new ShopActivityGift();
+        $activit = new ShopActivity();
+        $act_where = ['=', 'id', $id];
+        $act_type = $activit->getOneRecord($act_where, '', 'type');
+        $z_list = $gift->getList($where, '*', 'id desc');
+        //活动商品查询
+        $list = $act_shop->getPageList($where, '*', 'id desc', $page, $pageSize);
+
+        $count = $act_shop->getCount($where);
+        $page_count = $count;
+        if ($count > 0 && $pageSize > 0) {
+            $page_count = ceil($count / $pageSize);
+        }
+        $pages = new Pagination(['totalCount' => $count, 'pageSize' => $pageSize]);
+
+        if (empty($list)) {
+            $list = array();
+        }
+        if (empty($z_list)) {
+            $z_list = array();
+        }
+        $data = array(
+            'data' => $list,
+            'data_z' => $z_list,
+            'id' => $id,
+            'pages' => $pages,
+            'count' => $count,
+            'page_count' => $page_count,
+            'type' => $act_type['type']
+        );
+
+        return $this->render('shopview', $data);
+
+    }
 }
+

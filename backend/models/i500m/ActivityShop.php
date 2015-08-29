@@ -19,9 +19,57 @@
 
 namespace backend\models\i500m;
 
+/**
+ * ActivityShop
+ *
+ * @category CRM
+ * @package  ActivityShop
+ * @author   sunsong <sunsongsong@iyangpin.com>
+ * @license  http://www.i500m.com/ license
+ * @link     sunsong@iyangpin.com
+ */
+class ActivityShop extends I500Base
+{
 
-class ActivityShop extends I500Base{
-    public static function tableName(){
+    /**
+     * 参加活动表
+     *
+     * @return string
+     */
+    public static function tableName()
+    {
         return "{{%crm_activity_shop}}";
     }
+
+    /**
+     * 带分组的分页的sql方法
+     *
+     * @param array  $cond      条件
+     * @param string $field     字段
+     * @param string $group     分组
+     * @param string $order     排序
+     * @param int    $page      分页
+     * @param int    $size      分页
+     * @param string $and_where 第二条件
+     *
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function getPage($cond = array(), $field = '*', $group = '', $order = '', $page = 1, $size = 10, $and_where = '')
+    {
+        $list = [];
+        if ($cond || $and_where) {
+            $list = $this->find()
+                ->select($field)
+                ->where($cond)
+                ->andWhere($and_where)
+                ->groupBy($group)
+                ->orderBy($order)
+                ->offset(($page-1) * $size)
+                ->limit($size)
+                ->asArray()
+                ->all();
+        }
+        return $list;
+    }
+
 }

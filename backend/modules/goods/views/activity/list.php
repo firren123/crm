@@ -66,8 +66,10 @@ use yii\widgets\LinkPager;
                         <td><?= $v['status'];?></td>
                         <td><?= $v['province_name'];?></td>
                         <td>
-                            <a style="cursor:pointer" href="/goods/activity/view?id=<?= $v['id'];?>">查看</a> | <a style="cursor:pointer" href="/goods/activity/edit?id=<?= $v['id'];?>">编辑</a>
-                                | <a class="cargoState" style="cursor: pointer;" onclick="upstatusorder('<?= $v['id']; ?>')">停止</a>
+                            <a style="cursor:pointer" href="/goods/activity/view?id=<?= $v['id'];?>">查看</a> |
+                            <a style="cursor:pointer" href="/goods/activity/edit?id=<?= $v['id'];?>">编辑</a> |
+                            <a class="cargoState" style="cursor: pointer;" onclick="upstatusorder('<?= $v['id']; ?>')">停止</a> |
+                            <a href="/goods/activity/activity-view?id=<?= $v['id'];?>" style="cursor: pointer";>详情</a>
                         </td>
 
                     </tr>
