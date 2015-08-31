@@ -434,7 +434,7 @@ class ShopcontractController extends BaseController
                 return 1;
             }
         }
-
+        return 1;
     }
     /**
     * 简介：通过 ajax 获得 注册名称
@@ -454,7 +454,7 @@ class ShopcontractController extends BaseController
                 return 1;
             }
         }
-
+        return 1;
     }
 
     /**
