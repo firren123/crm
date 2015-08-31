@@ -42,7 +42,7 @@ class WarehouseController extends BaseController
         $name = RequestHelper::get('name');
 
         $branch = ['status'=>1];
-        if ($this->bc_id != \Yii::$app->params['COMPANY_ID']) {
+        if ($this->bc_id != 28) {
             $branch['id'] = $this->bc_id;
             $bc_id = $this->bc_id;
         }
