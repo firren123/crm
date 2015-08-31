@@ -17,7 +17,6 @@ use backend\controllers\BaseController;
 use backend\models\i500m\City;
 use backend\models\i500m\Province;
 use backend\models\i500m\Business;
-use backend\models\oa\FlowRun;
 use backend\models\shop\ShopContract;
 use backend\models\shop\ShopManage;
 use backend\models\shop\ShopBank;
@@ -320,7 +319,14 @@ class ShopcontractController extends BaseController
             $field = 'id,name';
             $Business_model_result = $Business_model->getInfo($cond, true, $field);
         }
-        return $this->render('detail', ['list'    =>$ShopContract_model_result, 'shop'    =>$ShopManage_model_result, 'province'=>$Province_model_result, 'city'    =>$City_model_result, 'business'=>$Business_model_result]);
+        $data_info = [
+            'list'    =>$ShopContract_model_result,
+            'shop'    =>$ShopManage_model_result,
+            'province'=>$Province_model_result,
+            'city'    =>$City_model_result,
+            'business'=>$Business_model_result
+        ];
+        return $this->render('detail', $data_info);
     }
     /**
      * 简介：商家合同图片下载
@@ -370,7 +376,8 @@ class ShopcontractController extends BaseController
     public function actionGetbcbankajax()
     {
         $ShopBcBank_model = new ShopBcBank();
-        $msg = RequestHelper::post('msg');//0 银行代码 1 城市号
+        $msg = RequestHelper::post('msg');//0 银行代码 1
+        $where = '';
         if (!empty($msg)) {
             //$where="bank_id='".$msg[0]."'";
             $where="bank_id=".$msg[0]." and city_id=".$msg[1];
@@ -457,7 +464,7 @@ class ShopcontractController extends BaseController
         $new_time = date('Y-m-d H:i:s');
         $info = [];
         $info['run_id'] = $run_id ; //'107' 自增
-        $info['run_name'] = CommonHelper::utf8ToGbk("商家合同审批(".$new_time.")") ;  //商家合同审批(2015-08-10 09:11:57) 按照格式填写
+        $info['run_name'] = CommonHelper::utf8ToGbk("商家合同审批(".$new_time.")");  //商家合同审批(2015-08-10 09:11:57) 按照格式填写
         $info['begin_user'] = 'BJ1013' ; //BJ1013 固定一人
         $info['begin_time'] = $new_time ;  //2015-08-10 09:11:57 当前时间
         $info['flow_auto_num'] = 0; //0
@@ -474,13 +481,13 @@ class ShopcontractController extends BaseController
         $info['data_68'] = CommonHelper::utf8ToGbk($data_info['contacts']);  //测试联系人
         $info['data_67'] = CommonHelper::utf8ToGbk($data_info['contacts_umber']);  //测试联系电话
         $info['data_66'] = CommonHelper::utf8ToGbk($ShopManageMsg['business_name']);  //测试经营名称
-        $info['data_65'] = CommonHelper::utf8ToGbk(implode(',',$this->business_scope_data));  //测试经营范围
+        $info['data_65'] = CommonHelper::utf8ToGbk(implode(',', $this->business_scope_data));  //测试经营范围
         $scope = '';
-        foreach ($this->business_scope_data as $k => $v){
-            $pos = strpos($ShopManageMsg['business_scope'],"$k");
-            if($pos === false){
-            }else{
-                $scope .= $v .',';
+        foreach ($this->business_scope_data as $k => $v) {
+            $pos = strpos($ShopManageMsg['business_scope'], "$k");
+            if ($pos === false) {
+            } else {
+                $scope .= $v . ',';
             }
         }
         $info['data_64'] = CommonHelper::utf8ToGbk($scope);  //测试实际经营范围  待定字段

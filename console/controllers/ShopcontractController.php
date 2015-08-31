@@ -17,6 +17,7 @@
 
 
 namespace console\controllers;
+
 use backend\models\shop\ShopContract;
 use yii\console\Controller;
 
@@ -30,7 +31,8 @@ use yii\console\Controller;
  * @license   http://www.i500m.com/ i500m license
  * @link      http://www.i500m.com/
  */
-class ShopcontractController extends Controller{
+class ShopcontractController extends Controller
+{
     /**
      * 简介：添加商家合同到OA系统中
      * @author  lichenjun@iyangpin.com。
@@ -39,20 +41,18 @@ class ShopcontractController extends Controller{
     public function actionAddOa()
     {
         $connection = \Yii::$app->db_oa;
-//        $ret = $connection->createCommand('select max(RUN_ID) as run_id from flow_run')->queryAll();
-        $time = date("Y-m-d H:i:s",strtotime("-1 hour"));
-
-        $sql ='select GROUP_CONCAT(run_id) as run_ids from flow_run_prcs where DELIVER_TIME>"$time" and FLOW_PRCS =4 and PRCS_FLAG = 3';
+        $time = date("Y-m-d H:i:s", strtotime("-1 hour"));
+        $sql = 'select GROUP_CONCAT(run_id) as run_ids from flow_run_prcs where DELIVER_TIME>"'.$time.'" and FLOW_PRCS =4 and PRCS_FLAG = 3';
         $ret = $connection->createCommand($sql)->queryAll();
-        if($ret){
+        if ($ret) {
             $run_ids = $ret[0]['run_ids'];
-            echo $sql ='select data_93 as crm_id from flow_data_160 where run_id in ('.$run_ids.')';
+            echo $sql = 'select data_93 as crm_id from flow_data_160 where run_id in (' . $run_ids . ')';
             $crm_ids = $connection->createCommand($sql)->queryAll();
-            foreach($crm_ids as $k => $v){
+            foreach ($crm_ids as $k => $v) {
                 $shopContractModel = new ShopContract();
-                $t = $shopContractModel->updateInfo(['status'=>1],['id'=>$v['crm_id']]);
-                if($t){
-                    echo $v['crm_id']."success\n";
+                $t = $shopContractModel->updateInfo(['status' => 1], ['id' => $v['crm_id']]);
+                if ($t) {
+                    echo $v['crm_id'] . "success\n";
                 }
             }
         }
