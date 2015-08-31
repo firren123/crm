@@ -41,7 +41,7 @@ class WebimController extends BaseController
     public function actionIndex()
     {
         $this->layout = '/empty';
-        $url = "/user/login/index?username=nini";
+        $url = "/user/login/index?username=admin";
         $info = CurlHelper::get($url);
         if ($info['code'] ==200) {
             return $this->render('index', $info['data']);

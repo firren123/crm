@@ -44,7 +44,7 @@
             var groupFlagMark = "group--";
             var groupQuering = false;
             var textSending = false;
-            var appkey = "iyangpin2015#i500";
+            var appkey = "iyangpin2015#i500social";
             var time = 0;
             var user = "<?= $user['username']; ?>";
             var accessToken= "<?= $access_token; ?>";
