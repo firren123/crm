@@ -42,9 +42,9 @@ return [
         ],
         'db_oa'    => [
             'class'=>'yii\db\Connection',
-            'dsn'=>'mysql:host=10.0.0.17:3336;dbname=td_oa',
-            'username'=>'toa',
-            'password'=>'toapass',
+            'dsn'=>'mysql:host=118.186.247.57;port=3336;dbname=td_oa',
+            'username'=>'oadev',
+            'password'=>'4fkok0ezZDurw',
             'charset'=>'utf8',
         ],
     ],
