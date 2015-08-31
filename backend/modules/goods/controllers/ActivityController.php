@@ -799,7 +799,7 @@ class ActivityController extends BaseController
         $shop = new Shop();
         $condition = ['>', 'id', 0];
         $filed = "id,name,subtitle,type,shop_id,start_time,
-                  end_time,stop_remark,describe,images,status,meet_amount,sort";
+                  end_time,stop_remark,describe,images,status,meet_amount,sort,is_verify";
         $desc = "id desc";
         $list = $activity->getPageList($condition, $filed, $desc, $page, $pageSize);
         if (empty($list)) {
@@ -886,6 +886,7 @@ class ActivityController extends BaseController
             'data' => $list,
             'data_z' => $z_list,
             'id' => $id,
+            'shop_id' => $shop_id,
             'pages' => $pages,
             'count' => $count,
             'page_count' => $page_count,
@@ -893,7 +894,41 @@ class ActivityController extends BaseController
         );
 
         return $this->render('shopview', $data);
+    }
 
+    /**
+     * 审核商家活动
+     * @return array
+     */
+    public function actionCheck()
+    {
+        $is_verify = RequestHelper::post('check', 0, 'intval');
+        $id = RequestHelper::post('act_id', 0, 'intval');
+        $shop_id = RequestHelper::post('shop_id', 0, 'intval');
+        $center = RequestHelper::post('center', '', 'trim');
+        $act_shop = new ShopActivity();
+
+        if ($is_verify == 1 && !empty($center)) {
+            $data['is_verify'] = $is_verify;
+            $data['reason'] = $center;
+            $where = ['and', ['=', 'id', $id], ['=', 'shop_id', $shop_id]];
+            $info = $act_shop->updateOneRecord($where, '', $data);
+            if ($info['result'] == 0) {
+                return $this->error("审核提交不正确！！！", "/goods/activity/activity-shop");
+            }
+            return $this->success("审核提交成功！！！", "/goods/activity/activity-shop");
+        }
+        if ($is_verify == 2) {
+            $data['is_verify'] = $is_verify;
+            $data['reason'] = "";
+            $where = ['and', ['=', 'id', $id], ['=', 'shop_id', $shop_id]];
+            $info = $act_shop->updateOneRecord($where, '', $data);
+            if ($info['result'] == 0) {
+                return $this->error("审核提交不正确！！！", "/goods/activity/activity-shop");
+            }
+            return $this->success("审核提交成功！！！", "/goods/activity/activity-shop");
+        }
+        return $this->error("提交数据不正确！！！", "/goods/activity/activity-shop");
     }
 }
 

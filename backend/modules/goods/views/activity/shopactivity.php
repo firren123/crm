@@ -27,6 +27,7 @@ use yii\widgets\LinkPager;
                 <th>结束日期</th>
                 <th>当前状态</th>
                 <th>商铺名称</th>
+                <th>审核状态</th>
                 <th>操作</th>
             </tr>
             <?php
@@ -48,10 +49,14 @@ use yii\widgets\LinkPager;
                         <td><?= $v['end_time'];?></td>
                         <td><?= $v['status_name'];?></td>
                         <td><?= $v['shop_name'];?></td>
+                        <td><?php if(isset($v['is_verify'])){
+                                switch($v['is_verify']){
+                                    case 0 : echo '未审核'; break;
+                                    case 1 : echo '审核不通过'; break;
+                                    case 2 : echo '审核通过'; break;
+                                }
+                            }?></td>
                         <td>
-                            <?php if(!empty($v['key'])){?>
-                            <a style="cursor:pointer" href="">审核</a> |
-                        <?php }?>
                             <a href="/goods/activity/look-shop?id=<?= $v['id'];?>&shopid=<?= $v['shop_id'];?>" style="cursor: pointer";>详情</a>
                         </td>
 
@@ -64,5 +69,6 @@ use yii\widgets\LinkPager;
         </div>
     </div>
 </div>
+
 
 
