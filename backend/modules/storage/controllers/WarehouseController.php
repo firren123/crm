@@ -1,14 +1,17 @@
 <?php
 /**
- * 新增库房
- * @category  crm
- * @package   Warehouse.php
- * @author    youyong <youyong@iyangpin.com>
- * @time      2015/5/26 11:25 
- * @copyright 灵韬致胜（北京）科技发展有限公司
- * @license   http://www.i500m.com
- * @link      youyong@iyangpin.com
- **/
+ * 供应商出库
+ *
+ * PHP Version 5
+ *
+ * @category  CRM
+ * @package   WarehouseController.php
+ * @author    sunsong <sunsongsong@iyangpin.com>
+ * @time      2015/8/20 9:15
+ * @copyright 2015 灵韬致胜（北京）科技发展有限公司
+ * @license   http://www.i500m.com license
+ * @link      sunsongsong@iyangpin.com
+ */
 namespace backend\modules\storage\controllers;
 
 use backend\controllers\BaseController;
@@ -21,7 +24,15 @@ use backend\models\i500m\District;
 use common\helpers\RequestHelper;
 use yii\data\Pagination;
 
-
+/**
+ * WarehouseController
+ *
+ * @category CRM
+ * @package  WarehouseController
+ * @author   sunsong <sunsongsong@iyangpin.com>
+ * @license  http://www.i500m.com/ license
+ * @link     sunsong@iyangpin.com
+ */
 class WarehouseController extends BaseController
 {
     /**
@@ -64,8 +75,8 @@ class WarehouseController extends BaseController
         //var_dump($where);exit;
         $p = RequestHelper::get('page', '1', 'intval');                //当前页
         $model = new Warehouse();
-        $list = $model->getPageList($where, '*', 'id desc', $p, $this->size,$and_where);
-        $count = $model->getCount($where,$and_where);
+        $list = $model->getPageList($where, '*', 'id desc', $p, $this->size, $and_where);
+        $count = $model->getCount($where, $and_where);
         //var_dump($list);exit;
         $res =array();
         $arr = array();
@@ -88,56 +99,48 @@ class WarehouseController extends BaseController
             $branch_m = new CrmBranch();
             //$where = "id=".$v['bc_id'];
             $where = array('id'=>$v['bc_id']);
-            $bc_name = $branch_m->getOneRecord($where,'',"name");
-            if(empty($bc_name)){
+            $bc_name = $branch_m->getOneRecord($where, '', "name");
+            if (empty($bc_name)) {
                 $arr['bc_name']='';
-            }else{
+            } else {
                 $arr['bc_name'] = $bc_name['name'];
             }
 
             $branch_m = new Province();
             //$where = "id=".$v['province_id'];
             $where = array('id'=>$v['province_id']);
-            $province = $branch_m->getOneRecord($where,'',"name");
-            if(empty($province)){
+            $province = $branch_m->getOneRecord($where, '', "name");
+            if (empty($province)) {
                 $arr['province_name']='';
-            }else{
+            } else {
                 $arr['province_name'] = $province['name'];
             }
 
             $branch_m = new City();
             //$where = "id=".$v['city_id'];
             $where = array('id'=>$v['city_id']);
-            $city = $branch_m->getInfo($where,"name");
-			if(empty($city)){
-                $arr['city_name']='';
-            }else{
+            $city = $branch_m->getInfo($where, "name");
+            if (empty($city)) {
+                $arr['city_name'] = '';
+            } else {
                 $arr['city_name'] = $city['name'];
             }
             
             $branch_m = new District();
             //$where = "id=".$v['district_id'];
             $where = array('id'=>$v['district_id']);
-            $district = $branch_m->getInfo($where,"name");
-			if(empty($district)){
+            $district = $branch_m->getInfo($where, "name");
+            if (empty($district)) {
                 $arr['district_name']='';
-            }else{
+            } else {
                 $arr['district_name'] = $district['name'];
             }
 
             $res[]=$arr;
         }
-        //var_dump($res);exit;
+
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->size]);
-        //var_dump($pages);exit;
-        return $this->render('list', [
-            'pages' => $pages,
-            'res' => $res,
-            'count' => $count,
-            'branch_arr'=>$branch_arr,
-            'name' => $name,
-            'bc_id' => $bc_id,
-        ]);
+        return $this->render('list', ['pages' => $pages, 'res' => $res, 'count' => $count, 'branch_arr'=>$branch_arr, 'name' => $name, 'bc_id' => $bc_id,]);
     }
 
     /**
@@ -155,16 +158,16 @@ class WarehouseController extends BaseController
         //获取分公司的ID和name
         $branch_m = new CrmBranch();
         $where['status'] = 1;
-        $list = $branch_m->getList($where,"id,name");
+        $list = $branch_m->getList($where, "id,name");
         $admin = new Admin();
-        $bc_id = $admin->getOneRecord(['id'=>$this->admin_id],'','bc_id');
+        $bc_id = $admin->getOneRecord(['id'=>$this->admin_id], '', 'bc_id');
         $branch_array = [];
-        foreach($list as $k =>$v){
+        foreach ($list as $k =>$v) {
             $branch_array[$v['id']] = $v['name'];
         }
-        if('28' == $bc_id['bc_id']){
-           $branch_arr = $branch_array;
-        }else{
+        if ('28' == $bc_id['bc_id']) {
+            $branch_arr = $branch_array;
+        } else {
             $branch_arr[$bc_id['bc_id']] = $branch_array[$bc_id['bc_id']];
         }
         //获取传参 array
@@ -175,11 +178,11 @@ class WarehouseController extends BaseController
             $cond = ['=', 'sn', $Warehouse['sn']];
             $info = $model->getOneRecord($cond, '', 'id');
             if (!empty($info)) {
-                return $this->error('库房编号已经存在！！！','/storage/warehouse/index');
+                return $this->error('库房编号已经存在！！！', '/storage/warehouse/index');
             }
             $result = $model->insertInfo($Warehouse);
             if ($result == true) {
-                return $this->success('添加成功','/storage/warehouse/index');
+                return $this->success('添加成功', '/storage/warehouse/index');
             }
         }
         return $this->render('add', ['model' => $model,'branch_arr'=>$branch_arr]);
@@ -188,14 +191,14 @@ class WarehouseController extends BaseController
     /**
      * 通过传过来的分公司$bc_id 获取省id name
      * 省id 查询省内所有的市id和市name
-     * Author youyong@iyangpin.com
-     *
+     * @return array
      */
-    public function actionProvinceCity(){
-        $bc_id = RequestHelper::get('bc_id',1,'intval');
+    public function actionProvinceCity()
+    {
+        $bc_id = RequestHelper::get('bc_id', 1, 'intval');
         $branch_m = new CrmBranch();
         $where = "id=".$bc_id;
-        $province = $branch_m->getList($where,"province_id");
+        $province = $branch_m->getList($where, "province_id");
         $pid = $province[0]['province_id'];
         //var_dump($pid);exit;
 
@@ -217,24 +220,23 @@ class WarehouseController extends BaseController
     }
 
     /**
-     * @purpose:查询出对应市级下面的所有县或者区
-     * @name: actionCity
+     * 查询出对应市级下面的所有县或者区
      * @return string
      */
-    public function actionDistrict(){
-        $id = RequestHelper::get('city_id',1,'intval');
+    public function actionDistrict()
+    {
+        $id = RequestHelper::get('city_id', 1, 'intval');
         $model = new District();
         $info = $model->district($id);
-        //print_r($info);exit;
         echo json_encode($info);
         return;
     }
 
-    /*
-   * 库房删除
-   *
-   * return int
-   */
+    /**
+     * 库房删除
+     *
+     * @return int
+     */
     public function actionDelete()
     {
         $code = 0;
@@ -259,40 +261,36 @@ class WarehouseController extends BaseController
     public function actionEdit()
     {
         //获取分公司的ID和name
-        $bList =array();
         $branch_m = new CrmBranch();
         $where['status'] = 1;
-        $bList = $branch_m->getList($where,"id,name");
-        //var_dump($bList);exit;
+        $bList = $branch_m->getList($where, "id,name");
 
         $id = RequestHelper::get('id');
         $model = new Warehouse();
         $cond = 'id=' . $id;
         $item = $model->getInfo($cond, true, '*');
-        //var_dump($item);exit;
 
         $province_model = new Province();
         $ProvinceWhere = $item['province_id'];
-        //var_dump($ProvinceWhere);exit;
+
         $pProvince = $province_model ->province_one($ProvinceWhere);
-        $pPro = array('id'=>$ProvinceWhere,'name'=>$pProvince['name']);
-        //var_dump($pPro);exit;
+        $pPro = array('id'=>$ProvinceWhere, 'name'=>$pProvince['name']);
+
 
         $city_model = new City();
         $CityWhere = $item['province_id'];
-        //var_dump($CityWhere);exit;
-        $pCity = $city_model ->city($CityWhere,"id,name");
-        //var_dump($pCity);exit;
+
+        $pCity = $city_model ->city($CityWhere, "id,name");
+
 
         $district_model = new District();
         $DistrictWhere = $item['city_id'];
-        //var_dump($DistrictWhere);exit;
-        $pDistrict = $district_model ->district($DistrictWhere,"id,name");
-        //var_dump($pDistrict);exit;
+
+        $pDistrict = $district_model ->district($DistrictWhere, "id,name");
+
 
         $model->attributes = $item;
         $Warehouse = RequestHelper::post('Warehouse');
-        //var_dump($Warehouse);exit;
         if (!empty($Warehouse)) {
             $model->attributes = $Warehouse;
             $model = new Warehouse();

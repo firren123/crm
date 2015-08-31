@@ -711,6 +711,7 @@ class ActivityController extends BaseController
 
     /**
      * 查看参与的所有商家
+     * @author sunsong<sunsongsong@iyangpin.com>
      * @return array
      */
     public function actionActivityView()
@@ -786,6 +787,7 @@ class ActivityController extends BaseController
 
     /**
      * 商家活动列表
+     * @author sunsong<sunsongsong@iyangpin.com>
      * @return array
      */
     public function actionActivityShop()
@@ -847,6 +849,7 @@ class ActivityController extends BaseController
 
     /**
      * 商家活动详情
+     * @author sunsong<sunsongsong@iyangpin.com>
      * @return array
      */
     public function actionLookShop()
@@ -898,6 +901,7 @@ class ActivityController extends BaseController
 
     /**
      * 审核商家活动
+     * @author sunsong<sunsongsong@iyangpin.com>
      * @return array
      */
     public function actionCheck()
