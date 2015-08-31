@@ -36,7 +36,7 @@ $this->title = '商家参与活动列表';
             <li>
                 <a href="/">首页</a>
             </li>
-            <li class="">活动列表</li>
+            <li class="">商家列表</li>
         </ul>
 </legends>
     <table class="table table-bordered table-hover">

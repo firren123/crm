@@ -49,7 +49,9 @@ use yii\widgets\LinkPager;
                         <td><?= $v['status_name'];?></td>
                         <td><?= $v['shop_name'];?></td>
                         <td>
+                            <?php if(!empty($v['key'])){?>
                             <a style="cursor:pointer" href="">审核</a> |
+                        <?php }?>
                             <a href="/goods/activity/look-shop?id=<?= $v['id'];?>&shopid=<?= $v['shop_id'];?>" style="cursor: pointer";>详情</a>
                         </td>
 
