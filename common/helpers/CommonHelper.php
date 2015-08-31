@@ -48,7 +48,6 @@ class CommonHelper extends BaseCommonHelps
 
     /**
      * 简介：
-     * @author  lichenjun@iyangpin.com。
      * @param int $length 长度
      * @return string
      */
@@ -71,7 +70,6 @@ class CommonHelper extends BaseCommonHelps
 
     /**
      * 简介：
-     * @author  lichenjun@iyangpin.com。
      * @param string $str 字符串
      * @param string $s   字符串
      * @return mixed

@@ -331,7 +331,7 @@ class ShopcontractController extends BaseController
     /**
      * 简介：商家合同图片下载
      * @author  weitonghe@iyangpin.com
-     * @return  Boolean
+     * @return  null
      */
     public function actionDownloadimg()
     {
@@ -348,6 +348,7 @@ class ShopcontractController extends BaseController
             header("Content-Disposition:  attachment;  filename= {$date}.jpg");
             $size = readfile($filename);
             header("Accept-Length: " .$size);
+            return;
         }
     }
 
@@ -564,7 +565,7 @@ class ShopcontractController extends BaseController
             $connection->createCommand()->insert('flow_run', $data)->execute();
             $connection->createCommand()->insert('flow_run_prcs', $data2)->execute();
             $transaction->commit();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $transaction->rollBack();
 
         }
