@@ -274,7 +274,7 @@ class ShopcontractController extends BaseController
     /**
      * 简介：商家合同详情
      * @author  weitonghe@iyangpin.com
-     * @return  Boolean
+     * @return  array
      */
     public function actionDetail()
     {
@@ -294,6 +294,7 @@ class ShopcontractController extends BaseController
         }
         unset($cond['id']);
         $ShopManage_model   = new ShopManage();         //经营信息表
+        $ShopManage_model_result = [];
         if (!empty($ShopContract_model_result) && !empty($ShopContract_model_result['id'])) {
             $cond['contract_id'] = $ShopContract_model_result['id'];
             $field = 'business_name,business_scope,business_address';   //经营名称 经营范围(1,2,3,4) 经营地址
@@ -302,18 +303,21 @@ class ShopcontractController extends BaseController
             unset($cond['contract_id']);
         }
         $Province_model     = new Province();           //省
+        $Province_model_result = [];
         if (!empty($ShopContract_model_result)) {
             $cond['id'] = $ShopContract_model_result['bank_province'];
             $field = 'name';
             $Province_model_result = $Province_model->getInfo($cond, true, $field);
         }
         $City_model         = new City();               //市
+        $City_model_result = [];
         if (!empty($ShopContract_model_result)) {
             $cond['id'] = $ShopContract_model_result['bank_city'];
             $field = 'name';
             $City_model_result = $City_model->getInfo($cond, true, $field);
         }
         $Business_model     = new Business();           //业务员
+        $Business_model_result = [];
         if (!empty($ShopContract_model_result)) {
             $cond['id'] = $ShopContract_model_result['counterman'];
             $field = 'id,name';
@@ -348,14 +352,14 @@ class ShopcontractController extends BaseController
             header("Content-Disposition:  attachment;  filename= {$date}.jpg");
             $size = readfile($filename);
             header("Accept-Length: " .$size);
-            return;
+            return null;
         }
     }
 
     /**
      * 简介：通过 ajax 获得 省份 对应的 city
      * @author  weitonghe@iyangpin.com
-     * @return  Boolean
+     * @return  void
      */
     public function actionGetcityajax()
     {
@@ -363,16 +367,16 @@ class ShopcontractController extends BaseController
         $Province_id = RequestHelper::post('province_id');
         $City_result = $City_model->city($Province_id);
         if (!empty($City_result)) {
-            echo json_encode($City_result);
+            echo json_encode($City_result);return;
         } else {
-            return 0;
+            return;
         }
     }
 
     /**
      * 简介：通过 ajax 获得 银行id和城市ID  对应的 支行信息
      * @author  weitonghe@iyangpin.com
-     * @return  Boolean
+     * @return  void
      */
     public function actionGetbcbankajax()
     {
@@ -385,16 +389,16 @@ class ShopcontractController extends BaseController
         }
         $BcBank_result = $ShopBcBank_model->getBcBank($where);
         if (!empty($BcBank_result)) {
-            echo json_encode($BcBank_result);
+            echo json_encode($BcBank_result);return;
         } else {
-            return 0;
+            return;
         }
     }
 
     /**
      * 简介：通过 ajax 获得 业务员ID 对应的 业务员姓名
      * @author  weitonghe@iyangpin.com
-     * @return  Boolean
+     * @return  void
      */
     public function actionGetcountermanidajax()
     {
@@ -406,16 +410,16 @@ class ShopcontractController extends BaseController
         $Business_result = $Business_model->getInfo($cond, true, $field);
         //$Business_result=$Business_model->find()->select('name')->where(['id' => $msg])->asArray()->one();
         if (!empty($Business_result)) {
-            echo json_encode($Business_result);
+            echo json_encode($Business_result);return;
         } else {
-            return 0;
+            return;
         }
     }
 
     /**
      * 简介：通过 ajax 获得 合同号
      * @author  weitonghe@iyangpin.com
-     * @return  Boolean
+     * @return  int
      */
     public function actionGethtnumberajax()
     {
@@ -435,7 +439,7 @@ class ShopcontractController extends BaseController
     /**
     * 简介：通过 ajax 获得 注册名称
     * @author  weitonghe@iyangpin.com
-    * @return  Boolean
+    * @return  int
     */
     public function actionGetzcmcajax()
     {
