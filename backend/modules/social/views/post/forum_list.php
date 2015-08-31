@@ -16,7 +16,7 @@
  */
 $this->title = "帖子板块管理";
 ?>
-<legends  style="fond-size:12px;">
+<legends style="fond-size:12px;">
     <legend>帖子板块管理</legend>
 </legends>
 <div class="tab-content">
@@ -24,47 +24,47 @@ $this->title = "帖子板块管理";
         [<a href="/social/post/forum-add?p_id=0">添加模块</a>]
         <table class="table table-bordered table-hover">
             <tbody>
-            <?php if(empty($list)) {
-            }else{
-                foreach ($list as $key =>$item):
+            <?php if (empty($list)) {
+            } else {
+                foreach ($list as $key => $item):
                     ?>
-                    <tr>
+                    <tr id="tr_<?= $item['id']; ?>">
                         <td style="text-align: left;">
-                            <?= $item['title'];?>(<?= $item['describe'];?>)　
-                            [<a href="/social/post/forum-add?p_id=<?= $item['id'];?> ">添加子模板</a>]　
-                            [<a href="/social/post/forum-edit?id=<?= $item['id'];?> ">编辑</a>]
-                            [<a href="/social/post/forum-view?f_id=<?= $item['id'];?>">查看板块</a>]
-                            [<a href="#" onclick="Delete(<?= $item['id']?>)">删除帖子</a>]
-                            [<a href="/social/post/index?f_id=<?= $item['id'];?>">查看帖子</a>]
+                            <?= $item['title']; ?>(<?= $item['describe']; ?>)　
+                            [<a href="/social/post/forum-add?p_id=<?= $item['id']; ?> ">添加子模板</a>]　
+                            [<a href="/social/post/forum-edit?id=<?= $item['id']; ?> ">编辑</a>]
+                            [<a href="/social/post/forum-view?f_id=<?= $item['id']; ?>">查看板块</a>]
+                            [<a href="#" onclick="Delete(<?= $item['id'] ?>)">删除帖子</a>]
+                            [<a href="/social/post/index?f_id=<?= $item['id']; ?>">查看帖子</a>]
                         </td>
                     </tr>
 
-                    <?php if(empty($list[$key][$item['id']])) {
-                }else{
+                    <?php if (empty($list[$key][$item['id']])) {
+                } else {
                     foreach ($list[$key][$item['id']] as $key1 => $item1):
                         ?>
-                        <tr id="tr_<?= $item1['id'];?>">
-                            <td style="text-align: left;" >　　
-                                |----<?= $item1['title'];?>(<?= $item1['describe'];?>)　
-                                [<a href="/social/post/forum-add?p_id=<?= $item1['id'];?>&act=1 ">添加子模板</a>]　
-                                [<a href="/social/post/forum-edit?id=<?= $item1['id'];?> ">编辑</a>]
-                                [<a href="/social/post/forum-view?f_id=<?= $item1['id'];?>">查看板块</a>]
-                                [<a href="#" onclick="Delete(<?= $item1['id']?>)">删除帖子</a>]
-                                [<a href="/social/post/index?f_id=<?= $item['id'];?>">查看帖子</a>]
+                        <tr id="tr_<?= $item1['id']; ?>">
+                            <td style="text-align: left;">　　
+                                |----<?= $item1['title']; ?>(<?= $item1['describe']; ?>)　
+                                [<a href="/social/post/forum-add?p_id=<?= $item1['id']; ?>&act=1 ">添加子模板</a>]　
+                                [<a href="/social/post/forum-edit?id=<?= $item1['id']; ?> ">编辑</a>]
+                                [<a href="/social/post/forum-view?f_id=<?= $item1['id']; ?>">查看板块</a>]
+                                [<a href="#" onclick="Delete(<?= $item1['id'] ?>)">删除帖子</a>]
+                                [<a href="/social/post/index?f_id=<?= $item['id']; ?>">查看帖子</a>]
                             </td>
                         </tr>
-                        <?php if(empty($list[$key][$item['id']][$key1][$item1['id']])) {
-                        }else{
+                        <?php if (empty($list[$key][$item['id']][$key1][$item1['id']])) {
+                    } else {
                         foreach ($list[$key][$item['id']][$key1][$item1['id']] as $item2):
                             ?>
-                            <tr id="tr_<?= $item2['id'];?>">
-                                <td style="text-align: left;" >　　
-                                    |----|----<?= $item2['title'];?>(<?= $item2['describe'];?>)　
-                                    [<a href="/social/post/forum-add?p_id=<?= $item2['id'];?>&act=1 ">添加子模板</a>]　
-                                    [<a href="/social/post/forum-edit?id=<?= $item2['id'];?> ">编辑</a>]
-                                    [<a href="/social/post/forum-view?f_id=<?= $item2['id'];?>">查看板块</a>]
-                                    [<a href="#" onclick="Delete(<?= $item2['id']?>)">删除帖子</a>]
-                                    [<a href="/social/post/index?f_id=<?= $item['id'];?>">查看帖子</a>]
+                            <tr id="tr_<?= $item2['id']; ?>">
+                                <td style="text-align: left;">　　
+                                    |----|----<?= $item2['title']; ?>(<?= $item2['describe']; ?>)　
+                                    [<a href="/social/post/forum-add?p_id=<?= $item2['id']; ?>&act=1 ">添加子模板</a>]　
+                                    [<a href="/social/post/forum-edit?id=<?= $item2['id']; ?> ">编辑</a>]
+                                    [<a href="/social/post/forum-view?f_id=<?= $item2['id']; ?>">查看板块</a>]
+                                    [<a href="#" onclick="Delete(<?= $item2['id'] ?>)">删除帖子</a>]
+                                    [<a href="/social/post/index?f_id=<?= $item['id']; ?>">查看帖子</a>]
                                 </td>
                             </tr>
 
@@ -83,25 +83,25 @@ $this->title = "帖子板块管理";
 </div>
 
 <script>
-    function Delete(id){
+    function Delete(id) {
 
         var msg = "您真的确定要删除吗？";
-        if (confirm(msg)==true){
+        if (confirm(msg) == true) {
             $.ajax(
                 {
                     type: "GET",
                     url: '/social/post/forum-del',
-                    data: {'id':id},
+                    data: {'id': id},
                     asynic: false,
                     dataType: "json",
                     beforeSend: function () {
                     },
                     success: function (result) {
-                        if(result==1){
-                            $("#tr_"+id).remove();
-                        }else if(result ==2){
+                        if (result == 1) {
+                            $("#tr_" + id).remove();
+                        } else if (result == 2) {
                             alert('请先删除子模块');
-                        }else{
+                        } else {
                             alert('网络失败');
                         }
                         return false;
@@ -109,7 +109,7 @@ $this->title = "帖子板块管理";
                 }
             );
 
-        }else{
+        } else {
             return false;
         }
 
