@@ -739,6 +739,7 @@ class ActivityController extends BaseController
         if ($count > 0 && $page_size > 0) {
             $page_count = ceil($count / $page_size);
         }
+        $info = array();
         foreach ($list as $v) {
             $shop_where = ['=', 'id', $v['shop_id']];
             $shop_name = $shop->getOneRecord($shop_where, '', 'shop_name,manage_type,province,city,district');
@@ -814,6 +815,7 @@ class ActivityController extends BaseController
             $v['shop_name'] = $shop_name['shop_name'];
             if ($v['start_time'] > $date) {
                 $v['status_name'] = "未开始";
+                $v['key'] = 1;
             }
             if ($v['start_time'] < $date && $v['end_time'] > $date) {
                 $v['status_name'] = "进行中";

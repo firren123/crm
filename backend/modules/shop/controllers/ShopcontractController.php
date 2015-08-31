@@ -281,15 +281,13 @@ class ShopcontractController extends BaseController
     {
         $id = RequestHelper::get('id');//注册名称
         if (empty($id)) {
-            echo $this->renderPartial('/../../../views/layouts/success', ['message' => 0, 'error'   => '未知错误 ，请重试!', 'jumpUrl' => '/shop/shopcontract/index', 'waitSecond' => 3,]);
-            return;
+            return $this->error('未知错误 ，请重试!', 'index');
         }
         $ShopContract_model = new ShopContract();       //合同表
         $cond['id'] = $id;
         $ShopContract_model_result = $ShopContract_model->selOneInfo($cond);
         if (empty($ShopContract_model_result)) {
-            echo $this->renderPartial('/../../../views/layouts/success', ['message' => 0, 'error'   => '未知错误 ，请重试!', 'jumpUrl' => '/shop/shopcontract/index', 'waitSecond' => 3,]);
-            return;
+            return $this->error('未知错误 ，请重试!', 'index');
         }
         if (!empty($ShopContract_model_result)) {
             $ShopContract_model_result['company_nature'] = explode(',', $ShopContract_model_result['company_nature']);//公司性质
@@ -333,8 +331,7 @@ class ShopcontractController extends BaseController
     {
         $img_src = RequestHelper::get('img_src');
         if ($img_src == '/images/05_mid.jpg') {
-            echo $this->renderPartial('/../../../views/layouts/success', ['message' => 0, 'error'   => '图片下载失败 ，请重试!', 'jumpUrl' => '/shop/shopcontract/index', 'waitSecond' => 3,]);
-            return;
+            return $this->error('图片下载失败 ，请重试!', 'index');
         } else {
             //下载
             ob_start();
