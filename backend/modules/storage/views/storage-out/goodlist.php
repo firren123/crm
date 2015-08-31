@@ -23,7 +23,7 @@ use yii\widgets\LinkPager;
     <form id="search-form" class="well form-inline">
         <label for="bar_code">商品名称：</label>
         <input id="name" type="text" size="31" name="name" value="<?=$name?>" class="form-control"/>
-        <button id="sub" class="btn btn-primary" name="yt0" type="submit">搜索</button>
+        <button id="search" class="btn btn-primary" name="yt0" type="submit">搜索</button>
     </form>
 </div>
 

@@ -134,7 +134,21 @@ var dataremark = new Array();
 
      $("#add_good").click(function(){
 
-        var sn = $.trim($("#depots option:selected").val());
+         var depots = $.trim($("#depots option:selected").val());
+         var sn = $.trim($("#depots option:selected").val());
+
+         var d = dialog({title:"提示",
+             okValue: '确定',
+             ok: function () {}
+         });
+
+         if(depots == ''){
+             content = "请选择仓库！！！";
+             d.content(content);
+             d.showModal();
+             return false;
+         }
+
          var d = dialog({
              url:'/storage/storage-out/good-add?sn='+sn,
              title: '添加商品',
