@@ -89,3 +89,16 @@ $form = ActiveForm::begin([
     </div>
 <?php ActiveForm::end(); ?>
 <script type="text/javascript" src="/js/goods/Upload.js?_<?= Yii::$app->params['jsVersion'];?>"></script>
+<script type="text/javascript">
+    $(function(){
+        $(".btn-primary").click(function(){
+            var img = $("#images1").val();
+            if(img.length ==0){
+                alert('图片不能为空');
+                return false;
+            }
+        });
+
+    });
+
+</script>
