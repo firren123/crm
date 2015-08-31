@@ -393,7 +393,10 @@ class ShopcontractController extends BaseController
         //得到业务员列表
         $Business_model = new Business();
         $msg = RequestHelper::post('msg');//业务员Id
-        $Business_result=$Business_model->find()->select('name')->where(['id' => $msg])->asArray()->one();
+        $cond['id'] = $msg;
+        $field = 'name';
+        $Business_result = $Business_model->getInfo($cond, true, $field);
+        //$Business_result=$Business_model->find()->select('name')->where(['id' => $msg])->asArray()->one();
         if (!empty($Business_result)) {
             echo json_encode($Business_result);
         } else {
