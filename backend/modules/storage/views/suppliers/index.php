@@ -84,9 +84,11 @@ $form = ActiveForm::begin([
         <td colspan="5" width="80%">
             <select id="depots" name="depots" onchange="ware(this.options[this.options.selectedIndex].value)">
                 <option value="">请选择仓库</option>
+                <?php if(!empty($ware)){?>
                 <?php foreach($ware as $item):?>
                 <option value="<?=$item['sn']?>"><?=$item['name']?></option>
                 <?php endforeach;?>
+                <?php }?>
             </select>
         </td>
     </tr>

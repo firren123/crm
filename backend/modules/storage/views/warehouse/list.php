@@ -1,5 +1,6 @@
 <?php
 $this->title = "库房列表";
+use yii\helpers\Html;
 use yii\widgets\LinkPager;
 ?>
 <legends  style="fond-size:12px;">
