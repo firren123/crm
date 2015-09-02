@@ -46,7 +46,6 @@ $this->title = "帖子板块管理";
                         <tr id="tr_<?= $item1['id']; ?>">
                             <td style="text-align: left;">　　
                                 |----<?= $item1['title']; ?>(<?= $item1['describe']; ?>)　
-                                [<a href="/social/post/forum-add?p_id=<?= $item1['id']; ?>&act=1 ">添加子模板</a>]　
                                 [<a href="/social/post/forum-edit?id=<?= $item1['id']; ?> ">编辑</a>]
                                 [<a href="/social/post/forum-view?f_id=<?= $item1['id']; ?>">查看板块</a>]
                                 [<a href="#" onclick="Delete(<?= $item1['id'] ?>)">删除帖子</a>]
