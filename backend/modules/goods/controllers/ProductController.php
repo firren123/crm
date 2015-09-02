@@ -305,9 +305,10 @@ class ProductController extends BaseController
                         //上传图片
                         $file_tmp = $file['tmp_name'][$k];
                         $real_name = $file['name'][$k];
-                        $url = dirname($file_tmp) . "/" . $real_name;
+                        $filename = dirname($file_tmp) . "/" . $real_name;
                         $fast = new FastDFSHelper();
-                        $ret = $fast->fdfs_upload_by_filename($url);
+                        @rename($file_tmp, $filename);
+                        $ret = $fast->fdfs_upload_by_filename($filename);
                         $product['image'] = '/'.$ret['group_name'] . '/' . $ret['filename'];
                         $product['attr_value'] = $v;
                         $product['origin_price'] = $products['origin_price'][$k];
@@ -791,7 +792,7 @@ class ProductController extends BaseController
               $file = $_FILES['image'];
               $products = RequestHelper::post('Products');
               $attr_result = $this->AttrValue($products, $id);
-                $model->attributes = $product;
+              $model->attributes = $product;
                 if ($product['brand_id']=="") {
                      $model->addError('brand_id', '商品品牌 不能空');
                 } elseif (empty($product['description'])) {
@@ -822,9 +823,10 @@ class ProductController extends BaseController
                                  //上传图片
                                  $file_tmp = $file['tmp_name'][0];
                                  $real_name = $file['name'][0];
-                                 $url = dirname($file_tmp) . "/" . $real_name;
+                                 $filename = dirname($file_tmp) . "/" . $real_name;
                                  $fast = new FastDFSHelper();
-                                 $ret = $fast->fdfs_upload_by_filename($url);
+                                 @rename($file_tmp, $filename);
+                                 $ret = $fast->fdfs_upload_by_filename($filename);
                                  $product['image'] = '/'.$ret['group_name'] . '/' . $ret['filename'];
                                  //主图添加
                                  $img_data = array();
@@ -895,32 +897,26 @@ class ProductController extends BaseController
                                  }
                                  if ($product['origin_price'] != $item['origin_price']) {
                                      $content .= ",属性值:" . $product['origin_price'];
-                                     $log_data['origin_price'] = $product['origin_price'];
                                      $log_model->recordLog($content);
                                  }
                                  if ($product['sale_price'] != $item['sale_price']) {
-                                     $content .= ",建议售价:" . $product['sale_price'];
-                                     $log_data['sale_price'] = $product['sale_price'];
+                                     $content .= ",建议售价:" . $product['sale_price'];;
                                      $log_model->recordLog($content);
                                  }
                                  if ($product['sale_price'] != $item['sale_price']) {
                                      $content .= ",进货价:" . $product['sale_price'];
-                                     $log_data['sale_price'] = $product['sale_price'];
                                      $log_model->recordLog($content);
                                  }
                                  if ($product['shop_price'] != $item['shop_price']) {
                                      $content .= ",铺货价:" . $product['shop_price'];
-                                     $log_data['shop_price'] = $product['shop_price'];
                                      $log_model->recordLog($content);
                                  }
                                  if ($product['total_num'] != $item['total_num']) {
                                      $content .= ",库存:" . $product['total_num'];
-                                     $log_data['total_num'] = $product['total_num'];
                                      $log_model->recordLog($content);
                                  }
                                  if ($product['bar_code'] != $item['bar_code']) {
                                      $content .= ",条形码:" . $product['bar_code'];
-                                     $log_data['bar_code'] = $product['bar_code'];
                                      $log_model->recordLog($content);
                                  }
                                  if ($product['cate_first_id'] != $item['cate_first_id']) {
@@ -944,6 +940,14 @@ class ProductController extends BaseController
                                  $this->redirect('/goods/product');
                              }
                          } else {
+                             //上传图片
+                             $file_tmp = $file['tmp_name'][$k];
+                             $real_name = $file['name'][$k];
+                             $filename = dirname($file_tmp) . "/" . $real_name;
+                             $fast = new FastDFSHelper();
+                             @rename($file_tmp, $filename);
+                             $ret = $fast->fdfs_upload_by_filename($filename);
+                             $product['image'] = '/'.$ret['group_name'] . '/' . $ret['filename'];
                              //分公司详情
                              $city_item = $branch_model->getInfo(array('id'=>$product['bc_id']));
                              $product['sku'] = time().mt_rand(1000, 9999);
@@ -1712,7 +1716,7 @@ class ProductController extends BaseController
                     if (!is_numeric($v) or !is_numeric($data['origin_price'][$k]) or !is_numeric($data['shop_price'][$k])) {
                         $price_number *= 2;
                     } else {
-                        if ($v <= $data['origin_price'][$k] or $data['shop_price'][$k]>=$v and  $data['shop_price'][$k] <=$data['origin_price'][$k] or $data['shop_price'][$k]==0) {
+                        if ($v <= $data['origin_price'][$k]  and  $data['shop_price'][$k] <=$data['origin_price'][$k] and ($data['shop_price'][$k]==0 or $data['shop_price'][$k]>=$v)) {
                             $price_number *= 0;
                         } else {
                             $price_number *= 1;

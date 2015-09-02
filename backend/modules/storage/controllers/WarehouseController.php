@@ -210,7 +210,21 @@ class WarehouseController extends BaseController
 
         //根据省id 查询省内所有的市id和市name
         $model = new City();
-        $cName = $model->city($pid);
+        $cwhere = ['and', ['=', 'id', $bc_id], ['=', 'province_id', $pid]];
+        $info = $branch_m->getOneRecord($cwhere, '', 'city_id_arr');
+        if (empty($info)) {
+            $info = array();
+        }
+        $data = explode(',', $info['city_id_arr']);
+        $cName = array();
+        foreach ($data as $v) {
+
+            $cond = ['=', 'id', $v];
+            $names = $model->getOneRecord($cond, '', 'id,name');
+            $cName[] = $names;
+        }
+        //print_r($cName);exit;
+        //$cName = $model->city($pid);
         //print_r($cName);exit;
 
         $arr = array('pName'=>$pName,'cName'=>$cName);

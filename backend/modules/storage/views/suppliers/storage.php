@@ -40,9 +40,11 @@ $this->title = '管理采购库存';
             <td>
                 <select id="depots" name="depots">
                     <option value="">全部库存</option>
-                    <?php foreach($ware as $item):?>
-                        <option value="<?=$item['sn']?>" <?=$item['sn']==$sn ? "selected" :'';?>><?=$item['name']?></option>
-                    <?php endforeach;?>
+                    <?php if(!empty($ware)){?>
+                        <?php foreach($ware as $item):?>
+                            <option value="<?=$item['sn']?>"><?=$item['name']?></option>
+                        <?php endforeach;?>
+                    <?php }?>
                 </select>
             </td>
             <td>
