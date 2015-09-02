@@ -303,11 +303,12 @@ class ProductController extends BaseController
                     $list = 0;
                     foreach ($products['attr_value'] as $k => $v) {
                         //上传图片
-                        $file_tmp = $file['tmp_name'][$k];
-                        $real_name = $file['name'][$k];
-                        $url = dirname($file_tmp) . "/" . $real_name;
+                        $file_tmp = $file['tmp_name'][0];
+                        $real_name = $file['name'][0];
+                        $filename = dirname($file_tmp) . "/" . $real_name;
                         $fast = new FastDFSHelper();
-                        $ret = $fast->fdfs_upload_by_filename($url);
+                        @rename($file_tmp, $filename);
+                        $ret = $fast->fdfs_upload_by_filename($filename);
                         $product['image'] = '/'.$ret['group_name'] . '/' . $ret['filename'];
                         $product['attr_value'] = $v;
                         $product['origin_price'] = $products['origin_price'][$k];
@@ -822,9 +823,10 @@ class ProductController extends BaseController
                                  //上传图片
                                  $file_tmp = $file['tmp_name'][0];
                                  $real_name = $file['name'][0];
-                                 $url = dirname($file_tmp) . "/" . $real_name;
+                                 $filename = dirname($file_tmp) . "/" . $real_name;
                                  $fast = new FastDFSHelper();
-                                 $ret = $fast->fdfs_upload_by_filename($url);
+                                 @rename($file_tmp, $filename);
+                                 $ret = $fast->fdfs_upload_by_filename($filename);
                                  $product['image'] = '/'.$ret['group_name'] . '/' . $ret['filename'];
                                  //主图添加
                                  $img_data = array();
@@ -938,6 +940,14 @@ class ProductController extends BaseController
                                  $this->redirect('/goods/product');
                              }
                          } else {
+                             //上传图片
+                             $file_tmp = $file['tmp_name'][0];
+                             $real_name = $file['name'][0];
+                             $filename = dirname($file_tmp) . "/" . $real_name;
+                             $fast = new FastDFSHelper();
+                             @rename($file_tmp, $filename);
+                             $ret = $fast->fdfs_upload_by_filename($filename);
+                             $product['image'] = '/'.$ret['group_name'] . '/' . $ret['filename'];
                              //分公司详情
                              $city_item = $branch_model->getInfo(array('id'=>$product['bc_id']));
                              $product['sku'] = time().mt_rand(1000, 9999);
