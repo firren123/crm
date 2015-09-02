@@ -89,7 +89,8 @@ echo $this->render('_search', ['search'=>$search,'cate_list'=>$cate_list,'brand_
                             <?php if($item['bc_id'] == $bc_id or $item['bc_id']!=$branch_id) :?>
                             <a href="/goods/product/edit?id=<?= $item['id'];?>" style="cursor:pointer">编辑</a> <br>
                             <?php endif;?>
-                            <a href="/goods/product/details?id=<?= $item['id'];?>" style="cursor:pointer">详情</a>
+                            <a href="/goods/product/details?id=<?= $item['id'];?>" style="cursor:pointer">详情</a><br>
+                            <a href="/goods/product/list?id=<?= $item['id'];?>">图集</a>
                             <a onclick="Delete(<?= $item['id'];?>)" style="cursor:pointer;display: none;">删除</a> <br>
 
                             <span class="zjs_cur_id" style="display:none;"><?php if(isset($item['id'])){echo $item['id'];} ?></span>

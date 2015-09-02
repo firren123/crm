@@ -257,6 +257,7 @@ class ProductController extends BaseController
           //是否固定价
           $model['fixed_price'] = 0;
           $product = RequestHelper::post('Product');
+          $products = RequestHelper::post('Products');
           if (!empty($product)) {
                 $model->attributes = $product;
                 if ($model['cate_first_id']!=0) {
@@ -276,7 +277,7 @@ class ProductController extends BaseController
                      }
                 }
                 //产品主图
-                $file = UploadedFile::getInstance($model, 'image');
+                $file = $_FILES['image'];
                 $product['keywords'] = empty($product['keywords']) ? '' : $product['keywords'];//关键字
                 $product['sale_price'] = empty($product['sale_price']) ? 0 : $product['sale_price'];//售价
                 $product['single'] = 1;//标准库
@@ -285,57 +286,72 @@ class ProductController extends BaseController
                 $product['description'] = empty($product['description']) ? '' : htmlspecialchars_decode($product['description']);
                 $product['description'] = empty($product['description']) ? '' : stripslashes($product['description']);
                 $model['description'] = $product['description'];
+                $attr_result = $this->AttrValue($products);
                 if (!empty($result)) {
-                     $model->addError('name', '商品名称 不能重复');
-                } elseif (empty($file)) {
-                     $model->addError('image', '商品主图 不能为空.');
-                } elseif ($file->type!='image/jpeg' and $file->type!='image/png') {
-                     $model->addError('image', '商品图片 仅支持JPG/PNG格式.');
-                } elseif ($file->size > 1024*1024*1) {
-                     $model->addError('image', '商品图片 不能大于1m.');
-                } if ($product['brand_id']=="") {
+                    $model->addError('name', '商品名称 不能重复');
+                } elseif (count($file['name']) != count(array_filter($file['name']))){
+                    \Yii::$app->getSession()->setFlash('attr_value', '主图 不能为空');
+                } elseif ($product['cate_first_id']=="") {
+                    $model->addError('cate_first_id', '商品分类 不能为空');
+                } elseif ($product['brand_id']=="") {
                      $model->addError('brand_id', '商品品牌 不能为空');
+                } elseif ($attr_result['code'] != 200) {
+                    \Yii::$app->getSession()->setFlash('attr_value', $attr_result['msg']);
                 } elseif (empty($product['description'])) {
-                     \Yii::$app->getSession()->setFlash('error', '商品详情 不能为空');
+                    \Yii::$app->getSession()->setFlash('error', '商品详情 不能为空');
                 } else {
-                     //上传图片
-                     $fast = new FastDFSHelper();
-                     $ret = $fast->fdfs_upload_name_size($file->tempName, $file->name);
-                     $product['image'] = '/'.$ret['group_name'] . '/' . $ret['filename'];
-                     $product['name'] = CommonHelper::semiangle($product['name']);
-                     $product['title'] = CommonHelper::semiangle($product['title']);
-                     $product['keywords'] = CommonHelper::semiangle($product['keywords']);
-                     if ($bc_id != $branch_id) {
-                          $product['bc_id'] =  $bc_id;
-                     }
-                     //分公司详情
-                     $city_item = $branch_model->getInfo(array('id'=>$product['bc_id']));
-                     $product['sku'] = time().mt_rand(1000, 9999);
-                     $product['province_id'] = $city_item['province_id'];
-                     $product['status'] = 2;
-                     $list = $model->getInsert($product);
-                     if ($list > 0) {
-                          //记录日志
-                          $content = "管理员：".\Yii::$app->user->identity->username.",添加了一个商品id为:".$list.",商品名称为:".$product['name'].' 的商品';
-                          $log_model = new Log();
-                          $log_model->recordLog($content);
-                          $img_model = new ProductImage();
-                          //新增商品实时同步到sphinx
-                          $url = $this->channel_url.'/sphinx/insert-goods?goods_id='.$list;
-                          CurlHelper::get($url, 'channel');
-                          //主图添加
-                          $img_data = array();
-                          $img_data['image'] = $product['image'];
-                          $img_data['product_id'] = $list;
-                          $img_data['status'] = 2;
-                          $img_data['sort'] = 99;
-                          $img_data['create_time'] = time();
-                          $img_data['type'] = 1;
-                          $img_result = $img_model->getBulkInsert($img_data);
-                          if ($img_result==true) {
-                                $this->redirect('/goods/product/attribute?id='.$list);
-                          }
-                     }
+                    $list = 0;
+                    foreach ($products['attr_value'] as $k => $v) {
+                        //上传图片
+                        $file_tmp = $file['tmp_name'][$k];
+                        $real_name = $file['name'][$k];
+                        $url = dirname($file_tmp) . "/" . $real_name;
+                        $fast = new FastDFSHelper();
+                        $ret = $fast->fdfs_upload_by_filename($url);
+                        $product['image'] = '/'.$ret['group_name'] . '/' . $ret['filename'];
+                        $product['attr_value'] = $v;
+                        $product['origin_price'] = $products['origin_price'][$k];
+                        $product['sale_price'] = $products['sale_price'][$k];
+                        $product['shop_price'] = $products['shop_price'][$k];
+                        $product['total_num'] = $products['total'][$k];
+                        $product['bar_code'] = $products['bar_code'][$k];
+                        $product['name'] = CommonHelper::semiangle($product['name']);
+                        $product['title'] = CommonHelper::semiangle($product['title']);
+                        $product['keywords'] = CommonHelper::semiangle($product['keywords']);
+                        if ($bc_id != $branch_id) {
+                            $product['bc_id'] =  $bc_id;
+                        }
+                        //分公司详情
+                        $city_item = $branch_model->getInfo(array('id'=>$product['bc_id']));
+                        $product['sku'] = time().mt_rand(1000, 9999);
+                        $product['province_id'] = $city_item['province_id'];
+                        $product['status'] = 2;
+                        $list = $model->getInsert($product);
+                        if ($list > 0) {
+                            //记录日志
+                            $content = "管理员：".\Yii::$app->user->identity->username.",添加了一个商品id为:".$list.",商品名称为:".$product['name'].' 的商品';
+                            $log_model = new Log();
+                            $log_model->recordLog($content);
+                            $img_model = new ProductImage();
+                            //新增商品实时同步到sphinx
+                            $url = $this->channel_url.'/sphinx/insert-goods?goods_id='.$list;
+                            CurlHelper::get($url, 'channel');
+
+                            //主图添加
+                            $img_data = array();
+                            $img_data['image'] = $product['image'];
+                            $img_data['product_id'] = $list;
+                            $img_data['status'] = 2;
+                            $img_data['sort'] = 99;
+                            $img_data['create_time'] = time();
+                            $img_data['type'] = 1;
+                            $img_model->getBulkInsert($img_data);
+                        }
+                    }
+                    if ($list>0) {
+                        $this->redirect('/goods/product');
+                    }
+
                 }
           }
           $param = array(
@@ -715,7 +731,7 @@ class ProductController extends BaseController
           $model = new Product();
           $id = RequestHelper::get('id');
           $cond['id'] = $id;
-          $item = $model->getInfo($cond, true, 'name,title,keywords,cate_first_id,brand_id,bc_id,is_hot,is_self,fixed_price,description,province_id');
+          $item = $model->getInfo($cond, true, '*');
           $brand_list = array(array('id'=>'','name'=>'选择品牌'));
           //商品分类列表
           $cate_model = new Category();
@@ -754,7 +770,6 @@ class ProductController extends BaseController
           $branch_id = empty($branch_item['id']) ? 0 :$branch_item['id'];//总公司id
           $branch_cond['status'] = 1;
           $city_data = $branch_model->getList($branch_cond, 'id,name,province_id');
-
           $model->attributes  = $item;
           //是否热销
           $model['is_hot'] = $item['is_hot'];
@@ -770,95 +785,191 @@ class ProductController extends BaseController
           $item['description'] = empty($item['description']) ? '' : stripslashes($item['description']);
           $model['description'] = $item['description'];
           $product = RequestHelper::post('Product');
+          $log_model = new Log();
+          $img_model = new ProductImage();
           if (!empty($product)) {
+              $file = $_FILES['image'];
+              $products = RequestHelper::post('Products');
+              $attr_result = $this->AttrValue($products, $id);
                 $model->attributes = $product;
                 if ($product['brand_id']=="") {
                      $model->addError('brand_id', '商品品牌 不能空');
                 } elseif (empty($product['description'])) {
                      \Yii::$app->getSession()->setFlash('error', '商品详情 不能为空');
+                } elseif($attr_result['code']!=200){
+                    \Yii::$app->getSession()->setFlash('attr_value', $attr_result['msg']);
+                } elseif(count($file['name']) - count(array_filter($file['name'])) > 1){
+                    \Yii::$app->getSession()->setFlash('attr_value', '主图 不能为空');
                 } else {
-                     $log_data = [];
-                     $product['name'] = CommonHelper::semiangle($product['name']);
-                     $product['title'] = CommonHelper::semiangle($product['title']);
-                     $product['keywords'] = CommonHelper::semiangle($product['keywords']);
-                     $product['bc_id'] = $bc_id!=$branch_id ? $bc_id : $product['bc_id'];
-                     //分公司详情
-                     $city_item = $branch_model->getInfo(array('id'=>$product['bc_id']));
-                     $product['province_id'] = $city_item['province_id'];
-                     $product_cond['id'] = $id;
-                     $result = $model->updateInfo($product, $product_cond);
-                     if ($result == 1) {
-                          $shop_product_log_model = new ShopProductLog();
-                          //记录日志
-                          $product['description'] = empty($product['description']) ? '' : htmlspecialchars_decode($product['description']);
-                          $product['description'] = empty($product['description']) ? '' : stripslashes($product['description']);
-                          $array = array_diff($product, $item);
-                          $content = \Yii::$app->user->identity->username.",把:".$item['name']."(".$id.")";
-                          $log_model = new Log();
-                          if (!empty($array)) {
-                                if (!empty($array['name'])) {
-                                     $content .= "修改为:".$array['name'];
-                                }
-                                if (!empty($array['title'])) {
-                                     $content .= ",副标题:".$array['title'];
-                                }
-                                if (!empty($array['keywords'])) {
-                                     $content .= ",关键词:".$array['keywords'];
-                                }
-                                if (!empty($array['cate_first_id'])) {
-                                     $cate_item = $cate_model->getInfo(['id'=>$array['cate_first_id']]);
-                                     $content .= ",分类:".$cate_item['name'];
-                                }
-                                if (!empty($array['brand_id'])) {
-                                     $brand_item = $brand_model->getInfo(['id'=>$array['brand_id']]);
-                                     $content .= ",品牌:".$brand_item['name'];
-                                }
-                                if (!empty($array['description'])) {
-                                     $content .= ",详情被修改了";
-                                }
+                     foreach ($products['attr_value'] as $k => $v) {
+                         $product['attr_value'] = $v;
+                         $product['origin_price'] = $products['origin_price'][$k];
+                         $product['sale_price'] = $products['sale_price'][$k];
+                         $product['shop_price'] = $products['shop_price'][$k];
+                         $product['total_num'] = $products['total'][$k];
+                         $product['bar_code'] = $products['bar_code'][$k];
+                         $log_data = [];
+                         $product['name'] = CommonHelper::semiangle($product['name']);
+                         $product['title'] = CommonHelper::semiangle($product['title']);
+                         $product['keywords'] = CommonHelper::semiangle($product['keywords']);
+                         $product['bc_id'] = $bc_id != $branch_id ? $bc_id : $product['bc_id'];
+                         //分公司详情
+                         $city_item = $branch_model->getInfo(array('id' => $product['bc_id']));
+                         $product['province_id'] = $city_item['province_id'];
+                         $product_cond['id'] = $id;
+                         if ($k == 0) {
+                             if ($file['name'][0]!="") {
+                                 //上传图片
+                                 $file_tmp = $file['tmp_name'][0];
+                                 $real_name = $file['name'][0];
+                                 $url = dirname($file_tmp) . "/" . $real_name;
+                                 $fast = new FastDFSHelper();
+                                 $ret = $fast->fdfs_upload_by_filename($url);
+                                 $product['image'] = '/'.$ret['group_name'] . '/' . $ret['filename'];
+                                 //主图添加
+                                 $img_data = array();
+                                 $img_data['image'] = $product['image'];
+                                 $img_data['product_id'] = $id;
+                                 $img_data['status'] = 2;
+                                 $img_data['sort'] = 99;
+                                 $img_data['create_time'] = time();
+                                 $img_data['type'] = 1;
+                                 $img_model->updateInfo(['type'=>0],['product_id'=>$id]);
+                                 $img_model->getBulkInsert($img_data);
+                             } else {
+                                 $product['image'] = $item['image'];
+                             }
+                             $result = $model->updateInfo($product, $product_cond);
+                             if ($result == 1) {
+                                 $shop_product_log_model = new ShopProductLog();
+                                 //记录日志
+                                 $product['description'] = empty($product['description']) ? '' : htmlspecialchars_decode($product['description']);
+                                 $product['description'] = empty($product['description']) ? '' : stripslashes($product['description']);
+                                 $array = array_diff($product, $item);
+                                 $content = \Yii::$app->user->identity->username . ",把:" . $item['name'] . "(" . $id . ")";
+                                 $log_model = new Log();
+                                 if (!empty($array)) {
+                                     if (!empty($array['name'])) {
+                                         $content .= "修改为:" . $array['name'];
+                                     }
+                                     if (!empty($array['title'])) {
+                                         $content .= ",副标题:" . $array['title'];
+                                     }
+                                     if (!empty($array['keywords'])) {
+                                         $content .= ",关键词:" . $array['keywords'];
+                                     }
+                                     if (!empty($array['cate_first_id'])) {
+                                         $cate_item = $cate_model->getInfo(['id' => $array['cate_first_id']]);
+                                         $content .= ",分类:" . $cate_item['name'];
+                                     }
+                                     if (!empty($array['brand_id'])) {
+                                         $brand_item = $brand_model->getInfo(['id' => $array['brand_id']]);
+                                         $content .= ",品牌:" . $brand_item['name'];
+                                     }
+                                     if (!empty($array['description'])) {
+                                         $content .= ",详情被修改了";
+                                     }
 
-                                $log_model->recordLog($content);
-                          }
-                          if ($product['bc_id'] != $item['bc_id']) {
-                                $branch_item = $branch_model->getInfo(['id'=>$product['bc_id']]);
-                                $content .= ",限定区域:".$branch_item['name'];
-                                $log_model->recordLog($content);
-                          }
-                          if ($product['is_hot'] != $item['is_hot']) {
-                                $is_hot = $product['is_hot'] == 1 ? '推荐' : '不推荐';
-                                $content .= ",推荐:".$is_hot;
-                                $log_model->recordLog($content);
-                          }
-                          if ($product['is_hot'] != $item['is_hot']) {
-                                $is_self = $product['is_self'] == 1 ? '可以' : '不可以';
-                                $content .= ",自营:".$is_self;
-                                $log_model->recordLog($content);
-                          }
-                          if ($product['fixed_price'] != $item['fixed_price']) {
-                                $fixed_price = $product['fixed_price'] == 1 ? '是' : '否';
-                                $content .= ",固定价:".$fixed_price;
-                                $log_data['fixed_price'] = $product['fixed_price'];
-                                $log_model->recordLog($content);
-                          }
-                          if ($product['cate_first_id']!=$item['cate_first_id']) {
-                                $log_data['cat_id'] = $product['cate_first_id'];
-                          }
-                          if ($product['brand_id']!=$item['brand_id']) {
-                                $log_data['brand_id'] = $product['brand_id'];
-                          }
-                          if (!empty($log_data)) {
-                                $log_data['product_id'] = $id;
-                                $result = $shop_product_log_model->getInfo(['product_id'=>$id]);
-                                if (empty($result)) {
-                                     $shop_product_log_model->insertInfo($log_data);
-                                } else {
-                                     $shop_product_log_model->updateInfo($log_data, ['product_id'=>$id]);
-                                }
-                          }
-                          //修改商品实时同步到sphinx
-                          $url = $this->channel_url.'/sphinx/sync-goods?goods_id='.$id;
-                          CurlHelper::get($url, 'channel');
-                          $this->redirect('/goods/product');
+                                     $log_model->recordLog($content);
+                                 }
+                                 if ($product['bc_id'] != $item['bc_id']) {
+                                     $branch_item = $branch_model->getInfo(['id' => $product['bc_id']]);
+                                     $content .= ",限定区域:" . $branch_item['name'];
+                                     $log_model->recordLog($content);
+                                 }
+                                 if ($product['is_hot'] != $item['is_hot']) {
+                                     $is_hot = $product['is_hot'] == 1 ? '推荐' : '不推荐';
+                                     $content .= ",推荐:" . $is_hot;
+                                     $log_model->recordLog($content);
+                                 }
+                                 if ($product['is_hot'] != $item['is_hot']) {
+                                     $is_self = $product['is_self'] == 1 ? '可以' : '不可以';
+                                     $content .= ",自营:" . $is_self;
+                                     $log_model->recordLog($content);
+                                 }
+                                 if ($product['fixed_price'] != $item['fixed_price']) {
+                                     $fixed_price = $product['fixed_price'] == 1 ? '是' : '否';
+                                     $content .= ",固定价:" . $fixed_price;
+                                     $log_data['fixed_price'] = $product['fixed_price'];
+                                     $log_model->recordLog($content);
+                                 }
+                                 if ($product['origin_price'] != $item['origin_price']) {
+                                     $content .= ",属性值:" . $product['origin_price'];
+                                     $log_data['origin_price'] = $product['origin_price'];
+                                     $log_model->recordLog($content);
+                                 }
+                                 if ($product['sale_price'] != $item['sale_price']) {
+                                     $content .= ",建议售价:" . $product['sale_price'];
+                                     $log_data['sale_price'] = $product['sale_price'];
+                                     $log_model->recordLog($content);
+                                 }
+                                 if ($product['sale_price'] != $item['sale_price']) {
+                                     $content .= ",进货价:" . $product['sale_price'];
+                                     $log_data['sale_price'] = $product['sale_price'];
+                                     $log_model->recordLog($content);
+                                 }
+                                 if ($product['shop_price'] != $item['shop_price']) {
+                                     $content .= ",铺货价:" . $product['shop_price'];
+                                     $log_data['shop_price'] = $product['shop_price'];
+                                     $log_model->recordLog($content);
+                                 }
+                                 if ($product['total_num'] != $item['total_num']) {
+                                     $content .= ",库存:" . $product['total_num'];
+                                     $log_data['total_num'] = $product['total_num'];
+                                     $log_model->recordLog($content);
+                                 }
+                                 if ($product['bar_code'] != $item['bar_code']) {
+                                     $content .= ",条形码:" . $product['bar_code'];
+                                     $log_data['bar_code'] = $product['bar_code'];
+                                     $log_model->recordLog($content);
+                                 }
+                                 if ($product['cate_first_id'] != $item['cate_first_id']) {
+                                     $log_data['cat_id'] = $product['cate_first_id'];
+                                 }
+                                 if ($product['brand_id'] != $item['brand_id']) {
+                                     $log_data['brand_id'] = $product['brand_id'];
+                                 }
+                                 if (!empty($log_data)) {
+                                     $log_data['product_id'] = $id;
+                                     $result = $shop_product_log_model->getInfo(['product_id' => $id]);
+                                     if (empty($result)) {
+                                         $shop_product_log_model->insertInfo($log_data);
+                                     } else {
+                                         $shop_product_log_model->updateInfo($log_data, ['product_id' => $id]);
+                                     }
+                                 }
+                                 //修改商品实时同步到sphinx
+                                 $url = $this->channel_url . '/sphinx/sync-goods?goods_id=' . $id;
+                                 CurlHelper::get($url, 'channel');
+                                 $this->redirect('/goods/product');
+                             }
+                         } else {
+                             //分公司详情
+                             $city_item = $branch_model->getInfo(array('id'=>$product['bc_id']));
+                             $product['sku'] = time().mt_rand(1000, 9999);
+                             $product['province_id'] = $city_item['province_id'];
+                             $product['status'] = 2;
+                             $product['single'] = 1;
+                             $product['create_time'] = date("Y-m-d H:i:s");
+                             $list = $model->getInsert($product);
+                             if ($list > 0) {
+                                 //记录日志
+                                 $content = "管理员：".\Yii::$app->user->identity->username.",添加了一个商品id为:".$list.",商品名称为:".$product['name'].' 的商品';
+                                 $log_model->recordLog($content);
+                                 //新增商品实时同步到sphinx
+                                 $url = $this->channel_url.'/sphinx/insert-goods?goods_id='.$list;
+                                 CurlHelper::get($url, 'channel');
+                                 //主图添加
+                                 $img_data = array();
+                                 $img_data['image'] = $product['image'];
+                                 $img_data['product_id'] = $list;
+                                 $img_data['status'] = 2;
+                                 $img_data['sort'] = 99;
+                                 $img_data['create_time'] = time();
+                                 $img_data['type'] = 1;
+                                 $img_model->getBulkInsert($img_data);
+                             }
+                         }
                      }
                 }
           }
@@ -1544,4 +1655,85 @@ class ProductController extends BaseController
           }
           return $code;
      }
+
+    /**
+     * 属性验证
+     *
+     * @param $data
+     * @param $product_id
+     *
+     * @return array
+     */
+    public function AttrValue($data, $product_id=NULL) {
+        $result = [];
+        $attr_value = array_filter($data['attr_value']);
+        $origin_price = array_filter($data['origin_price']);
+        $sale_price = array_filter($data['sale_price']);
+        $shop_price  = array_filter($data['shop_price']);
+        $total = array_filter($data['total']);
+        $bar_code = array_filter($data['bar_code']);
+        if (empty($attr_value) or count($data['attr_value'])!=count($attr_value)) {
+            $result = ['code'=>101, 'msg'=>'属性 不能为空'];
+        } elseif (empty($origin_price) or count($data['origin_price'])!=count($origin_price)) {
+            $result = ['code'=>101, 'msg'=>'建议售价 不能为空'];
+        } elseif (empty($sale_price) or count($data['sale_price'])!=count($sale_price)) {
+            $result = ['code'=>101, 'msg'=>'进货价 不能为空'];
+        } elseif (empty($shop_price) or count($data['shop_price'])!=count($shop_price)) {
+            $result = ['code'=>101, 'msg'=>'铺货价 不能为空'];
+        } elseif (empty($total) or count($data['total'])!=count($total)) {
+            $result = ['code'=>101, 'msg'=>'库存 不能为空'];
+        } elseif (empty($attr_value) or count($data['bar_code'])!=count($bar_code)) {
+            $result = ['code'=>101, 'msg'=>'条形码 不能为空'];
+        } else {
+            if (count($data['attr_value']) != count(array_unique($data['attr_value']))) {
+                $result = ['code'=>101, 'msg'=>'属性 不能重复'];
+            } elseif (count($data['bar_code']) != count(array_unique($data['bar_code']))) {
+                $result = ['code'=>101, 'msg'=>'条形码 不能重复'];
+            } else {
+                $code_number = 1;
+                $price_number = 1;
+                foreach ($data['sale_price'] as $k => $v) {
+                    if (!is_numeric($data['bar_code'][$k]) and mb_strlen($data['bar_code'][$k], 'utf8')<13) {
+                        $code_number *= 2;
+                    } else {
+                        $model = new Product();
+                        $cond['bar_code'] = $data['bar_code'][$k];
+                        $where = [];
+                        if (!empty($product_id)) {
+                            $where = ['!=', 'id', $product_id];
+                        }
+                        $count = $model->getCount($cond, $where);
+                        if ($count==0) {
+                            $code_number *= 0;
+                        } else {
+                            $code_number *= 1;
+                        }
+                    }
+                    if (!is_numeric($v) or !is_numeric($data['origin_price'][$k]) or !is_numeric($data['shop_price'][$k])) {
+                        $price_number *= 2;
+                    } else {
+                        if ($v <= $data['origin_price'][$k] or $data['shop_price'][$k]>=$v and  $data['shop_price'][$k] <=$data['origin_price'][$k] or $data['shop_price'][$k]==0) {
+                            $price_number *= 0;
+                        } else {
+                            $price_number *= 1;
+                        }
+                    }
+                }
+                if ($price_number==0 and $code_number==0) {
+                    $result = ['code'=>200, 'msg'=>'成功'];
+                } else {
+                    if ($price_number>1) {
+                        $result = ['code'=>101, 'msg'=>'建议售价或进货价或铺货价 必须是数字!'];
+                    } elseif($price_number==1) {
+                        $result = ['code'=>101, 'msg'=>'价格不合法'];
+                    } elseif ($code_number>1) {
+                        $result = ['code'=>101, 'msg'=>'条形码 不能小于13位的数字'];
+                    } elseif($code_number==1) {
+                        $result = ['code'=>101, 'msg'=>'条形码 已经存在'];
+                    }
+                }
+            }
+        }
+        return $result;
+    }
 }

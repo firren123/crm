@@ -23,7 +23,7 @@ use yii\data\Pagination;
  *
  * @category CRM
  * @package  Product
- * @author   liuwei <linxinliang@iyangpin.com>
+ * @author   liuwei <liuwei@iyangpin.com>
  * @license  http://www.i500m.com/ license
  * @link     liuwei@iyangpin.com
  */
@@ -50,14 +50,15 @@ class Product extends I500Base
             [['name'],'required','message' => '商品名称 不能为空.'],
             [['cate_first_id'],'required','message' => '分类 不能为空.'],
             [['brand_id'],'required','message' => '品牌 不能为空.'],
-            [['image'],'required','message' => '产品主图 不能为空.'],
         ];
     }
+
     /**
      * 添加
      *
-     * @param: array $data
-     * @return bool
+     * @param array $data 数据
+     *
+     * @return int
      */
     public function getInsert($data = array())
     {
@@ -74,10 +75,12 @@ class Product extends I500Base
         }
         return $re;
     }
+
     /**
      * 删除
      *
-     * @param: string $ids
+     * @param string $ids id集合
+     *
      * @return int
      */
     public function getDelete($ids)
@@ -93,12 +96,14 @@ class Product extends I500Base
             }
         }
     }
+
     /**
      * 商品名称是否存在
      *
-     * @param: $name
-     * @param: NULL $id
-     * @return array|null|ActiveRecord
+     * @param string $name 名称
+     * @param null   $id   id
+     *
+     * @return array|null|\yii\db\ActiveRecord
      */
     public function getDetailsByName($name, $id=NULL)
     {
@@ -114,12 +119,14 @@ class Product extends I500Base
         }
         return $list;
     }
+
     /**
      * 商品条形码是否存在
      *
-     * @param: $name
-     * @param: NULL $id
-     * @return array|null|ActiveRecord
+     * @param string $name 名称
+     * @param null   $id   id
+     *
+     * @return array|null|\yii\db\ActiveRecord
      */
     public function getDetailsByCode($name, $id=NULL)
     {
@@ -135,10 +142,12 @@ class Product extends I500Base
         }
         return $list;
     }
+
     /**
-     * 简介：商家发货减少库存
-     * @author  lichenjun@iyangpin.com。
-     * @param $order_sn
+     * 商家发货减少库存
+     *
+     * @param int $order_sn 订单号
+     *
      * @return bool
      */
     public function reduceInventory($order_sn)
@@ -153,39 +162,59 @@ class Product extends I500Base
         foreach ($product_arr as $k => $v) {
             //标准库
             $product_model = new Product();
-            $product_str = $product_model->findOne($v['p_id']);
-//            echo "<pre>";
-//            print_r($product_str);
-//            exit;
+            $product_str = $product_model->findOne($v['p_id']);;
             $product_str->total_num = $product_str->total_num - $v['num'];
             $product_str->save();
         }
 
         return true;
     }
+
+    /**
+     * 商品列表
+     *
+     * @param array  $map      条件
+     * @param array  $andWhere 附加条件
+     * @param int    $pageSize 每页显示条数
+     * @param string $order    排序
+     * @param int    $sort     正倒排序
+     *
+     * @return array
+     */
     public function getProductList($map = [],$andWhere = [], $pageSize = 20, $order = 'id', $sort = SORT_DESC)
     {
 
         $query = $this->find()->where($map)->andWhere(['!=','status',0])->andWhere($andWhere);
-        //echo $query->createCommand()->sql;
         $count = $query->count();
         $pages = new Pagination(['totalCount' =>$count, 'pageSize' => $pageSize]);
         $list = $query->orderBy([$order=>$sort])->offset($pages->offset)->limit($pages->limit)->asArray()->all();
-        //var_dump($list);
         return ['list'=>$list,'pages'=>$pages,'count'=>$count,'pageCount'=>$pages->pageCount];
 
     }
 
+    /**
+     * 单行函数说明
+     *
+     * @param int $product_id 商品id
+     *
+     * @return array|null|\yii\db\ActiveRecord
+     */
     public function pro_all($product_id)
     {
         $list = $this->find()->select('name,attr_value')->where("id=$product_id")->asArray()->one();
         return $list;
     }
 
+    /**
+     * 单行函数说明
+     *
+     * @param int $product_id 商品id
+     *
+     * @return array|null|\yii\db\ActiveRecord
+     */
     public function get_first_id($product_id)
     {
         $list = $this->find()->select('cate_first_id')->where("id=$product_id")->asArray()->one();
         return $list;
     }
-
 }
