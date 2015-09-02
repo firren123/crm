@@ -13,8 +13,8 @@
  * @link      liuwei@iyangpin.com
  */
 
-
 namespace backend\models\i500m;
+
 use backend\models\shop\ShopDetailOrder;
 use yii\data\Pagination;
 
@@ -65,7 +65,7 @@ class Product extends I500Base
         $re = 0;
         if ($data) {
             $model = clone $this;
-            foreach ($data as $k=>$v) {
+            foreach ($data as $k => $v) {
                 $model->$k = $v;
             }
             $result = $model->save();
@@ -105,7 +105,7 @@ class Product extends I500Base
      *
      * @return array|null|\yii\db\ActiveRecord
      */
-    public function getDetailsByName($name, $id=NULL)
+    public function getDetailsByName($name, $id=null)
     {
         $list = array();
         $where = "name="."'".$name."' and single=1 and status!=0";
@@ -128,7 +128,7 @@ class Product extends I500Base
      *
      * @return array|null|\yii\db\ActiveRecord
      */
-    public function getDetailsByCode($name, $id=NULL)
+    public function getDetailsByCode($name, $id=null)
     {
         $list = array();
         $where = "bar_code="."'".$name."' and single=1 and status!=0";
@@ -181,7 +181,7 @@ class Product extends I500Base
      *
      * @return array
      */
-    public function getProductList($map = [],$andWhere = [], $pageSize = 20, $order = 'id', $sort = SORT_DESC)
+    public function getProductList($map = [], $andWhere = [], $pageSize = 20, $order = 'id', $sort = SORT_DESC)
     {
 
         $query = $this->find()->where($map)->andWhere(['!=','status',0])->andWhere($andWhere);
