@@ -894,22 +894,28 @@ class ProductController extends BaseController
                                      $log_model->recordLog($content);
                                  }
                                  if ($product['origin_price'] != $item['origin_price']) {
-                                     $log_data['origin_price'] = $product['origin_price'];
+                                     $content .= ",属性值:" . $product['origin_price'];
+                                     $log_model->recordLog($content);
                                  }
                                  if ($product['sale_price'] != $item['sale_price']) {
-                                     $log_data['sale_price'] = $product['sale_price'];
+                                     $content .= ",建议售价:" . $product['sale_price'];;
+                                     $log_model->recordLog($content);
                                  }
                                  if ($product['sale_price'] != $item['sale_price']) {
-                                     $log_data['sale_price'] = $product['sale_price'];
+                                     $content .= ",进货价:" . $product['sale_price'];
+                                     $log_model->recordLog($content);
                                  }
                                  if ($product['shop_price'] != $item['shop_price']) {
-                                     $log_data['shop_price'] = $product['shop_price'];
+                                     $content .= ",铺货价:" . $product['shop_price'];
+                                     $log_model->recordLog($content);
                                  }
                                  if ($product['total_num'] != $item['total_num']) {
-                                     $log_data['total_num'] = $product['total_num'];
+                                     $content .= ",库存:" . $product['total_num'];
+                                     $log_model->recordLog($content);
                                  }
                                  if ($product['bar_code'] != $item['bar_code']) {
-                                     $log_data['bar_code'] = $product['bar_code'];
+                                     $content .= ",条形码:" . $product['bar_code'];
+                                     $log_model->recordLog($content);
                                  }
                                  if ($product['cate_first_id'] != $item['cate_first_id']) {
                                      $log_data['cat_id'] = $product['cate_first_id'];
