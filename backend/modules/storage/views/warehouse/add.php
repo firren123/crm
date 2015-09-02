@@ -34,9 +34,12 @@ $form = ActiveForm::begin([
     <div class="col-sm-6">
         <select id="warehouse-bc_id" class="form-control bc_id" name="Warehouse[bc_id]" style="width:200px">
             <option value="0" class="form-control bc_id">请选择分公司</option>
-            <?php foreach($branch_arr as $k=>$v){?>
-                <option value="<?php echo $k;?>"><?php echo $branch_arr[$k]; ?></option>
-            <?php }?>
+
+            <?php if(!empty($branch_arr)) :?>
+                <?php foreach($branch_arr as $data) :?>
+                    <option value="<?= $data['id'];?>" <?php if(!empty($bc_id) and $data['id']==$bc_id):?>selected="selected"<?php endif;?>><?= $data['name']; ?></option>
+                <?php endforeach;?>
+            <?php endif;?>
         </select>
         <div class="help-block help-block-error "></div>
     </div>
@@ -172,8 +175,9 @@ $form = ActiveForm::begin([
                     })
                     d.showModal();
                     return false;
+                }else{
+                    $("#login-form").submit();
                 }
-                $("#login-form").submit();
             });
 
         })

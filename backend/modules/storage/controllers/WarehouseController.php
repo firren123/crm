@@ -53,10 +53,10 @@ class WarehouseController extends BaseController
         $name = RequestHelper::get('name');
 
         $branch = ['status'=>1];
-        if ($this->bc_id != 28) {
+        /*if ($this->bc_id != 28) {
             $branch['id'] = $this->bc_id;
             $bc_id = $this->bc_id;
-        }
+        }*/
         //获取分公司的ID和name
         $branch_m = new CrmBranch();
         $branch_arr = $branch_m->getList($branch, "id,name");
@@ -161,7 +161,7 @@ class WarehouseController extends BaseController
         $list = $branch_m->getList($where, "id,name");
         $admin = new Admin();
         $bc_id = $admin->getOneRecord(['id'=>$this->admin_id], '', 'bc_id');
-        $branch_array = [];
+        /*$branch_array = [];
         foreach ($list as $k =>$v) {
             $branch_array[$v['id']] = $v['name'];
         }
@@ -169,7 +169,7 @@ class WarehouseController extends BaseController
             $branch_arr = $branch_array;
         } else {
             $branch_arr[$bc_id['bc_id']] = $branch_array[$bc_id['bc_id']];
-        }
+        }*/
         //获取传参 array
         $model = new Warehouse();
         $Warehouse = RequestHelper::post('Warehouse');
@@ -185,7 +185,7 @@ class WarehouseController extends BaseController
                 return $this->success('添加成功', '/storage/warehouse/index');
             }
         }
-        return $this->render('add', ['model' => $model,'branch_arr'=>$branch_arr]);
+        return $this->render('add', ['model' => $model,'branch_arr'=>$list]);
     }
 
     /**
