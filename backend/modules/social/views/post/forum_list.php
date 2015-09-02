@@ -50,7 +50,7 @@ $this->title = "帖子板块管理";
                                 [<a href="/social/post/forum-edit?id=<?= $item1['id']; ?> ">编辑</a>]
                                 [<a href="/social/post/forum-view?f_id=<?= $item1['id']; ?>">查看板块</a>]
                                 [<a href="#" onclick="Delete(<?= $item1['id'] ?>)">删除帖子</a>]
-                                [<a href="/social/post/index?f_id=<?= $item['id']; ?>">查看帖子</a>]
+                                [<a href="/social/post/index?f_id=<?= $item1['id']; ?>">查看帖子</a>]
                             </td>
                         </tr>
                         <?php if (empty($list[$key][$item['id']][$key1][$item1['id']])) {
@@ -60,11 +60,10 @@ $this->title = "帖子板块管理";
                             <tr id="tr_<?= $item2['id']; ?>">
                                 <td style="text-align: left;">　　
                                     |----|----<?= $item2['title']; ?>(<?= $item2['describe']; ?>)　
-                                    [<a href="/social/post/forum-add?p_id=<?= $item2['id']; ?>&act=1 ">添加子模板</a>]　
                                     [<a href="/social/post/forum-edit?id=<?= $item2['id']; ?> ">编辑</a>]
                                     [<a href="/social/post/forum-view?f_id=<?= $item2['id']; ?>">查看板块</a>]
                                     [<a href="#" onclick="Delete(<?= $item2['id'] ?>)">删除帖子</a>]
-                                    [<a href="/social/post/index?f_id=<?= $item['id']; ?>">查看帖子</a>]
+                                    [<a href="/social/post/index?f_id=<?= $item2['id']; ?>">查看帖子</a>]
                                 </td>
                             </tr>
 
