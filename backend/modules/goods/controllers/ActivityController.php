@@ -203,7 +203,7 @@ class ActivityController extends BaseController
             $model = new Activity();
             $where = array();
             $where['stop_remark'] = RequestHelper::get('stop_remark', '');
-            $where['status'] = 3;
+            $where['status'] = 2;
             if (empty($where['stop_remark'])) {
                 echo 2;
                 exit;
