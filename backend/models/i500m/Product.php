@@ -14,6 +14,7 @@
  */
 
 namespace backend\models\i500m;
+
 use backend\models\shop\ShopDetailOrder;
 use yii\data\Pagination;
 
