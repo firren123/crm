@@ -160,10 +160,6 @@ class ActivityController extends BaseController
                 }
             }
 
-            if (!empty($v['stop_remark'])) {
-                $arr['status'] = '已停止';
-            }
-
             //获取省名
             $branch_m = new Province();
             $where = array('id' => $v['province']);
