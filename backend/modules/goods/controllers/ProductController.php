@@ -303,8 +303,8 @@ class ProductController extends BaseController
                     $list = 0;
                     foreach ($products['attr_value'] as $k => $v) {
                         //上传图片
-                        $file_tmp = $file['tmp_name'][0];
-                        $real_name = $file['name'][0];
+                        $file_tmp = $file['tmp_name'][$k];
+                        $real_name = $file['name'][$k];
                         $filename = dirname($file_tmp) . "/" . $real_name;
                         $fast = new FastDFSHelper();
                         @rename($file_tmp, $filename);
