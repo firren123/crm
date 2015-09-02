@@ -38,7 +38,9 @@ use backend\models\i500m\ShopOrderBlack;
 use backend\models\i500m\User;
 use backend\models\i500m\UserOrder;
 use backend\models\shop\ShopProduct;
+use common\helpers\CommonHelper;
 use common\helpers\CurlHelper;
+use common\helpers\FilePutContentHelps;
 use yii;
 use yii\data\Pagination;
 use common\helpers\RequestHelper;
@@ -606,11 +608,12 @@ class UserorderController extends BaseController
             echo "订单没有确认没有超过5分钟，不能再次分配订单";
             exit;
         }
+        FilePutContentHelps::writeFile('getShop.log', 'start'.$order_sn);
         //获取订单中的商品
         $goods_list = $orderInfoModel->getList(['order_sn' => $order_sn], "GROUP_CONCAT(p_id) as list");
         $goods_arr = explode(',', $goods_list[0]['list']);
         $num = count($goods_arr);
-        $where = ['product_id' => $goods_arr, 'status' => 1];
+
         //根据用户收货地址获取坐标
         $curl_info = $configModel->getInfo(['key' => 'channel']);
         $pro = $ProvinceModel->getInfo(['id' => $order_info['province']], 'name');
@@ -619,6 +622,7 @@ class UserorderController extends BaseController
         $curl = $curl_info['value'] . 'lbs/get-point?address=' . $pro['name'] . $city['name'] . $dist['name'] . $order_info['address'];
         $ret = CurlHelper::get($curl);
         $shop_list_n = [];
+        //去查询周围商家
         if ($ret['code'] == 200) {
             $value = $configModel->getInfo(['key'=>'orderNearShop'], 'value');
             $content = $value['value'];
@@ -628,9 +632,16 @@ class UserorderController extends BaseController
                 $shop_list_n = $ret['data'];
             }
         }
-        //去查询周围商家
+        $ner_shop = [];
+        foreach ($shop_list_n as $k => $v) {
+            $ner_shop[] = $v['shop_id'];
+        }
+        $where = ['product_id' => $goods_arr, 'status' => 1,'shop_id'=>$ner_shop];
+        FilePutContentHelps::writeFile('getShop.log', '获取坐标商家'.var_export($ner_shop, true));
+
         //查询商家中有订单中的商品的商家
         $shop_list1 = $shopProduct->find()->select('shop_id,count(product_id) as num ')->where($where)->groupBy('shop_id')->having('num = ' . $num)->asArray()->all();
+        FilePutContentHelps::writeFile('getShop.log', '查询商家中有订单中的商品的商家'.var_export($shop_list1, true));
 
         $shop_list_s = [];
         foreach ($shop_list1 as $k => $v) {
@@ -640,9 +651,11 @@ class UserorderController extends BaseController
                 }
             }
         }
+        FilePutContentHelps::writeFile('getShop.log', '满足条件的商家'.var_export($shop_list_s, true));
 
         //黑名单商家
         $shop_list2 = $ShopOrderBlack->getList(['order_sn' => $order_sn], "shop_id");
+        FilePutContentHelps::writeFile('getShop.log', '黑名单的商家'.var_export($shop_list2, true));
         if ($shop_list2) {
             $shop_list3 = [];
             foreach ($shop_list2 as $k => $v) {
@@ -654,6 +667,7 @@ class UserorderController extends BaseController
                 }
             }
         }
+        FilePutContentHelps::writeFile('getShop.log', '过滤黑名单黑名单的商家'.var_export($shop_list_s, true));
         //删除本单商家
         foreach ($shop_list_s as $kk => &$vv) {
             if ($order_info['shop_id'] == $vv) {
@@ -664,6 +678,9 @@ class UserorderController extends BaseController
                 unset($shop_list_s[$kk]);
             }
         }
+        FilePutContentHelps::writeFile('getShop.log', '本单的商家'.$order_info['shop_id']);
+        FilePutContentHelps::writeFile('getShop.log', '去掉本单的商家和1号商家'.var_export($shop_list_s, true));
+        FilePutContentHelps::writeFile('getShop.log', 'end ');
         $hop_list = $shopModel->getList(['id' => $shop_list_s, 'business_status' => 1]);
         $pages = new Pagination();
         $data_info = [
