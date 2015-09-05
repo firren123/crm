@@ -51,7 +51,68 @@ var uploader5 = WebUploader.create({
     accept: {title: 'Images', extensions: 'gif,jpg,jpeg,bmp,png', mimeTypes: 'image/*'},
     formData: {'_csrf' : _csrf}
 });
+var uploader6 = WebUploader.create({
+    auto: true,
+    swf: "/js/webuploader/uploadify.swf",
+    server: "/public/upload",
+    pick: '#filePicker6',
+    accept: {title: 'Images', extensions: 'gif,jpg,jpeg,bmp,png', mimeTypes: 'image/*'},
+    formData: {'_csrf' : _csrf}
+});
 
+var uploader7 = WebUploader.create({
+    auto: true,
+    swf: "/js/webuploader/uploadify.swf",
+    server: "/public/upload",
+    pick: '#filePicker7',
+    accept: {title: 'Images', extensions: 'gif,jpg,jpeg,bmp,png', mimeTypes: 'image/*'},
+    formData: {'_csrf' : _csrf}
+});
+
+var uploader8 = WebUploader.create({
+    auto: true,
+    swf: "/js/webuploader/uploadify.swf",
+    server: "/public/upload",
+    pick: '#filePicker8',
+    accept: {title: 'Images', extensions: 'gif,jpg,jpeg,bmp,png', mimeTypes: 'image/*'},
+    formData: {'_csrf' : _csrf}
+});
+
+var uploader9 = WebUploader.create({
+    auto: true,
+    swf: "/js/webuploader/uploadify.swf",
+    server: "/public/upload",
+    pick: '#filePicker9',
+    accept: {title: 'Images', extensions: 'gif,jpg,jpeg,bmp,png', mimeTypes: 'image/*'},
+    formData: {'_csrf' : _csrf}
+});
+
+var uploader10 = WebUploader.create({
+    auto: true,
+    swf: "/js/webuploader/uploadify.swf",
+    server: "/public/upload",
+    pick: '#filePicker10',
+    accept: {title: 'Images', extensions: 'gif,jpg,jpeg,bmp,png', mimeTypes: 'image/*'},
+    formData: {'_csrf' : _csrf}
+});
+
+var uploader11 = WebUploader.create({
+    auto: true,
+    swf: "/js/webuploader/uploadify.swf",
+    server: "/public/upload",
+    pick: '#filePicker11',
+    accept: {title: 'Images', extensions: 'gif,jpg,jpeg,bmp,png', mimeTypes: 'image/*'},
+    formData: {'_csrf' : _csrf}
+});
+
+var uploader12 = WebUploader.create({
+    auto: true,
+    swf: "/js/webuploader/uploadify.swf",
+    server: "/public/upload",
+    pick: '#filePicker12',
+    accept: {title: 'Images', extensions: 'gif,jpg,jpeg,bmp,png', mimeTypes: 'image/*'},
+    formData: {'_csrf' : _csrf}
+});
 
 uploader1.on( 'uploadSuccess', function( file, data ) {
     var BaseUrl = $("#img_url").val();
@@ -86,4 +147,53 @@ uploader5.on( 'uploadSuccess', function( file, data ) {
     var url = BaseUrl+data.url;
     $('#images5').val(data.url);
     $('#filePicker5_img').html('<img src="'+url+'" style="width:90px;height:90px;" />');
+});
+
+uploader6.on( 'uploadSuccess', function( file, data ) {
+    var BaseUrl = $("#img_url").val();
+    var url = BaseUrl+data.url;
+    $('#images6').val(data.url);
+    $('#filePicker6_img').html('<img src="'+url+'" style="width:90px;height:90px;" />');
+});
+
+uploader7.on( 'uploadSuccess', function( file, data ) {
+    var BaseUrl = $("#img_url").val();
+    var url = BaseUrl+data.url;
+    $('#images7').val(data.url);
+    $('#filePicker7_img').html('<img src="'+url+'" style="width:90px;height:90px;" />');
+});
+
+uploader8.on( 'uploadSuccess', function( file, data ) {
+    var BaseUrl = $("#img_url").val();
+    var url = BaseUrl+data.url;
+    $('#images8').val(data.url);
+    $('#filePicker8_img').html('<img src="'+url+'" style="width:90px;height:90px;" />');
+});
+
+uploader9.on( 'uploadSuccess', function( file, data ) {
+    var BaseUrl = $("#img_url").val();
+    var url = BaseUrl+data.url;
+    $('#images9').val(data.url);
+    $('#filePicker9_img').html('<img src="'+url+'" style="width:90px;height:90px;" />');
+});
+
+uploader10.on( 'uploadSuccess', function( file, data ) {
+    var BaseUrl = $("#img_url").val();
+    var url = BaseUrl+data.url;
+    $('#images10').val(data.url);
+    $('#filePicker10_img').html('<img src="'+url+'" style="width:90px;height:90px;" />');
+});
+
+uploader11.on( 'uploadSuccess', function( file, data ) {
+    var BaseUrl = $("#img_url").val();
+    var url = BaseUrl+data.url;
+    $('#images11').val(data.url);
+    $('#filePicker11_img').html('<img src="'+url+'" style="width:90px;height:90px;" />');
+});
+
+uploader12.on( 'uploadSuccess', function( file, data ) {
+    var BaseUrl = $("#img_url").val();
+    var url = BaseUrl+data.url;
+    $('#images12').val(data.url);
+    $('#filePicker12_img').html('<img src="'+url+'" style="width:90px;height:90px;" />');
 });

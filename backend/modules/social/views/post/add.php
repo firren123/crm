@@ -46,7 +46,7 @@ $form = ActiveForm::begin([
 <?= $form->field($model, 'title')->input('text',['style'=>'width:200px']) ; ?>
     <div class="form-group field-forum-post_img">
         <label class="control-label col-sm-3" for="forum-post_img"><span class="red">*</span>帖子图片</label>
-        <div class="col-sm-6">
+        <div class="col-sm-8">
             <ul class="imgList imgListForm">
                 <li>
                     <a href="javascript:;" id="filePicker1_img">
@@ -57,11 +57,123 @@ $form = ActiveForm::begin([
                     <span class="txt" id="filePicker1">上传</span>
                     <input type="hidden" value="<?= $model->post_img;?>" name="Post[post_img]" id="images1" />
                 </li>
+                <li>
+                    <a href="javascript:;" id="filePicker2_img">
+                        <?php if(!empty($model->post_img)){ ?>
+                            <img src="<?= \Yii::$app->params['imgHost'].$model->post_img;?>" style="width:90px;height:90px;">
+                        <?php } ?>
+                    </a>
+                    <span class="txt" id="filePicker2">上传</span>
+                    <input type="hidden" value="<?= $model->post_img;?>" name="Post[post_img]" id="images2" />
+                </li>
+                <li>
+                    <a href="javascript:;" id="filePicker3_img">
+                        <?php if(!empty($model->post_img)){ ?>
+                            <img src="<?= \Yii::$app->params['imgHost'].$model->post_img;?>" style="width:90px;height:90px;">
+                        <?php } ?>
+                    </a>
+                    <span class="txt" id="filePicker3">上传</span>
+                    <input type="hidden" value="<?= $model->post_img;?>" name="Post[post_img]" id="images3" />
+                </li>
+                <li>
+                    <a href="javascript:;" id="filePicker4_img">
+                        <?php if(!empty($model->post_img)){ ?>
+                            <img src="<?= \Yii::$app->params['imgHost'].$model->post_img;?>" style="width:90px;height:90px;">
+                        <?php } ?>
+                    </a>
+                    <span class="txt" id="filePicker4">上传</span>
+                    <input type="hidden" value="<?= $model->post_img;?>" name="Post[post_img]" id="images4" />
+                </li>
+                <li>
+                    <a href="javascript:;" id="filePicker5_img">
+                        <?php if(!empty($model->post_img)){ ?>
+                            <img src="<?= \Yii::$app->params['imgHost'].$model->post_img;?>" style="width:90px;height:90px;">
+                        <?php } ?>
+                    </a>
+                    <span class="txt" id="filePicker5">上传</span>
+                    <input type="hidden" value="<?= $model->post_img;?>" name="Post[post_img]" id="images5" />
+                </li>
+
+
+                <li>
+                    <a href="javascript:;" id="filePicker6_img">
+                        <?php if(!empty($model->post_img)){ ?>
+                            <img src="<?= \Yii::$app->params['imgHost'].$model->post_img;?>" style="width:90px;height:90px;">
+                        <?php } ?>
+                    </a>
+                    <span class="txt" id="filePicker6">上传</span>
+                    <input type="hidden" value="<?= $model->post_img;?>" name="Post[post_img]" id="images6" />
+                </li>
             </ul>
             <div class="help-block help-block-error "></div>
         </div>
 
     </div>
+    <div class="form-group field-forum-post_img">
+    <label class="control-label col-sm-3" for="forum-post_img"></label>
+    <div class="col-sm-8">
+        <ul class="imgList imgListForm">
+            <li>
+                <a href="javascript:;" id="filePicker7_img">
+                    <?php if(!empty($model->post_img)){ ?>
+                        <img src="<?= \Yii::$app->params['imgHost'].$model->post_img;?>" style="width:90px;height:90px;">
+                    <?php } ?>
+                </a>
+                <span class="txt" id="filePicker7">上传</span>
+                <input type="hidden" value="<?= $model->post_img;?>" name="Post[post_img]" id="images7" />
+            </li>
+            <li>
+                <a href="javascript:;" id="filePicker8_img">
+                    <?php if(!empty($model->post_img)){ ?>
+                        <img src="<?= \Yii::$app->params['imgHost'].$model->post_img;?>" style="width:90px;height:90px;">
+                    <?php } ?>
+                </a>
+                <span class="txt" id="filePicker8">上传</span>
+                <input type="hidden" value="<?= $model->post_img;?>" name="Post[post_img]" id="images8" />
+            </li>
+            <li>
+                <a href="javascript:;" id="filePicker9_img">
+                    <?php if(!empty($model->post_img)){ ?>
+                        <img src="<?= \Yii::$app->params['imgHost'].$model->post_img;?>" style="width:90px;height:90px;">
+                    <?php } ?>
+                </a>
+                <span class="txt" id="filePicker9">上传</span>
+                <input type="hidden" value="<?= $model->post_img;?>" name="Post[post_img]" id="images9" />
+            </li>
+            <li>
+                <a href="javascript:;" id="filePicker10_img">
+                    <?php if(!empty($model->post_img)){ ?>
+                        <img src="<?= \Yii::$app->params['imgHost'].$model->post_img;?>" style="width:90px;height:90px;">
+                    <?php } ?>
+                </a>
+                <span class="txt" id="filePicker10">上传</span>
+                <input type="hidden" value="<?= $model->post_img;?>" name="Post[post_img]" id="images10" />
+            </li>
+            <li>
+                <a href="javascript:;" id="filePicker11_img">
+                    <?php if(!empty($model->post_img)){ ?>
+                        <img src="<?= \Yii::$app->params['imgHost'].$model->post_img;?>" style="width:90px;height:90px;">
+                    <?php } ?>
+                </a>
+                <span class="txt" id="filePicker11">上传</span>
+                <input type="hidden" value="<?= $model->post_img;?>" name="Post[post_img]" id="images11" />
+            </li>
+
+
+            <li>
+                <a href="javascript:;" id="filePicker12_img">
+                    <?php if(!empty($model->post_img)){ ?>
+                        <img src="<?= \Yii::$app->params['imgHost'].$model->post_img;?>" style="width:90px;height:90px;">
+                    <?php } ?>
+                </a>
+                <span class="txt" id="filePicker12">上传</span>
+                <input type="hidden" value="<?= $model->post_img;?>" name="Post[post_img]" id="images12" />
+            </li>
+        </ul>
+        <div class="help-block help-block-error "></div>
+    </div>
+
+</div>
 <?= $form->field($model, 'thumbs')->input('text',['style'=>'width:200px']) ; ?>
 <?= $form->field($model, 'views')->input('text',['style'=>'width:200px']) ; ?>
 <?= $form->field($model, 'top')->radioList(['1'=>'是','2'=>'否']); ?>
