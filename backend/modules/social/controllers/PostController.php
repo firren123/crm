@@ -127,6 +127,8 @@ class PostController extends BaseController
             $Post['views']=RequestHelper::post('Post[views]', 0, 'intval');
             if (empty($Post['post_img'])) {
                 return $this->error('图片不能为空');
+            } else {
+                $Post['post_img'] = implode('###', $Post['post_img']);
             }
             $model->attributes = $Post;
             unset($Post['content']);
@@ -137,6 +139,7 @@ class PostController extends BaseController
                 $log = new Log();
                 $log_info = '管理员 ' . \Yii::$app->user->identity->username . '添加了帖子' . $result['data']['new_id'];
                 $log->recordLog($log_info, 12);
+
                 $this->redirect('/social/post/index');
             } else {
                 \Yii::$app->getSession()->setFlash('error', '添加失败.');
@@ -156,12 +159,17 @@ class PostController extends BaseController
         $model = new Post();
         $cond = 'id=' . $id;
         $item = $model->getInfo($cond, false, '*');
+        $item->post_img = explode("###",$item->post_img);
         $contentModel = new Content();
         $con = $contentModel->getInfo(['post_id' => $id]);
         $item['content'] = $con['content'];
         $Post = RequestHelper::post('Post');
-
         if (!empty($Post)) {
+            if (empty($Post['post_img'])) {
+                return $this->error('图片不能为空');
+            } else {
+                $Post['post_img'] = implode('###', $Post['post_img']);
+            }
             $content = $Post['content'];
             unset($Post['content']);
             $model->attributes = $Post;
@@ -189,6 +197,7 @@ class PostController extends BaseController
         $model = new Post();
         $cond = 'id=' . $id;
         $item = $model->getInfo($cond);
+        $item['post_img'] = explode("###",$item['post_img']);
         $contentModel = new Content();
         $con = $contentModel->getInfo(['post_id' => $id]);
         $item['content'] = $con['content'];

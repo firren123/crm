@@ -75,7 +75,13 @@ use yii\bootstrap\ActiveForm;
     <tr>
         <th>版块图片</th>
         <td colspan="5" width="80%">
-            <img src="<?= \Yii::$app->params['imgHost'].$item['post_img'];?>" alt=""/>
+            <?php foreach ($item['post_img'] as $k => $v) {
+                if ($v != '') { ?>
+                    <img width="90px" height="90px" src="<?= \Yii::$app->params['imgHost'] . $v; ?>" alt=""/>
+
+                <?php }
+            } ?>
+
         </td>
     </tr>
     <tr>
