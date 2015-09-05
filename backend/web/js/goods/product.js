@@ -180,6 +180,43 @@ function getUpdateHot(){
     }
 }
 /**
+ * 批量发布
+ * @returns {boolean}
+ */
+function getSingle(){
+    var falg = 0;
+    $("input[name='ids[]']:checkbox").each(function () {
+        if ($(this).prop("checked")==true) {
+            falg += 1;
+        }
+    })
+    if (falg > 0){
+        var token        = $('#token').val();
+        var ids = $("input[name='ids[]']:checkbox").valueOf();
+        var ids=$('input[id="brandid"]:checked').map(function(){return this.value}).get().join();
+        $.ajax(
+            {
+                type: "GET",
+                url: '/goods/productpre/update-single',
+                data: {'product_id':ids},
+                asynic: false,
+                dataType: "json",
+                beforeSend: function () {
+                },
+                success: function (result) {
+                    if(result['code']==200){
+                        window.location.reload()
+                    } else {
+                        gf.alert(result['msg']);
+                    }
+                }
+            });
+    }else{
+        alert('请选择要发布的商品');
+        return false;
+    }
+}
+/**
  * 删除图片
  * @param id
  * @returns {boolean}
@@ -240,7 +277,35 @@ function UpdateImg(id,oid_id){
         return false;
     }
 }
-
+/**
+ * 发布
+ * @param $product_id
+ */
+function getUpdateSingle(product_id){
+    var msg = "您真的确定发布吗？";
+    if (confirm(msg)==true){
+        $.ajax(
+            {
+                type: "GET",
+                url: '/goods/productpre/update-single',
+                data: {'product_id':product_id},
+                asynic: false,
+                dataType: "json",
+                beforeSend: function () {
+                },
+                success: function (result) {
+                    if(result['code']==200){
+                        window.location.reload()
+                    } else {
+                        gf.alert(result['msg']);
+                    }
+                }
+            }
+        );
+    }else{
+        return false;
+    }
+}
 $(function()
 {
     $(document).on("click",".zjs_text_price_3",function(event)

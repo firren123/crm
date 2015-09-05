@@ -1,15 +1,15 @@
 <?php
 use yii\widgets\LinkPager;
-$this->title = '标准库管理';
+$this->title = '待发布商品管理';
 ?>
 <script type="text/javascript" src="/js/goods/product.js"></script>
 <legends  style="fond-size:12px;">
-    <legend>标准库管理</legend>
+    <legend>待发布商品管理</legend>
 </legends>
 <?php
 echo $this->render('_search', ['search'=>$search,'cate_list'=>$cate_list,'brand_list'=>$brand_list,'city_data'=>$city_data]);
 ?>
-<!--<a id="yw0" class="btn btn-primary" href="/goods/product/add" style="margin-bottom:10px;">添加标准库</a>-->
+<a id="yw0" class="btn btn-primary" href="/goods/productpre/add" style="margin-bottom:10px;">添加待发布商品</a>
 
 <div class="tab-content">
     <div class="summary pull-right" >共 <span style="color: red"><?= $total?></span> 个商品</div>
@@ -29,8 +29,6 @@ echo $this->render('_search', ['search'=>$search,'cate_list'=>$cate_list,'brand_
                 <th width="130px">建议售价</th>
                 <th width="130px">铺货价</th>
                 <th>分类</th>
-                <th>上下架</th>
-                <th>是否推荐</th>
                 <th>库存</th>
                 <th style="width: 10%">限定区域</th>
                 <th>操作</th>
@@ -81,16 +79,15 @@ echo $this->render('_search', ['search'=>$search,'cate_list'=>$cate_list,'brand_
                             </p>
                         </td>
                         <td><?= empty($item['cate_name']) ? '--' : $item['cate_name'];?></td>
-                        <td><?= $item['status']==1 ? '上架' : '下架';?></td>
-                        <td><?= $item['is_hot']==1 ? '是' : '否';?></td>
                         <td><?= $item['total_num'];?></td>
                         <td><?= $item['area_name'];?></td>
                         <td style="width: 10%">
                             <?php if($item['bc_id'] == $bc_id or $item['bc_id']!=$branch_id) :?>
-<!--                            <a href="/goods/product/edit?id=--><?//= $item['id'];?><!--" style="cursor:pointer">编辑</a> <br>-->
+                            <a href="/goods/productpre/edit?id=<?= $item['id'];?>" style="cursor:pointer">编辑</a>
                             <?php endif;?>
-                            <a href="/goods/product/details?id=<?= $item['id'];?>" style="cursor:pointer">详情</a>
-<!--                            <a href="/goods/product/list?id=--><?//= $item['id'];?><!--">图集</a>-->
+                            <a href="/goods/productpre/details?id=<?= $item['id'];?>" style="cursor:pointer">详情</a><br>
+                            <a href="/goods/productpre/list?id=<?= $item['id'];?>">图集</a>
+                            <a href="javascript:void(0)" onclick="getUpdateSingle(<?= $item['id'];?>)">发布</a>
                             <a onclick="Delete(<?= $item['id'];?>)" style="cursor:pointer;display: none;">删除</a> <br>
 
                             <span class="zjs_cur_id" style="display:none;"><?php if(isset($item['id'])){echo $item['id'];} ?></span>
@@ -105,10 +102,7 @@ echo $this->render('_search', ['search'=>$search,'cate_list'=>$cate_list,'brand_
                 <td colspan="15">
                     <div id="egw0" class="pull-right" style="position:relative">
                         <input type="hidden" id="token" value="<?php echo Yii::$app->getRequest()->getCsrfToken(); ?>" />
-                        <button id="id_btn_set_pop" class="bulk-actions-btn btn btn-success btn-small active" type="button" name="yt1" onclick="getUpdateOne()">使选中上架</button>
-                        <button id="show_all" class="bulk-actions-btn btn btn-success btn-small active" type="button" name="yt2" onclick="getUpdateTwo()">使选中下架</button>
-                        <button id="show_all" class="bulk-actions-btn btn btn-danger btn-small active" type="button" name="yt3" onclick="getUpdateHot()">使选中为推荐</button>
-                        <button id="delete_all" class="bulk-actions-btn btn btn-danger btn-small active" type="button" name="yt4" onclick="checkSelectd()" style="display: none">删除所选</button>
+                        <button id="id_btn_set_pop" class="bulk-actions-btn btn btn-success btn-small active" type="button" name="yt1" onclick="getSingle()">批量发布</button>
                         <div class="bulk-actions-blocker" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; display: none;"></div>
                     </div>
 

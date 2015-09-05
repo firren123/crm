@@ -47,5 +47,12 @@ return [
             'password'=>'4fkok0ezZDurw',
             'charset'=>'utf8',
         ],
+        'db_social'    => [
+            'class'=>'yii\db\Connection',
+            'dsn'=>'mysql:host=118.186.247.55;dbname=i500_social',
+            'username'=>'500m',
+            'password'=>'500m',
+            'charset'=>'utf8',
+        ],
     ],
 ];
