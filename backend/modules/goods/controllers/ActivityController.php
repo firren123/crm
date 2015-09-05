@@ -305,7 +305,7 @@ class ActivityController extends BaseController
         $coupon_list = $this->getCouponType();
         //获取商品分类
         $cateModel = new Category();
-        $goods_cate = $cateModel->getList(['level'=>1, 'status'=>2], "id,name");
+        $goods_cate = $cateModel->getList(['level'=>1, 'status'=>2,'type'=>0], "id,name");
         $data_info = [
             'model' => $Activity_model,
             'title' => $title,
@@ -417,7 +417,7 @@ class ActivityController extends BaseController
         $coupon_list = $this->getCouponType();
         //获取商品分类
         $cateModel = new Category();
-        $goods_cate = $cateModel->getList(['level'=>1, 'status'=>2], "id,name");
+        $goods_cate = $cateModel->getList(['level'=>1, 'status'=>2,'type'=>0], "id,name");
         $data_info = [
             'model' => $Activity_model,
             'title' => $title,
@@ -457,7 +457,7 @@ class ActivityController extends BaseController
         //获取优惠券
         $coupon_list = $this->getCouponType();
         $cateModel = new Category();
-        $goods_cate = $cateModel->getList(['level'=>1, 'status'=>2], "id,name");
+        $goods_cate = $cateModel->getList(['level'=>1, 'status'=>2,'type'=>0], "id,name");
         $data_info = [
             'model' => $Activity_model,
             'title' => $title,
