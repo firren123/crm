@@ -99,7 +99,7 @@ var dataremark = new Array();
          var code = $.trim($("#code").val());//区号
          var tel = $.trim($("#tel").val());
          var email = $.trim($("#email").val());
-         var depots = $.trim($("#depots option:selected").val());
+         var depots = $.trim($('select[name="depots"]').val());
          var dep_name = $.trim($("#dep_name").val());//仓库名称
          var depot = $.trim($("#depot").val());//仓库地址
          var explain = $.trim($("#explain").val());
