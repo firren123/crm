@@ -182,7 +182,7 @@ class StorageOutController extends BaseController
         $sn = RequestHelper::get('sn', '', 'trim');
         $page_size = 5;
         $name = RequestHelper::get('name', '', 'trim');
-        $where = ['and', ['>', 'id', 0], ['!=', 'good_name', '']];
+        $where = ['and', ['>', 'id', 0]];
         if (!empty($name)) {
             $where[] = ['like', 'good_name', $name];
         }

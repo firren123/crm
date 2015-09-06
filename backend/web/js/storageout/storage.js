@@ -134,9 +134,7 @@ var dataremark = new Array();
 
      $("#add_good").click(function(){
 
-         var depots = $.trim($("#depots option:selected").val());
-         var sn = $.trim($("#depots option:selected").val());
-
+         var depots = $.trim($('select[name="depots"]').val());
          var d = dialog({title:"提示",
              okValue: '确定',
              ok: function () {}
@@ -149,8 +147,9 @@ var dataremark = new Array();
              return false;
          }
 
+
          var d = dialog({
-             url:'/storage/storage-out/good-add?sn='+sn,
+             url:'/storage/storage-out/good-add?sn='+depots,
              title: '添加商品',
              width: '70em',
              okValue: '确定',
