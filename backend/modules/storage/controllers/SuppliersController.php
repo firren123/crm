@@ -222,6 +222,9 @@ class SuppliersController extends BaseController
             }
             if (!empty($list['district_id'])) {
                 $d_name = $district->getOneRecord(" id = '{$list['district_id']}'", '', 'name');
+                if (empty($d_name)) {
+                    $d_name['name'] = "全部区域";
+                }
                 $address .= $d_name['name'];
             }
 
