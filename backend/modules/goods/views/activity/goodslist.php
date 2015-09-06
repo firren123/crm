@@ -35,7 +35,7 @@ use yii\widgets\LinkPager;
                             <td colspan="2" id="goods_name"><?= $pro_info['name'];?></td>
                             <td colspan="2"><?= $pro_info['attr_value'];?></td>
                             <td colspan="2"><?= $pro_info['pro_type'];?></td>
-                            <input type="hidden" name="pid" value="<?= $pro_info['id']; ?>"/>
+                            <input type="hidden" id="pid" name="pid" value="<?= $pro_info['id']; ?>"/>
                         </tr>
                 <?php } ?>
                 <?php if($type == 1){?>
@@ -126,7 +126,7 @@ use yii\widgets\LinkPager;
         $('#end_time').blur(function(){
             if($(this).val()){
                 var end_time = $(this).val().substr(0,10);
-                end_time += ' 23:59:59 '
+                end_time += ' 23:59:59 ';
                 $("#end_time").val(end_time);
             }
 
