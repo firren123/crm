@@ -79,7 +79,7 @@ $this->title = '管理采购库存';
                     <td><?= $item['good_id'];?></td>
                     <td><?= $item['good_name'];?></td>
                     <td><?= $item['attr_value'];?></td>
-                    <td><?=empty($item['allnum']) ? $item['total'] : $item['allnum'];?></td>
+                    <td><?=$item['allnum'];?></td>
                     <td><?=$item['bar_code']?></td>
                     <!--<td><a href="javascript:;">查看</td>-->
                 </tr>
