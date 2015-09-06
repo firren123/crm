@@ -25,13 +25,15 @@ namespace backend\models\shop;
  * @license  http://www.i500m.com/ license
  * @link     liuwei@iyangpin.com
  */
-class ShopProductLog extends ShopBase{
+class ShopProductLog extends ShopBase
+{
     /**
      * 数据表连接
      *
      * @return string
      */
-    public static function tableName(){
+    public static function tableName()
+    {
         return '{{%shop_product_log}}';
     }
 }
