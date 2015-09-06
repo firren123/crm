@@ -58,6 +58,7 @@ class BrandController extends BaseController
         if (!empty($search['name'])) {
             $where = ['like', 'name' , $search['name']];
         }
+        $ids_data = [];
         if (!empty($search['cate_id'])) {
             $brand_cond = 'category_id='.$search['cate_id'];
             $brand_list = $brand_model->getList($brand_cond, 'brand_id');
