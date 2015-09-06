@@ -35,6 +35,7 @@ use yii\widgets\LinkPager;
                             <td colspan="2" id="goods_name"><?= $pro_info['name'];?></td>
                             <td colspan="2"><?= $pro_info['attr_value'];?></td>
                             <td colspan="2"><?= $pro_info['pro_type'];?></td>
+                            <input type="hidden" name="pid" value="<?= $pro_info['id']; ?>"/>
                         </tr>
                 <?php } ?>
                 <?php if($type == 1){?>
@@ -74,6 +75,7 @@ use yii\widgets\LinkPager;
                 </tr>
             <tr>
                 <td colspan="6" style="text-align: center;"><input type="button" value="添加" class="btn btn-primary" id="btn1">
+
                 </td>
             </tr>
         <?php } ?>
@@ -138,6 +140,7 @@ use yii\widgets\LinkPager;
             var d = new Object();
 
             var goods_name = $("#goods_name").html();
+            console.log(goods_name);
             if(goods_name == undefined){
                 alert('商品不能为空');
                 return false;
@@ -155,7 +158,7 @@ use yii\widgets\LinkPager;
             var day = day_num == 0?0:day_num2;
 
 
-            d.id = $("#product_id").val();
+            d.id = $("#pid").val();
             d.start_time=$("#start_time").val();
             d.end_time=$("#end_time").val();
             d.day_num=day;
@@ -183,6 +186,8 @@ use yii\widgets\LinkPager;
                 alert('每日限购不能为空');
                 return false;
             }
+            var goods_name = $("#goods_name").html();
+            console.log(goods_name);
             if(goods_name == undefined){
                 alert('商品不能为空');
                 return false;
@@ -193,7 +198,7 @@ use yii\widgets\LinkPager;
             }
             var day = day_num == 0?0:day_num2;
 
-            d.id=$("#product_id").val();
+            d.id=$("#pid").val();
             d.day_num=day;
             d.start_time=$("#start_time").val();
             d.end_time=$("#end_time").val();
@@ -213,37 +218,7 @@ use yii\widgets\LinkPager;
             activity.childAddGoods2(d);
             return false;
         });
-//        $(".unable_user").click(function(){
-//            $(".user").attr('disabled','disabled');
-//        })
-//        $(".able_user").click(function(){
-//            $(".user").removeAttr("disabled");
-//        })
-//
-//        $(".unable_qu").click(function(){
-//            $(".qu").attr('disabled','disabled');
-//        })
-//        $(".able_qu").click(function(){
-//            $(".qu").removeAttr("disabled");
-//        })
-//
-//        $(".unable_time").click(function(){
-//            $(".time_start").attr('disabled','disabled');
-//            $(".time_end").attr('disabled','disabled');
-//        })
-//        $(".able_time").click(function(){
-//            $(".time_start").removeAttr("disabled");
-//            $(".time_end").removeAttr("disabled");
-//        })
-//        $(".btn").click(function(){
-//            var info = $(".active").val();
-//            if(info<=0){
-//                $(".act_num").text('活动价格不能小于等于0');
-//                return false;
-//            }else{
-//                $(".act_num").text('');
-//            }
-//        })
+
 
     });
 
