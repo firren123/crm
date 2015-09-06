@@ -23,13 +23,15 @@ use common\helpers\FastDFSHelper;
 use yii\web\Controller;
 
 
-class PublicController extends Controller{
+class PublicController extends Controller
+{
     /**
      * 简介：
      * @author  lichenjun@iyangpin.com。
      * @return string
      */
-    public function actionUpload(){
+    public function actionUpload()
+    {
         if (\Yii::$app->request->getIsPost()) {
             $return = array('status' => 1, 'info' => 'success', 'url' => '');
             $fast_dfs = new FastDFSHelper();
@@ -38,7 +40,37 @@ class PublicController extends Controller{
                 $return['url'] = '/' . $images['group_name'] . '/' . $images['filename'];
             }
             exit(json_encode($return));
-        }else{
+        } else {
+            echo 'error';
+        }
+    }
+
+    /**
+     * 简介：
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionUpload2()
+    {
+        if (\Yii::$app->request->getIsPost()) {
+            var_dump($_FILES);
+            var_dump($_POST);
+            $model = new Post();
+            $model->file = UploadedFile::getInstances($model, 'file');
+            var_dump($model);
+            exit;
+            $return = array('status' => 1, 'info' => 'success', 'url' => '');
+
+
+//            $fast_dfs = new FastDFSHelper();
+//            $images = $fast_dfs->fdfs_upload('file');
+//            if ($images) {
+//                $return['url'] = '/' . $images['group_name'] . '/' . $images['filename'];
+//            }
+//            exit(json_encode($return));
+
+
+        } else {
             echo 'error';
         }
     }
