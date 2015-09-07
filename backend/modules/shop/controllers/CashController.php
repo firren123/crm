@@ -361,14 +361,6 @@ class CashController extends BaseController
         $objPHPExcel->getActiveSheet()->duplicateStyle($objPHPExcel->getActiveSheet()->getStyle('A3'), 'A3:F'.$num);//复制单元格样式
         $objPHPExcel->getActiveSheet()->getStyle('A3:D'.$num)->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID);
         $objPHPExcel->getActiveSheet()->getStyle('A3:D'.$num)->getFill()->getStartColor()->setARGB('#FFFF99');
-        //$objPHPExcel = $objPHPExcel->getActiveSheet()->getBorders();
-        //$objBorderA5->getTop()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-        //$objBorderA5->getTop()->getColor()->setARGB('FFFF0000'); // color
-        //$objBorderA5->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-        //$objBorderA5->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-        //$objBorderA5->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-        //$objPHPExcel->getActiveSheet()->setTitle('accounts');
-        //$objPHPExcel->setActiveSheetIndex(0);
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="'.$name.'.xls"');
         header('Cache-Control: max-age=0');
