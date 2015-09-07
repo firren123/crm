@@ -51,6 +51,7 @@ use yii\widgets\LinkPager;
                         </tr>
                 </tbody>
             </table>
+            <?php echo LinkPager::widget(['pagination' => $pages]); ?>
             <br><br>
             <div style="padding: auto;">
             <form action="/admin/shop/freeze" method="post">
