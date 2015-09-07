@@ -132,6 +132,7 @@ use yii\widgets\LinkPager;
         $(".number").keyup(function(){
             var price = $.trim($(this).parent().closest("tr").find(".pric").val());
             var num = $.trim($(this).parent().closest("tr").find(".number").val());
+            var num2 = $(this).parent().closest("tr").find(".number");
             var id = $.trim($(this).parent().closest("tr").find(".goodid").text());
             var sn = $.trim($(this).parent().closest("tr").find(".storage_sn").text());
 
@@ -172,6 +173,7 @@ use yii\widgets\LinkPager;
                         }
                     })
                     n.show();
+                    num2.val("");
                     return false;
                 }
             });

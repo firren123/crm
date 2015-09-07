@@ -24,6 +24,7 @@ use common\helpers\FastDFSHelper;
 use common\helpers\RequestHelper;
 use backend\controllers\BaseController;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 
 /**
@@ -57,6 +58,7 @@ class BrandController extends BaseController
         if (!empty($search['name'])) {
             $where = ['like', 'name' , $search['name']];
         }
+        $ids_data = [];
         if (!empty($search['cate_id'])) {
             $brand_cond = 'category_id='.$search['cate_id'];
             $brand_list = $brand_model->getList($brand_cond, 'brand_id');
@@ -375,6 +377,8 @@ class BrandController extends BaseController
     }
     /**
      * 获取品牌列表
+     *
+     * @return int
      */
     public function actionList()
     {
@@ -393,10 +397,10 @@ class BrandController extends BaseController
                 }
                 $ids = implode(',', $cate_data);
                 $cond = "id in (" . $ids . ") and status=2";
-                $data = $model->getList($cond, 'id,name', 'id desc');
+                $list = $model->getList($cond, 'name', 'id desc');
+                $data = ArrayHelper::getColumn($list, 'name');
             }
         }
         echo json_encode($data);
     }
-
 }

@@ -42,7 +42,8 @@ class Brand extends I500Base
     /**
      * 添加
      *
-     * @param: array $data
+     * @param array $data 数据
+     *
      * @return bool
      */
     public function getInsert($data = array())
@@ -74,12 +75,13 @@ class Brand extends I500Base
             [['status'],'required','message' => '状态 不能为空.'],
         ];
     }
+
     /**
      * 品牌删除
      *
-     * @param: $id
+     * @param int $id 品牌id
+     *
      * @return int
-     * @throws \Exception
      */
     public function getDelete($id)
     {
@@ -100,11 +102,12 @@ class Brand extends I500Base
     /**
      * 品牌名称是否存在
      *
-     * @param: $name
-     * @param: NULL $id
+     * @param string $name 名称
+     * @param null   $id   id
+     *
      * @return array|null|ActiveRecord
      */
-    public function getDetailsByName($name, $id=NULL)
+    public function getDetailsByName($name, $id=null)
     {
         $list = array();
         if (!empty($name)) {
@@ -120,7 +123,8 @@ class Brand extends I500Base
     /**
      * 批量删除
      *
-     * @param: string $ids
+     * @param string $ids id集合
+     *
      * @return int
      */
     public function getBatchDelete($ids)
@@ -136,5 +140,4 @@ class Brand extends I500Base
             }
         }
     }
-
 }

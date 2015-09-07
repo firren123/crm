@@ -21,14 +21,12 @@ use backend\models\i500m\AttributeValue;
 use backend\models\i500m\Brand;
 use backend\models\i500m\BrandCategory;
 use backend\models\i500m\Category;
-use backend\models\i500m\CategoryAttribute;
 use backend\models\i500m\CrmBranch;
 use backend\models\i500m\CrmConfig;
 use backend\models\i500m\Log;
 use backend\models\i500m\Product;
 use backend\models\i500m\ProductAttr;
 use backend\models\i500m\ProductImage;
-use backend\models\i500m\ProductSku;
 use backend\models\i500m\Province;
 use backend\models\shop\ShopProduct;
 use backend\models\shop\ShopProductLog;
@@ -37,6 +35,7 @@ use common\helpers\CurlHelper;
 use common\helpers\FastDFSHelper;
 use common\helpers\RequestHelper;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 
 /**
@@ -228,6 +227,7 @@ class ProductpreController extends BaseController
         $brand_item = array(array('id'=>'','name'=>'选择品牌'));
          //商品分类列表
         $cate_model = new Category();
+        $brand_cate = new BrandCategory();
         $cate_cond['level'] = 1;
         $cate_cond['type'] = 0;
         $cate_cond['status'] = 2;
@@ -256,11 +256,11 @@ class ProductpreController extends BaseController
         $model['fixed_price'] = 0;
         $product = RequestHelper::post('Product');
         $products = RequestHelper::post('Products');
+        $brand_model = new Brand();
         if (!empty($product)) {
             $model->attributes = $product;
             if ($model['cate_first_id']!=0) {
                 $category_model = new BrandCategory();
-                $brand_model = new Brand();
                 //分类下的品牌id列表
                 $category_cond['category_id'] = $model['cate_first_id'];
                 $category_list = $category_model->getList($category_cond, 'brand_id', 'id desc');
@@ -284,17 +284,18 @@ class ProductpreController extends BaseController
             $product['description'] = empty($product['description']) ? '' : htmlspecialchars_decode($product['description']);
             $product['description'] = empty($product['description']) ? '' : stripslashes($product['description']);
             $model['description'] = $product['description'];
+            $model['brand_id'] = $product['brand_name'];
             $attr_result = $this->attrValue($products);
             if (!empty($result)) {
                 $model->addError('name', '商品名称 不能重复');
-            } elseif (count($file['name']) != count(array_filter($file['name']))) {
-                \Yii::$app->getSession()->setFlash('attr_value', '主图 不能为空');
             } elseif ($product['cate_first_id']=="") {
                 $model->addError('cate_first_id', '商品分类 不能为空');
-            } elseif ($product['brand_id']=="") {
-                $model->addError('brand_id', '商品品牌 不能为空');
+            } elseif ($product['brand_name']=="") {
+                \Yii::$app->getSession()->setFlash('brand_name', '商品品牌 不能为空');
             } elseif ($attr_result['code'] != 200) {
                 \Yii::$app->getSession()->setFlash('attr_value', $attr_result['msg']);
+            } elseif (count($file['name']) != count(array_filter($file['name']))) {
+                \Yii::$app->getSession()->setFlash('attr_value', '主图 不能为空');
             } elseif (empty($product['description'])) {
                 \Yii::$app->getSession()->setFlash('error', '商品详情 不能为空');
             } else {
@@ -307,6 +308,30 @@ class ProductpreController extends BaseController
                     $fast = new FastDFSHelper();
                     @rename($file_tmp, $filename);
                     $ret = $fast->fdfs_upload_by_filename($filename);
+                    $list_category = $brand_cate->getList(['category_id'=>$product['cate_first_id']], 'brand_id');
+                    $cond_brand['id'] = empty($list_category) ? [0] : ArrayHelper::getColumn($list_category, 'brand_id');
+                    $cond_brand['name'] = $product['brand_name'];
+                    $item_brand = $brand_model->getInfo($cond_brand, true, 'id', 'id desc');
+                    if (!empty($item_brand)) {
+                        $product['brand_id'] = $item_brand['id'];
+                    } else {
+                        $brand_list['name'] = $product['brand_name'];
+                        $brand_list['status'] = 2;
+                        $brand_list['description'] = $product['brand_name'];
+                        $brand_list['sort'] = 99;
+                        $brand_list['add_time'] = date('Y-m-d H:i:s');
+                        $product['brand_id'] = $brand_model->getInsert($brand_list);
+                        if ($product['brand_id'] != false) {
+                            //日志
+                            $content = "管理员：".\Yii::$app->user->identity->username.",增加了品牌id为:".$product['brand_id'].",品牌名称为:".$brand_list['name'];
+                            $log_model = new Log();
+                            $log_model->recordLog($content);
+                            $cate['brand_id'] = $product['brand_id'];
+                            $cate['category_id'] = $product['cate_first_id'];
+                            $cate['add_time'] = date('Y-m-d H:i:s');
+                            $brand_cate->insertInfo($cate);
+                        }
+                    }
                     $product['image'] = '/'.$ret['group_name'] . '/' . $ret['filename'];
                     $product['attr_value'] = $v;
                     $product['origin_price'] = $products['origin_price'][$k];
@@ -325,6 +350,7 @@ class ProductpreController extends BaseController
                     $product['sku'] = time().mt_rand(1000, 9999);
                     $product['province_id'] = $city_item['province_id'];
                     $product['status'] = 2;
+                    ArrayHelper::remove($product, 'brand_name');
                     $list = $model->getInsert($product);
                     if ($list > 0) {
                         //记录日志
@@ -363,210 +389,6 @@ class ProductpreController extends BaseController
         );
         return $this->render('add', $param);
     }
-
-    /**
-     * 图集上传
-     *
-     * @return string
-     */
-    public function actionImages()
-    {
-        $id = RequestHelper::get('id');
-        $product_model = new Product();
-        $product_item = $product_model->getInfo(['id'=>$id]);
-        $sku = empty($product_item) ? 0 : $product_item['sku'];
-        //sku为空时，只针对当前商品上传图片
-        if ($sku) {
-            $product_list = $product_model->getList(['sku'=>$sku], 'id');
-        } else {
-            $product_list[] = ['id'=>$id];
-        }
-        $model = new ProductImage();
-        $submit = RequestHelper::post('add');
-        if (!empty($submit)) {
-            //上传图片
-            $fast = new FastDFSHelper();
-            //图集上传
-            $img1 = $_FILES['img1'];
-            $img2 = $_FILES['img2'];
-            $img3 = $_FILES['img3'];
-            $img4 = $_FILES['img4'];
-            $img5 = $_FILES['img5'];
-            $image_data = array();
-            if (!empty($img1['name'])) {
-                 $image_data[] = $fast->fdfs_upload('img1');
-            }
-            if (!empty($img2['name'])) {
-                 $image_data[] = $fast->fdfs_upload('img2');
-            }
-            if (!empty($img3['name'])) {
-                 $image_data[] = $fast->fdfs_upload('img3');
-            }
-            if (!empty($img4['name'])) {
-                 $image_data[] = $fast->fdfs_upload('img4');
-            }
-            if (!empty($img5['name'])) {
-                 $image_data[] = $fast->fdfs_upload('img5');
-            }
-            $image_result = true;
-            foreach ($product_list as $list) {
-                foreach ($image_data as $k => $v) {
-                      $data = array();
-                      $data['image'] = '/' . $v['group_name'] . '/' . $v['filename'];
-                      $data['product_id'] = $list['id'];
-                      $data['status'] = 2;
-                      $data['sort'] = 99;
-                      $data['create_time'] = time();
-                      $data['type'] = 0;
-                      $image_result = $model->getBulkInsert($data);
-                }
-                $item = $product_model->getInfo(['id'=>$list['id']]);
-                //记录日志
-                $content = "管理员：".\Yii::$app->user->identity->username.",修改了商品id为:".$list['id'].",商品名称为:".$item['name'].' 的商品图集';
-                $log_model = new Log();
-                $log_model->recordLog($content);
-            }
-            if ($image_result == true) {
-                 $this->redirect('/goods/product');
-            }
-        }
-        return $this->render('_images');
-    }
-
-     /**
-      * 商品属性---添加
-      *
-      * @return string
-      */
-    public function actionAttribute()
-    {
-        $log_model = new Log();
-        $id = RequestHelper::get('id');
-        $model = new Product();
-        $model['sort'] = 999;
-        $product_attr = new ProductAttr();
-        $attr_model = new Attribute();
-        $model_attr = new CategoryAttribute();
-        $cond['id'] = $id;
-        $list = $model->getInfo($cond);
-        $ids_data = array();
-        if (!empty($list)) {
-            $model_conf['category_id'] = $list['cate_first_id'];
-            $data =$model_attr->getList($model_conf, 'attribute_id');
-            if (!empty($data)) {
-                foreach ($data as $v) {
-                      $ids_data[] = $v['attribute_id'];
-                }
-            }
-        }
-        $attr_conf['id'] = $ids_data;
-        $item = $attr_model->getList($attr_conf, 'id,admin_name', 'weight asc');
-        $attr_name_id = RequestHelper::post('attr_name_id');
-        $attr_values = RequestHelper::post('attr_values');
-        $origin_price = RequestHelper::post('origin_price');
-        $sale_price = RequestHelper::post('sale_price');
-        $shop_price = RequestHelper::post('shop_price');
-        $total = RequestHelper::post('total');
-        $attr_names = RequestHelper::post('attr_names');
-        $bar_code = RequestHelper::post('bar_code');
-        if (!empty($attr_name_id)) {
-            if ($attr_name_id[0]==0) {
-                 $this->redirect('/goods/product/images?id=' . $id);
-            } else {
-                $price_number = 1;
-                foreach ($sale_price as $key => $value) {
-                    if ($value > $origin_price[$key]) {
-                        $price_number *= 0;
-                    } else {
-                        $price_number *= 1;
-                    }
-                }
-                if ($price_number!=1) {
-                    return $this->error('建议售价 不能小于进货价', '/goods/product/attribute?id=' . $id);
-                } else {
-                    $attribute_value_model = new AttributeValue();
-                    $product_result = false;
-                    foreach ($origin_price as $k => $v) {
-                        $ids = $attr_values[$k];
-                        $id_data = explode(',', $ids);
-                        $attribute_value_list = $attribute_value_model->getList(['id' => $id_data]);
-                        $data = [];
-                        $data['origin_price'] = $v;
-                        $data['sale_price'] = $sale_price[$k];
-                        $data['shop_price'] = $shop_price[$k];
-                        $data['total_num'] = !empty($total[$k]) ? $total[$k] : 0;
-                        $data['bar_code'] = $bar_code[$k];
-                        $data['attr_value'] = $attr_names[$k];
-                        if ($k == 0) {
-                            $product_result = $model->updateInfo($data, array('id' => $list['id']));
-                            $product_id = $id;
-                            //记录日志
-                            $content = "管理员：".\Yii::$app->user->identity->username.",把商品id为:".$id.",商品名称为:".$list['name'].' 商品的条形码修改成了:'.$data['bar_code'];
-                            if ($data['origin_price']!=$list['origin_price']) {
-                                $content .= ",建议售价修改成了:".$data['origin_price'];
-                            }
-                            if ($data['sale_price']!=$list['sale_price']) {
-                                $content .= ",进货价修改成了:".$data['sale_price'];
-                            }
-                            if ($data['shop_price']!=$list['shop_price']) {
-                                $content .= ",铺货价修改成了:".$data['shop_price'];
-                            }
-                            if ($data['total_num']!=$list['total_num']) {
-                                $content .= ",库存修改成了:".$data['total_num'];
-                            }
-                            $log_model->recordLog($content);
-                            //修改商品实时同步到sphinx
-                            $url = $this->channel_url.'/sphinx/sync-goods?goods_id='.$product_id;
-                            CurlHelper::get($url, 'channel');
-                        } else {
-                             $data['name'] = $list['name'];
-                             $data['sku'] = $list['sku'];
-                             $data['image'] = $list['image'];
-                             $data['cate_first_id'] = $list['cate_first_id'];
-                             $data['brand_id'] = $list['brand_id'];
-                             $data['status'] = 2;
-                             $data['create_time'] = time();
-                             $data['single'] = 2;
-                             $data['description'] = $list['description'];
-                             $data['bc_id'] = $list['bc_id'];
-                             $data['province_id'] = $list['province_id'];
-                             $data['is_self'] = $list['is_self'];
-                             $data['fixed_price'] = $list['fixed_price'];
-                             $img_model = new ProductImage();
-                             $product_result = $model->getInsert($data);
-                             //记录日志
-                             $content = "管理员：".\Yii::$app->user->identity->username.",添加了一个商品id为:".$product_result.",商品名称为:".$list['name'].' 的商品';
-                             $log_model = new Log();
-                             $log_model->recordLog($content);
-                             $product_id = $product_result;
-                             //主图
-                             $img['image'] = $list['image'];
-                             $img['product_id'] = $product_id;
-                             $img['status'] = 2;
-                             $img['sort'] = 99;
-                             $img['create_time'] = time();
-                             $img['type'] = 1;
-                             $img_model->insertInfo($img);
-                             //新添的商品实时同步到sphinx
-                             $url = $this->channel_url.'/sphinx/insert-goods?goods_id='.$product_result;
-                             CurlHelper::get($url, 'channel');
-                        }
-                        foreach ($attribute_value_list as $attr_value) {
-                            $attr_data['product_id'] = $product_id;
-                            $attr_data['attr_name_id'] = $attr_value['attr_id'];
-                            $attr_data['attr_value_id'] = $attr_value['id'];
-                            $product_attr->insertInfo($attr_data);
-                        }
-                    }
-                    if ($product_result > 0) {
-                        $this->redirect('/goods/product/images?id=' . $id);
-                    }
-                }
-            }
-        }
-        return $this->render('_attribute', ['item'=>$item]);
-    }
-
     /**
     * 内容编辑
     *
@@ -609,8 +431,11 @@ class ProductpreController extends BaseController
             }
             $cond['id'] = $category_data;
             $cond['status'] = 2;
-            $brand_list = $brand_model->getList($cond, 'id,name', 'id desc');
+            $brand = $brand_model->getList($cond, 'id,name', 'id desc');
+            $brand_list = ArrayHelper::getColumn($brand, 'name');
         }
+        $brand_data = $brand_model->getInfo(['id'=>$item['brand_id']]);
+        $item['brand_name'] = empty($brand_data) ? '' : $brand_data['name'];
         //所属分公司
         $branch_model =new CrmBranch();
         $data_cond['name'] = '总公司';
@@ -640,8 +465,10 @@ class ProductpreController extends BaseController
             $products = RequestHelper::post('Products');
             $attr_result = $this->attrValue($products, $id);
             $model->attributes = $product;
-            if ($product['brand_id']=="") {
-                 $model->addError('brand_id', '商品品牌 不能空');
+            if ($product['cate_first_id']=="") {
+                $model->addError('cate_first_id', '商品分类 不能为空');
+            } elseif ($product['brand_name']=="") {
+                \Yii::$app->getSession()->setFlash('brand_name', '商品品牌 不能为空');
             } elseif (empty($product['description'])) {
                  \Yii::$app->getSession()->setFlash('error', '商品详情 不能为空');
             } elseif ($attr_result['code']!=200) {
@@ -650,6 +477,30 @@ class ProductpreController extends BaseController
                 \Yii::$app->getSession()->setFlash('attr_value', '主图 不能为空');
             } else {
                 foreach ($products['attr_value'] as $k => $v) {
+                    $list_category = $category_model->getList(['category_id'=>$product['cate_first_id']], 'brand_id');
+                    $cond_brand['id'] = empty($list_category) ? [0] : ArrayHelper::getColumn($list_category, 'brand_id');
+                    $cond_brand['name'] = $product['brand_name'];
+                    $item_brand = $brand_model->getInfo($cond_brand, true, 'id', 'id desc');
+                    if (!empty($item_brand)) {
+                        $product['brand_id'] = $item_brand['id'];
+                    } else {
+                        $list_brand['name'] = $product['brand_name'];
+                        $list_brand['status'] = 2;
+                        $list_brand['description'] = $product['brand_name'];
+                        $list_brand['sort'] = 99;
+                        $list_brand['add_time'] = date('Y-m-d H:i:s');
+                        $product['brand_id'] = $brand_model->getInsert($list_brand);
+                        if ($product['brand_id'] != false) {
+                            //日志
+                            $content = "管理员：".\Yii::$app->user->identity->username.",增加了品牌id为:".$product['brand_id'].",品牌名称为:".$list_brand['name'];
+                            $log_model = new Log();
+                            $log_model->recordLog($content);
+                            $cate['brand_id'] = $product['brand_id'];
+                            $cate['category_id'] = $product['cate_first_id'];
+                            $cate['add_time'] = date('Y-m-d H:i:s');
+                            $category_model->insertInfo($cate);
+                        }
+                    }
                     $product['attr_value'] = $v;
                     $product['origin_price'] = $products['origin_price'][$k];
                     $product['sale_price'] = $products['sale_price'][$k];
@@ -665,6 +516,7 @@ class ProductpreController extends BaseController
                     $city_item = $branch_model->getInfo(array('id' => $product['bc_id']));
                     $product['province_id'] = $city_item['province_id'];
                     $product_cond['id'] = $id;
+                    ArrayHelper::remove($product, 'brand_name');
                     if ($k == 0) {
                         if ($file['name'][0]!="") {
                             //上传图片
@@ -827,7 +679,7 @@ class ProductpreController extends BaseController
             'model'=>$model,
             'item'=>$item,
             'cate_list'=>$cate_list,
-            'brand_list'=>$brand_list,
+            'brand_list'=>json_encode($brand_list),
             'city_list'=>$city_data,
             'bc_id' =>$bc_id,
             'branch_id'=>$branch_id

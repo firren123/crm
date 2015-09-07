@@ -4,6 +4,27 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 $this->title = '编辑待发布商品';
 ?>
+<style type="text/css">
+    .item{
+        padding:3px 5px;
+        cursor:pointer;
+        height: 30px;
+        line-height: 30px;
+    }
+    .addbg{
+        background:#ccc;
+    }
+    #append{
+        border:1px solid #ccc;
+        border-top:0;
+        display:none;
+        width: 400px;
+        overflow: hidden;
+        position: absolute;
+        z-index: 2;
+        background: #ffffff;
+    }
+</style>
 <?= $this->registerJsFile("@web/js/jquery-1.10.2.min.js");?>
 <?= $this->registerJsFile("@web/js/news.js");?>
 <?= $this->registerJsFile("@web/plug/ueditor/ueditor.config.js");?>
@@ -29,7 +50,14 @@ $form = ActiveForm::begin([
     <?= $form->field($model, 'title')->label('副标题/简介')->input('text',['style'=>'width:400px']) ; ?>
     <?= $form->field($model, 'keywords')->label('关键词')->input('text',['style'=>'width:400px']) ; ?>
 <?= $form->field($model, 'cate_first_id')->dropDownList(ArrayHelper::map($cate_list,'id','name'),array('id'=>'cate_id'))->label('分类'); ?>
-<?= $form->field($model, 'brand_id')->dropDownList(ArrayHelper::map($brand_list,'id','name'),array('id'=>'brand_id'),array('style'=>'width:250px'))->label('品牌'); ?>
+<div class="form-group field-product-brand_id required">
+    <label class="control-label col-sm-3" for="product-description">品牌</label>
+    <div class="col-sm-6" style="width: 85%">
+        <input id="kw" onKeyup="getContent(this);" class="form-control" style="width:400px" name="Product[brand_name]" value="<?= !empty($item['brand_name']) ? $item['brand_name'] : '' ?>"/>
+        <div id="append"></div>
+        <div class="help-block help-block-error " style="color: #a94442"> <?= \Yii::$app->getSession()->getFlash('brand_name'); ?></div>
+    </div>
+</div>
 <div class="form-group field-product-name required">
     <label class="control-label col-sm-3" for="attributevalue-attr_value">属性<br>
         <?= Html::button('添加', ['class' => 'btn', 'id'=>'add_attr_value']) ?></label>
@@ -83,6 +111,7 @@ $form = ActiveForm::begin([
     </div>
 <?php ActiveForm::end(); ?>
 <script>
+    var data = <?php echo $brand_list?>;
     $(document).ready(function(){
         $("#cate_id").change(function()
         {
@@ -92,16 +121,7 @@ $form = ActiveForm::begin([
                 "/goods/brand/list?cate_id="+cate_id,
                 function(str_json)
                 {
-                    obj=JSON.parse(str_json);
-
-                    var html_option="<option value=''>选择品牌</option>";
-                    var len=obj.length;
-                    for(var i=0;i<len;i++)
-                    {
-                        html_option+='<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>';
-                    }
-                    $("#brand_id").html('全部品牌');
-                    $("#brand_id").append(html_option);
+                    data=JSON.parse(str_json);
                 }
             );
         });
@@ -111,4 +131,83 @@ $form = ActiveForm::begin([
         var html = $('#attr_value tr:first-child').html();
         $('#attr_value').append('<tr>'+html+'</tr>');
     })
+    $(document).ready(function(){
+        $(document).keydown(function(e){
+            e = e || window.event;
+            var keycode = e.which ? e.which : e.keyCode;
+            if(keycode == 38){
+                if(jQuery.trim($("#append").html())==""){
+                    return;
+                }
+                movePrev();
+            }else if(keycode == 40){
+                if(jQuery.trim($("#append").html())==""){
+                    return;
+                }
+                $("#kw").blur();
+                if($(".item").hasClass("addbg")){
+                    moveNext();
+                }else{
+                    $(".item").removeClass('addbg').eq(0).addClass('addbg');
+                }
+
+            }else if(keycode == 13){
+                dojob();
+            }
+        });
+
+        var movePrev = function(){
+            $("#kw").blur();
+            var index = $(".addbg").prevAll().length;
+            if(index == 0){
+                $(".item").removeClass('addbg').eq($(".item").length-1).addClass('addbg');
+            }else{
+                $(".item").removeClass('addbg').eq(index-1).addClass('addbg');
+            }
+        }
+
+        var moveNext = function(){
+            var index = $(".addbg").prevAll().length;
+            if(index == $(".item").length-1){
+                $(".item").removeClass('addbg').eq(0).addClass('addbg');
+            }else{
+                $(".item").removeClass('addbg').eq(index+1).addClass('addbg');
+            }
+
+        }
+
+        var dojob = function(){
+            $("#kw").blur();
+            var value = $(".addbg").text();
+            $("#kw").val(value);
+            $("#append").hide().html("");
+        }
+    });
+    function getContent(obj){
+        var kw = jQuery.trim($(obj).val());
+        if(kw == ""){
+            $("#append").hide().html("");
+            return false;
+        }
+        var html = "";
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].indexOf(kw) >= 0) {
+                html = html + "<div class='item' onmouseenter='getFocus(this)' onClick='getCon(this);'>" + data[i] + "</div>"
+            }
+        }
+        if(html != ""){
+            $("#append").show().html(html);
+        }else{
+            $("#append").hide().html("");
+        }
+    }
+    function getFocus(obj){
+        $(".item").removeClass("addbg");
+        $(obj).addClass("addbg");
+    }
+    function getCon(obj){
+        var value = $(obj).text();
+        $("#kw").val(value);
+        $("#append").hide().html("");
+    }
 </script>

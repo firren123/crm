@@ -391,9 +391,10 @@ class SuppliersController extends BaseController
         $list = array();
         if (!empty($sup_list)) {
             foreach ($sup_list as $v) {
+                $v['allnum'] = $v['total'];
                 foreach ($stor_list as $val) {
                     if ($v['good_id'] == $val['good_id']) {
-                        $v['allnum'] = $v['total'] - $val['total'];
+                        $v['allnum'] = $v['total']-$val['total'];
                     }
                 }
                 $list[] = $v;
