@@ -142,7 +142,7 @@ class CashController extends BaseController
                             $cash_data['account_card'] = $item['account_card'];
                             $cash_data['create_time'] = date('Y-m-d H:i:s');
                             $cash_data['money'] = $item['money'];
-                            $cash_data['cash_id'] = $pay_cash_id.$item['id'].',';
+                            $cash_data['cash_id'] = $pay_cash_id.','.$item['id'].',';
                             $cash_model->insertinfo($cash_data);
                         }
                     }
