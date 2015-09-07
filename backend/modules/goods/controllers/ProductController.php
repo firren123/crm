@@ -1722,4 +1722,33 @@ class ProductController extends BaseController
         }
         return $result;
     }
+    /**
+     * 发布
+     *
+     * @return string
+     */
+    public function actionUpdateSingle()
+    {
+        $model = new Product();
+        $id = RequestHelper::get('product_id', 0);
+        $array = ['code'=>101, 'msg'=>'缺少参数'];
+        if ($id>0) {
+            $cond['id'] = explode(',', $id);
+            $cond['single'] = 1;
+            $number = $model->getCount($cond);
+            if ($number==0) {
+                $array = ['code'=>102, 'msg'=>'产品不存在'];
+            } else {
+                $data['single'] = 2;
+                $data['status'] = 2;
+                $result = $model->updateInfo($data, $cond);
+                if ($result==true) {
+                    $array = ['code'=>200, 'msg'=>'发布成功'];
+                } else {
+                    $array = ['code'=>103, 'msg'=>'系统繁忙'];
+                }
+            }
+        }
+        return json_encode($array);
+    }
 }
