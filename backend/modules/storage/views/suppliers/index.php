@@ -58,10 +58,14 @@ $form = ActiveForm::begin([
     </td>
 </tr>
 <tr>
-    <th width="20%"><span class="red">*</span>联系电话</th>
+    <th width="20%"><span class="red">*</span>手机号码</th>
     <td colspan="5" width="80%">
         <input type="text" name="mobile" placeholder='手机号码' maxlength="11" value="" id="mobile" size="25"/>
-        &nbsp;&nbsp;或&nbsp;&nbsp;
+    </td>
+</tr>
+<tr>
+    <th width="20%">联系电话</th>
+    <td colspan="5" width="80%">
         <input type="text" name="code" placeholder='区号' maxlength="3" value="" id="code" size="3"/>
         &nbsp;-&nbsp;
         <input type="text" name="phone" placeholder='电话号码' maxlength="8" value="" id="phone" size="8"/>&nbsp;&nbsp;<span style="color:#F00">座机格式：010-88888888</span>
