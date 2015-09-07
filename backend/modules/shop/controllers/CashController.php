@@ -22,7 +22,6 @@ use backend\models\shop\ShopCash;
 use backend\models\pay\PayCash;
 use common\helpers\RequestHelper;
 use yii\data\Pagination;
-use yii\helpers\ArrayHelper;
 
 /**
  * CashController
@@ -117,18 +116,24 @@ class CashController extends BaseController
                     $list['code'] = 1;
                     $list['message'] = '操作成功';
                     $cash_model = new PayCash();
-                    $cash_item = $cash_model->getInfo(['shop_id'=>$item['shop_id']], true);
+                    //付款中的详情
+                    $cash_item = $cash_model->getInfo(['shop_id'=>$item['shop_id'],'status'=>0], true);
                     $cash_id_data = explode(",", $cash_item['cash_id']);
                     $cash_result = in_array($id, $cash_id_data);
                     if ($status==1) {
                         $account_id = $item['account_id'];
                         $account_model->updateInfo(['is_apply'=>2], ['id'=>$account_id]);
-
+                        //最后一个支付失败的详情
+                        $item_cash = $cash_model->getInfo(['shop_id'=>$item['shop_id'],'status'=>1], true, 'cash_id', 'id desc');
+                        $cash_id = empty($item_cash) ? '' : $item_cash['cash_id'];
+                        //付款中的是否存在
+                        $list_cash = $cash_model->getOneRecord(['shop_id'=>$item['shop_id'],'status'=>0], ['like', 'cash_id', $cash_id]);
+                        $pay_cash_id = !empty($list_cash) ? '' : $cash_id;
                         if ($cash_item) {
                             if ($cash_result==false) {
-                                $cash_data['cash_id'] = $cash_item['cash_id'].$id.',';
+                                $cash_data['cash_id'] = $cash_item['cash_id'].$pay_cash_id.$id.',';
                                 $cash_data['money'] = $cash_item['money'] + $item['money'];
-                                $cash_model->updateInfo($cash_data, ['shop_id' => $item['shop_id']]);
+                                $cash_model->updateInfo($cash_data, ['shop_id' => $item['shop_id'],'status'=>0]);
                             }
                         } else {
                             $cash_data['shop_id'] = $item['shop_id'];
@@ -137,7 +142,7 @@ class CashController extends BaseController
                             $cash_data['account_card'] = $item['account_card'];
                             $cash_data['create_time'] = date('Y-m-d H:i:s');
                             $cash_data['money'] = $item['money'];
-                            $cash_data['cash_id'] = $item['id'].',';
+                            $cash_data['cash_id'] = $pay_cash_id.$item['id'].',';
                             $cash_model->insertinfo($cash_data);
                         }
                     }
@@ -145,14 +150,14 @@ class CashController extends BaseController
                         if ($cash_item) {
                             if ($cash_result==true) {
                                 $array[] = $id;
-                                $array1 = array_diff_assoc($cash_id_data, $array);
+                                $array1 = array_diff($cash_id_data, $array);
                                 $cash_id = implode($array1, ',');
                                 if ($cash_id=="") {
                                     $cash_model->deleteAll(['shop_id' => $item['shop_id']]);
                                 } else {
                                     $cash_data['cash_id'] = $cash_id;
                                     $cash_data['money'] = $cash_item['money'] - $item['money'];
-                                    $cash_model->updateInfo($cash_data, ['shop_id' => $item['shop_id']]);
+                                    $cash_model->updateInfo($cash_data, ['shop_id' => $item['shop_id'],'status'=>0]);
                                 }
 
                             }
@@ -183,10 +188,10 @@ class CashController extends BaseController
             echo $this->renderPartial(
                 '/../../../views/layouts/success',
                 [
-                'message' => 0,
-                'error'   => '没有可以导出的数据',
-                'jumpUrl' => '/shop/cash/index',
-                'waitSecond' => 3,
+                    'message' => 0,
+                    'error'   => '没有可以导出的数据',
+                    'jumpUrl' => '/shop/cash/index',
+                    'waitSecond' => 3,
                 ]
             );
             return;
