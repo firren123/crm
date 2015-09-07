@@ -197,13 +197,13 @@ class ShopController extends BaseController
         $model = new Shop();
         $account_id = RequestHelper::get('account_id');
         $shop_id = RequestHelper::get('shop_id');
-
+        $page = RequestHelper::get('page', 1, 'intval');
         //取出商家名称shop_name
         $shop_one = $model->shop_info($shop_id);
         $shop_name = $shop_one['shop_name'];
 
         //调用接口返回该商家的订单信息
-        $info = $model->details_all($shop_id, $account_id);
+        $info = $model->details_all($shop_id, $account_id, $page);
 //var_dump($info);
         $total = ArrayHelper::getValue($info, 'data.count' , 0);
         $pages = new Pagination(['totalCount' =>$total, 'pageSize' => 20]);

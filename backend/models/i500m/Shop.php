@@ -258,9 +258,9 @@ class Shop extends I500Base
         return $list;
     }
 
-    public function details_all($shop_id,$account_id)
+    public function details_all($shop_id,$account_id, $page = 1)
     {
-        $url = "shop/account/list?shop_id=".$shop_id.'&account_id='.$account_id;
+        $url = "shop/account/list?shop_id=".$shop_id.'&account_id='.$account_id.'&page='.$page;
         $arr_result = CurlHelper::get($url, 'server');
         return $arr_result;
     }
