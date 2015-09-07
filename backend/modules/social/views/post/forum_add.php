@@ -88,7 +88,7 @@ $form = ActiveForm::begin([
         <a class="btn cancelBtn" href="javascript:history.go(-1);">取消</a>
     </div>
 <?php ActiveForm::end(); ?>
-<script type="text/javascript" src="/js/goods/Upload.js?_<?= Yii::$app->params['jsVersion'];?>"></script>
+<input type="hidden" id="img_url" value="<?= \Yii::$app->params['imgHost']; ?>"/>
 <script type="text/javascript">
     $(function(){
         $(".btn-primary").click(function(){
@@ -99,6 +99,24 @@ $form = ActiveForm::begin([
             }
         });
 
+        $("#filePicker1").click(function(){
+            var f_id = $("#forum-pid").val();
+            var d = dialog({
+                url:'/public/phone?f_id='+f_id,
+                title: '选择图片',
+                width:'50em',
+                height:'50em',
+                ok: function () {}
+            });
+            d.showModal();
+            return false;
+        });
     });
+    function addImg(data){
+        var imgUrl = $("#img_url").val();
+        $("image1").attr("src",data);
+        $('#filePicker1_img').html('<img src="'+imgUrl+data+'" style="width:90px;height:90px;" />');
+    }
+
 
 </script>
