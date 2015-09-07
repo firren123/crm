@@ -9,7 +9,7 @@ phpunit.phar
 # runtime
 runtime/
 /*/web/assets/
-
+common/config/main.php
 
 
 # mac

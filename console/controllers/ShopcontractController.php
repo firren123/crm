@@ -42,26 +42,21 @@ class ShopcontractController extends Controller
     {
         $connection = \Yii::$app->db_oa;
         $time = date("Y-m-d H:i:s", strtotime("-1 hour"));
-        $sql = 'select GROUP_CONCAT(run_id) as run_ids from flow_run_prcs where DELIVER_TIME>"' . $time . '" and FLOW_PRCS =4 and PRCS_FLAG = 3';
+        $sql = 'select run_id from flow_run_prcs where DELIVER_TIME>"' . $time . '" and FLOW_PRCS =6 and PRCS_FLAG = 4';
         $ret = $connection->createCommand($sql)->queryAll();
         if ($ret) {
-            $run_ids = $ret[0]['run_ids'];
-            if ($run_ids) {
-                $sql = 'select data_93 as crm_id from flow_data_160 where run_id in (' . $run_ids . ')';
+            $shopContractModel = new ShopContract();
+            foreach ($ret as $k => $v) {
+                $sql = 'select data_93 as crm_id from flow_data_160 where run_id = ' . $v['run_id'];
                 $crm_ids = $connection->createCommand($sql)->queryAll();
-                foreach ($crm_ids as $k => $v) {
-                    $shopContractModel = new ShopContract();
-                    $t = $shopContractModel->updateInfo(['status' => 1], ['id' => $v['crm_id']]);
-                    if ($t) {
-                        echo $v['crm_id'] . "success\n";
-                    }else{
-                        echo $v['crm_id'] . "error\n";
-                    }
+                $t = $shopContractModel->updateInfo(['status' => 1], ['id' => $crm_ids[0]['crm_id']]);
+                if ($t) {
+                    echo $v['crm_id'] . "success\n";
+                } else {
+                    echo $v['crm_id'] . "error\n";
                 }
-            }else{
-                echo "empty";
             }
-        }else{
+        } else {
             echo "sql error";
         }
     }
