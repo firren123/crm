@@ -66,36 +66,30 @@
 </head>
 <body>
 <div class="container">
+    <div class="col-sm-6">
+
+                <button class="btn btn-large btn-inverse" id="filePicker1">上传</button>
+
+    <!-- This is the form that our event handler fills -->
+    <input type="hidden" id="x" name="x"/>
+    <input type="hidden" id="y" name="y"/>
+    <input type="hidden" id="w" name="w"/>
+    <input type="hidden" id="h" name="h"/>
+    <input type="hidden" value="<?= $model->forum_img;?>" name="forum_img" id="images1" />
+    <input type="submit" value="提交" id="checkCoords" class=" btn btn-large btn-inverse"/>
+        <hr/>
+    </div>
+
+
     <input type="hidden" value="<?=\Yii::$app->params['imgHost'] ?>" id="img_url"/>
     <!-- This is the image we're attaching Jcrop to -->
     <?php if($model->forum_img){ ?>
         <img src="<?=  \Yii::$app->params['imgHost'].$model->forum_img; ?>" id="cropbox" />
     <?php }else { ?>
-        <img src="/images/05_mid.jpg" max-width="500px" max-height="500px" id="cropbox" />
+        <img src="/images/05_mid.jpg" id="cropbox" />
     <?php } ?>
-    <div class="col-sm-6">
-        <ul class="imgList imgListForm">
-            <!--当上传图片后<span class="txt">上传</span>去掉-->
-            <li>
-                <span class="txt" id="filePicker1">上传</span>
 
-            </li>
-
-        </ul>
-        <div class="help-block help-block-error "></div>
-    </div>
-    <!-- This is the form that our event handler fills -->
-        <input type="hidden" id="x" name="x"/>
-        <input type="hidden" id="y" name="y"/>
-        <input type="hidden" id="w" name="w"/>
-        <input type="hidden" id="h" name="h"/>
-        <input type="hidden" value="<?= $model->forum_img;?>" name="forum_img" id="images1" />
-        <input type="submit" value="提交" id="checkCoords" class="btn btn-large btn-inverse"/>
-    </form>
 </div>
-</body>
-<script src="/js/social/upload.js?_src=<?php echo  rand(1,10);?>"></script>
-</html>
 <script type="text/javascript">
     $(function(){
         $("#checkCoords").click(function(){
@@ -121,5 +115,27 @@
                 }
             })
         })
-    })
+    });
+    $(document).ajaxStart(function(){
+        $("#submit_button").addClass('inoperable').attr("disabled", true);
+    }).ajaxStop(function(){
+        $("#submit_button").removeClass('inoperable').attr("disabled", false);
+    });
+    var _csrf = $("input[name='_csrf']").val();
+    var uploader1 = WebUploader.create({
+        auto: true,
+        swf: "/js/webuploader/uploadify.swf",
+        server: "/public/upload",
+        pick: '#filePicker1',
+        accept: {title: 'Images', extensions: 'gif,jpg,jpeg,bmp,png', mimeTypes: 'image/*'},
+        formData: {'_csrf' : _csrf}
+    });
+
+    uploader1.on( 'uploadSuccess', function( file, data ) {
+        var BaseUrl = $("#img_url").val();
+        var url = BaseUrl+data.url;
+        //$('img').attr("src",url);
+        //$('#images1').val(data.url);
+        window.location.href='/public/phone?forum_img='+data.url;
+    });
 </script>

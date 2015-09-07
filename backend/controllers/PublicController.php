@@ -134,9 +134,12 @@ class PublicController extends Controller
     public function actionPhone()
     {
         $f_id = RequestHelper::get("f_id", 0, 'intval');
+        $img = RequestHelper::get('forum_img');
         $model = new Forum();
         if ($f_id) {
             $model = $model->getInfo(['id'=>$f_id], false, "forum_img");
+        }else{
+            $model->forum_img = $img;
         }
         return $this->renderPartial('phone', ['model'=>$model]);
     }

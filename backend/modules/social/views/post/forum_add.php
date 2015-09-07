@@ -104,9 +104,7 @@ $form = ActiveForm::begin([
             var d = dialog({
                 url:'/public/phone?f_id='+f_id,
                 title: '选择图片',
-                width:'50em',
-                height:'50em',
-                ok: function () {}
+
             });
             d.showModal();
             return false;
@@ -114,7 +112,7 @@ $form = ActiveForm::begin([
     });
     function addImg(data){
         var imgUrl = $("#img_url").val();
-        $("image1").attr("src",data);
+        $("#images1").val(data);
         $('#filePicker1_img').html('<img src="'+imgUrl+data+'" style="width:90px;height:90px;" />');
     }
 

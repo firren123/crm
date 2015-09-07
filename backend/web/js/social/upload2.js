@@ -19,6 +19,7 @@ var uploader1 = WebUploader.create({
 uploader1.on( 'uploadSuccess', function( file, data ) {
     var BaseUrl = $("#img_url").val();
     var url = BaseUrl+data.url;
-    $('img').attr("src",url);
-    $('#images1').val(data.url);
+    //$('img').attr("src",url);
+    //$('#images1').val(data.url);
+    window.location.href='/public/phone?forum_img='+data.url;
 });
