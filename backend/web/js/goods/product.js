@@ -70,7 +70,7 @@ function checkSelectd(){
                 }
             });
     }else{
-        alert('请选择要删除项');
+        gf.alert('请选择要删除项');
         return false;
     }
 }
@@ -105,7 +105,7 @@ function checkSelectd(){
                     }
                 });
         }else{
-            alert('请选择要上架的商品');
+            gf.alert('请选择要上架的商品');
             return false;
         }
     }
@@ -140,7 +140,7 @@ function getUpdateTwo(){
                 }
             });
     }else{
-        alert('请选择要上架的商品');
+        gf.alert('请选择要上架的商品');
         return false;
     }
 }
@@ -175,7 +175,7 @@ function getUpdateHot(){
                 }
             });
     }else{
-        alert('请选择热销的商品');
+        gf.alert('请选择热销的商品');
         return false;
     }
 }
@@ -212,7 +212,7 @@ function getSingle(){
                 }
             });
     }else{
-        alert('请选择要发布的商品');
+        gf.alert('请选择要发布的商品');
         return false;
     }
 }
@@ -303,6 +303,72 @@ function getUpdateSingle(product_id){
             }
         );
     }else{
+        return false;
+    }
+}
+/**
+ * 单个取消发布
+ * @returns {boolean}
+ */
+function getUpdatePreOne(product_id){
+    var msg = "您真的确定取消发布吗？";
+    if (confirm(msg)==true){
+        $.ajax(
+            {
+                type: "GET",
+                url: '/goods/product/update-single',
+                data: {'product_id':product_id},
+                asynic: false,
+                dataType: "json",
+                beforeSend: function () {
+                },
+                success: function (result) {
+                    if(result['code']==200){
+                        window.location.reload()
+                    } else {
+                        gf.alert(result['msg']);
+                    }
+                }
+            }
+        );
+    }else{
+        return false;
+    }
+}
+/**
+ * 批量取消发布
+ * @returns {boolean}
+ */
+function getUpdatePre(){
+    var falg = 0;
+    $("input[name='ids[]']:checkbox").each(function () {
+        if ($(this).prop("checked")==true) {
+            falg += 1;
+        }
+    })
+    if (falg > 0){
+        var token        = $('#token').val();
+        var ids = $("input[name='ids[]']:checkbox").valueOf();
+        var ids=$('input[id="brandid"]:checked').map(function(){return this.value}).get().join();
+        $.ajax(
+            {
+                type: "GET",
+                url: '/goods/product/update-single',
+                data: {'product_id':ids},
+                asynic: false,
+                dataType: "json",
+                beforeSend: function () {
+                },
+                success: function (result) {
+                    if(result['code']==200){
+                        window.location.reload()
+                    } else {
+                        gf.alert(result['msg']);
+                    }
+                }
+            });
+    }else{
+        gf.alert('请选择要取消发布的商品');
         return false;
     }
 }

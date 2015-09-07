@@ -85,11 +85,13 @@ echo $this->render('_search', ['search'=>$search,'cate_list'=>$cate_list,'brand_
                         <td><?= $item['is_hot']==1 ? '是' : '否';?></td>
                         <td><?= $item['total_num'];?></td>
                         <td><?= $item['area_name'];?></td>
-                        <td style="width: 10%">
+                        <td style="width: 12%">
                             <?php if($item['bc_id'] == $bc_id or $item['bc_id']!=$branch_id) :?>
 <!--                            <a href="/goods/product/edit?id=--><?//= $item['id'];?><!--" style="cursor:pointer">编辑</a> <br>-->
                             <?php endif;?>
                             <a href="/goods/product/details?id=<?= $item['id'];?>" style="cursor:pointer">详情</a>
+                            <br>
+                            <a onclick="getUpdatePreOne(<?= $item['id'];?>)" style="cursor:pointer">取消发布</a>
 <!--                            <a href="/goods/product/list?id=--><?//= $item['id'];?><!--">图集</a>-->
                             <a onclick="Delete(<?= $item['id'];?>)" style="cursor:pointer;display: none;">删除</a> <br>
 
@@ -107,7 +109,7 @@ echo $this->render('_search', ['search'=>$search,'cate_list'=>$cate_list,'brand_
                         <input type="hidden" id="token" value="<?php echo Yii::$app->getRequest()->getCsrfToken(); ?>" />
                         <button id="id_btn_set_pop" class="bulk-actions-btn btn btn-success btn-small active" type="button" name="yt1" onclick="getUpdateOne()">使选中上架</button>
                         <button id="show_all" class="bulk-actions-btn btn btn-success btn-small active" type="button" name="yt2" onclick="getUpdateTwo()">使选中下架</button>
-                        <button id="show_all" class="bulk-actions-btn btn btn-danger btn-small active" type="button" name="yt3" onclick="getUpdateHot()">使选中为推荐</button>
+                        <button id="show_all" class="bulk-actions-btn btn btn-danger btn-small active" type="button" name="yt3" onclick="getUpdatePre()">使选中取消发布</button>
                         <button id="delete_all" class="bulk-actions-btn btn btn-danger btn-small active" type="button" name="yt4" onclick="checkSelectd()" style="display: none">删除所选</button>
                         <div class="bulk-actions-blocker" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; display: none;"></div>
                     </div>
