@@ -9,6 +9,7 @@ $this->title = '用户管理';
 <a id="yw0" class="btn btn-primary" href="/social/user/add" style="margin-bottom:10px;">添加用户</a>
 <?php
 echo $this->render('_search', ['search'=>$search]);
+
 ?>
 <div class="tab-content">
     <div class="summary pull-right" >共 <span style="color: red"><?= $total?></span> 个用户</div>
