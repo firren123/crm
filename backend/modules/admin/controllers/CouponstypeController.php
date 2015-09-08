@@ -56,8 +56,9 @@ class CouponstypeController extends BaseController
         $cond = "status!=0";
         if (!in_array($this->quanguo_city_id, $this->city_id)) {
             $city_arr = $this->city_id;
-            $city_str = implode(',', $city_arr);
-            $cond .= ' and city_id in (999,' . $city_str . ')';
+            $city_arr2 = array_merge($city_arr, [999]);
+            $city_str3 = implode(',', $city_arr2);
+            $cond .= ' and city_id in (' . $city_str3 . ')';
         }
         $order = "type_id desc";
         $data = $model->getPageList($cond, '*', $order, $page, $size);
