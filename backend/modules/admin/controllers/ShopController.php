@@ -134,7 +134,19 @@ class ShopController extends BaseController
 
         $total = $shop_model->total($where);
         $pages = new Pagination(['totalCount' =>$total, 'pageSize' => $this->size]);
-        return $this->render('index', ['list'=>$list, 'pages'=>$pages, 'total'=>$total, 'number_all'=>$number_all, 'branch_all'=>$branch_all, 'branch_id'=>$branch_id, 'city_id'=>$city_id, 'settle_status'=>$settle_status, 'arr'=>$arr, 'positive_minus'=>$positive_minus]);
+        $params = [
+            'list'=>$list,
+            'pages'=>$pages,
+            'total'=>$total,
+            'number_all'=>$number_all,
+            'branch_all'=>$branch_all,
+            'branch_id'=>$branch_id,
+            'city_id'=>$city_id,
+            'settle_status'=>$settle_status,
+            'arr'=>$arr,
+            'positive_minus'=>$positive_minus
+        ];
+        return $this->render('index', $params);
     }
 
 
@@ -153,6 +165,7 @@ class ShopController extends BaseController
         if ($info) {
             $bark = RequestHelper::post('info');
             $log = new Log();
+            $str = '';
             if ($is_freeze == 0) {
                 $str = '冻结了';
             } elseif ($is_freeze == 1) {
@@ -203,11 +216,9 @@ class ShopController extends BaseController
         //取出商家名称shop_name
         $shop_one = $model->shop_info($shop_id);
         $shop_name = $shop_one['shop_name'];
-
         //调用接口返回该商家的订单信息
         $info = $model->details_all($shop_id, $account_id, $page);
-//var_dump($info);
-        $total = ArrayHelper::getValue($info, 'data.count' , 0);
+        $total = ArrayHelper::getValue($info, 'data.count', 0);
         $pages = new Pagination(['totalCount' =>$total, 'pageSize' => 20]);
         //结算状态
         $status = $info['data']['status'];
@@ -215,19 +226,17 @@ class ShopController extends BaseController
         //拼凑时间
         $ship_merge = $info['data']['account_start_time'].'--'.$info['data']['account_end_time'];
         $arr = $info['data']['data'];
-
-        return $this->render('details',
-            [
-                'arr'=>$arr,
-                'pages'=>$pages,
-                'shop_name'=>$shop_name,
-                'ship_merge'=>$ship_merge,
-                'status'=>$status,
-                'info'=>$info,
-                'shop_id'=>$shop_id,
-                'account_id'=>$account_id
-            ]
-        );
+        $params = [
+            'arr'=>$arr,
+            'pages'=>$pages,
+            'shop_name'=>$shop_name,
+            'ship_merge'=>$ship_merge,
+            'status'=>$status,
+            'info'=>$info,
+            'shop_id'=>$shop_id,
+            'account_id'=>$account_id
+        ];
+        return $this->render('details', $params);
     }
 
     /**
@@ -258,7 +267,7 @@ class ShopController extends BaseController
     /**
      * 导出账期中待结算金额大于0的订单
      *
-     * @author    liuwei <liuwei@iyangpin.com>
+     * @author liuwei <liuwei@iyangpin.com>
      * @return array
      */
     public function actionExport()
@@ -279,7 +288,7 @@ class ShopController extends BaseController
                     if (empty($result['data'])) {
                         echo $this->error('账期中没有待结算金额大于0的订单');
                     } else {
-                        $this->Write($result['data'], $shop_name);
+                        $this->write($result['data'], $shop_name);
                     }
                 }
             }
@@ -294,11 +303,12 @@ class ShopController extends BaseController
      * @param array  $list      数组
      * @param string $shop_name 商家id
      *
-     * @author    liuwei <liuwei@iyangpin.com>
+     * @author liuwei <liuwei@iyangpin.com>
      * @throws \PHPExcel_Exception
      * @throws \PHPExcel_Reader_Exception
+     * @return array
      */
-    public  function Write($list,$shop_name)
+    public  function write($list,$shop_name)
     {
         $name    = $shop_name.'商家的待结算订单列表'.date("Y-m-d H:i:s");//文件名
         error_reporting(E_ALL);
