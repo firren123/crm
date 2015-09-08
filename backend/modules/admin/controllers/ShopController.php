@@ -26,6 +26,7 @@ use common\helpers\CurlHelper;
 use common\helpers\RequestHelper;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
+
 /**
  * Shop
  *
@@ -69,7 +70,7 @@ class ShopController extends BaseController
             $info = $branch_model->city_all($branch_id);
             $list = explode(',', $info['city_id_arr']);
             $arr = array();
-            foreach ($list as $k=>$v) {
+            foreach ($list as $k => $v) {
                 $city_all = $city_model->city_all($v);
                 $arr[] = $city_all[0];
             }
@@ -123,7 +124,7 @@ class ShopController extends BaseController
 
         //从shop表中查询出商家名称赋予到$list数组里，拼装一下时间
         $number_all = 0;
-        foreach ($list as $k=>$v) {
+        foreach ($list as $k => $v) {
             $number_all += $v['money'];
             $info_shop = $model->shop_info($v['shop_id']);
             $list[$k]['shop_name'] = $info_shop['shop_name'];
@@ -194,7 +195,7 @@ class ShopController extends BaseController
         $info = $model->city_all($bid);
         $list = explode(',', $info['city_id_arr']);
         $arr = array();
-        foreach ($list as $k=>$v) {
+        foreach ($list as $k => $v) {
             $city_all = $city_model->city_all($v);
             $arr[] = $city_all[0];
         }
@@ -308,7 +309,7 @@ class ShopController extends BaseController
      * @throws \PHPExcel_Reader_Exception
      * @return array
      */
-    public  function write($list,$shop_name)
+    public  function write($list, $shop_name)
     {
         $name    = $shop_name.'商家的待结算订单列表'.date("Y-m-d H:i:s");//文件名
         error_reporting(E_ALL);
