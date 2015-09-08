@@ -63,6 +63,7 @@ use yii\widgets\LinkPager;
                 <div style="padding: 0px 0px 0px 240px;">
                     <input type="button" class="btn btn-primary" id="jiesuan" style="margin: 0px 45px 0px 0px;"  value="确认结算">
                 <input type="button" class="btn btn-primary" id="dongjie"  value="异常冻结">
+                    <a href="/admin/shop/export?account_id=<?= $_GET['account_id']?>" style="margin: 0px 0px 0px 45px;" class="btn btn-primary">导出</a>
                 <a href="/admin/shop/index" style="margin: 0px 0px 0px 45px;" class="btn btn-primary">返回</a>
                 </div>
                 <?php }elseif($status == 1){?>  <!--已结算-->
