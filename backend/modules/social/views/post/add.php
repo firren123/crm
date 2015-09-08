@@ -55,7 +55,7 @@ $form = ActiveForm::begin([
                         <?php } ?>
                     </a>
                     <span class="txt" id="filePicker1">上传</span>
-                    <input type="hidden" value="<?= $model->post_img[0];?>" name="Post[post_img][]" id="images1" />
+                    <input type="hidden" value="<?php if (isset($model->post_img[0])){echo $model->post_img[0];} ?>" name="Post[post_img][]" id="images1" />
                 </li>
                 <li>
                     <a href="javascript:;" id="filePicker2_img">
@@ -64,7 +64,7 @@ $form = ActiveForm::begin([
                         <?php } ?>
                     </a>
                     <span class="txt" id="filePicker2">上传</span>
-                    <input type="hidden" value="<?= $model->post_img[1];?>" name="Post[post_img][]" id="images2" />
+                    <input type="hidden" value="<?php if (isset($model->post_img[1])){echo $model->post_img[1];} ?>" name="Post[post_img][]" id="images2" />
                 </li>
                 <li>
                     <a href="javascript:;" id="filePicker3_img">
@@ -73,7 +73,7 @@ $form = ActiveForm::begin([
                         <?php } ?>
                     </a>
                     <span class="txt" id="filePicker3">上传</span>
-                    <input type="hidden" value="<?= $model->post_img[2];?>" name="Post[post_img][]" id="images3" />
+                    <input type="hidden" value="<?php if (isset($model->post_img[2])){echo $model->post_img[2];} ?>" name="Post[post_img][]" id="images3" />
                 </li>
                 <li>
                     <a href="javascript:;" id="filePicker4_img">
@@ -82,7 +82,7 @@ $form = ActiveForm::begin([
                         <?php } ?>
                     </a>
                     <span class="txt" id="filePicker4">上传</span>
-                    <input type="hidden" value="<?= $model->post_img[3];?>" name="Post[post_img][]" id="images4" />
+                    <input type="hidden" value="<?php if (isset($model->post_img[3])){echo $model->post_img[3];} ?>" name="Post[post_img][]" id="images4" />
                 </li>
                 <li>
                     <a href="javascript:;" id="filePicker5_img">
@@ -91,7 +91,7 @@ $form = ActiveForm::begin([
                         <?php } ?>
                     </a>
                     <span class="txt" id="filePicker5">上传</span>
-                    <input type="hidden" value="<?= $model->post_img[4];?>" name="Post[post_img][]" id="images5" />
+                    <input type="hidden" value="<?php if (isset($model->post_img[4])){echo $model->post_img[4];} ?>" name="Post[post_img][]" id="images5" />
                 </li>
 
 
@@ -102,7 +102,7 @@ $form = ActiveForm::begin([
                         <?php } ?>
                     </a>
                     <span class="txt" id="filePicker6">上传</span>
-                    <input type="hidden" value="<?= $model->post_img[5];?>" name="Post[post_img][]" id="images6" />
+                    <input type="hidden" value="<?php if (isset($model->post_img[5])){echo $model->post_img[5];} ?>" name="Post[post_img][]" id="images6" />
                 </li>
             </ul>
             <div class="help-block help-block-error "></div>
@@ -120,7 +120,7 @@ $form = ActiveForm::begin([
                     <?php } ?>
                 </a>
                 <span class="txt" id="filePicker7">上传</span>
-                <input type="hidden" value="<?= $model->post_img[6];?>" name="Post[post_img][]" id="images7" />
+                <input type="hidden" value="<?php if (isset($model->post_img[6])){echo $model->post_img[6];} ?>" name="Post[post_img][]" id="images7" />
             </li>
             <li>
                 <a href="javascript:;" id="filePicker8_img">
@@ -129,7 +129,7 @@ $form = ActiveForm::begin([
                     <?php } ?>
                 </a>
                 <span class="txt" id="filePicker8">上传</span>
-                <input type="hidden" value="<?= $model->post_img[7];?>" name="Post[post_img][]" id="images8" />
+                <input type="hidden" value="<?php if (isset($model->post_img[7])){echo $model->post_img[7];} ?>" name="Post[post_img][]" id="images8" />
             </li>
             <li>
                 <a href="javascript:;" id="filePicker9_img">
@@ -138,7 +138,7 @@ $form = ActiveForm::begin([
                     <?php } ?>
                 </a>
                 <span class="txt" id="filePicker9">上传</span>
-                <input type="hidden" value="<?= $model->post_img[8];?>" name="Post[post_img][]" id="images9" />
+                <input type="hidden" value="<?php if (isset($model->post_img[8])){echo $model->post_img[8];} ?>" name="Post[post_img][]" id="images9" />
             </li>
             <li>
                 <a href="javascript:;" id="filePicker10_img">
@@ -147,7 +147,7 @@ $form = ActiveForm::begin([
                     <?php } ?>
                 </a>
                 <span class="txt" id="filePicker10">上传</span>
-                <input type="hidden" value="<?= $model->post_img[9];?>" name="Post[post_img][]" id="images10" />
+                <input type="hidden" value="<?php if (isset($model->post_img[9])){echo $model->post_img[9];} ?>" name="Post[post_img][]" id="images10" />
             </li>
             <li>
                 <a href="javascript:;" id="filePicker11_img">
@@ -156,7 +156,7 @@ $form = ActiveForm::begin([
                     <?php } ?>
                 </a>
                 <span class="txt" id="filePicker11">上传</span>
-                <input type="hidden" value="<?= $model->post_img[10];?>" name="Post[post_img][]" id="images11" />
+                <input type="hidden" value="<?php if (isset($model->post_img[10])){echo $model->post_img[10];} ?>" name="Post[post_img][]" id="images11" />
             </li>
 
 
@@ -167,7 +167,7 @@ $form = ActiveForm::begin([
                     <?php } ?>
                 </a>
                 <span class="txt" id="filePicker12">上传</span>
-                <input type="hidden" value="<?= $model->post_img[11];?>" name="Post[post_img][]" id="images12" />
+                <input type="hidden" value="<?php if (isset($model->post_img[11])){echo $model->post_img[11];} ?>" name="Post[post_img][]" id="images12" />
             </li>
         </ul>
     </div>
