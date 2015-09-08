@@ -6,7 +6,6 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'defaultRoute'=>'admin/site/index',
     'timeZone'=>'Asia/Chongqing',
-
     'modules' => [
         'shop' => [
             'basePath'=>'@backend/modules/shop',
