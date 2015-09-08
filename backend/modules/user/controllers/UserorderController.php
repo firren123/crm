@@ -254,7 +254,10 @@ class UserorderController extends BaseController
         if (!empty($p_id_arr)) {
             foreach ($p_id_arr as $value) {
                 $cate_id = $model_product->getList(array('id' => $value), 'cate_first_id');
-                $cate_id_arr[] = $cate_id[0]['cate_first_id'];
+                if ($cate_id) {
+                    $cate_id_arr[] = $cate_id[0]['cate_first_id'];
+                }
+
             }
         }
         return in_array('3043', $cate_id_arr);
@@ -272,7 +275,7 @@ class UserorderController extends BaseController
             return $this->error('无效的订单号！');
         }
         $model = new UserOrder();
-        $detail = $model->getInfo(['order_sn'=>$order_sn]);
+        $detail = $model->getInfo(['order_sn' => $order_sn]);
         if (!$detail) {
             return $this->error('无效的订单号！');
         }
@@ -466,14 +469,14 @@ class UserorderController extends BaseController
      * 更改订单状态
      * @param string $order_sn 订单号
      * @param int $status //订单状态 1 确认 2取消 4发货 5收货
-     * @param int $type   // 类型 1 订单确认状态 2发货状态
+     * @param int $type // 类型 1 订单确认状态 2发货状态
      * @return int
      */
     /**
      * 简介：更改订单状态
      * @param int $order_sn 订单状态 1 确认 2取消 4发货 5收货
-     * @param int $status   类型 1 订单确认状态 2发货状态
-     * @param int $type     类型
+     * @param int $status 类型 1 订单确认状态 2发货状态
+     * @param int $type 类型
      * @return int
      */
     public function editOrderStatus($order_sn, $status, $type)
@@ -608,7 +611,7 @@ class UserorderController extends BaseController
             echo "订单没有确认没有超过5分钟，不能再次分配订单";
             exit;
         }
-        FilePutContentHelps::writeFile('getShop.log', 'start'.$order_sn);
+        FilePutContentHelps::writeFile('getShop.log', 'start' . $order_sn);
         //获取订单中的商品
         $goods_list = $orderInfoModel->getList(['order_sn' => $order_sn], "GROUP_CONCAT(p_id) as list");
         $goods_arr = explode(',', $goods_list[0]['list']);
@@ -624,9 +627,9 @@ class UserorderController extends BaseController
         $shop_list_n = [];
         //去查询周围商家
         if ($ret['code'] == 200) {
-            $value = $configModel->getInfo(['key'=>'orderNearShop'], 'value');
+            $value = $configModel->getInfo(['key' => 'orderNearShop'], 'value');
             $content = $value['value'];
-            $curl = $curl_info['value'] . 'lbs/near-shop?lng=' . $ret['data']['lng'] . '&lat=' . $ret['data']['lat'] . '&dis='.$content;
+            $curl = $curl_info['value'] . 'lbs/near-shop?lng=' . $ret['data']['lng'] . '&lat=' . $ret['data']['lat'] . '&dis=' . $content;
             $ret = CurlHelper::get($curl);
             if ($ret['code'] == 200) {
                 $shop_list_n = $ret['data'];
@@ -636,12 +639,12 @@ class UserorderController extends BaseController
         foreach ($shop_list_n as $k => $v) {
             $ner_shop[] = $v['shop_id'];
         }
-        $where = ['product_id' => $goods_arr, 'status' => 1,'shop_id'=>$ner_shop];
-        FilePutContentHelps::writeFile('getShop.log', '获取坐标商家'.var_export($ner_shop, true));
+        $where = ['product_id' => $goods_arr, 'status' => 1, 'shop_id' => $ner_shop];
+        FilePutContentHelps::writeFile('getShop.log', '获取坐标商家' . var_export($ner_shop, true));
 
         //查询商家中有订单中的商品的商家
         $shop_list1 = $shopProduct->find()->select('shop_id,count(product_id) as num ')->where($where)->groupBy('shop_id')->having('num = ' . $num)->asArray()->all();
-        FilePutContentHelps::writeFile('getShop.log', '查询商家中有订单中的商品的商家'.var_export($shop_list1, true));
+        FilePutContentHelps::writeFile('getShop.log', '查询商家中有订单中的商品的商家' . var_export($shop_list1, true));
 
         $shop_list_s = [];
         foreach ($shop_list1 as $k => $v) {
@@ -651,11 +654,11 @@ class UserorderController extends BaseController
                 }
             }
         }
-        FilePutContentHelps::writeFile('getShop.log', '满足条件的商家'.var_export($shop_list_s, true));
+        FilePutContentHelps::writeFile('getShop.log', '满足条件的商家' . var_export($shop_list_s, true));
 
         //黑名单商家
         $shop_list2 = $ShopOrderBlack->getList(['order_sn' => $order_sn], "shop_id");
-        FilePutContentHelps::writeFile('getShop.log', '黑名单的商家'.var_export($shop_list2, true));
+        FilePutContentHelps::writeFile('getShop.log', '黑名单的商家' . var_export($shop_list2, true));
         if ($shop_list2) {
             $shop_list3 = [];
             foreach ($shop_list2 as $k => $v) {
@@ -667,7 +670,7 @@ class UserorderController extends BaseController
                 }
             }
         }
-        FilePutContentHelps::writeFile('getShop.log', '过滤黑名单黑名单的商家'.var_export($shop_list_s, true));
+        FilePutContentHelps::writeFile('getShop.log', '过滤黑名单黑名单的商家' . var_export($shop_list_s, true));
         //删除本单商家
         foreach ($shop_list_s as $kk => &$vv) {
             if ($order_info['shop_id'] == $vv) {
@@ -678,8 +681,8 @@ class UserorderController extends BaseController
                 unset($shop_list_s[$kk]);
             }
         }
-        FilePutContentHelps::writeFile('getShop.log', '本单的商家'.$order_info['shop_id']);
-        FilePutContentHelps::writeFile('getShop.log', '去掉本单的商家和1号商家'.var_export($shop_list_s, true));
+        FilePutContentHelps::writeFile('getShop.log', '本单的商家' . $order_info['shop_id']);
+        FilePutContentHelps::writeFile('getShop.log', '去掉本单的商家和1号商家' . var_export($shop_list_s, true));
         FilePutContentHelps::writeFile('getShop.log', 'end ');
         $hop_list = $shopModel->getList(['id' => $shop_list_s, 'business_status' => 1]);
         $pages = new Pagination();
@@ -721,7 +724,7 @@ class UserorderController extends BaseController
         //给黑名单商家发送短信
         $shopInfo = $shopModel->getInfo(['id' => $order_info['shop_id']]);
         $mobile = $shopInfo['mobile'];
-        $value = $configModel->getInfo(['key'=>'orderOldShop'], 'value');
+        $value = $configModel->getInfo(['key' => 'orderOldShop'], 'value');
         $content = $value['value'];//'尊敬的i500商家，由于您有未及时处理的订单，您的订单已被转移至其他商家，如有问题请与客服联系400－661－1690。';
         $QueueSmsModel->addMsg($mobile, $content);
         //计算订单总金额
@@ -737,8 +740,8 @@ class UserorderController extends BaseController
                 $price_new = $productModel->getInfo(['id' => $v['p_id']], true, "origin_price as price");
             }
             $goods_info[$v['p_id']]['product_id'] = $v['p_id'];
-            $goods_info[$v['p_id']]['price']      = $price_new['price'];
-            $goods_info[$v['p_id']]['total']      = $v['num'] * $price_new['price'];
+            $goods_info[$v['p_id']]['price'] = $price_new['price'];
+            $goods_info[$v['p_id']]['total'] = $v['num'] * $price_new['price'];
             $total += $v['num'] * $price_new['price'];
         }
         $product_info = json_encode($goods_info);
@@ -747,13 +750,13 @@ class UserorderController extends BaseController
         //判断是否被转移过
         $count = $orderAllocationModel->getCount(['order_sn' => $order_sn]);
         if ($count) {
-            $orderAllocationModel->updateInfo(['shop_id' => $shop_id, 'total' => $total_z, 'product_info'=> $product_info], ['order_sn' => $order_sn]);
+            $orderAllocationModel->updateInfo(['shop_id' => $shop_id, 'total' => $total_z, 'product_info' => $product_info], ['order_sn' => $order_sn]);
         } else {
             $data2 = [
                 'shop_id' => $shop_id,
                 'order_sn' => $order_sn,
                 'total' => $total_z,
-                'product_info'=> $product_info
+                'product_info' => $product_info
             ];
             $orderAllocationModel->insertInfo($data2);
         }
@@ -764,7 +767,7 @@ class UserorderController extends BaseController
             //给商家发送短信
             $shopInfo2 = $shopModel->getInfo(['id' => $shop_id]);
             $mobile = $shopInfo2['mobile'];
-            $value1 = $configModel->getInfo(['key'=>'orderNewShop'], 'value');
+            $value1 = $configModel->getInfo(['key' => 'orderNewShop'], 'value');
             $content = $value1['value'];//'亲爱的i500商家，您有一个新的订单，请及时登录i500商家后台或通过i500商家APP查看订单详情。';
             $QueueSmsModel->addMsg($mobile, $content);
             //记录日志
