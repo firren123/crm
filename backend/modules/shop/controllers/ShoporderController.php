@@ -74,23 +74,25 @@ class ShoporderController extends BaseController
     public function actionIndex()
     {
         $shop_m = new Shop();
-        $start_time = RequestHelper::get('start_time','');   //支付时间开始
-        $end_time = RequestHelper::get('end_time','');        //支付时间结束
+        $start_time = RequestHelper::get('start_time', '');   //支付时间开始
+        $end_time = RequestHelper::get('end_time', '');        //支付时间结束
         $p = RequestHelper::get('page', '1', 'intval');                //当前页
-        $order_sn = RequestHelper::get('order_sn','');        //订单号
-        $order_sn = htmlspecialchars($order_sn,ENT_QUOTES,"UTF-8");
-        $ship_status = RequestHelper::get('ship_status',-1);  //订单物流状态
-        $pay_status = RequestHelper::get('pay_status',-1);
-        $status = RequestHelper::get('status',-2);
-        $shop_name = RequestHelper::get('shop_name','');
-        $where =' 1 ';
-        if(!in_array($this->quanguo_city_id,$this->city_id)){
-            $city_id_str = implode(',',$this->city_id);
-            $where .=" and city in(" . $city_id_str.")";
+        $order_sn = RequestHelper::get('order_sn', '');        //订单号
+        $order_sn = htmlspecialchars($order_sn, ENT_QUOTES, "UTF-8");
+        $ship_status = RequestHelper::get('ship_status', -1);  //订单物流状态
+        $pay_status = RequestHelper::get('pay_status', -1);
+        $status = RequestHelper::get('status', -2);
+        $shop_name = RequestHelper::get('shop_name', '');
+        $where = ' 1 ';
+        if (!in_array($this->quanguo_city_id, $this->city_id)) {
+            if ($this->city_id) {
+                $city_id_str = implode(',', $this->city_id);
+                $where .= " and city in(" . $city_id_str . ")";
+            }
         }
-        if($start_time && $end_time){
-            if($start_time >$end_time){
-                return $this->error('开始时间不能大于结束时间','/shop/shoporder/index');
+        if ($start_time && $end_time) {
+            if ($start_time > $end_time) {
+                return $this->error('开始时间不能大于结束时间', '/shop/shoporder/index');
             }
         }
         if ($start_time) {
