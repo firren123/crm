@@ -6,7 +6,7 @@
  * 文件介绍2
  *
  * @category  PHP
- * @package   admin
+ * @package   Crm
  * @filename  ShopProduct.php
  * @author    lichenjun <lichenjun@iyangpin.com>
  * @copyright 2015 www.i500m.com
