@@ -17,6 +17,7 @@
 
 
 namespace backend\models\social;
+
 use common\helpers\CommonHelper;
 
 
@@ -48,7 +49,9 @@ class OrderLog extends SocialBase
     public function recordLog($data = [])
     {
         $admin_id = \Yii::$app->user->id;
-        if (empty($admin_id)) return false;
+        if (empty($admin_id)) {
+            return false;
+        }
         $re = false;
         if ($data) {
             foreach ($data as $k=>$v) {

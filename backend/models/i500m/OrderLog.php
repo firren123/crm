@@ -18,6 +18,15 @@ namespace backend\models\i500m;
 
 use common\helpers\CommonHelper;
 
+/**
+ * Class OrderLog
+ * @category  PHP
+ * @package   OrderLog
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
 class OrderLog extends I500Base
 {
     /**
@@ -84,7 +93,9 @@ class OrderLog extends I500Base
     public function recordLog($data = [])
     {
         $admin_id = \Yii::$app->user->id;
-        if (empty($admin_id)) return false;
+        if (empty($admin_id)) {
+            return false;
+        }
         $re = false;
         if ($data) {
             foreach ($data as $k => $v) {
