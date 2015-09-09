@@ -18,26 +18,45 @@ namespace backend\models\i500m;
 
 use common\helpers\CommonHelper;
 
-class OrderLog extends I500Base{
-    public static function tableName(){
+class OrderLog extends I500Base
+{
+    /**
+     * 简介：连接表
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public static function tableName()
+    {
         return '{{%order_log}}';
     }
 
-    public function total($where=null)
+    /**
+     * 简介：总数
+     * @param null $where xx
+     * @return int|string
+     */
+    public function total($where = null)
     {
-        if($where){
+        if ($where) {
             $total = $this->find()->where($where)->count();
             return $total;
-        }else{
+        } else {
             $total = $this->find()->count();
             return $total;
         }
 
     }
 
-    public function show($data=array(),$offset,$where=null)
+    /**
+     * 简介：
+     * @param array $data   x
+     * @param int   $offset x
+     * @param null  $where  x
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function show($data = array(), $offset, $where = null)
     {
-        if($where){
+        if ($where) {
             $list = $this->find()
                 ->where($where)
                 ->offset($offset)
@@ -46,7 +65,7 @@ class OrderLog extends I500Base{
                 ->asArray()
                 ->all();
             return $list;
-        }else{
+        } else {
             $list = $this->find()
                 ->offset($offset)
                 ->limit($data['size'])
@@ -59,7 +78,7 @@ class OrderLog extends I500Base{
 
     /**
      * 记录日志
-     * @param array $data     日志内容
+     * @param array $data 日志内容
      * @return bool|mixed
      */
     public function recordLog($data = [])
@@ -68,7 +87,7 @@ class OrderLog extends I500Base{
         if (empty($admin_id)) return false;
         $re = false;
         if ($data) {
-            foreach ($data as $k=>$v) {
+            foreach ($data as $k => $v) {
                 $this->$k = $v;
             }
             $this->add_time = date('Y-m-d H:i:s');
@@ -80,5 +99,4 @@ class OrderLog extends I500Base{
         }
         return $re;
     }
-    
 }
