@@ -21,9 +21,12 @@ use backend\models\i500m\City;
 use backend\models\i500m\Log;
 use backend\models\i500m\Shop;
 use backend\models\shop\Settlement;
+use backend\models\shop\ShopAccount;
+use common\helpers\CurlHelper;
 use common\helpers\RequestHelper;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
+
 /**
  * Shop
  *
@@ -67,7 +70,7 @@ class ShopController extends BaseController
             $info = $branch_model->city_all($branch_id);
             $list = explode(',', $info['city_id_arr']);
             $arr = array();
-            foreach ($list as $k=>$v) {
+            foreach ($list as $k => $v) {
                 $city_all = $city_model->city_all($v);
                 $arr[] = $city_all[0];
             }
@@ -121,7 +124,7 @@ class ShopController extends BaseController
 
         //从shop表中查询出商家名称赋予到$list数组里，拼装一下时间
         $number_all = 0;
-        foreach ($list as $k=>$v) {
+        foreach ($list as $k => $v) {
             $number_all += $v['money'];
             $info_shop = $model->shop_info($v['shop_id']);
             $list[$k]['shop_name'] = $info_shop['shop_name'];
@@ -132,7 +135,19 @@ class ShopController extends BaseController
 
         $total = $shop_model->total($where);
         $pages = new Pagination(['totalCount' =>$total, 'pageSize' => $this->size]);
-        return $this->render('index', ['list'=>$list, 'pages'=>$pages, 'total'=>$total, 'number_all'=>$number_all, 'branch_all'=>$branch_all, 'branch_id'=>$branch_id, 'city_id'=>$city_id, 'settle_status'=>$settle_status, 'arr'=>$arr, 'positive_minus'=>$positive_minus]);
+        $params = [
+            'list'=>$list,
+            'pages'=>$pages,
+            'total'=>$total,
+            'number_all'=>$number_all,
+            'branch_all'=>$branch_all,
+            'branch_id'=>$branch_id,
+            'city_id'=>$city_id,
+            'settle_status'=>$settle_status,
+            'arr'=>$arr,
+            'positive_minus'=>$positive_minus
+        ];
+        return $this->render('index', $params);
     }
 
 
@@ -151,6 +166,7 @@ class ShopController extends BaseController
         if ($info) {
             $bark = RequestHelper::post('info');
             $log = new Log();
+            $str = '';
             if ($is_freeze == 0) {
                 $str = '冻结了';
             } elseif ($is_freeze == 1) {
@@ -179,7 +195,7 @@ class ShopController extends BaseController
         $info = $model->city_all($bid);
         $list = explode(',', $info['city_id_arr']);
         $arr = array();
-        foreach ($list as $k=>$v) {
+        foreach ($list as $k => $v) {
             $city_all = $city_model->city_all($v);
             $arr[] = $city_all[0];
         }
@@ -201,11 +217,9 @@ class ShopController extends BaseController
         //取出商家名称shop_name
         $shop_one = $model->shop_info($shop_id);
         $shop_name = $shop_one['shop_name'];
-
         //调用接口返回该商家的订单信息
         $info = $model->details_all($shop_id, $account_id, $page);
-//var_dump($info);
-        $total = ArrayHelper::getValue($info, 'data.count' , 0);
+        $total = ArrayHelper::getValue($info, 'data.count', 0);
         $pages = new Pagination(['totalCount' =>$total, 'pageSize' => 20]);
         //结算状态
         $status = $info['data']['status'];
@@ -213,19 +227,17 @@ class ShopController extends BaseController
         //拼凑时间
         $ship_merge = $info['data']['account_start_time'].'--'.$info['data']['account_end_time'];
         $arr = $info['data']['data'];
-
-        return $this->render('details',
-            [
-                'arr'=>$arr,
-                'pages'=>$pages,
-                'shop_name'=>$shop_name,
-                'ship_merge'=>$ship_merge,
-                'status'=>$status,
-                'info'=>$info,
-                'shop_id'=>$shop_id,
-                'account_id'=>$account_id
-            ]
-        );
+        $params = [
+            'arr'=>$arr,
+            'pages'=>$pages,
+            'shop_name'=>$shop_name,
+            'ship_merge'=>$ship_merge,
+            'status'=>$status,
+            'info'=>$info,
+            'shop_id'=>$shop_id,
+            'account_id'=>$account_id
+        ];
+        return $this->render('details', $params);
     }
 
     /**
@@ -252,4 +264,106 @@ class ShopController extends BaseController
         ];
         return $this->render('particulars', $params);
     }
-} 
+
+    /**
+     * 导出账期中待结算金额大于0的订单
+     *
+     * @author liuwei <liuwei@iyangpin.com>
+     * @return array
+     */
+    public function actionExport()
+    {
+        $account_id = RequestHelper::get('account_id', 0);
+        if ($account_id>0) {
+            $account_model = new ShopAccount();
+            $account_item = $account_model->getInfo(['id'=>$account_id]);
+            if (empty($account_item)) {
+                echo $this->error('账期不存在');
+            } else {
+                $shop_model = new Shop();
+                $shop_item = $shop_model->getInfo(['id'=>$account_item['shop_id']]);
+                $shop_name = empty($shop_item) ? '' : $shop_item['shop_name'];
+                $url = "shop/account/order-list?shop_id=".$account_item['shop_id'].'&account_id='.$account_id;
+                $result = CurlHelper::get($url, 'server');
+                if ($result['code']==200) {
+                    if (empty($result['data'])) {
+                        echo $this->error('账期中没有待结算金额大于0的订单');
+                    } else {
+                        $this->write($result['data'], $shop_name);
+                    }
+                }
+            }
+        } else {
+            echo $this->error('账期id不能为空');
+        }
+    }
+
+    /**
+     * 导出表格
+     *
+     * @param array  $list      数组
+     * @param string $shop_name 商家id
+     *
+     * @author liuwei <liuwei@iyangpin.com>
+     * @throws \PHPExcel_Exception
+     * @throws \PHPExcel_Reader_Exception
+     * @return array
+     */
+    public  function write($list, $shop_name)
+    {
+        $name    = $shop_name.'商家的待结算订单列表'.date("Y-m-d H:i:s");//文件名
+        error_reporting(E_ALL);
+        //date_default_timezone_set('Europe/London');
+        $objPHPExcel = new \PHPExcel();
+        $header = array(
+            'A' => $shop_name.'商家的待结算订单列表',
+            'B' => '',
+            'C' => '',
+            'D' => '',
+            'E' => '',
+            'F' => '',
+            'G' => '',
+        );
+        foreach ($header as $key => $value) {
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue($key . '1', $value);
+            $objPHPExcel->getActiveSheet()->getColumnDimension($key)->setWidth(12);
+            $objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
+            $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setSize(15);
+            $objPHPExcel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        }
+        /*以下就是对处理Excel里的数据， 横着取数据，主要是这一步，其他基本都不要改*/
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A2', '订单编号')
+            ->setCellValue('B2', '交易日期')
+            ->setCellValue('C2', '支付类型')
+            ->setCellValue('D2', '交易金额（元）')
+            ->setCellValue('E2', '已结算（元）')
+            ->setCellValue('F2', '待结算（元）');
+        //设置样式
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(19);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+        foreach ($list as $k => $v) {
+            $num=$k+3;
+            $objPHPExcel->setActiveSheetIndex(0)
+                //Excel的第A列，account_bank是你查出数组的键值，下面以此类推
+                ->setCellValue('A'.$num, '`'.$v['order_sn'].'`')
+                ->setCellValue('B'.$num, $v['ship_status_time'])
+                ->setCellValueExplicit('C'.$num, $v['pay_method'])
+                ->setCellValue('D'.$num, sprintf("%0.2f", $v['total']))
+                ->setCellValue('E'.$num, $v['settled'])
+                ->setCellValue('F'.$num, $v['unsettled']);
+        }
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'.$name.'.xls"');
+        header('Cache-Control: max-age=0');
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        exit;
+    }
+}
