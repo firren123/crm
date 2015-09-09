@@ -1418,7 +1418,7 @@ class ProductpreController extends BaseController
                 $code_number = 1;
                 $price_number = 1;
                 foreach ($data['sale_price'] as $k => $v) {
-                    if (!is_numeric($data['bar_code'][$k]) and mb_strlen($data['bar_code'][$k], 'utf8')<13) {
+                    if (!is_numeric($data['bar_code'][$k]) or mb_strlen($data['bar_code'][$k], 'utf8')<13) {
                         $code_number *= 2;
                     } else {
                         $model = new Product();
