@@ -311,7 +311,7 @@ class ShopController extends BaseController
      */
     public  function write($list, $shop_name)
     {
-        $name    = $shop_name.'商家的待结算订单列表'.date("Y-m-d H:i:s");//文件名
+        $name    = $shop_name.'商家的待结算订单列表'.date("Y-m-d H-i-s");//文件名
         error_reporting(E_ALL);
         //date_default_timezone_set('Europe/London');
         $objPHPExcel = new \PHPExcel();
@@ -333,6 +333,9 @@ class ShopController extends BaseController
             $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER);
             $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         }
+        //设置居中
+        $objPHPExcel->getActiveSheet()->getStyle('A2:F2')
+            ->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         /*以下就是对处理Excel里的数据， 横着取数据，主要是这一步，其他基本都不要改*/
         $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A2', '订单编号')
@@ -352,12 +355,17 @@ class ShopController extends BaseController
             $num=$k+3;
             $objPHPExcel->setActiveSheetIndex(0)
                 //Excel的第A列，account_bank是你查出数组的键值，下面以此类推
-                ->setCellValue('A'.$num, '`'.$v['order_sn'].'`')
+                ->setCellValueExplicit('A'.$num, $v['order_sn'], \PHPExcel_Cell_DataType::TYPE_STRING)
                 ->setCellValue('B'.$num, $v['ship_status_time'])
-                ->setCellValueExplicit('C'.$num, $v['pay_method'])
-                ->setCellValue('D'.$num, sprintf("%0.2f", $v['total']))
+                ->setCellValue('C'.$num, $v['pay_method'])
+                ->setCellValue('D'.$num, $v['total'])
                 ->setCellValue('E'.$num, $v['settled'])
                 ->setCellValue('F'.$num, $v['unsettled']);
+            //设置居中
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$num.':F'.$num)
+                ->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('D'.$num.':F'.$num)
+                ->getNumberFormat()->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
         }
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="'.$name.'.xls"');
