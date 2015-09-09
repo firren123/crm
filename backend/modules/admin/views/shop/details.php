@@ -44,41 +44,42 @@ use yii\widgets\LinkPager;
                                 <td colspan="2" style="color: green;"><?php echo number_format($item['unsettled'],2);?></td>
                             <?php }?>
                         </tr>
-                        <?php }}?>
-                        <tr>
-                            <td colspan="6"><b>待结算总金额</b></td>
-                            <td colspan="6"><b><?php echo $info['data']['total'];?></b></td>
-                        </tr>
+                    <?php }}?>
+                <tr>
+                    <td colspan="6"><b>待结算总金额</b></td>
+                    <td colspan="6"><b><?php echo $info['data']['total'];?></b></td>
+                </tr>
                 </tbody>
             </table>
             <?php echo LinkPager::widget(['pagination' => $pages]); ?>
             <br><br>
             <div style="padding: auto;">
-            <form action="/admin/shop/freeze" method="post">
-                <?php if($status == 0){?>  <!--未结算-->
-                    <div style="margin: 0px 0px 0px 115px;">
-                    <span style="color: red;">*</span><span>备注：</span>
-                    <textarea cols="80" rows="5" name="intro" id="intro"></textarea><span id="area" style="color: red;"></span><br><br><br>
-                    </div>
-                <div style="padding: 0px 0px 0px 240px;">
-                    <input type="button" class="btn btn-primary" id="jiesuan" style="margin: 0px 45px 0px 0px;"  value="确认结算">
-                <input type="button" class="btn btn-primary" id="dongjie"  value="异常冻结">
-                <a href="/admin/shop/index" style="margin: 0px 0px 0px 45px;" class="btn btn-primary">返回</a>
-                </div>
-                <?php }elseif($status == 1){?>  <!--已结算-->
-                    <a href="/admin/shop/index" class="btn btn-primary" style="margin: 0px 0px 0px 460px;">返回</a>
-                <?php }else{?>  <!--冻结-->
-                <div style="margin: 0px 0px 0px 115px;">
-                    <span style="color: red;">* 备注：</span>
-                    <textarea cols="80" rows="5" name="intro" id="intro"></textarea><span id="area" style="color: red;"></span><br><br><br>
-                </div>
+                <form action="/admin/shop/freeze" method="post">
+                    <?php if($status == 0){?>  <!--未结算-->
+                        <div style="margin: 0px 0px 0px 115px;">
+                            <span style="color: red;">*</span><span>备注：</span>
+                            <textarea cols="80" rows="5" name="intro" id="intro"></textarea><span id="area" style="color: red;"></span><br><br><br>
+                        </div>
+                        <div style="padding: 0px 0px 0px 240px;">
+                            <input type="button" class="btn btn-primary" id="jiesuan" style="margin: 0px 45px 0px 0px;"  value="确认结算">
+                            <input type="button" class="btn btn-primary" id="dongjie"  value="异常冻结">
+                            <a href="/admin/shop/export?account_id=<?= $_GET['account_id']?>" style="margin: 0px 0px 0px 45px;" class="btn btn-primary">导出</a>
+                            <a href="/admin/shop/index" style="margin: 0px 0px 0px 45px;" class="btn btn-primary">返回</a>
+                        </div>
+                    <?php }elseif($status == 1){?>  <!--已结算-->
+                        <a href="/admin/shop/index" class="btn btn-primary" style="margin: 0px 0px 0px 460px;">返回</a>
+                    <?php }else{?>  <!--冻结-->
+                        <div style="margin: 0px 0px 0px 115px;">
+                            <span style="color: red;">* 备注：</span>
+                            <textarea cols="80" rows="5" name="intro" id="intro"></textarea><span id="area" style="color: red;"></span><br><br><br>
+                        </div>
 
-                    <input type="button" class="btn btn-primary" id="jiechu" style="margin: 0px 0px 0px 260px;" value="解除冻结">
-                    <a href="/admin/shop/index" class="btn btn-primary" style="margin: 0px 0px 0px 90px;">返回</a>
+                        <input type="button" class="btn btn-primary" id="jiechu" style="margin: 0px 0px 0px 260px;" value="解除冻结">
+                        <a href="/admin/shop/index" class="btn btn-primary" style="margin: 0px 0px 0px 90px;">返回</a>
 
-                <?php }?>
-            </form>
-                </div>
+                    <?php }?>
+                </form>
+            </div>
             <br><br><br>
         </div>
     </div>
@@ -176,18 +177,18 @@ use yii\widgets\LinkPager;
 
             if (!checkSubmitFlg) {
                 checkSubmitFlg = true;
-            $.ajax({
-                type: "POST",
-                url: '/admin/shop/freeze?id='+account_id+'&is_freeze=2'+'&shop_id='+shop_id,
-                data: {
-                    "info":info,
-                    "account_time":account_time
-                },
-                success: function(){
-                    layer.msg('修改成功！');
-                    window.location.href = '/admin/shop/index';
-                }
-            });
+                $.ajax({
+                    type: "POST",
+                    url: '/admin/shop/freeze?id='+account_id+'&is_freeze=2'+'&shop_id='+shop_id,
+                    data: {
+                        "info":info,
+                        "account_time":account_time
+                    },
+                    success: function(){
+                        layer.msg('修改成功！');
+                        window.location.href = '/admin/shop/index';
+                    }
+                });
             } else {
                 layer.msg('请勿重复提交！');
                 return false;
