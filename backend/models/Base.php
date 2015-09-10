@@ -409,7 +409,9 @@ class Base extends ActiveRecord
      */
     public function getFieldName($map, $field)
     {
-        if (empty($map) || empty($field)) return false;
+        if (empty($map) || empty($field)) {
+            return false;
+        }
         return $this->find()->select($field)->where($map)->scalar();
     }
 
