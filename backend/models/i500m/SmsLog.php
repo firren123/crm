@@ -1,12 +1,12 @@
 <?php
 /**
  *  发送短信及短信发送记录
- * @category  crm
+ * @category  Crm
  * @package   SmsLog.php
  * @author    youyong <youyong@iyangpin.com>
  * @time      2015/5/25 10:22
- * @copyright 灵韬致胜（北京）科技发展有限公司
- * @license   http://www.i500m.com
+ * @copyright 2015 灵韬致胜（北京）科技发展有限公司
+ * @license   i500m http://www.i500m.com
  * @link      youyong@iyangpin.com
  */
 namespace backend\models\i500m;
