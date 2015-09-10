@@ -19,7 +19,15 @@
 
 namespace backend\models\i500m;
 
-
+/**
+ * Class RefundOrder
+ * @category  PHP
+ * @package   RefundOrder
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
 class RefundOrder extends I500Base
 {
     /**
@@ -31,5 +39,4 @@ class RefundOrder extends I500Base
     {
         return "{{%refund_order}}";
     }
-
 }

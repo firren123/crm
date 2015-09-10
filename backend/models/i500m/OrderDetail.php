@@ -6,7 +6,7 @@
  * 文件介绍2
  *
  * @category  PHP
- * @package   admin
+ * @package   Admin
  * @filename  OrderDetail.php
  * @author    lichenjun <lichenjun@iyangpin.com>
  * @copyright 2015 www.i500m.com
@@ -19,11 +19,19 @@
 
 namespace backend\models\i500m;
 
-
-class OrderDetail extends I500Base{
+/**
+ * Class OrderDetail
+ * @category  PHP
+ * @package   OrderDetail
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class OrderDetail extends I500Base
+{
     /**
      * 数据库
-     *
      * @return string
      */
     public static function tableName()
@@ -34,14 +42,15 @@ class OrderDetail extends I500Base{
     /**
      * 简介：根据订单号查询订单详情
      * @author  lichenjun@iyangpin.com。
-     * @param $order_sn
+     * @param string $order_sn 订单号
      * @return array|\yii\db\ActiveRecord[]
      */
     public function getOrderDetailBySn($order_sn)
     {
-        if (empty($order_sn)) return array();
-        $info = $this::find()->select('p_id,order_sn,name,num,price,attribute_str,total')->where(['order_sn'=>$order_sn])->asArray()->all();
+        if (empty($order_sn)) {
+            return array();
+        }
+        $info = $this::find()->select('p_id,order_sn,name,num,price,attribute_str,total')->where(['order_sn' => $order_sn])->asArray()->all();
         return $info;
     }
-
 }

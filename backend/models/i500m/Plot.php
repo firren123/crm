@@ -18,24 +18,29 @@
 
 
 namespace backend\models\i500m;
+
 use Yii;
-use yii\base\Model;
-use common\helpers\CurlHelper;
-use yii\helpers\ArrayHelper;
 use linslin\yii2\curl;
+
+/**
+ * Class Plot
+ * @category  PHP
+ * @package   Plot
+ * @author    zhoujun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
 class Plot extends I500Base
 {
-
     /**
      * 小区表后缀
-     *
      * @var string 小区表后缀，形如 _beijing
      */
     private static $_table_suffix = '_beijing';
 
     /**
      * 表名
-     *
      * @return string
      */
     public static function tableName()
@@ -44,42 +49,50 @@ class Plot extends I500Base
     }
 
     /**
-     * 设置后缀
-     *
-     * Author zhengyu@iyangpin.com
-     *
-     * @param string $str 后缀
-     *
-     * @return void
+     * 简介：设置后缀
+     * @author  zhengyu@iyangpin.com
+     * @param string $str x
+     * @param array  $arr x
+     * @return null
      */
     public static function setSuffix($str, $arr)
     {
-        if(in_array($str,$arr)){
+        if (in_array($str, $arr)) {
             Plot::$_table_suffix = $str;
             return;
-        }else{
+        } else {
             Plot::$_table_suffix = '_beijing';
             return;
         }
     }
 
-    public static function setSuffix1($str = 'beijing') {
+    /**
+     * 简介：
+     * @param string $str
+     * @return null
+     */
+    public static function setSuffix1($str = 'beijing')
+    {
         Plot::$_table_suffix = $str;
     }
 
+    /**
+     * 简介：
+     * @return array
+     */
     public function attributeLabels()
     {
         return array(
             'name' => '小区名称',
             'province' => '省名',
-            'city' =>'市名',
-            'area' =>'区域',
-            'address' =>'地址',
-            'lng' =>'经度',
-            'lat' =>'纬度',
+            'city' => '市名',
+            'area' => '区域',
+            'address' => '地址',
+            'lng' => '经度',
+            'lat' => '纬度',
             'average' => '均价',
-            'total_area' =>'总面积',
-            'total_number'=>'总户数',
+            'total_area' => '总面积',
+            'total_number' => '总户数',
             'buildings' => '建筑年代',
             'developer' => '开发商',
             'volume_rate' => '容积率',
@@ -92,45 +105,48 @@ class Plot extends I500Base
             'status' => '状态',
         );
     }
-//    public static function tableName()
-//    {
-//        return '{{%community_beijing}}';
-//    }
+
+    /**
+     * 简介：
+     * @return array
+     */
     public function rules()
     {
         return [
             //不可为空的字段
-            [['name', 'area', 'status','address','province','city','average','total_area','buildings','developer','volume_rate','property','letting_rate','property_type','parking','property_fee','greening_rate'], 'required'],
+            [['name', 'area', 'status', 'address', 'province', 'city', 'average', 'total_area', 'buildings', 'developer', 'volume_rate', 'property', 'letting_rate', 'property_type', 'parking', 'property_fee', 'greening_rate'], 'required'],
             [['total_number'], 'integer'],
-            [['lng','lat'], 'double'],
+            [['lng', 'lat'], 'double'],
         ];
     }
 
-
     /**
-     * @purpose:判断数据库中是否有表$tablename
-     * @name: ckeck_table_is
-     * @return boolean
+     * 简介：判断数据库中是否有表$tablename
+     * @param string $tablename ckeck_table_is
+     * @return bool
      */
     public function ckeck_table_is($tablename)
     {
         $sql = "SHOW TABLES FROM 500m_new LIKE '" . $tablename . "'";
         $row = self::getDB()->createCommand($sql)->queryAll();
-       if(!empty($row)){
-           return true;
-       }else{
-           return false;
-       }
+        if (!empty($row)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
-     * @purpose:省市分页显示
-     * @name: show
-     * @return string
+     * 简介：省市分页显示
+     * @author  lichenjun@iyangpin.com。
+     * @param array $data   x
+     * @param null  $offset x
+     * @param null  $area   x
+     * @return array|\yii\db\ActiveRecord[]
      */
-    public function show($data=array(),$offset,$area=null)
+    public function show($data = array(), $offset = null, $area = null)
     {
-        if($area){
+        if ($area) {
             $list = $this->find()
                 ->where(['like', 'name', $area])
                 ->offset($offset)
@@ -139,7 +155,7 @@ class Plot extends I500Base
                 ->asArray()
                 ->all();
             return $list;
-        }else{
+        } else {
             $list = $this->find()
                 ->offset($offset)
                 ->limit($data['size'])
@@ -150,30 +166,44 @@ class Plot extends I500Base
         }
     }
 
-    public function total($area=null)
+    /**
+     * 简介：
+     * @param null $area x
+     * @return int|string
+     */
+    public function total($area = null)
     {
-        if($area){
+        if ($area) {
             $total = $this->find()->where(['like', 'name', $area])->count();
             return $total;
-        }else{
+        } else {
             $total = $this->find()->count();
             return $total;
         }
-
     }
 
-
-
-    public function verifyDredgeCity($name){
+    /**
+     * 简介：
+     * @param string $name x
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public function verifyDredgeCity($name)
+    {
         $arr = $this->find()
             ->select('*')
-            ->where(['name'=>$name])
+            ->where(['name' => $name])
             ->asArray()
             ->one();
         return $arr;
     }
 
-    public function add_info($data,$is_exist=null)
+    /**
+     * 简介：
+     * @param array $data     x
+     * @param null  $is_exist x
+     * @return bool
+     */
+    public function add_info($data, $is_exist = null)
     {
         $this->name = $data['name'];
         $this->province = $data['province'];
@@ -194,25 +224,31 @@ class Plot extends I500Base
         $this->greening_rate = $data['greening_rate'];
         $this->status = $data['status'];
         $this->create_time = $data['create_time'];
-        if($is_exist == 2){
+        if ($is_exist == 2) {
             $this->lng = $data['lng'];
             $this->lat = $data['lat'];
-        }elseif($is_exist == 1){
+        } elseif ($is_exist == 1) {
             $this->lng = $data['lng'];
             $this->lat = '00.000000';
-        }else{
+        } else {
             $this->lng = '000.000000';
             $this->lat = '00.000000';
         }
         $re = false;
         $result = $this->save();
-        if ($result==true) {
+        if ($result == true) {
             $re = $this->attributes['id'];
         }
 
         return $re;
     }
 
+    /**
+     * 简介：
+     * @param int $id x
+     * @return false|int
+     * @throws \Exception
+     */
     public function del($id)
     {
         $data = $this::findOne($id);
@@ -220,17 +256,25 @@ class Plot extends I500Base
         return $info;
     }
 
+    /**
+     * 简介：
+     * @param int $id x
+     * @return array|null|\yii\db\ActiveRecord
+     */
     public function display_back($id)
     {
         $list = $this->find()->where("id = $id")->asArray()->one();
-//        var_dump($list);exit;
         return $list;
     }
 
+    /**
+     * 简介：
+     * @param int $id x
+     * @return array|null|\yii\db\ActiveRecord
+     */
     public function look($id)
     {
         $list = $this->find()->where("id = $id")->asArray()->one();
         return $list;
     }
-
 }

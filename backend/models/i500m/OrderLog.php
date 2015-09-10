@@ -63,7 +63,7 @@ class OrderLog extends I500Base
      * @param null  $where  x
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function show($data = array(), $offset, $where = null)
+    public function show($data = array(), $offset = null, $where = null)
     {
         if ($where) {
             $list = $this->find()

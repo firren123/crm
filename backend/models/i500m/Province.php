@@ -28,7 +28,7 @@ use linslin\yii2\curl;
  * Class Province
  * @category  PHP
  * @package   Admin
- * @author    zhoujun <lichenjun@iyangpin.com>
+ * @author    zhoujun <zhoujun@iyangpin.com>
  * @copyright 2015 www
  * @license   http://www.i500m.com/ i500m license
  * @link      http://www.i500m.com/
