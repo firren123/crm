@@ -93,11 +93,11 @@ class ExchangeController extends BaseController
         $dev = array();
         if (!empty($res)) {
 
-            foreach ($res as $k=>$v) {
+            foreach ($res as $k => $v) {
                 $result[] = $v['shop_id'];
             }
             $map = array_unique($result);
-            foreach ($map as $key=>$val) {
+            foreach ($map as $key => $val) {
 
                 $dev[$key]['shop_name'] = $this->shopName($val);
                 $dev[$key]['shop_id'] = $val;
