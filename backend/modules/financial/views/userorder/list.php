@@ -95,8 +95,13 @@ $this->title = "用户订单列表";
                             <td colspan="2"><?= $item['refund_time']; ?></td>
 
                             <td colspan="4">
-                                <a href="<?= '/user/userorder/detail?order_sn=' . $item['order_sn']; ?>">详情</a>
-                                <?php if ($role['fin'] == 1) {
+                                <?php if ($item['from_data']==1) { ?>
+                                    <a target="_blank" href="<?= '/social/userorder/detail?order_sn=' . $item['order_sn']; ?>">详情</a>
+                                    <?php }else{ ?>
+                                    <a target="_blank" href="<?= '/user/userorder/detail?order_sn=' . $item['order_sn']; ?>">详情</a>
+                                <?php
+                                    }
+                                if ($role['fin'] == 1) {
                                     if ($item['audit_status'] == 1) { ?>
                                         &nbsp;|&nbsp;<a href="javascript:;" class="financial">财务审核</a>
                                     <?php } else if ($item['audit_status'] == 2) {

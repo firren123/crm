@@ -128,7 +128,7 @@ class PostController extends BaseController
             if (empty($Post['post_img'])) {
                 return $this->error('图片不能为空');
             } else {
-                $Post['post_img'] = implode('###', $Post['post_img']);
+                $Post['post_img'] = implode(',', $Post['post_img']);
             }
             $model->attributes = $Post;
             unset($Post['content']);
@@ -159,7 +159,7 @@ class PostController extends BaseController
         $model = new Post();
         $cond = 'id=' . $id;
         $item = $model->getInfo($cond, false, '*');
-        $item->post_img = explode("###",$item->post_img);
+        $item->post_img = explode(",",$item->post_img);
         $contentModel = new Content();
         $con = $contentModel->getInfo(['post_id' => $id]);
         $item['content'] = $con['content'];
@@ -168,7 +168,7 @@ class PostController extends BaseController
             if (empty($Post['post_img'])) {
                 return $this->error('图片不能为空');
             } else {
-                $Post['post_img'] = implode('###', $Post['post_img']);
+                $Post['post_img'] = implode(',', $Post['post_img']);
             }
             $content = $Post['content'];
             unset($Post['content']);
@@ -197,7 +197,7 @@ class PostController extends BaseController
         $model = new Post();
         $cond = 'id=' . $id;
         $item = $model->getInfo($cond);
-        $item['post_img'] = explode("###",$item['post_img']);
+        $item['post_img'] = explode(",",$item['post_img']);
         $contentModel = new Content();
         $con = $contentModel->getInfo(['post_id' => $id]);
         $item['content'] = $con['content'];

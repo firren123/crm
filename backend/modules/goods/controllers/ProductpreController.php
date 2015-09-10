@@ -476,10 +476,10 @@ class ProductpreController extends BaseController
             } elseif (count($file['name']) - count(array_filter($file['name'])) > 1) {
                 \Yii::$app->getSession()->setFlash('attr_value', '主图 不能为空');
             } else {
+                $cond_brand['name'] = $product['brand_name'];
                 foreach ($products['attr_value'] as $k => $v) {
                     $list_category = $category_model->getList(['category_id'=>$product['cate_first_id']], 'brand_id');
                     $cond_brand['id'] = empty($list_category) ? [0] : ArrayHelper::getColumn($list_category, 'brand_id');
-                    $cond_brand['name'] = $product['brand_name'];
                     $item_brand = $brand_model->getInfo($cond_brand, true, 'id', 'id desc');
                     if (!empty($item_brand)) {
                         $product['brand_id'] = $item_brand['id'];
@@ -635,7 +635,6 @@ class ProductpreController extends BaseController
                             //修改商品实时同步到sphinx
                             $url = $this->channel_url . '/sphinx/sync-goods?goods_id=' . $id;
                             CurlHelper::get($url, 'channel');
-                            $this->redirect('/goods/productpre');
                         }
                     } else {
                         //上传图片
@@ -653,24 +652,27 @@ class ProductpreController extends BaseController
                         $product['status'] = 2;
                         $product['single'] = 2;
                         $product['create_time'] = date("Y-m-d H:i:s");
-                        $list = $model->getInsert($product);
-                        if ($list > 0) {
+                        $result = $model->getInsert($product);
+                        if ($result > 0) {
                             //记录日志
-                            $content = "管理员：".\Yii::$app->user->identity->username.",添加了一个商品id为:".$list.",商品名称为:".$product['name'].' 的商品';
+                            $content = "管理员：".\Yii::$app->user->identity->username.",添加了一个商品id为:".$result.",商品名称为:".$product['name'].' 的商品';
                             $log_model->recordLog($content);
                             //新增商品实时同步到sphinx
-                            $url = $this->channel_url.'/sphinx/insert-goods?goods_id='.$list;
+                            $url = $this->channel_url.'/sphinx/insert-goods?goods_id='.$result;
                             CurlHelper::get($url, 'channel');
                             //主图添加
                             $img_data = array();
                             $img_data['image'] = $product['image'];
-                            $img_data['product_id'] = $list;
+                            $img_data['product_id'] = $result;
                             $img_data['status'] = 2;
                             $img_data['sort'] = 99;
                             $img_data['create_time'] = time();
                             $img_data['type'] = 1;
                             $img_model->getBulkInsert($img_data);
                         }
+                    }
+                    if ($result>0) {
+                        $this->redirect('/goods/productpre');
                     }
                 }
             }
@@ -1418,7 +1420,7 @@ class ProductpreController extends BaseController
                 $code_number = 1;
                 $price_number = 1;
                 foreach ($data['sale_price'] as $k => $v) {
-                    if (!is_numeric($data['bar_code'][$k]) and mb_strlen($data['bar_code'][$k], 'utf8')<13) {
+                    if (!is_numeric($data['bar_code'][$k]) or mb_strlen($data['bar_code'][$k], 'utf8')<13) {
                         $code_number *= 2;
                     } else {
                         $model = new Product();
