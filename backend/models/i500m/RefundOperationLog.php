@@ -19,9 +19,21 @@
 
 namespace backend\models\i500m;
 
-
+/**
+ * Class RefundOperationLog
+ * @category  PHP
+ * @package   RefundOperationLog
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
 class RefundOperationLog extends I500Base
 {
+    /**
+     * 简介：
+     * @return string
+     */
     public static function tableName()
     {
         return "{{%refund_operation_log}}";
