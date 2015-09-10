@@ -61,4 +61,3 @@ class StorageOut extends I500Base
         return $list;
     }
 }
-

@@ -6,7 +6,7 @@
  * 文件介绍2
  *
  * @category  PHP
- * @package   admin
+ * @package   Admin
  * @filename  User.php
  * @author    lichenjun <lichenjun@iyangpin.com>
  * @copyright 2015 www.i500m.com
@@ -16,8 +16,19 @@
  * @link      http://www.i500m.com/
  */
 namespace backend\models\i500m;
-use backend\models\i500m\I500Base;
-class User extends I500Base{
+
+
+/**
+ * Class User
+ * @category  PHP
+ * @package   User
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class User extends I500Base
+{
     /**
      * 数据库
      *user 表
@@ -27,6 +38,7 @@ class User extends I500Base{
     {
         return '{{%user}}';
     }
+
     /**
      * 规则
      * @return array
@@ -35,40 +47,42 @@ class User extends I500Base{
     {
         return [
             //不可为空的字段
-            [['password'],'required','message' => '密码不能为空！'],
-            [['email'],'required','message' => '电子邮箱不能为空！'],
-            [['mobile'],'required','message' => '手机号不能为空！'],
-            [['status'],'required','message' => '状态不能为空！'],
-            [['balance'],'required','message' => '余额不能为空！'],
+            [['password'], 'required', 'message' => '密码不能为空！'],
+            [['email'], 'required', 'message' => '电子邮箱不能为空！'],
+            [['mobile'], 'required', 'message' => '手机号不能为空！'],
+            [['status'], 'required', 'message' => '状态不能为空！'],
+            [['balance'], 'required', 'message' => '余额不能为空！'],
         ];
     }
+
     /**
-     * @param array $where
-     * 获得总的记录条数
+     * 简介：获得总的记录条数
+     * @param $where
+     * @return int|string
      */
-    public function totalNum($where){
-//        $listcount = $this->find()
-//            ->where($where)
-//            ->count();
+    public function totalNum($where)
+    {
         $listcount = User::find()->andFilterWhere($where)->count();
         return $listcount;
     }
+
     /**
-     * @param array $where
-     * @param string $fields
-     * @param string $order
-     * @param int $page
-     * @param int $size
-     * @return array
      * 根据条件查询记录 并分页
+     * @param array  $where  X
+     * @param string $fields X
+     * @param string $order  X
+     * @param int    $page   X
+     * @param int    $size   X
+     * @return array
      */
-    public function getAllUser($where=array() , $fields='*' , $order='' , $page = 1 , $size = 2){
-        $allGoods=[];
-        $allGoods=$this->find()
+    public function getAllUser($where = array(), $fields = '*', $order = '', $page = 1, $size = 2)
+    {
+        $allGoods = [];
+        $allGoods = $this->find()
             ->where($where)
             ->select($fields)
             ->orderBy($order)
-            ->offset(($page-1) * $size)
+            ->offset(($page - 1) * $size)
             ->limit($size)
             ->asArray()
             ->all();
@@ -76,12 +90,13 @@ class User extends I500Base{
     }
 
     /**
-     * @param array $where
-     * @param string $field
-     * @return array|\yii\db\ActiveRecord[]
      * 获得一个人的信息
+     * @param array  $where X
+     * @param string $field X
+     * @return array|\yii\db\ActiveRecord[]
      */
-    public function getOneuser($where = array() , $field = '*'){
+    public function getOneuser($where = array(), $field = '*')
+    {
         $oneuser = [];
         $oneuser = $this->find()
             ->where($where)
@@ -92,71 +107,81 @@ class User extends I500Base{
     }
 
     /**
-     * @param $id
-     * @param $msg
-     * @return bool
      * 修改一个人的信息
+     * @param int   $id  x
+     * @param array $msg x
+     * @return bool
      */
-    public function editUserMsg($id,$msg=[]){
+    public function editUserMsg($id, $msg = [])
+    {
         $user = $this->findOne($id);
 
-        $user->email= $msg['email'];
-        $user->mobile=$msg['mobile'];
-        $user->status=$msg['status'];
-        $user->balance=$msg['balance'];
+        $user->email = $msg['email'];
+        $user->mobile = $msg['mobile'];
+        $user->status = $msg['status'];
+        $user->balance = $msg['balance'];
 
         $result = $user->save();  // 等同于 $supplier->update();
         return $result;
     }
 
     /**
-     * @param $id
-     * @param $psw
-     * @return bool
      * 重置密码
+     * @param int    $id  x
+     * @param string $psw x
+     * @return bool
      */
-    public function editUserPswMsg($id,$psw){
+    public function editUserPswMsg($id, $psw)
+    {
         $user = $this->findOne($id);
-        $salt = rand(100000,999999);
+        $salt = rand(100000, 999999);
         $user->salt = $salt;
-        $user->password = md5($salt.md5($psw));
+        $user->password = md5($salt . md5($psw));
         $result = $user->save();  // 等同于 $supplier->update();
         return $result;
     }
+
     /**
-     * @param $id
-     * 冻结/解锁用户
+     * 简介：冻结/解锁用户
+     * @param int $id x
+     * @return bool
      */
-    public function lock($id){
+    public function lock($id)
+    {
         $user = $this->findOne($id);
-        if(!empty($user)){
-            if($user['status']==1){
-                $user['status']=2;
-            }else{
-                $user['status']=1;
+        if (!empty($user)) {
+            if ($user['status'] == 1) {
+                $user['status'] = 2;
+            } else {
+                $user['status'] = 1;
             }
-        $result=$user->save();
-        return $result;
-        }else{return false;}
+            $result = $user->save();
+            return $result;
+        } else {
+            return false;
+        }
     }
+
     /**
-     * @param array $arrid
-     * @return bool
      * 全部锁定
+     * @param array $arrid x
+     * @return bool
      */
-    public function alllock($arrid=array()){
+    public function alllock($arrid = array())
+    {
 
-        foreach( $arrid as $k=>$v){
-            if( !$v )
-                unset( $arrid[$k] );
+        foreach ($arrid as $k => $v) {
+            if (!$v) {
+                unset($arrid[$k]);
+            }
         }
 
-        foreach($arrid as $k=>$v){
-            $userid = User :: findOne($v);
-            if(!empty($userid)){
-                $userid->status=1;
-                $result=$userid->save();
-                if($result!=1){
+        foreach ($arrid as $k => $v) {
+            $userid = User:: findOne($v);
+            if (!empty($userid)) {
+                $userid->status = 1;
+                $result = $userid->save();
+                if ($result != 1) {
                     return false;
                 }
             }
@@ -165,30 +190,38 @@ class User extends I500Base{
     }
 
     /**
-     * @param array $arrid
-     * @return bool
      * 全部激活
+     * @param array $arrid x
+     * @return bool
      */
-    public function allunlock($arrid=array()){
-        foreach( $arrid as $k=>$v){
-            if( !$v )
-                unset( $arrid[$k] );
+    public function allunlock($arrid = array())
+    {
+        foreach ($arrid as $k => $v) {
+            if (!$v) {
+                unset($arrid[$k]);
+            }
         }
-        foreach($arrid as $k=>$v){
-            $userid = User :: findOne($v);
-            if(!empty($userid)){
-                $userid->status=2;
-                $result=$userid->save();
-                if($result!=1){
+        foreach ($arrid as $k => $v) {
+            $userid = User:: findOne($v);
+            if (!empty($userid)) {
+                $userid->status = 2;
+                $result = $userid->save();
+                if ($result != 1) {
                     return false;
                 }
             }
         }
         return true;
     }
-    public function showdatatime(){
+
+    /**
+     * 简介：
+     * @return bool
+     */
+    public function showdatatime()
+    {
         //date_default_timezone_set("PRC");
-        $show=User:: find()
+        $show = User:: find()
             ->where(['username' => '18310051157'])
             ->select('id,username,password,status')
             ->asArray()
@@ -197,18 +230,18 @@ class User extends I500Base{
         var_dump($show);
         //var_dump($v['login_time']);
         exit;
-        foreach($show as $k=>$v){
+        foreach ($show as $k => $v) {
             //$v['login_time']=60*60*24+strtotime($v['add_time']);
             //$v['login_time']=date("Y-m-d H:i:s", $v['login_time']);
             //$v+=10;
             //var_dump($v['login_time']);
-            $userid = User :: findOne($v['id']);
-            $userid->password = $v['id'] ;
-            $result=$userid->save();
-            if($result!=1){
+            $userid = User:: findOne($v['id']);
+            $userid->password = $v['id'];
+            $result = $userid->save();
+            if ($result != 1) {
                 return false;
             }
         }
         return true;
-        }
+    }
 }
