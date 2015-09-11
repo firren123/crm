@@ -96,9 +96,9 @@ $this->title = '退换货列表';
                             <?php
                             if($item['type'] == 1){
                                 echo "退货";
-                            }else if($item['status'] == 2){
+                            }else if($item['type'] == 2){
                                 echo "换货";
-                            }else{
+                            }else {
                                 echo "无";
                             }
                             ?>
@@ -121,7 +121,12 @@ $this->title = '退换货列表';
                         <td><?=$item['apply_time']?></td>
                         <td>
                             <?php if($item['status']==0){?>
+                                <?php if($item['type']==2){?>
                                 <a class="checked" href="/social/exchange/check?id=<?=$item['id']?>">审核</a>&nbsp;|&nbsp;
+                                <?php }?>
+                                <?php if($item['type']==1){?>
+                                    <a class="checked" href="/social/exchange/return-goods?id=<?=$item['id']?>&order_sn=<?=$item['order_sn']?>&apply_time=<?=$item['apply_time']?>">审核</a>&nbsp;|&nbsp;
+                                <?php }?>
                             <?php } ?>
                             <a class="view" href="javascript:;">详情</a>
                         </td>

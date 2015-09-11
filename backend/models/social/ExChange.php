@@ -14,6 +14,7 @@
  */
 
 namespace backend\models\social;
+use backend\models\i500m\RefundOperationLog;
 
 /**
  * ExChange
@@ -35,5 +36,6 @@ class ExChange extends SocialBase
     {
         return "{{%i500_exchange}}";
     }
+
 }
 

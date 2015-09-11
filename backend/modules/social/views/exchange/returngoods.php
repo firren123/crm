@@ -17,7 +17,7 @@
  */
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
-$this->title = "退换申请审核";
+$this->title = "退货审核";
 ?>
 
 <style>
@@ -36,7 +36,7 @@ $this->title = "退换申请审核";
     .imgListForm span{color:#666; line-height:25px; cursor:pointer;text-align: center;}
 </style>
 <legends  style="fond-size:12px;">
-    <legend>退换订单审核</legend>
+    <legend>退货订单审核</legend>
 </legends>
 <?php
 $form = ActiveForm::begin([
@@ -48,15 +48,17 @@ $form = ActiveForm::begin([
 ?>
 <table class="table table-bordered table-hover">
 <tr>
-    <th colspan="6" style="text-align: left;">退换货申请审查</th>
+    <th colspan="6" style="text-align: left;">退货申请审核</th>
 </tr>
 <tr>
     <input type="hidden" id="ex_id" name="ex_id" value="<?=$ex_id;?>">
+    <input type="hidden" id="order_sn" name="order_sn" value="<?=$order_sn;?>">
+    <input type="hidden" id="apply_time" name="apply_time" value="<?=$apply_time;?>">
     <th><span class="red">*</span>审核:</th>
     <td colspan="5" width="80%">
         <div class="radio">
-            <label><input class="back" type="radio" name="status" value="0"> 审核驳回</label>
-            <label><input class="back" type="radio" name="status"  value="1"> 审核通过</label>
+            <label><input type="radio" name="status" value="0"> 审核驳回</label>
+            <label><input type="radio" name="status"  value="1"> 审核通过</label>
         </div>
     </td>
 </tr>
@@ -67,9 +69,9 @@ $form = ActiveForm::begin([
         <label><input type="checkbox" value="1"  name="contact[]"/>已联系用户</label>
     </td>
 </tr>
-<tr id="bh">
+<tr>
     <th><span class="red">*</span>驳回理由:</th>
-    <td colspan="5"  width="80%">
+    <td>
         <textarea id="remark" name="remark" class="form-control"></textarea>
     </td>
 </tr>
@@ -86,16 +88,6 @@ $form = ActiveForm::begin([
 <?php ActiveForm::end(); ?>
 <script type="text/javascript">
 $(function(){
-    /*$("#bh").css('display','none');
-    $(".back").click(function(){
-        var status = $.trim($('input:radio:checked').val());
-        if(status==0){
-            $("#bh").css('display','block');
-        }
-        if(status==1){
-            $("#bh").css('display','none');
-        }
-    })*/
     $(".sub_ok").click(function(){
         var status = $.trim($('input:radio:checked').val());
         var remark = $.trim($("#remark").val());
@@ -104,14 +96,12 @@ $(function(){
             okValue: '确定',
             ok: function () {}
         });
-
         if(status == undefined){
             content = "审核不能为空！！！";
             dia.content(content);
             dia.showModal();
             return false;
         }
-
         if(contact.length < 2){
             content = "联系商家和用户必须全选！！！";
             dia.content(content);
@@ -119,7 +109,7 @@ $(function(){
             return false;
         }
         if(status == 0) {
-            if(remark == '') {
+            if (remark == '') {
                 content = "驳回理由不能为空！！！";
                 dia.content(content);
                 dia.showModal();
