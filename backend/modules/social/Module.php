@@ -15,6 +15,7 @@
  * @link      http://www.i500m.com/
  */
 
+namespace backend\modules\social;
 
 /**
  * Class Module
@@ -25,9 +26,6 @@
  * @license   http://www.i500m.com/ i500m license
  * @link      http://www.i500m.com/
  */
-
-namespace backend\modules\social;
-
 class Module extends \yii\base\Module
 {
     /**

@@ -47,7 +47,9 @@ class UserOrder extends I500Base
      */
     public function UserDetailByOrderId($order_sn)
     {
-        if (empty($order_sn)) return array();
+        if (empty($order_sn)) {
+            return array();
+        }
         $detail = $this::find()->where(['order_sn' => $order_sn])->asArray()->one();
         return $detail;
     }
