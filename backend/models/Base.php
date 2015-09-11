@@ -9,7 +9,7 @@
  * @package   Base
  * @name      Base
  * @author    liubaocheng <liubaocheng@iyangpin.com>
- * @time      15/4/18 下午12:16 
+ * @time      15/4/18 下午12:16
  * @copyright 2015 灵韬致胜（北京）科技发展有限公司
  * @license   xx http://www.i500m.com
  * @link      liubaocheng@iyangpin.com
@@ -409,7 +409,9 @@ class Base extends ActiveRecord
      */
     public function getFieldName($map, $field)
     {
-        if (empty($map) || empty($field)) return false;
+        if (empty($map) || empty($field)) {
+            return false;
+        }
         return $this->find()->select($field)->where($map)->scalar();
     }
 

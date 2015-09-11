@@ -118,4 +118,3 @@ class SupplierGood extends I500Base
     }
 
 }
-

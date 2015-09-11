@@ -14,16 +14,31 @@
  * @link      zhaochengqiang@iyangpin.com
  */
 namespace backend\models\i500m;
-use common\helpers\CommonHelper;
 
+
+/**
+ * Class SampleApply
+ * @category  PHP
+ * @package   SampleApply
+ * @author    zhaochengqiang <zhaochengqiang@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
 class SampleApply extends I500Base
 {
-
-    public static function getDB(){
+    /**
+     * 简介：
+     * @return mixed
+     */
+    public static function getDB()
+    {
         return \Yii::$app->db_500m;
     }
+
     /**
-     * @inheritdoc
+     * 简介：
+     * @return string
      */
     public static function tableName()
     {
@@ -31,7 +46,8 @@ class SampleApply extends I500Base
     }
 
     /**
-     * @inheritdoc
+     * 简介：
+     * @return array
      */
     public function rules()
     {
@@ -39,23 +55,33 @@ class SampleApply extends I500Base
         ];
     }
 
-
-
-    public function total($where=null)
+    /**
+     * 简介：
+     * @param null $where x
+     * @return int|string
+     */
+    public function total($where = null)
     {
-        if($where){
+        if ($where) {
             $total = $this->find()->where($where)->count();
             return $total;
-        }else{
+        } else {
             $total = $this->find()->count();
             return $total;
         }
 
     }
 
-    public function show($data=array(),$offset,$where=null)
+    /**
+     * 简介：
+     * @param array $data   x
+     * @param null  $offset x
+     * @param null  $where  x
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function show($data = array(), $offset = null, $where = null)
     {
-        if($where){
+        if ($where) {
             $list = $this->find()
                 ->where($where)
                 ->offset($offset)
@@ -64,7 +90,7 @@ class SampleApply extends I500Base
                 ->asArray()
                 ->all();
             return $list;
-        }else{
+        } else {
             $list = $this->find()
                 ->offset($offset)
                 ->limit($data['size'])
@@ -74,5 +100,4 @@ class SampleApply extends I500Base
             return $list;
         }
     }
-
 }

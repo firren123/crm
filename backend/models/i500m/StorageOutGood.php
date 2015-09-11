@@ -88,4 +88,3 @@ class StorageOutGood extends I500Base
         return $arr;
     }
 }
-

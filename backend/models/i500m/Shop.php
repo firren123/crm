@@ -43,7 +43,6 @@ class Shop extends I500Base
 
     /**
      * 表名
-     *
      * @return string
      */
     public static function tableName()
@@ -51,6 +50,11 @@ class Shop extends I500Base
         return '{{%shop}}';
     }
 
+    /**
+     * 简介：
+     * @param string $username username
+     * @return array|null|\yii\db\ActiveRecord
+     */
     public function getListId($username){
         $arr = $this->find()
             ->select('id')
@@ -60,7 +64,14 @@ class Shop extends I500Base
         return $arr;
     }
 
-    public function getListinfo($map,$fileds='*'){
+    /**
+     * 简介：
+     * @param array  $map    array
+     * @param string $fileds fileds
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public function getListinfo($map,$fileds='*')
+    {
         $arr = $this->find()
             ->select($fileds)
             ->where($map)
@@ -214,21 +225,33 @@ class Shop extends I500Base
         return $arr_city_list2;
     }
 
+    /**
+     * 简介：
+     * @param null $where x
+     * @return int|string
+     */
     public function total($where=null)
     {
-        if($where){
+        if ($where) {
             $total = $this->find()->where($where)->count();
             return $total;
-        }else{
+        } else {
             $total = $this->find()->count();
             return $total;
         }
 
     }
 
-    public function show($data=array(),$offset,$where=null)
+    /**
+     * 简介：
+     * @param array $data   x
+     * @param null  $offset x
+     * @param null  $where  x
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function show($data = array(), $offset = null, $where = null)
     {
-        if($where){
+        if ($where) {
             $list = $this->find()
                 ->where($where)
                 ->offset($offset)
@@ -237,7 +260,7 @@ class Shop extends I500Base
                 ->asArray()
                 ->all();
             return $list;
-        }else{
+        } else {
             $list = $this->find()
                 ->offset($offset)
                 ->limit($data['size'])
@@ -247,17 +270,35 @@ class Shop extends I500Base
             return $list;
         }
     }
+
+    /**
+     * 简介：
+     * @param int $shop_id shop_id
+     * @return array|null|\yii\db\ActiveRecord
+     */
     public function shop_info($shop_id)
     {
         $list = $this->find()->select("shop_name")->where("id = $shop_id")->asArray()->one();
         return $list;
     }
+    /**
+     * 简介：
+     * @param array $andwhere $andwhere
+     * @return array|null|\yii\db\ActiveRecord
+     */
     public function shop_id($andwhere)
     {
         $list = $this->find()->select('id,username')->where($andwhere)->asArray()->all();
         return $list;
     }
 
+    /**
+     * 简介：
+     * @param int $shop_id    x
+     * @param int $account_id x
+     * @param int $page       x
+     * @return mixed
+     */
     public function details_all($shop_id,$account_id, $page = 1)
     {
         $url = "shop/account/list?shop_id=".$shop_id.'&account_id='.$account_id.'&page='.$page;
@@ -265,6 +306,12 @@ class Shop extends I500Base
         return $arr_result;
     }
 
+    /**
+     * 简介：
+     * @param int    $shop_id  x
+     * @param string $order_sn x
+     * @return mixed
+     */
     public function details_other($shop_id,$order_sn)
     {
         $url = "shop/account/account-order-info?shop_id=".$shop_id.'&order_sn='.$order_sn;

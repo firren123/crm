@@ -35,11 +35,10 @@ class ProductImage extends I500Base
     {
         return '{{%product_image}}';
     }
+
     /**
      * 多行插入
-     *
-     * @param: int $brand_id
-     * @param: array $ids
+     * @param array $data x
      * @return int
      */
     public function getBulkInsert($data = array())
@@ -54,10 +53,10 @@ class ProductImage extends I500Base
         }
         return $re !== false;
     }
+
     /**
      * 删除
-     *
-     * @param: string $ids
+     * @param string $ids x
      * @return int
      */
     public function getDelete($ids)
@@ -73,10 +72,10 @@ class ProductImage extends I500Base
             }
         }
     }
+
     /**
      * 添加
-     *
-     * @param: array $data
+     * @param array $data x
      * @return bool
      */
     public function getInsert($data = array())

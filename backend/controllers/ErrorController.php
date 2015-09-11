@@ -6,7 +6,7 @@
  * 文件介绍2
  *
  * @category  PHP
- * @package   admin
+ * @package   Admin
  * @filename  ErrorController.php
  * @author    lichenjun <lichenjun@iyangpin.com>
  * @copyright 2015 www.i500m.com
@@ -22,10 +22,24 @@ namespace backend\controllers;
 
 use yii\web\Controller;
 
-class ErrorController extends Controller{
-
-    public function actionIndex(){
-//        echo 1111;exit;
+/**
+ * Class ErrorController
+ * @category  PHP
+ * @package   ErrorController
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class ErrorController extends Controller
+{
+    /**
+     * 简介：错误提示
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionIndex()
+    {
         $jumpUrl = '/admin/site/index';
         $message = '页面不存在';
         if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
@@ -36,10 +50,13 @@ class ErrorController extends Controller{
 
         $jumpUrl = $jumpUrl ? $jumpUrl : $url;
         $waitSecond = 3;
-        return $this->renderPartial('index', [
-            'message' => $message,
-            'jumpUrl' => $jumpUrl,
-            'waitSecond' => $waitSecond,
-        ]);
+        return $this->renderPartial(
+            'index',
+            [
+                'message' => $message,
+                'jumpUrl' => $jumpUrl,
+                'waitSecond' => $waitSecond,
+            ]
+        );
     }
 }
