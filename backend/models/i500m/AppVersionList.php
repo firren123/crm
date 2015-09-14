@@ -1,19 +1,43 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2015/6/4
- * Time: 9:12
+ * App版本列表
+ *
+ * PHP Version 5
+ *
+ * @category  PHP
+ * @package   Admin
+ * @filename  AppVersionList.php
+ * @author    weitonghe <weitonghe@iyangpin.com>
+ * @copyright 2015 www.i500m.com
+ * @license   http://www.i500m.com/ i500m license
+ * @datetime  2015/6/4 上午9:12
+ * @version   SVN: 1.0
+ * @link      http://www.i500m.com/
  */
 namespace backend\models\i500m;
-class AppVersionList extends I500Base{
+/**
+ * Class app_log
+ * @category  PHP
+ * @package   Admin
+ * @author    weitonghe <weitonghe@iyangpin.com>
+ * @copyright 2015 www.i500m.com
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class AppVersionList extends I500Base
+{
     /**
-     * *数据库  表名称
+     * 数据库  表名称
      * @return string
      */
-    public static function tableName(){
+    public static function tableName()
+    {
         return "{{%app_log}}";
     }
+    /**
+     * 字段名称
+     * @return string
+     */
     public function attributeLabels()
     {
         return array(
@@ -25,6 +49,8 @@ class AppVersionList extends I500Base{
             'url' => '下载地址',
             'explain' => '升级提示',
             'status'=>'有效性',
+            'is_forced_to_update'=>'是否强制更新',
+            'update_prompt'=>'更新提示时间',
         );
     }
     /**
@@ -35,7 +61,7 @@ class AppVersionList extends I500Base{
     {
         return [
             //不可为空的字段
-            [['name','subordinate_item','major','type','url','explain','status'],'required'],
+            [['name','subordinate_item','major','type','url','explain','status','is_forced_to_update','update_prompt'],'required'],
             //[['name'],'unique','message'=>'{attribute}已存在'],
             [['major','minor'],'match','pattern'=>'/^\d+(\.\d+){0,2}$/','message'=>'{attribute}格式输入不正确'],
             [['subordinate_item','type'],'match','pattern'=>'/^\d+$/','message'=>'请选择{attribute}'],
@@ -44,43 +70,48 @@ class AppVersionList extends I500Base{
     }
 
     /**
-     * @param array $where
+     * 统计记录数
+     * @param array  $where    条件
+     * @param string $and_cond And条件
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function totalNum($where,$and_cond = ''){
-//        $allapp_result = $this->find()
-//            ->where($where)
-//            ->count();
-        $allapp_result = AppVersionList::find()
+    public function totalNum($where,$and_cond = '')
+    {
+        $allApp_result = AppVersionList::find()
             ->andFilterWhere($where)
             ->andWhere($and_cond)
             ->count();
-        return $allapp_result;
+        return $allApp_result;
     }
 
     /**
-     * @param array $where
+     * 查询
+     * @param array $where 条件
      * @return array|null|\yii\db\ActiveRecord
      * show one app
      */
-    public function showoneurl($where = array()){
-        $oneapp_result = $this->find()
+    public function showOneUrl($where = array())
+    {
+        $oneApp_result = $this->find()
             ->where($where)
             ->asArray()
             ->one();
-        return $oneapp_result;
+        return $oneApp_result;
     }
 
     /**
-     * @param array $where
-     * @param string $fields
-     * @param string $order
-     * @param int $page
-     * @param int $size
+     * 查询分页数据
+     * @param array  $where    条件
+     * @param string $fields   字段
+     * @param string $order    排序
+     * @param int    $page     第几页
+     * @param int    $size     每页数量
+     * @param string $and_cond And条件
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function allapp($where=array() , $fields='*' , $order='' , $page = 1 , $size = 2,$and_cond){
-        $allapp_result = $this->find()
+    public function allApp($where=array(), $fields='*', $order='', $page = 1, $size = 2, $and_cond='')
+    {
+        $allApp_result = $this->find()
             ->where($where)
             ->andWhere($and_cond)
             ->select($fields)
@@ -89,43 +120,49 @@ class AppVersionList extends I500Base{
             ->limit($size)
             ->asArray()
             ->all();
-        return $allapp_result;
+        return $allApp_result;
     }
 
     /**
-     * @param $msg
+     * 添加
+     * @param array $msg Data
      * @return bool|mixed
-     * add
      */
-    public function addapp($msg){
+    public function addApp($msg)
+    {
         $AddApp_model = new AppVersionList();
-        foreach($msg as $k=>$v){
+        foreach ($msg as $k=>$v) {
             $AddApp_model->$k = $v;
         }
         $result = $AddApp_model->save();
-        if($result){
+        if ($result) {
             return $AddApp_model->primaryKey;
-        }else{
+        } else {
             return false;
         }
     }
 
     /**
-     * del
+     * 删除
+     * @param array $id Data
+     * @return bool|mixed
      */
-    public function deloneurl($id){
+    public function delOneUrl($id)
+    {
         $AddApp_model = AppVersionList::findOne($id);
         $result = $AddApp_model->delete();
         return $result;
     }
 
     /**
-     * @param $id
-     * @param $msg
+     * 修改
+     * @param string $id  ID
+     * @param Array  $msg Data
      * @return bool
      * edit
      */
-    public function editapp($id,$msg){
+    public function editApp($id, $msg)
+    {
         $id = AppVersionList::findOne($id);
         if (!empty($id)) {
             foreach ($msg as $k => $v) {

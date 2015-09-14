@@ -49,7 +49,7 @@ $form = ActiveForm::begin([
     <span style=" float: left; margin-top: 5px; margin-left: 40px;">主版本</span>
     <input type="text" name="major" class="form-control" maxlength="10" style="float: left; width: 200px; margin-left: 20px; margin-right: 20px;" value="<?= @$_GET['major'] ?>" onkeyup="regmajor(this)"/>
     <?= Html::submitButton('搜索', ['class' => 'btn btn-primary']) ?>
-    <a class="btn btn-primary" style="margin-left: 20px;" href="newversion">发布新版本</a>
+    <a class="btn btn-primary" style="margin-left: 20px;" href="new-version">发布新版本</a>
 </div>
 <?php ActiveForm::end(); ?>
 <table style=" width: 100%;">
@@ -96,9 +96,9 @@ $form = ActiveForm::begin([
             ?>
         </td>
         <td class="text-center" style="width: 100px;">
-            <a href="showoneurl?id=<?php echo !empty($v['id']) ? $v['id'] : '0' ;?>" title="编辑">
+            <a href="show-one-url?id=<?php echo !empty($v['id']) ? $v['id'] : '0' ;?>" title="编辑">
                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>&nbsp;&nbsp; |&nbsp;&nbsp;
-            <a href="deloneurl?id=<?php echo !empty($v['id']) ? $v['id'] : '0' ;?>"  title="删除" onClick="if(confirm('确定要删除？'))return true;return false;">
+            <a href="del-one-url?id=<?php echo !empty($v['id']) ? $v['id'] : '0' ;?>"  title="删除" onClick="if(confirm('确定要删除？'))return true;return false;">
                 <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></a>
         </td>
     </tr>

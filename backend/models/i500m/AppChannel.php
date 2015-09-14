@@ -1,35 +1,33 @@
 <?php
 /**
- * 简介1
+ * App版本列表
  *
  * PHP Version 5
- * 文件介绍2
  *
  * @category  PHP
- * @package   AppChannel
- * @filename  Admin.php
+ * @package   Admin
+ * @filename  AppChannel.php
  * @author    weitonghe <weitonghe@iyangpin.com>
  * @copyright 2015 www.i500m.com
  * @license   http://www.i500m.com/ i500m license
- * @datetime  15/4/21 下午4:39
+ * @datetime  2015/6/4 上午10:56
  * @version   SVN: 1.0
  * @link      http://www.i500m.com/
  */
-
 namespace backend\models\i500m;
 /**
- * Class AppChannel
+ * Class app_channel
  * @category  PHP
- * @package   AppChannel
+ * @package   Admin
  * @author    weitonghe <weitonghe@iyangpin.com>
- * @copyright 2015 www
+ * @copyright 2015 www.i500m.com
  * @license   http://www.i500m.com/ i500m license
  * @link      http://www.i500m.com/
  */
 class AppChannel extends I500Base
 {
     /**
-     * *数据库  表名称
+     * 数据库  表名称
      * @return string
      */
     public static function tableName()
@@ -50,14 +48,14 @@ class AppChannel extends I500Base
     }
 
     /**
-     * $msg
+     * 添加
+     * @param array $msg Data
      * @return bool|mixed
-     * add
      */
-    public function addapp($msg)
+    public function addApp($msg)
     {
         $AddApp_model = new AppChannel();
-        foreach ($msg as $k => $v) {
+        foreach ($msg as $k=>$v) {
             $AddApp_model->$k = $v;
         }
         $result = $AddApp_model->save();
@@ -69,44 +67,41 @@ class AppChannel extends I500Base
     }
 
     /**
-     * 简介：xx
-     * @param array $where x
-     * @param array $list  x
-     * @return int
+     * 修改
+     * @param Array $where 条件 baidu 360
+     * @param Array $list  Data
+     * @return bool
      */
-    public function editapp($where,$list)
+    public function editApp($where, $list)
     {
-        $result = AppChannel::updateAll(['update_time' => $list['update_time'], 'url' => $list['url']], $where);
+        $result = AppChannel::updateAll(['update_time'=>$list['update_time'], 'url'=>$list['url']], $where);
         return $result;
     }
 
     /**
-     * 简介：
-     * @param int $app_id id
-     * @return int
+     * 删除
+     * @param int $app_id AppID
+     * @return bool
      */
-    public function deloneurl($app_id){
+    public function delOneUrl($app_id)
+    {
         $result = AppChannel::deleteAll('app_id = :app_id', [':app_id' => $app_id]);
         //$result = Customer::deleteAll('age > :age AND gender = :gender', [':age' => 20, ':gender' => 'M']);
         return $result;
     }
+
     /**
-     * @param array $where
+     * 查询一条记录
+     * @param array $where 条件
      * @return array|null|\yii\db\ActiveRecord
-     * show one app
      */
-    /**
-     * 简介：
-     * @param array $where $where
-     * @return int
-     */
-    public function showoneurl($where)
+    public function showOneUrl($where)
     {
         $AddApp_model = new AppChannel();
-        $oneapp_result = $AddApp_model->find()
+        $oneApp_result = $AddApp_model->find()
             ->where($where)
             ->asArray()
             ->all();
-        return $oneapp_result;
+        return $oneApp_result;
     }
 }
