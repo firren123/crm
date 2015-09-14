@@ -61,7 +61,7 @@ class ServiceCategory extends SocialBase
     {
         $re = false;
         if ($data) {
-            foreach ($data as $k=>$v) {
+            foreach ($data as $k => $v) {
                 $this->$k = $v;
             }
             $result = $this->save();
