@@ -6,7 +6,7 @@
  * 文件介绍2
  *
  * @category  PHP
- * @package   admin
+ * @package   Admin
  * @filename  Admin.php
  * @author    lichenjun <lichenjun@iyangpin.com>
  * @copyright 2015 www.i500m.com
@@ -19,16 +19,27 @@
 
 namespace backend\models\i500m;
 
-
-class Admin extends I500Base{
-
+/**
+ * Class Admin
+ * @category  PHP
+ * @package   Admin
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class Admin extends I500Base
+{
+    /**
+     * 简介：
+     * @return string
+     */
     public static function tableName()
     {
         return '{{%crm_admin}}';
     }
     /**
      * 简介：
-     * @author  lichenjun@iyangpin.com。
      * @return array
      */
     public function attributeLabels()
@@ -45,9 +56,7 @@ class Admin extends I500Base{
         );
     }
     /**
-     *
      * 简介：定义过滤规则
-     * @author  lichenjun@iyangpin.com。
      * @return array
      */
     public function rules()

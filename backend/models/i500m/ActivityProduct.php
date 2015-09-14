@@ -6,7 +6,7 @@
  * 文件介绍2
  *
  * @category  PHP
- * @package   admin
+ * @package   Admin
  * @filename  ActivityProduct.php
  * @author    lichenjun <lichenjun@iyangpin.com>
  * @copyright 2015 www.i500m.com
@@ -19,9 +19,23 @@
 
 namespace backend\models\i500m;
 
-
-class ActivityProduct extends I500Base{
-    public static function tableName(){
+/**
+ * Class ActivityProduct
+ * @category  PHP
+ * @package   ActivityProduct
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class ActivityProduct extends I500Base
+{
+    /**
+     * 简介：
+     * @return string
+     */
+    public static function tableName()
+    {
         return "{{%crm_activity_product}}";
     }
 
