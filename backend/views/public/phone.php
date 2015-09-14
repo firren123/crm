@@ -68,7 +68,7 @@
 <div class="container">
     <div class="col-sm-6">
 
-                <button class="btn btn-large btn-inverse" id="filePicker1">上传</button>
+                <span class="btn btn-large btn-inverse" id="filePicker1">上传</span>
 
     <!-- This is the form that our event handler fills -->
     <input type="hidden" id="x" name="x"/>
