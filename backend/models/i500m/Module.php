@@ -6,7 +6,7 @@
  * 文件介绍2
  *
  * @category  PHP
- * @package   admin
+ * @package   Admin
  * @filename  Module.php
  * @author    lichenjun <lichenjun@iyangpin.com>
  * @copyright 2015 www.i500m.com
@@ -19,14 +19,23 @@
 
 namespace backend\models\i500m;
 
-
-class Module extends I500Base{
+/**
+ * Class Module
+ * @category  PHP
+ * @package   Module
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class Module extends I500Base
+{
     /**
      * 简介：表名
-     * @author  lichenjun@iyangpin.com。
      * @return string
      */
-    public static function tableName(){
+    public static function tableName()
+    {
         return '{{%crm_module}}';
     }
 
@@ -54,12 +63,6 @@ class Module extends I500Base{
             //不可为空的字段
             [['name','status'],'required'],
         ];
-    }
-
-
-    public function getModule($role_id = 0)
-    {
-
     }
 
 }

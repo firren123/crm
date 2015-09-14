@@ -28,7 +28,6 @@ class BrandCategory extends I500Base
 {
     /**
      * 数据库
-     *
      * @return string
      */
     public static function tableName()
@@ -38,9 +37,8 @@ class BrandCategory extends I500Base
 
     /**
      * 多行插入
-     *
-     * @param: int $brand_id
-     * @param: array $ids
+     * @param int   $brand_id c
+     * @param array $ids      c
      * @return int
      */
     public function getBulkInsert($brand_id ,$ids)
@@ -59,10 +57,12 @@ class BrandCategory extends I500Base
         }
         return $code;
     }
+
     /**
-     * 批量删除
-     *
-     * @param: string $ids
+     * 简介：批量删除
+     * @author  lichenjun@iyangpin.com。
+     * @param int    $bid x
+     * @param string $ids x
      * @return int
      */
     public function getBatchDelete($bid,$ids)

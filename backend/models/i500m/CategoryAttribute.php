@@ -15,16 +15,28 @@
 
 namespace backend\models\i500m;
 
-
-class CategoryAttribute  extends I500Base{
+/**
+ * Class CategoryAttribute
+ * @category  PHP
+ * @package   CategoryAttribute
+ * @author    liuwei <liuwei@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class CategoryAttribute  extends I500Base
+{
+    /**
+     * 简介：
+     * @return string
+     */
     public static function tableName()
     {
         return '{{%category_attribute}}';
     }
     /**
      * 多个添加
-     *
-     * @param: array $data
+     * @param array $data data
      * @return bool
      */
     public function getInsert($data = array())
@@ -32,7 +44,7 @@ class CategoryAttribute  extends I500Base{
         $re = 0;
         if ($data) {
             $model = clone $this;
-            foreach ($data as $k=>$v) {
+            foreach ($data as $k => $v) {
 
                 $model->$k = $v;
             }

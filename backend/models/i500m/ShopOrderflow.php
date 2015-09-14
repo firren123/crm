@@ -96,7 +96,7 @@ class ShopOrderflow extends I500Base
      *
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function groupList($cond = array(), $field = '*', $group = '',$order = '', $and_where = '')
+    public function groupList($cond = array(), $field = '*', $group = '', $order = '', $and_where = '')
     {
         $list = [];
         if ($cond || $and_where) {

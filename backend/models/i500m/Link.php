@@ -93,11 +93,11 @@ class Link extends I500Base
 
     /**
      * 站点名称是否存在
-     * @param: $name
-     * @param: NULL $id
+     * @param: string $title title
+     * @param: null $id x
      * @return array|null|ActiveRecord
      */
-    public function getDetailsByName($title, $id = NULL)
+    public function getDetailsByName($title, $id = null)
     {
         $list = array();
         if (!empty($title)) {
@@ -112,7 +112,7 @@ class Link extends I500Base
 
     /**
      * 批量删除
-     * @param: string $ids
+     * @param: string $ids x
      * @return int
      */
     public function getBatchDelete($ids)

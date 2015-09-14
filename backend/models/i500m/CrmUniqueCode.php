@@ -74,7 +74,7 @@ class CrmUniqueCode extends I500Base
         if ($data) {
             $sql = "INSERT INTO ".$this->tableName()."(`unique_code`, `bar_code`, `status`, `purchase_storage_id`, `create_time`) VALUES";
             $value = [];
-            foreach ($data as $k => $v ) {
+            foreach ($data as $k => $v) {
                 $value[] = "('".$v['unique_code']."','".$v['bar_code']."','".$v['status']."','".$v['purchase_storage_id']."','".$v['create_time']."')";
             }
             $sql .= implode(',', $value);

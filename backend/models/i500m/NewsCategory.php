@@ -45,7 +45,7 @@ class NewsCategory extends I500Base
      * @param string $order 排序
      * @return array
      */
-    public function getCategoryList($where=[],$field='*',$order='id desc')
+    public function getCategoryList($where = [], $field = '*', $order = 'id desc')
     {
         $rs = [];
         if (!empty($where)) {

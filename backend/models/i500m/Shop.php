@@ -55,7 +55,8 @@ class Shop extends I500Base
      * @param string $username username
      * @return array|null|\yii\db\ActiveRecord
      */
-    public function getListId($username){
+    public function getListId($username)
+    {
         $arr = $this->find()
             ->select('id')
             ->where(['username'=>$username])
@@ -70,7 +71,7 @@ class Shop extends I500Base
      * @param string $fileds fileds
      * @return array|null|\yii\db\ActiveRecord
      */
-    public function getListinfo($map,$fileds='*')
+    public function getListinfo($map, $fileds = '*')
     {
         $arr = $this->find()
             ->select($fileds)
@@ -299,7 +300,7 @@ class Shop extends I500Base
      * @param int $page       x
      * @return mixed
      */
-    public function details_all($shop_id,$account_id, $page = 1)
+    public function details_all($shop_id, $account_id, $page = 1)
     {
         $url = "shop/account/list?shop_id=".$shop_id.'&account_id='.$account_id.'&page='.$page;
         $arr_result = CurlHelper::get($url, 'server');
@@ -312,7 +313,7 @@ class Shop extends I500Base
      * @param string $order_sn x
      * @return mixed
      */
-    public function details_other($shop_id,$order_sn)
+    public function details_other($shop_id, $order_sn)
     {
         $url = "shop/account/account-order-info?shop_id=".$shop_id.'&order_sn='.$order_sn;
         $arr_result = CurlHelper::get($url, 'server');

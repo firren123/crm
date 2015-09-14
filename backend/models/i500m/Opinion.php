@@ -1,22 +1,27 @@
 <?php
 /**
- * 简介
- * @category  admin
- * @package   意见反馈
- * @author     <youyong@iyangpin.com>
- * @time      2015/4/1 11:10
- * @copyright 灵韬致胜（北京）科技发展有限公司
- * @license   http://www.i500m.com
- * @link      youyong@iyangpin.com
+ * 意见反馈
+ *
+ * PHP Version 5
+ * 文件介绍2
+ *
+ * @category  PHP
+ * @package   Admin
+ * @filename  UserorderController.php
+ * @author    youyong <youyong@iyangpin.com>
+ * @copyright 2015 www.i500m.com
+ * @license   http://www.i500m.com/ i500m license
+ * @datetime  15/7/20 下午5:47
+ * @version   SVN: 1.0
+ * @link      http://www.i500m.com/
  */
+
 namespace backend\models\i500m;
-use yii\db\ActiveRecord;
 
 class Opinion extends I500Base
 {
     /**
      * 数据库
-     *
      * @return string
      */
     public static function tableName()
@@ -26,7 +31,6 @@ class Opinion extends I500Base
 
     /**
      * 规则
-     *
      * @return array
      */
     public function rules()
@@ -44,19 +48,20 @@ class Opinion extends I500Base
 
     /**
      * 意见反馈列表（后台）
-     *
      * Author youyong@iyangpin.com
      *
-     * @param： int $size    显示条数
-     * @param： int $page    页码
-     * @param： string where 条件
+     * @param int    $size      显示条数
+     * @param int    $offset    页码
+     * @param int    $is_number 页码
+     * @param string $where     条件
      *
      * @return array 反馈列表集合
      */
-    public function getListOpinion($size=NULL,$offset=NULL,$is_number=NULL,$where=NULL){
-        if(!empty($is_number)){
+    public function getListOpinion($size = null, $offset = null, $is_number = null, $where = null)
+    {
+        if (!empty($is_number)) {
             $list = $this->find()->where($where)->count();
-        }else {
+        } else {
             $list = $this->find()
                 ->where($where)
                 ->offset($offset)

@@ -82,10 +82,11 @@ class CouponType extends I500Base
      * 简介：
      * @return array
      */
-    public function rules(){
+    public function rules()
+    {
         return [
             //不可为空的字段
-          [['type_name','send_type','par_value','min_amount','consumer_points','start_time','expired_time','used_status','number','limit_num'],'required'],
+            [['type_name', 'send_type', 'par_value', 'min_amount', 'consumer_points', 'start_time', 'expired_time', 'used_status', 'number', 'limit_num'], 'required'],
             //去掉首尾空格
         ];
     }
@@ -111,7 +112,7 @@ class CouponType extends I500Base
      * @param int   $offset x
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function show_coupon($data = array(),$offset)
+    public function show_coupon($data = array(), $offset)
     {
         $list = $this->find()
             ->offset($offset)
@@ -192,7 +193,7 @@ class CouponType extends I500Base
         $re = 0;
         if ($data) {
             $model = clone $this;
-            foreach ($data as $k=>$v) {
+            foreach ($data as $k => $v) {
                 $model->$k = $v;
             }
             $result = $model->save();
