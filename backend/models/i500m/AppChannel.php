@@ -56,7 +56,7 @@ class AppChannel extends I500Base
     public function addApp($msg)
     {
         $AddApp_model = new AppChannel();
-        foreach ($msg as $k=>$v) {
+        foreach ($msg as $k => $v) {
             $AddApp_model->$k = $v;
         }
         $result = $AddApp_model->save();
