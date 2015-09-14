@@ -29,7 +29,8 @@ class ShopRebate extends ShopBase
      *
      * @return string
      */
-    public static function tableName(){
+    public static function tableName()
+    {
         return '{{%shop_rebate}}';
     }
 }

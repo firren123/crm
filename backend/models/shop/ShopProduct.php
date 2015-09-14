@@ -114,3 +114,4 @@ class ShopProduct extends ShopBase
         return $rs;
     }
 }
+

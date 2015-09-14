@@ -35,6 +35,7 @@ class ShopContract extends ShopBase
     {
         return '{{%shop_contract}}';
     }
+
     /**
      * 规则
      * @return array
@@ -47,6 +48,7 @@ class ShopContract extends ShopBase
             //[['image'],'match','pattern'=>'/^.*[^a][^b][^c]\.(?:jpg|gif|bmp|bnp|png)$/','message'=>'合同主图 格式不正确'],
         ];
     }
+
     /**
      * 简介：所有数据
      * @author  weitonghe@iyangpin.com
@@ -54,11 +56,12 @@ class ShopContract extends ShopBase
      */
     public function allInfo()
     {
-        $all=$this->find()
+        $all = $this->find()
             ->asArray()
             ->all();
         return $all;
     }
+
     /**
      * 简介：添加商家合同基本信息
      *
@@ -69,12 +72,13 @@ class ShopContract extends ShopBase
     public function insertOneData($msg)
     {
         $ShopContract_model = new ShopContract();
-        foreach ($msg as $k=>$v) {
+        foreach ($msg as $k => $v) {
             $ShopContract_model->$k = $v;
         }
         $result = $ShopContract_model->save();
         return $ShopContract_model->primaryKey;
     }
+
     /**
      * 首页index 显示的  count(记录的条数)
      *
@@ -129,7 +133,7 @@ class ShopContract extends ShopBase
             ->andWhere($and_Cond4)
             ->andWhere($and_Cond5)
             ->orderBy($order)
-            ->offset(($page-1) * $pageSize)
+            ->offset(($page - 1) * $pageSize)
             ->limit($pageSize)
             ->asArray()
             ->all();

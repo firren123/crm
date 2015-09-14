@@ -35,6 +35,7 @@ class ShopBcBank extends ShopBase
     {
         return '{{%shop_bc_bank}}';//开户支行信息表
     }
+
     /**
      * 规则
      * @return array
@@ -45,6 +46,7 @@ class ShopBcBank extends ShopBase
             //不可为空的字段
         ];
     }
+
     /**
      * 查询一条数据  显示字段值
      *
@@ -54,26 +56,28 @@ class ShopBcBank extends ShopBase
      */
     public function getAllData($where)
     {
-        $all=$this->find()
+        $all = $this->find()
             ->where($where)
             ->asArray()
             ->all();
         return $all;
     }
+
     /**
      * 查询数据
      * @param array $where 条件
      * @return array|\yii\db\ActiveRecord[]
      */
-    public  function getBcBank($where)
+    public function getBcBank($where)
     {
-        $all=$this->find()
+        $all = $this->find()
             ->select("id,name")
             ->where($where)
             ->asArray()
             ->all();
         return $all;
     }
+
     /**
      * 查询一条数据
      * @param array $where 条件
@@ -81,7 +85,7 @@ class ShopBcBank extends ShopBase
      */
     public function getOneBcBank($where)
     {
-        $all=$this->find()
+        $all = $this->find()
             ->select("id,name")
             ->where($where)
             ->asArray()

@@ -6,7 +6,7 @@
  * 文件介绍2
  *
  * @category  PHP
- * @package   admin
+ * @package   Admin
  * @filename  ShopDetailOrder.php
  * @author    lichenjun <lichenjun@iyangpin.com>
  * @copyright 2015 www.i500m.com
@@ -19,9 +19,23 @@
 
 namespace backend\models\shop;
 
-
-class ShopDetailOrder extends ShopBase{
-    public static function tableName(){
+/**
+ * Class ShopDetailOrder
+ * @category  PHP
+ * @package   ShopDetailOrder
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class ShopDetailOrder extends ShopBase
+{
+    /**
+     * 简介：
+     * @return string
+     */
+    public static function tableName()
+    {
         return "{{%shop_order_detail}}";
     }
 }

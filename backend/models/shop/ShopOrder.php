@@ -18,15 +18,33 @@
 
 namespace backend\models\shop;
 
-use backend\models\i500m\OrderDetail;
-use backend\models\i500m\OrderLog;
 use backend\models\i500m\Product;
-use common\helpers\CurlHelper;
 use linslin\yii2\curl;
-class ShopOrder extends ShopBase{
-    public static function tableName(){
+
+/**
+ * Class ShopOrder
+ * @category  PHP
+ * @package   ShopOrder
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class ShopOrder extends ShopBase
+{
+    /**
+     * 简介：
+     * @return string
+     */
+    public static function tableName()
+    {
         return '{{%shop_order}}';
     }
+
+    /**
+     * 简介：
+     * @return array
+     */
     public function attributeLabels()
     {
         return array(
@@ -37,21 +55,33 @@ class ShopOrder extends ShopBase{
 
         );
     }
-    public function rules(){
+
+    /**
+     * 简介：
+     * @return array
+     */
+    public function rules()
+    {
         return [
             //不可为空的字段
-            [['remark'],'required'],
+            [['remark'], 'required'],
 
         ];
     }
 
-    public function getDetail($map){
+    /**
+     * 简介：
+     * @param array $map array
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public function getDetail($map)
+    {
         $data = $this->find()->where($map)->asArray()->one();
         $m_detail = new ShopDetailOrder();
         $data['detail'] = $m_detail->find()->where($map)->asArray()->All();
         $p_model = new Product();
-        foreach($data['detail'] as $k=>$v){
-            $image = $p_model->getInfo(['id'=>$v['p_id']],true,'image');
+        foreach ($data['detail'] as $k => $v) {
+            $image = $p_model->getInfo(['id' => $v['p_id']], true, 'image');
             $data['detail'][$k]['image'] = $image['image'];
         }
         return $data;

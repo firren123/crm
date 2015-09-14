@@ -33,6 +33,7 @@ class ShopCash extends ShopBase
     {
         return '{{%shop_cash}}';
     }
+
     /**
      * 已导出
      * @param string $arrId id
@@ -44,7 +45,7 @@ class ShopCash extends ShopBase
         if (!empty($listId)) {
             $listId->export_status = 2;
             $result = $listId->save();
-            if ($result!=1) {
+            if ($result != 1) {
                 return false;
             }
         }
