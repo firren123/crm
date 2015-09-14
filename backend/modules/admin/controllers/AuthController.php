@@ -86,5 +86,4 @@ class AuthController extends BaseController
         }
         $this->redirect('/admin/role/index');
     }
-
 }

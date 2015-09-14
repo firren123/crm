@@ -148,7 +148,7 @@ class MenuController extends BaseController
         $list_m = array('0'=>'请选择');
         if ($act) {   //针对方法设置导航
             $module_list = $model->getList(['level'=>1, 'status'=>1, 'display'=>1], 'id, title', 'sort');
-            foreach ($module_list as $k=>$v) {
+            foreach ($module_list as $k => $v) {
                 $list_m[$v['id']] = $v['title'];
             }
         }
@@ -182,7 +182,7 @@ class MenuController extends BaseController
         }
         $list_m = array('0'=>'请选择');
         $module_list = $model->getList(['level'=>1, 'status'=>1, 'display'=>1], 'id, title', 'sort');
-        foreach ($module_list as $k=>$v) {
+        foreach ($module_list as $k => $v) {
             $list_m[$v['id']] = $v['title'];
         }
 

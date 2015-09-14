@@ -197,6 +197,4 @@ class BusinessController extends BaseController
         }
         return $code;
     }
-
-
 }

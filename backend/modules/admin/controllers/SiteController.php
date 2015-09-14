@@ -24,19 +24,33 @@ use backend\controllers\BaseController;
 use backend\models\i500m\Admin;
 use common\helpers\RequestHelper;
 
-class SiteController extends BaseController{
-
+/**
+ * SiteController
+ *
+ * @category Admin
+ * @package  SiteController
+ * @author   liuwei <liuwei@iyangpin.com>
+ * @license  http://www.i500m.com/ license
+ * @link     liuwei@iyangpin.com
+ */
+class SiteController extends BaseController
+{
+    /**
+     * 首页
+     *
+     * @return string
+     */
     public function actionIndex(){
-        return $this->render('index',[
-            'ceshi'=>$this->cesshi
-        ]);
+        return $this->render('index', ['ceshi'=>$this->cesshi]);
     }
 
     /**
-     * 简介：密码修改
-     * @author  songjiankang@iyangpin.com。
+     * 密码修改
+     *
+     * @return string
      */
-    public function actionEditpwd(){
+    public function actionEditpwd()
+    {
         $old_password = RequestHelper::post('old_pwd');
         $new_password = RequestHelper::post('new_pwd');
         $user_id = RequestHelper::post('id');
@@ -49,16 +63,16 @@ class SiteController extends BaseController{
         $salt = $arr_info['salt'];
 
         $info_old_password = $arr_info['password'];
-        if(md5($salt.md5($old_password)) == $info_old_password){
+        if (md5($salt.md5($old_password)) == $info_old_password) {
             $arr_set=array('password'=>md5($salt.md5($new_password)));
-            $arr_msg = $model->updateOneRecord($arr_where,'',$arr_set);
-            if(0 == $arr_msg['result']){
-                echo json_encode(array('status'=>0,'message'=>'修改失败'));
-            }else{
-                echo json_encode(array('status'=>1,'message'=>'修改成功'));
+            $arr_msg = $model->updateOneRecord($arr_where, '', $arr_set);
+            if (0 == $arr_msg['result']) {
+                echo json_encode(array('status'=>0, 'message'=>'修改失败'));
+            } else {
+                echo json_encode(array('status'=>1, 'message'=>'修改成功'));
             }
-        }else{
-            echo json_encode(array('status'=>-1,'message'=>'输入原密码错误'));
+        } else {
+            echo json_encode(array('status'=>-1, 'message'=>'输入原密码错误'));
         }
     }
 
@@ -66,7 +80,8 @@ class SiteController extends BaseController{
      * 简介：密码修改页面
      * @author  songjiankang@iyangpin.com。
      */
-    public function actionPwd(){
+    public function actionPwd()
+    {
         return $this->render('editpwd');
     }
 }
