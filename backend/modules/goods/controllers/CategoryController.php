@@ -14,6 +14,7 @@
  */
 
 namespace backend\modules\goods\controllers;
+
 use backend\controllers\BaseController;
 use backend\models\i500m\Attribute;
 use backend\models\i500m\Category;
@@ -56,10 +57,10 @@ class CategoryController extends BaseController
         $page = RequestHelper::get('page', 1);
         $pageSize = $this->size;
         $model = new Category();
-        $list = $model->getPageList($cond , '*', $order, $page, $pageSize, $where);
+        $list = $model->getPageList($cond, '*', $order, $page, $pageSize, $where);
         $cate_list = [];
         if ($list) {
-            foreach ($list as $k=>$v) {
+            foreach ($list as $k => $v) {
                 $cate_cond['cate_first_id'] = $v['id'];
                 $number = $product_model->getCount($cate_cond);
                 $cate_list[] = $v;
@@ -107,7 +108,7 @@ class CategoryController extends BaseController
                     $category_data[$value['attribute_id']] = $value['attribute_id'];
                 }
             }
-            foreach ($attribute_list as $k=>$v) {
+            foreach ($attribute_list as $k => $v) {
                 $attribute_list[$k]['checked'] = empty($category_data[$v['id']]) ? 0 : 1;
             }
         }

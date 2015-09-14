@@ -28,12 +28,28 @@ use yii\data\Pagination;
 use common\helpers\RequestHelper;
 use yii\helpers\ArrayHelper;
 
+/**
+ * BarcodeController
+ *
+ * @category Admin
+ * @package  BarcodeController
+ * @author   liuwei <liuwei@iyangpin.com>
+ * @license  http://www.i500m.com/ license
+ * @link     liuwei@iyangpin.com
+ */
 class BarcodeController extends BaseController
 {
     public $enableCsrfValidation = false;
 
     public $pay_site_id_data = array();
-    public function init(){
+
+    /**
+     * 单行函数说明
+     *
+     * @return array
+     */
+    public function init()
+    {
         parent::init();
     }
 
@@ -46,24 +62,24 @@ class BarcodeController extends BaseController
     public function actionIndex()
     {
         $bar_code = RequestHelper::post('bar_code', '');
-        $start_time = RequestHelper::post('start_time',0);
-        $end_time = RequestHelper::post('end_time',0);
+        $start_time = RequestHelper::post('start_time', 0);
+        $end_time = RequestHelper::post('end_time', 0);
 
         $page = RequestHelper::get('page', 1, 'intval');
         $where = array();
         $andWhere = [];
 
         if ($bar_code) {
-            if(strlen($bar_code)!=13){
-                return $this->error('请输入正确的13位码','/goods/barcode/index');
+            if (strlen($bar_code)!=13) {
+                return $this->error('请输入正确的13位码', '/goods/barcode/index');
             }
 
             $where['bar_code'] = $bar_code;
         }
 
-        if($start_time && $end_time){
-            if($start_time >$end_time){
-                return $this->error('开始时间不能大于结束时间','/goods/barcode/index');
+        if ($start_time && $end_time) {
+            if ($start_time >$end_time) {
+                return $this->error('开始时间不能大于结束时间', '/goods/barcode/index');
             }
         }
 
@@ -79,13 +95,13 @@ class BarcodeController extends BaseController
 
         $model = new Barcode();
 
-        $count = $model->getListCount($where,$andWhere);
+        $count = $model->getListCount($where, $andWhere);
 
-        $list = $model->getList2($where,$andWhere,['add_time'=> SORT_DESC ],"*",($page-1)*$this->size,$this->size);
+        $list = $model->getList2($where, $andWhere, ['add_time'=> SORT_DESC ], "*", ($page-1)*$this->size, $this->size);
 
         //商家名称
-        if(is_array($list) && !empty($list)){
-            foreach($list as $key =>$val){
+        if (is_array($list) && !empty($list)) {
+            foreach ($list as $key => $val) {
                 $shop_id = $val['shop_id'];
                 $shop_model = new Shop();
                 $shop_info = $shop_model->shop_info($shop_id);
@@ -94,16 +110,13 @@ class BarcodeController extends BaseController
         }
 
         $pages = new Pagination(['totalCount' => $count['num'], 'pageSize' => $this->size]);
-        return $this->render('index', [
+        $param = [
             'pages' => $pages,
             'data' => $list,
             'bar_code'=>$bar_code,
             'start_time'=>$start_time,
             'end_time'=>$end_time,
-        ]);
+        ];
+        return $this->render('index', $param);
     }
-
-
-
-
 }
