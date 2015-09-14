@@ -125,7 +125,6 @@ class WarehouseController extends BaseController
             } else {
                 $arr['city_name'] = $city['name'];
             }
-            
             $branch_m = new District();
             //$where = "id=".$v['district_id'];
             $where = array('id'=>$v['district_id']);

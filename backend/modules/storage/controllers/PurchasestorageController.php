@@ -8,7 +8,7 @@
  * @category  Admin
  * @package   Storage
  * @author    liubaocheng <liubaocheng@iyangpin.com>
- * @time      15/5/26 上午11:13 
+ * @time      15/5/26 上午11:13
  * @copyright 2015 灵韬致胜（北京）科技发展有限公司
  * @license   http://www.i500m.com license
  * @link      liubaocheng@iyangpin.com
