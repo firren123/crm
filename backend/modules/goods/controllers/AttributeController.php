@@ -13,6 +13,7 @@
  * @link      renyineng@iyangpin.com
  */
 namespace backend\modules\goods\controllers;
+
 use backend\controllers\BaseController;
 use backend\models\i500m\Attribute;
 use backend\models\i500m\AttributeValue;
@@ -21,6 +22,15 @@ use backend\models\i500m\ProductAttr;
 use common\helpers\RequestHelper;
 use Yii;
 
+/**
+ * AttributeController
+ *
+ * @category Admin
+ * @package  AttributeController
+ * @author   liuwei <liuwei@iyangpin.com>
+ * @license  http://www.i500m.com/ license
+ * @link     liuwei@iyangpin.com
+ */
 class AttributeController extends BaseController
 {
     /**
@@ -34,7 +44,7 @@ class AttributeController extends BaseController
         $list = $model->getListAttribute();
         $data = [];
         if ($list) {
-            foreach ($list as $k=>$v) {
+            foreach ($list as $k => $v) {
                 $attr_cond['attr_name_id'] = $v['id'];
                 $number = $attr_model->getCount($attr_cond);
                 $data[] = $v;
@@ -95,7 +105,7 @@ class AttributeController extends BaseController
     public function actionEdit()
     {
         $log_model = new Log();
-        $attr_id = RequestHelper::get('id',0,'intval');
+        $attr_id = RequestHelper::get('id', 0, 'intval');
         $model = new Attribute();
         $show = $model->getInfo(['id'=>$attr_id], false);
         $list = $model->getInfo(['id'=>$attr_id]);
@@ -131,7 +141,7 @@ class AttributeController extends BaseController
                 if (isset($data['AttributeValue'])) {
                     $res = $model_value->updateValue($data['AttributeValue']);
                     $attr_data = array_merge($data['AttributeValue']);
-                    foreach ($attr_data as $k=>$v) {
+                    foreach ($attr_data as $k => $v) {
                         if ($v[0] != $value_list[$k]['attr_value']) {
                             $content = "管理员：" . \Yii::$app->user->identity->username . ",修改了属性id为:" . $attr_id . " 属性的属性值列表，改成为属性值:" . $v[0] . ",属性值权重值:" . $v[1];
                             $log_model->recordLog($content);
@@ -141,7 +151,7 @@ class AttributeController extends BaseController
                 }
                 if (isset($data['NewValue'])) {
                     $res = $model_value->insertValue($attr_id, $data['NewValue']);
-                    foreach ($data['NewValue']['attr_value'] as $key=>$value) {
+                    foreach ($data['NewValue']['attr_value'] as $key => $value) {
                         if ($value) {
                             $content = "管理员：" . \Yii::$app->user->identity->username . ",属性id为:" . $attr_id . " 属性的属性值列表，增加了属性值:" . $value . ",属性值权重值:" . $data['NewValue']['weight'][$key] . " 的记录";
                             $log_model->recordLog($content);
