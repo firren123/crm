@@ -81,15 +81,15 @@ class Category extends I500Base
         if (empty($ids)) {
             return 0;
         } else {
-            $result = $this->deleteAll(" id in (".$ids.")");
-            if ($result==true) {
+            $result = $this->deleteAll(" id in (" . $ids . ")");
+            if ($result == true) {
                 return 200;
             } else {
                 return 0;
             }
         }
     }
-    
+
     /**
      * 简介：
      * @author  lichenjun@iyangpin.com。
@@ -118,7 +118,7 @@ class Category extends I500Base
     {
         $re = false;
         if ($data) {
-            foreach ($data as $k=>$v) {
+            foreach ($data as $k => $v) {
                 $this->$k = $v;
             }
             $result = $this->save();

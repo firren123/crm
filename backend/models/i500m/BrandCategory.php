@@ -41,11 +41,11 @@ class BrandCategory extends I500Base
      * @param array $ids      c
      * @return int
      */
-    public function getBulkInsert($brand_id ,$ids)
+    public function getBulkInsert($brand_id, $ids)
     {
         $code = 0;
         if (!empty($brand_id) and !empty($ids)) {
-            foreach ($ids as $k=>$v) {
+            foreach ($ids as $k => $v) {
                 $model = clone $this;
                 $model->brand_id = $brand_id;
                 $model->category_id = $v;
@@ -65,7 +65,7 @@ class BrandCategory extends I500Base
      * @param string $ids x
      * @return int
      */
-    public function getBatchDelete($bid,$ids)
+    public function getBatchDelete($bid, $ids)
     {
         if (empty($ids) and empty($bid)) {
             return 0;

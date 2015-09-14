@@ -68,7 +68,7 @@ class Plot extends I500Base
 
     /**
      * 简介：
-     * @param string $str
+     * @param string $str x
      * @return null
      */
     public static function setSuffix1($str = 'beijing')
