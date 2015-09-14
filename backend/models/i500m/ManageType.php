@@ -81,10 +81,10 @@ class ManageType extends I500Base
      * 名称是否存在
      *
      * @param: $name
-     * @param: NULL $id
+     * @param: null $id
      * @return array|null|ActiveRecord
      */
-    public function getDetailsByName($name, $id=NULL)
+    public function getDetailsByName($name, $id = null)
     {
         $list = array();
         if (!empty($name)) {
@@ -99,8 +99,7 @@ class ManageType extends I500Base
 
     /**
      * 批量删除
-     *
-     * @param: string $ids
+     * @param string $ids
      * @return int
      */
     public function getBatchDelete($ids)
@@ -117,18 +116,25 @@ class ManageType extends I500Base
         }
     }
 
+    /**
+     * 简介：
+     * @return array|\yii\db\ActiveRecord[]
+     */
     public function type_all()
     {
         $list = $this->find()->select('id,name')->where("status=2")->asArray()->all();
         return $list;
     }
 
+    /**
+     * 简介：
+     * @param int $manage_type id
+     * @return array|null|\yii\db\ActiveRecord
+     */
     public function type_name($manage_type)
     {
         $list = $this->find()->select('id,name')->where("id=$manage_type")->asArray()->one();
         return $list;
     }
-
-
 
 }
