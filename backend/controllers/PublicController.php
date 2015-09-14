@@ -6,7 +6,7 @@
  * 文件介绍2
  *
  * @category  PHP
- * @package   admin
+ * @package   Admin
  * @filename  PublicController.php
  * @author    lichenjun <lichenjun@iyangpin.com>
  * @copyright 2015 www.i500m.com
@@ -24,7 +24,15 @@ use common\helpers\FastDFSHelper;
 use common\helpers\RequestHelper;
 use yii\web\Controller;
 
-
+/**
+ * Class PublicController
+ * @category  PHP
+ * @package   PublicController
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
 class PublicController extends Controller
 {
     public $enableCsrfValidation = false;
@@ -131,6 +139,10 @@ class PublicController extends Controller
         return;
     }
 
+    /**
+     * 简介：上传图片
+     * @return string
+     */
     public function actionPhone()
     {
         $f_id = RequestHelper::get("f_id", 0, 'intval');
@@ -138,7 +150,7 @@ class PublicController extends Controller
         $model = new Forum();
         if ($f_id) {
             $model = $model->getInfo(['id'=>$f_id], false, "forum_img");
-        }else{
+        } else {
             $model->forum_img = $img;
         }
         return $this->renderPartial('phone', ['model'=>$model]);
@@ -169,12 +181,12 @@ class PublicController extends Controller
             echo 0;
             exit();
         }
-        $dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
-        imagecopyresampled($dst_r,$img_r, 0, 0, $_POST['x'], $_POST['y'], $targ_w, $targ_h, $_POST['w'], $_POST['h']);
+        $dst_r = ImageCreateTrueColor($targ_w, $targ_h);
+        imagecopyresampled($dst_r, $img_r, 0, 0, $_POST['x'], $_POST['y'], $targ_w, $targ_h, $_POST['w'], $_POST['h']);
         //header('Content-type: image/jpeg');
-        $filename = '/tmp/shop_logo_'.rand(1,100).time().$type;
+        $filename = '/tmp/shop_logo_' . rand(1, 100) . time() . $type;
         if ($type == '.jpeg' || $type == '.jpg') {
-            imagejpeg($dst_r, $filename,$jpeg_quality);
+            imagejpeg($dst_r, $filename, $jpeg_quality);
         } elseif ($type == '.png') {
             imagepng($dst_r, $filename);
         } elseif ($type == '.gif') {
@@ -182,8 +194,8 @@ class PublicController extends Controller
         }
         $dfs = new FastDFSHelper();
         $info = $dfs->fdfs_upload_by_filename($filename);
-        if($info) {
-            $forum_img = '/'.$info['group_name'].'/'.$info['filename'];
+        if ($info) {
+            $forum_img = '/' . $info['group_name'] . '/' . $info['filename'];
             echo $forum_img;
             exit();
         } else {

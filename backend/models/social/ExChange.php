@@ -14,7 +14,6 @@
  */
 
 namespace backend\models\social;
-use backend\models\i500m\RefundOperationLog;
 
 /**
  * ExChange

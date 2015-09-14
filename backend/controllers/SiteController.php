@@ -1,4 +1,20 @@
 <?php
+/**
+ * 简介1
+ *
+ * PHP Version 5
+ * 文件介绍2
+ *
+ * @category  PHP
+ * @package   Admin
+ * @filename  PublicController.php
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www.i500m.com
+ * @license   http://www.i500m.com/ i500m license
+ * @datetime  15/6/2 下午2:45
+ * @version   SVN: 1.0
+ * @link      http://www.i500m.com/
+ */
 namespace backend\controllers;
 
 use Yii;
@@ -8,7 +24,13 @@ use common\models\LoginForm;
 use yii\filters\VerbFilter;
 
 /**
- * Site controller
+ * Class SiteController
+ * @category  PHP
+ * @package   SiteController
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
  */
 class SiteController extends Controller
 {
@@ -71,18 +93,10 @@ class SiteController extends Controller
         ];
     }
 
-    public function actionIndex()
-    {
-        //$u = \Yii::$app->user->identity->name;
-        //var_dump($u);
-        echo 11;
-        exit;
-//        return $this->r('index');
-//        return $this->goHome();
-//        echo "<script>location.href='/admin/site/index';</script>";
-        return $this->redirect('/admin/site/index');
-    }
-
+    /**
+     * 简介：
+     * @return string|\yii\web\Response
+     */
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
@@ -90,30 +104,28 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
-       // var_dump(Yii::$app->request->post());
-       // $model->load(Yii::$app->request->post());
-        //var_dump($model->load(Yii::$app->request->post()));
-       // var_dump($model->attributes);
-        //var_dump($model);
-//var_dump($model->login());
 
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
 
             return $this->goBack();
         } else {
-
-            return $this->render('login', [
-                'model' => $model,
-            ]);
+            return $this->render(
+                'login',
+                [
+                    'model' => $model,
+                ]
+            );
         }
     }
 
+    /**
+     * 简介：
+     * @return \yii\web\Response
+     */
     public function actionLogout()
     {
         Yii::$app->user->logout();
 
         return $this->goHome();
     }
-
-
 }

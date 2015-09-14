@@ -54,7 +54,7 @@ class OrderLog extends SocialBase
         }
         $re = false;
         if ($data) {
-            foreach ($data as $k=>$v) {
+            foreach ($data as $k => $v) {
                 $this->$k = $v;
             }
             $this->add_time = date('Y-m-d H:i:s');

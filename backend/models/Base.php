@@ -151,7 +151,7 @@ class Base extends ActiveRecord
         $re = false;
         if ($data) {
             $model = clone $this;
-            foreach ($data as $k=>$v) {
+            foreach ($data as $k => $v) {
                 $model->$k = $v;
             }
             $re = $model->save();
