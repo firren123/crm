@@ -101,9 +101,11 @@ class SensitiveKeywordsController extends BaseController
         $model = new SensitiveKeywords();
         $info = $model->UpdateStatus(array('id'=>$id));
         if ($info) {
-            echo "1";exit;
+            echo "1";
+            exit;
         } else {
-            echo "0";exit;
+            echo "0";
+            exit;
         }
     }
 

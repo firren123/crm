@@ -13,6 +13,7 @@
  * @link      liuwei@iyangpin.com
  */
 namespace backend\modules\shop\controllers;
+
 use backend\controllers\BaseController;
 use backend\models\i500m\CrmBranch;
 use backend\models\shop\ShopConfig;
@@ -44,18 +45,18 @@ class ConfigController extends BaseController
         $cond = '1=1';
         $list = $model->getPageList($cond, '*', 'id desc', $page, $size);
         if (!empty($list)) {
-            foreach ($list as $key=>$value) {
+            foreach ($list as $key => $value) {
                 $branch_conf['id'] = $value['bc_id'];
                 $branch_list = $branch->getInfo($branch_conf);
                 $list[$key]['branch_name'] = empty($branch_list) ? '--' : $branch_list['name'];
             }
         }
         $total = $model->getCount($cond);
-        $pages = new Pagination(['totalCount' =>$total, 'pageSize' => $size]);
+        $pages = new Pagination(['totalCount' => $total, 'pageSize' => $size]);
 
         $param = [
-            'list'=>$list,
-            'pages'=>$pages,
+            'list' => $list,
+            'pages' => $pages,
         ];
 
         return $this->render('list', $param);
@@ -72,13 +73,13 @@ class ConfigController extends BaseController
         $model->community_num = 0;
         $model->price_limit = 0;
         $bc_id = \Yii::$app->user->identity->bc_id;//分公司id
-        $branch_model =new CrmBranch();
+        $branch_model = new CrmBranch();
         $data_cond['name'] = '总公司';
         $branch_item = $branch_model->getInfo($data_cond);
-        $branch_id = empty($branch_item['id']) ? 0 :$branch_item['id'];//总公司id
+        $branch_id = empty($branch_item['id']) ? 0 : $branch_item['id'];//总公司id
         //分公司对应的省id集合
         $crm_branch_conf['status'] = 1;
-        if ($bc_id!=$branch_id) {
+        if ($bc_id != $branch_id) {
             $crm_branch_conf['id'] = array($bc_id);
         }
         $branch_data = $branch_model->getList($crm_branch_conf, '*');
@@ -91,7 +92,7 @@ class ConfigController extends BaseController
             $bc_id = $ShopConfig['bc_id'];//限定城市id
             $city_data = 0;
             if ($bc_id) {
-                $city_data = $model->getCount(['bc_id'=>$bc_id]);
+                $city_data = $model->getCount(['bc_id' => $bc_id]);
             }
 
             if (!is_numeric($free_shipping)) {
@@ -112,12 +113,12 @@ class ConfigController extends BaseController
                 \Yii::$app->getSession()->setFlash('error', '限定区域 已经添加');
             } else {
                 $config_add = $model->insertInfo($ShopConfig);
-                if ($config_add==true) {
+                if ($config_add == true) {
                     return $this->success('添加成功!', '/shop/config/list');
                 }
             }
         }
-        return $this->render('add', ['model'=>$model,'branch_data'=>$branch_data]);
+        return $this->render('add', ['model' => $model, 'branch_data' => $branch_data]);
     }
 
 }
