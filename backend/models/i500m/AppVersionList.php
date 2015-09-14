@@ -76,7 +76,7 @@ class AppVersionList extends I500Base
      * @param string $and_cond And条件
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function totalNum($where,$and_cond = '')
+    public function totalNum($where, $and_cond = '')
     {
         $allApp_result = AppVersionList::find()
             ->andFilterWhere($where)
@@ -132,7 +132,7 @@ class AppVersionList extends I500Base
     public function addApp($msg)
     {
         $AddApp_model = new AppVersionList();
-        foreach ($msg as $k=>$v) {
+        foreach ($msg as $k => $v) {
             $AddApp_model->$k = $v;
         }
         $result = $AddApp_model->save();
