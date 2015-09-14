@@ -77,7 +77,7 @@ class PostController extends BaseController
         $forumModel = new Forum();
         $forum_list = $forumModel->getList(1, "id,pid");
         $forum_ids = CommonHelper::getChildCateId($forum_list, $forum_id);
-        $forum_ids = array_merge($forum_ids,array($forum_id));
+        $forum_ids = array_merge($forum_ids, array($forum_id));
         if ($forum_id != 0) {
             $cond['forum_id'] = $forum_ids;
         }
@@ -159,7 +159,7 @@ class PostController extends BaseController
         $model = new Post();
         $cond = 'id=' . $id;
         $item = $model->getInfo($cond, false, '*');
-        $item->post_img = explode(",",$item->post_img);
+        $item->post_img = explode(",", $item->post_img);
         $contentModel = new Content();
         $con = $contentModel->getInfo(['post_id' => $id]);
         $item['content'] = $con['content'];
@@ -197,7 +197,7 @@ class PostController extends BaseController
         $model = new Post();
         $cond = 'id=' . $id;
         $item = $model->getInfo($cond);
-        $item['post_img'] = explode(",",$item['post_img']);
+        $item['post_img'] = explode(",", $item['post_img']);
         $contentModel = new Content();
         $con = $contentModel->getInfo(['post_id' => $id]);
         $item['content'] = $con['content'];
