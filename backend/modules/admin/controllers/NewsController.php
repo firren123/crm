@@ -81,13 +81,13 @@ class NewsController extends BaseController
         $field = 'id,title,author,category_id,create_time,status';
         $order = 'id DESC';
         $page  = RequestHelper::get('page', 1, 'intval');
-        $data['list']  = $this->news_model->getNewsList($where, $field, $order, $page, $this->PAGE_SIZE,$and_where);
+        $data['list'] = $this->news_model->getNewsList($where, $field, $order, $page, $this->PAGE_SIZE, $and_where);
         if (!empty($data['list'])) {
             foreach ($data['list'] as $k => $v) {
                 $data['list'][$k]['category_name'] = $this->news_category_model->getCategoryName($v['category_id']);
             }
         }
-        $total_count   = $this->news_model->getCount($where,$and_where);
+        $total_count = $this->news_model->getCount($where, $and_where);
         $pages = new Pagination(['totalCount' =>$total_count, 'pageSize' => $this->PAGE_SIZE]);
         return $this->render('index', ['data'=>$data,'pages'=>$pages]);
     }
