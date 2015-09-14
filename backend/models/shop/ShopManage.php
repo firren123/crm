@@ -15,6 +15,7 @@
  * @link      http://www.i500m.com/
  */
 namespace backend\models\shop;
+
 /**
  * ShopManage - model
  *

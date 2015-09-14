@@ -13,6 +13,7 @@
  * @link      liuwei@iyangpin.com
  */
 namespace backend\models\shop;
+
 /**
  * ShopCash
  *
