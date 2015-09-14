@@ -222,7 +222,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         if (md5($this->salt . md5($password)) != $this->password) {
             return false; //密码不正确
-        } else if ($this->status == 1) {
+        } elseif ($this->status == 1) {
             return false; //用户未激活
         } else {
             return true; //验证成功
