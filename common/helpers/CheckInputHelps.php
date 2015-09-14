@@ -255,8 +255,8 @@ class CheckInputHelps
             return array(200, $arr);
         } elseif ($goods_type == 1) {
             foreach ($shop as $kk => $vv) {
-                $product_arr = $productModel->getList(['cate_first_id' => $data['goods_cate']],"id,origin_price,total_num");
-                foreach($product_arr as $kkk => $vvv){
+                $product_arr = $productModel->getList(['cate_first_id' => $data['goods_cate']], "id,origin_price,total_num");
+                foreach ($product_arr as $kkk => $vvv) {
                     $arr2 = [];
                     $arr[$key]['shop_id'] = $vv['shop_id'];
                     $arr[$key]['activity_id'] = $insert_id;
