@@ -15,6 +15,7 @@
  * @link      http://www.i500m.com/
  */
 namespace backend\models\i500m;
+
 /**
  * Class app_log
  * @category  PHP
@@ -171,5 +172,6 @@ class AppVersionList extends I500Base
             $result = $id->save();
             return $result;
         }
+        return false;
     }
 }
