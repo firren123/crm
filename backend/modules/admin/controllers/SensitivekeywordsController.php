@@ -116,9 +116,11 @@ class SensitiveKeywordsController extends BaseController
             $log = new Log();
             $log_info = '管理员 '.\Yii::$app->user->identity->username .'更改了ID为'.$id.'的敏感词状态';
             $log->recordLog($log_info, 10);
-            echo "1";exit;
+            echo "1";
+            exit;
         } else {
-            echo "0";exit;
+            echo "0";
+            exit;
         }
     }
 }
