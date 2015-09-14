@@ -272,6 +272,68 @@ class ShopcontractController extends BaseController
     }
 
     /**
+     * 简介：商家合同修改页面
+     * @author  weitonghe@iyangpin.com
+     * @return  array
+     */
+    public function actionEdit()
+    {
+        $id = RequestHelper::get('id', '78', '');//注册名称
+        if (empty($id)) {
+            return $this->error('未知错误 ，请重试!', 'index');
+        }
+        $ShopContract_model = new ShopContract();       //合同表
+        $cond['id'] = $id;
+        $ShopContract_model_result = $ShopContract_model->selOneInfo($cond);
+        if (empty($ShopContract_model_result)) {
+            return $this->error('未知错误 ，请重试!', 'index');
+        }
+        if (!empty($ShopContract_model_result)) {
+            $ShopContract_model_result['company_nature'] = explode(',', $ShopContract_model_result['company_nature']);//公司性质
+            $ShopContract_model_result['business_hours'] = explode(',', $ShopContract_model_result['business_hours']);//营业时间
+        }
+        unset($cond['id']);
+        $ShopManage_model   = new ShopManage();         //经营信息表
+        $ShopManage_model_result = [];
+        if (!empty($ShopContract_model_result) && !empty($ShopContract_model_result['id'])) {
+            $cond['contract_id'] = $ShopContract_model_result['id'];
+            $field = 'business_name,business_scope,business_address';   //经营名称 经营范围(1,2,3,4) 经营地址
+            $ShopManage_model_result = $ShopManage_model->getInfo($cond, true, $field);
+            $ShopManage_model_result['business_scope'] = explode(',', $ShopManage_model_result['business_scope']);     //经营范围
+            unset($cond['contract_id']);
+        }
+        $Province_model     = new Province();           //省
+        $Province_model_result = [];
+        if (!empty($ShopContract_model_result)) {
+            $cond['id'] = $ShopContract_model_result['bank_province'];
+            $field = 'name';
+            $Province_model_result = $Province_model->getInfo($cond, true, $field);
+        }
+        $City_model         = new City();               //市
+        $City_model_result = [];
+        if (!empty($ShopContract_model_result)) {
+            $cond['id'] = $ShopContract_model_result['bank_city'];
+            $field = 'name';
+            $City_model_result = $City_model->getInfo($cond, true, $field);
+        }
+        $Business_model     = new Business();           //业务员
+        $Business_model_result = [];
+        if (!empty($ShopContract_model_result)) {
+            $cond['id'] = $ShopContract_model_result['counterman'];
+            $field = 'id,name';
+            $Business_model_result = $Business_model->getInfo($cond, true, $field);
+        }
+        $data_info = [
+            'list'    =>$ShopContract_model_result,
+            'shop'    =>$ShopManage_model_result,
+            'province'=>$Province_model_result,
+            'city'    =>$City_model_result,
+            'business'=>$Business_model_result
+        ];
+        return $this->render('edit', $data_info);
+    }
+
+    /**
      * 简介：商家合同详情
      * @author  weitonghe@iyangpin.com
      * @return  array
