@@ -21,13 +21,22 @@ use backend\controllers\BaseController;
 use backend\models\i500m\SensitiveKeywords;
 use common\helpers\RequestHelper;
 use yii\data\Pagination;
+
+/**
+ * Class SensitiveKeywordsController
+ * @category  PHP
+ * @package   SensitiveKeywordsController
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
 class SensitiveKeywordsController extends BaseController
 {
     public $size = 10;
 
     /**
-     * @purpose:
-     * @name: actionIndex
+     * 简介：
      * @return string
      */
     public function actionIndex()
@@ -37,13 +46,13 @@ class SensitiveKeywordsController extends BaseController
         $data['size'] = RequestHelper::get('per-page', $this->size, 'intval');
         $offset = ($data['page'] - 1) * $data['size'];
         $model = new SensitiveKeywords();
-        $list = $model->show($data,$offset);
+        $list = $model->show($data, $offset);
         $total = $model->total();
         $pages = new Pagination(['totalCount' =>$total, 'pageSize' => $this->size]);
-        return $this->render('index',['info'=>$list,'pages'=>$pages]);
+        return $this->render('index', ['info' => $list, 'pages' => $pages]);
     }
     /**
-     * @purpose:敏感词添加
+     * 敏感词添加
      * @name: actionAdd
      * @return string
      */
@@ -54,10 +63,9 @@ class SensitiveKeywordsController extends BaseController
             $data = RequestHelper::post('SensitiveKeywords', array());
             $verify = $model->verify($data['keyword']);
             if ($verify) {
-              //echo "<script>alert('此敏感词你已添加过');</script>";
                 return $this->redirect("/user/sensitivekeywords/link");
             } else {
-                $model->add($data['keyword'],$data['status']);
+                $model->add($data['keyword'], $data['status']);
                 return $this->redirect("/user/sensitivekeywords/index");
             }
         } else {
@@ -66,13 +74,13 @@ class SensitiveKeywordsController extends BaseController
     }
 
     /**
-     * @purpose:敏感词删除
+     * 敏感词删除
      * @name: actionDel
      * @return string
      */
     public function actionDel()
     {
-        $id = RequestHelper::get('id', 0,'intval');
+        $id = RequestHelper::get('id', 0, 'intval');
         if ($id) {
             $model = new SensitiveKeywords();
             $info = $model->del(array('id'=>$id));
@@ -83,13 +91,13 @@ class SensitiveKeywordsController extends BaseController
     }
 
     /**
-     * @purpose:敏感词状态更新
+     * 敏感词状态更新
      * @name: actionUp
      * @return string
      */
     public function actionUp()
     {
-        $id = RequestHelper::get('id',1,'intval');
+        $id = RequestHelper::get('id', 1, 'intval');
         $model = new SensitiveKeywords();
         $info = $model->UpdateStatus(array('id'=>$id));
         if ($info) {
@@ -100,13 +108,13 @@ class SensitiveKeywordsController extends BaseController
     }
 
     /**
-     * @purpose:敏感词重复添加提示
+     * 敏感词重复添加提示
      * @name: actionLink
      * @return string
      */
     public function actionLink()
     {
         $model = new SensitiveKeywords();
-        return $this->render('link',['model'=>$model]);
+        return $this->render('link', ['model' => $model]);
     }
 }

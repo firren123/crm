@@ -8,7 +8,7 @@
  * @category  Crm
  * @package   Member
  * @author    liubaocheng <liubaocheng@iyangpin.com>
- * @time      15/7/27 上午9:48 
+ * @time      15/7/27 上午9:48
  * @copyright 2015 灵韬致胜（北京）科技发展有限公司
  * @license   i500m http://www.i500m.com
  * @link      liubaocheng@iyangpin.com
