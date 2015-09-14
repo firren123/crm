@@ -18,7 +18,6 @@
 
 namespace backend\models\oa;
 
-
 /**
  * Class FlowRun
  * @category  PHP

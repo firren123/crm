@@ -68,11 +68,13 @@ class CrmMenu extends I500Base
     }
 
     /**
-     * 获取角色导航列表  
-     * @return array :   array
-     * @param int $role_id 角色id
-     * @param int $level   导航级别
-     * @param int $display 是否显示
+     * 简介：
+     * @author  lichenjun@iyangpin.com。
+     * @param int  $role_id x
+     * @param int  $level   x
+     * @param null $display x
+     * @param int  $nav_id  x
+     * @return array
      */
     public function getNav($role_id = 0, $level = 1, $display = null, $nav_id = 0)
     {

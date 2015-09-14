@@ -37,6 +37,4 @@ class CrmBranch extends I500Base
         return '{{%crm_branch}}';
     }
 
-
-
 }
