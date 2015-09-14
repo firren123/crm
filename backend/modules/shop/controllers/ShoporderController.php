@@ -142,7 +142,7 @@ class ShoporderController extends BaseController
         }
         $count = $model->getCount($where);
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->size]);
-        return $this->render('index', [
+        $param = [
             'pages' => $pages,
             'list' => $list,
             'start_time' => $start_time,
@@ -156,7 +156,8 @@ class ShoporderController extends BaseController
             'ship_status_data' => ShoporderController::$ship_status_data,
             'pay_status_data' => ShoporderController::$pay_status_data,
             'result_arr' => $result_arr,
-        ]);
+        ];
+        return $this->render('index', $param);
     }
 
     /**
@@ -416,7 +417,7 @@ class ShoporderController extends BaseController
 
         }
         $shop = Shop::findOne($data['shop_id']);
-        return $this->render('detail', [
+        $param = [
             'model' => $model,
             'order_info' => $data,
             'log_list' => $log_list,
@@ -425,8 +426,7 @@ class ShoporderController extends BaseController
             'pay_status_type' => ShoporderController::$pay_status_data,
             'pay_type_data' => ShoporderController::$pay_type_data,
             'shop_name' => $shop['shop_name'],
-        ]);
+        ];
+        return $this->render('detail', $param);
     }
-
-
 }
