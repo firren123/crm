@@ -56,13 +56,13 @@ class FlowfundController extends BaseController
 
         }
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->size]);
-        return $this->render('index', [
+        $param = [
             'pages' => $pages,
             'list' => $list,
             'username' => $username,
             'count' => $count,
-        ]);
+        ];
+        return $this->render('index', $param);
     }
-
 
 }
