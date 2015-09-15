@@ -13,7 +13,7 @@
  * @link      weitonghe@iyangpin.com
  */
 namespace backend\models\pay;
-use backend\models\pay\PayBase;
+
 /**
  * PayCash
  *
@@ -38,9 +38,9 @@ class PayCash extends PayBase
     /**
      *  检索数据
      *
-     * @param array  $Cond        条件
-     * @param array  $andCond     and条件
-     * @param string  $filed      字段
+     * @param array  $Cond    条件
+     * @param array  $andCond and条件
+     * @param string $filed   字段
      *
      * @return array
      */
@@ -54,18 +54,24 @@ class PayCash extends PayBase
                 ->andWhere($andCond)
                 ->asArray()
                 ->one();
-            if(empty($info)){
+            if (empty($info)) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
         }
         return false;
     }
+
+    /**
+     * 简介：
+     * @param array $list list
+     * @return bool
+     */
     public function insertinfo($list = array())
     {
         $model = new PayCash();
-        foreach($list as $k=>$v){
+        foreach ($list as $k => $v) {
             $model->$k = $v;
         }
         $result = $model->save();

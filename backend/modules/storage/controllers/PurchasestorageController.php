@@ -8,7 +8,7 @@
  * @category  Admin
  * @package   Storage
  * @author    liubaocheng <liubaocheng@iyangpin.com>
- * @time      15/5/26 上午11:13 
+ * @time      15/5/26 上午11:13
  * @copyright 2015 灵韬致胜（北京）科技发展有限公司
  * @license   http://www.i500m.com license
  * @link      liubaocheng@iyangpin.com
@@ -339,8 +339,8 @@ class PurchasestorageController extends BaseController
     }
 
     /**
-     *  
      * 获取采购单
+     * @return null
      */
     public function actionAjaxGetPurchase()
     {
@@ -355,8 +355,8 @@ class PurchasestorageController extends BaseController
     }
 
     /**
-     *  
      * 删除采购单
+     * @return null
      */
     public function actionDel()
     {
@@ -364,8 +364,8 @@ class PurchasestorageController extends BaseController
     }
 
     /**
-     *  
      * 查看
+     * @return null
      */
     public function actionView()
     {
@@ -502,8 +502,8 @@ class PurchasestorageController extends BaseController
     }
 
     /**
-     *  
      * 生成唯一码
+     * @return null
      */
     public function actionCreateCode()
     {
@@ -566,8 +566,11 @@ class PurchasestorageController extends BaseController
     }
 
     /**
-     *  
-     * 生成唯一码
+     * 简介：
+     * @param int    $product_id  product_id
+     * @param string $unique_code unique_code
+     * @param int    $temp        int
+     * @return string
      */
     private function _create_code($product_id = 0, $unique_code = '', $temp = 1)
     {
@@ -587,6 +590,12 @@ class PurchasestorageController extends BaseController
         return $code;
     }
 
+    /**
+     * 简介：
+     * @param array  $data       x
+     * @param string $storage_sn x
+     * @return null
+     */
     private function _create_excel($data = [], $storage_sn = ''){
 
         $obj = new \PHPExcel();
@@ -595,7 +604,7 @@ class PurchasestorageController extends BaseController
         $obj->getActiveSheet()->setCellValue('B1', '次品');
 
         $i = 2;
-        foreach($data as $item){
+        foreach ($data as $item) {
             $obj->getActiveSheet()->setCellValue('A'.$i, $item['bar_code'].'111');
             $obj->getActiveSheet()->setCellValue('B'.$i, $item['goods_name'].'111');
             foreach ($item['code'] as $val) {
@@ -620,7 +629,7 @@ class PurchasestorageController extends BaseController
         header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
         header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
         header("Pragma: no-cache");
-        $xlsWriter->save( "php://output" );
+        $xlsWriter->save("php://output");
     }
 
 }

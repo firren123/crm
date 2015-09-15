@@ -8,9 +8,9 @@
  * @category  Admin
  * @package   Supplier
  * @author    liubaocheng <liubaocheng@iyangpin.com>
- * @time      15/7/24 上午11:52 
- * @copyright 灵韬致胜（北京）科技发展有限公司
- * @license   http://www.i500m.com
+ * @time      15/7/24 上午11:52
+ * @copyright 2015 灵韬致胜（北京）科技发展有限公司
+ * @license   i500m http://www.i500m.com
  * @link      liubaocheng@iyangpin.com
  */
 
@@ -22,8 +22,21 @@ use backend\models\i500m\SupplierSample;
 use common\helpers\RequestHelper;
 use yii\data\Pagination;
 
-class SampleController extends BaseController{
-
+/**
+ * Class SampleController
+ * @category  PHP
+ * @package   SampleController
+ * @author    liubaocheng <liubaocheng@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class SampleController extends BaseController
+{
+    /**
+     * 简介：
+     * @return string
+     */
     public function actionIndex()
     {
         $page = RequestHelper::get('page', 1, 'intval');
@@ -37,9 +50,13 @@ class SampleController extends BaseController{
         $count = $m_supplier_sample->getCount($cond);
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $page_size]);
 
-        return $this->render('index', ['list'=>$list, 'pages'=>$pages]);
+        return $this->render('index', ['list' => $list, 'pages' => $pages]);
     }
 
+    /**
+     * 简介：
+     * @return string
+     */
     public function actionDetail()
     {
         $id = RequestHelper::get('id', 0, 'intval');
@@ -47,12 +64,16 @@ class SampleController extends BaseController{
         $info = [];
         if ($id) {
             $m_supplier_sample = new SupplierSample();
-            $info = $m_supplier_sample->getInfo(['id'=>$id]);
+            $info = $m_supplier_sample->getInfo(['id' => $id]);
         }
 
-        return $this->render('detail', ['info'=>$info]);
+        return $this->render('detail', ['info' => $info]);
     }
 
+    /**
+     * 简介：
+     * @return string
+     */
     public function actionExamine()
     {
         $id = RequestHelper::get('id', 0, 'intval');
@@ -60,25 +81,25 @@ class SampleController extends BaseController{
 
         if ($id) {
             $m_supplier_sample = new SupplierSample();
-            $supplier_sample = $m_supplier_sample->getInfo(['id'=>$id], false);
+            $supplier_sample = $m_supplier_sample->getInfo(['id' => $id], false);
 
             if (!$supplier_sample['id']) {
-                echo json_encode(['code'=>101, 'msg'=>'无数据']);
+                echo json_encode(['code' => 101, 'msg' => '无数据']);
                 exit;
             }
 
             if ($supplier_sample['status'] != 1) {
-                echo json_encode(['code'=>102, 'msg'=>'不是待审核状态，不能操作']);
+                echo json_encode(['code' => 102, 'msg' => '不是待审核状态，不能操作']);
                 exit;
             }
 
             $supplier_sample->status = $status;
             $supplier_sample->save();
 
-            echo json_encode(['code'=>200, 'msg'=>'操作成功']);
+            echo json_encode(['code' => 200, 'msg' => '操作成功']);
             exit;
         }
-        echo json_encode(['code'=>103, 'msg'=>'缺少id']);
+        echo json_encode(['code' => 103, 'msg' => '缺少id']);
         exit;
     }
 }

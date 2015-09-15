@@ -29,7 +29,8 @@ use Yii;
 class Attribute extends I500Base
 {
     /**
-     * @inheritdoc
+     * 简介：
+     * @return string
      */
     public static function tableName()
     {
@@ -37,7 +38,8 @@ class Attribute extends I500Base
     }
 
     /**
-     * @inheritdoc
+     * 简介：
+     * @return array
      */
     public function rules()
     {
@@ -49,7 +51,8 @@ class Attribute extends I500Base
     }
 
     /**
-     * @inheritdoc
+     * 简介：
+     * @return array
      */
     public function attributeLabels()
     {
@@ -74,25 +77,15 @@ class Attribute extends I500Base
     }
 
     /**
-     * 获取单条属性
-     * @param array $attr_id 属性id
-     * @return array
-     */
-//    public function getInfo($attr_id)
-//    {
-//        if (empty($attr_id)) return [];
-//        $show = $this->findOne($attr_id);
-//        return $show;
-//    }
-
-    /**
      * 插入属性
      * @param array $data 插入的数据
      * @return bool
      */
     public function insertAttribute($data)
     {
-        if (empty($data)) return false;
+        if (empty($data)) {
+            return false;
+        }
         //$attribute['Attribute']
         $attribute = [];
         $attribute['Attribute'] = $data;
@@ -104,9 +97,18 @@ class Attribute extends I500Base
 
         return isset($re)?$this->attributes['id']:false;
     }
+
+    /**
+     * 简介：
+     * @param array $model x
+     * @param array $data  x
+     * @return bool
+     */
     public function updateAttribute($model, $data)
     {
-        if (empty($model) || empty($data)) return false;
+        if (empty($model) || empty($data)) {
+            return false;
+        }
         //$attribute['Attribute']
         $attribute = [];
         $attribute['Attribute'] = $data;
@@ -115,6 +117,13 @@ class Attribute extends I500Base
 
         return isset($re)?$this->attributes['id']:false;
     }
+
+    /**
+     * 简介：
+     * @param int $id x
+     * @return bool
+     * @throws \Exception
+     */
     public function delAttribute($id)
     {
         $model = $this->findOne($id);
@@ -125,7 +134,5 @@ class Attribute extends I500Base
             return true;
         }
         return false;
-
-
     }
 }

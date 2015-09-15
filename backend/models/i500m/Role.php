@@ -6,7 +6,7 @@
  * 文件介绍2
  *
  * @category  PHP
- * @package   admin
+ * @package   Admin
  * @filename  Role.php
  * @author    lichenjun <lichenjun@iyangpin.com>
  * @copyright 2015 www.i500m.com
@@ -19,37 +19,49 @@
 
 namespace backend\models\i500m;
 
-
-class Role extends I500Base{
-    public static function tableName(){
-        return '{{%crm_role}}';
-    }
+/**
+ * Class Role
+ * @category  PHP
+ * @package   Role
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class Role extends I500Base
+{
     /**
      * 简介：
-     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public static function tableName()
+    {
+        return '{{%crm_role}}';
+    }
+
+    /**
+     * 简介：
      * @return array
      */
     public function attributeLabels()
     {
         return array(
             'name' => '角色名称',
-            'city_id'=>'分公司',
-            'status' =>'状态',
-            'sort'=>'排序'
+            'city_id' => '分公司',
+            'status' => '状态',
+            'sort' => '排序'
         );
     }
+
     /**
-     *
      * 简介：定义过滤规则
-     * @author  lichenjun@iyangpin.com。
      * @return array
      */
     public function rules()
     {
         return [
             //不可为空的字段
-            [['name','status'],'required'],
+            [['name', 'status'], 'required'],
         ];
     }
-
 }

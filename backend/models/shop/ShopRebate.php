@@ -13,6 +13,7 @@
  * @link      liuwei@iyangpin.com
  */
 namespace backend\models\shop;
+
 /**
  * ShopRebate
  *
@@ -29,7 +30,8 @@ class ShopRebate extends ShopBase
      *
      * @return string
      */
-    public static function tableName(){
+    public static function tableName()
+    {
         return '{{%shop_rebate}}';
     }
 }

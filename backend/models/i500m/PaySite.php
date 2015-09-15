@@ -6,7 +6,7 @@
  * 文件介绍2
  *
  * @category  PHP
- * @package   admin
+ * @package   Admin
  * @filename  PaySite.php
  * @author    lichenjun <lichenjun@iyangpin.com>
  * @copyright 2015 www.i500m.com
@@ -19,10 +19,23 @@
 
 namespace backend\models\i500m;
 
-
-class PaySite extends I500Base{
-    public static function tableName(){
+/**
+ * Class PaySite
+ * @category  PHP
+ * @package   PaySite
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class PaySite extends I500Base
+{
+    /**
+     * 简介：
+     * @return string
+     */
+    public static function tableName()
+    {
         return "{{%pay_site}}";
     }
-
 }

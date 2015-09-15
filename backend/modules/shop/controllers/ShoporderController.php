@@ -38,12 +38,12 @@ class ShoporderController extends BaseController
 {
     public $enableCsrfValidation = false;
     public static $pay_status_data = array(
-        -1=>'全部',
+        -1 => '全部',
         0 => '未支付',
         1 => '已支付'
     );
     public static $ship_status_data = array(
-        -1=>'全部',
+        -1 => '全部',
         0 => '待发货',
         1 => '待收货',
         2 => '已签收',
@@ -51,7 +51,7 @@ class ShoporderController extends BaseController
 
     );
     public static $status_data = array(
-        -2=>'全部',
+        -2 => '全部',
         0 => '未确认',
         1 => '已确认',
         2 => '取消',
@@ -59,7 +59,7 @@ class ShoporderController extends BaseController
     );
     public static $pay_type_data = array(
 //        0 => '',
-        -1=>'全部',
+        -1 => '全部',
         1 => '支付宝',
         2 => '银联',
         3 => '货到付款'
@@ -101,27 +101,27 @@ class ShoporderController extends BaseController
         if ($end_time) {
             $where .= " and create_time<'" . $end_time . " 23:59:59'";
         }
-        if($ship_status!=-1){
+        if ($ship_status != -1) {
             $where .= " and ship_status =" . $ship_status;
         }
-        if($status!=-2){
-            $where .= " and status =" .$status;
+        if ($status != -2) {
+            $where .= " and status =" . $status;
         }
-        if($pay_status !=-1){
-            $where .=" and pay_status=".$pay_status;
+        if ($pay_status != -1) {
+            $where .= " and pay_status=" . $pay_status;
         }
-        if($shop_name){
+        if ($shop_name) {
 
             $shop_id = $shop_m->getList(array('shop_name' => $shop_name), "id");
-            if($shop_id){
+            if ($shop_id) {
                 $arr = [];
-                foreach($shop_id as $k =>$v){
+                foreach ($shop_id as $k => $v) {
                     $arr[] = $v['id'];
                 }
-                $ids = implode(',',$arr);
+                $ids = implode(',', $arr);
                 $where .= " and shop_id in($ids)";
-            }else{
-                return $this->error('商家名不存在','/shop/shoporder/index');
+            } else {
+                return $this->error('商家名不存在', '/shop/shoporder/index');
             }
 
         }
@@ -133,7 +133,7 @@ class ShoporderController extends BaseController
         $model = new ShopOrder();
         $result_arr = array();
         $list = $model->getPageList($where, '*', 'id desc', $p, $this->size);
-        foreach($list as $k => $v) {
+        foreach ($list as $k => $v) {
             if ($this->_check($v['id'])) {
                 array_push($result_arr, $v['id']);
             }
@@ -142,21 +142,22 @@ class ShoporderController extends BaseController
         }
         $count = $model->getCount($where);
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->size]);
-        return $this->render('index', [
+        $param = [
             'pages' => $pages,
             'list' => $list,
-            'start_time'=>$start_time,
-            'end_time'=>$end_time,
-            'order_sn'=>$order_sn,
-            'status'=>$status,
-            'ship_status' =>$ship_status,
-            'pay_status'=>$pay_status,
-            'shop_name'=>$shop_name,
+            'start_time' => $start_time,
+            'end_time' => $end_time,
+            'order_sn' => $order_sn,
+            'status' => $status,
+            'ship_status' => $ship_status,
+            'pay_status' => $pay_status,
+            'shop_name' => $shop_name,
             'status_data' => ShoporderController::$status_data,
             'ship_status_data' => ShoporderController::$ship_status_data,
             'pay_status_data' => ShoporderController::$pay_status_data,
             'result_arr' => $result_arr,
-        ]);
+        ];
+        return $this->render('index', $param);
     }
 
     /**
@@ -164,22 +165,23 @@ class ShoporderController extends BaseController
      *
      * @author  songjiankang@iyangpin.com。
      */
-    private function _check($o_id = ''){
+    private function _check($o_id = '')
+    {
         $model_detail = new ShopDetailOrder();
-        $p_id = $model_detail->getList(array('o_id'=>$o_id),'p_id');
+        $p_id = $model_detail->getList(array('o_id' => $o_id), 'p_id');
         $p_id_arr = array();
-            foreach($p_id as $v){
-                $p_id_arr[] = $v['p_id'];
-            }
+        foreach ($p_id as $v) {
+            $p_id_arr[] = $v['p_id'];
+        }
         $model_product = new Product();
         $cate_id_arr = array();
-        if(!empty($p_id_arr)){
-            foreach($p_id_arr as $value){
-                $cate_id = $model_product->getList(array('id'=>$value),'cate_first_id');
-                $cate_id_arr[]=$cate_id[0]['cate_first_id'];
+        if (!empty($p_id_arr)) {
+            foreach ($p_id_arr as $value) {
+                $cate_id = $model_product->getList(array('id' => $value), 'cate_first_id');
+                $cate_id_arr[] = $cate_id[0]['cate_first_id'];
             }
         }
-        return in_array('3043',$cate_id_arr);
+        return in_array('3043', $cate_id_arr);
     }
 
     /**
@@ -197,10 +199,10 @@ class ShoporderController extends BaseController
         $log_info = \Yii::$app->user->identity->username;
         if ('' != $pay_status) {
             $map['pay_status'] = $pay_status;
-            if($pay_status == 1) {
-                $log_info .= ' 确定用户收款了 订单号为'.$order_sn;
+            if ($pay_status == 1) {
+                $log_info .= ' 确定用户收款了 订单号为' . $order_sn;
             } elseif ($pay_status == 2) {
-                $log_info .= ' 取消用户付款 订单号为 '.$order_sn;
+                $log_info .= ' 取消用户付款 订单号为 ' . $order_sn;
             }
             $log['pay_status'] = $pay_status;
 
@@ -208,22 +210,22 @@ class ShoporderController extends BaseController
         if ('' != $status) {
             $map['status'] = $status;
             $log['status'] = $status;
-            if($status == 1) {
-                $log_info .= ' 确认了订单'.$order_sn;
+            if ($status == 1) {
+                $log_info .= ' 确认了订单' . $order_sn;
             } elseif ($status == 2) {
-                $log_info .= ' 取消了订单 '.$order_sn;
+                $log_info .= ' 取消了订单 ' . $order_sn;
             }
         }
         if ('' != $ship_status) {
             $map['ship_status'] = $ship_status;
             $map['delivery_time'] = date("Y-m-d H:i:s", time());
             $log['ship_status'] = $ship_status;
-            if($ship_status == 1) {
-                $log_info .= ' 发货了订单'.$order_sn;
+            if ($ship_status == 1) {
+                $log_info .= ' 发货了订单' . $order_sn;
             } elseif ($ship_status == 2) {
-                $log_info .= ' 确定收货了订单 '.$order_sn;
+                $log_info .= ' 确定收货了订单 ' . $order_sn;
             } elseif ($ship_status == 3) {
-                $log_info .= ' 操作了退货订单 '.$order_sn;
+                $log_info .= ' 操作了退货订单 ' . $order_sn;
             }
         }
 
@@ -241,7 +243,7 @@ class ShoporderController extends BaseController
             return $this->error('此订单无效，订单未指定商家');
         }
         $shop = new Shop();
-        $shop_name = $shop->getFieldName(['id'=>$shop_id], 'shop_name');
+        $shop_name = $shop->getFieldName(['id' => $shop_id], 'shop_name');
         if (empty($shop_name)) {
             return $this->error('无效的商家');
         }
@@ -263,7 +265,7 @@ class ShoporderController extends BaseController
 
             $log['oper'] = $remark;
             $log['order_sn'] = $order_sn;
-            $log['log_info'] = $log_info . ' 备注:'.$remark;;
+            $log['log_info'] = $log_info . ' 备注:' . $remark;;
 //        $map['add_time'] = date('Y-m-d H:i:s');
 //        $map['create_time'] = time();
 //        $map['type'] = 3;
@@ -271,19 +273,19 @@ class ShoporderController extends BaseController
 
             $modelLog->recordLog($log);//操作备注
             //发货修改库存
-            if ($ship_status==1) {
+            if ($ship_status == 1) {
                 $p_model = new Product();
                 $ret = $p_model->reduceInventory($order_sn);
             }
             //收货修改商家库存
-            if($ship_status==2){
+            if ($ship_status == 2) {
                 $shop_order_detail_m = new ShopDetailOrder();
-                $ret = $shop_order_detail_m->getList(['order_sn'=>$order_sn],"*");
+                $ret = $shop_order_detail_m->getList(['order_sn' => $order_sn], "*");
 
                 $_model = new ShopProduct(); //商家商品表
                 $_modelProduct = new Product();  //商品表
-                foreach($ret as $k=>$v){
-                    $details = $_modelProduct->getInfo(['id'=>$v['p_id']]);
+                foreach ($ret as $k => $v) {
+                    $details = $_modelProduct->getInfo(['id' => $v['p_id']]);
                     $arr = [];
                     $arr['cat_id'] = $details['cate_first_id'];
                     $arr['brand_id'] = $details['brand_id'];
@@ -297,17 +299,17 @@ class ShoporderController extends BaseController
                     $re = $_model->addProduct($arr);
                     if ($re) {
                         $buy_record = [
-                            'product_id'=>$v['p_id'],
-                            'shop_id'=>$v['shop_id'],
-                            'shop_name'=>$shop_name,
-                            'cat_id'=>$details['cate_first_id'],
-                            'buy_number'=>$v['num'],
-                            'surplus'=>$v['num'],
-                            'goods_type'=>2,
-                            'buy_price'=>$v['price'],
-                            'buy_date'=>$time,
-                            'order_sn'=>$v['order_sn'],
-                            'status'=>0,
+                            'product_id' => $v['p_id'],
+                            'shop_id' => $v['shop_id'],
+                            'shop_name' => $shop_name,
+                            'cat_id' => $details['cate_first_id'],
+                            'buy_number' => $v['num'],
+                            'surplus' => $v['num'],
+                            'goods_type' => 2,
+                            'buy_price' => $v['price'],
+                            'buy_date' => $time,
+                            'order_sn' => $v['order_sn'],
+                            'status' => 0,
 
 
                         ];
@@ -395,37 +397,36 @@ class ShoporderController extends BaseController
     {
         $order_sn = RequestHelper::get("order_sn");
         $model = new ShopOrder();
-        $map = ['order_sn'=>$order_sn];
+        $map = ['order_sn' => $order_sn];
         $data = $model->getDetail($map);
 //        echo "<pre>";
 //        print_r($data);
 //        exit;
         //读取管理员操作日志
         $order_log_m = new OrderLog();
-        $log_list = $order_log_m->getList(['order_sn'=>$order_sn,'type'=>3],"*",'id desc');
+        $log_list = $order_log_m->getList(['order_sn' => $order_sn, 'type' => 3], "*", 'id desc');
         $admin_n = new Admin();
-        foreach($log_list as $k=>$v){
-            $admin_id = $admin_n->getInfo(['id'=>$v['admin_id']],true,'name');
+        foreach ($log_list as $k => $v) {
+            $admin_id = $admin_n->getInfo(['id' => $v['admin_id']], true, 'name');
             $log_list[$k]['name'] = $admin_id['name'];
             $status_log = [];
-            $status_log[] = $v['status']?ShoporderController::$status_data[$v['status']]:'';
-            $status_log[] = $v['ship_status']?ShoporderController::$ship_status_data[$v['ship_status']]:'';
-            $status_log[] = $v['pay_status']?ShoporderController::$pay_status_data[$v['pay_status']]:"";
-            $log_list[$k]['status_log'] = implode('|',array_filter($status_log));
+            $status_log[] = $v['status'] ? ShoporderController::$status_data[$v['status']] : '';
+            $status_log[] = $v['ship_status'] ? ShoporderController::$ship_status_data[$v['ship_status']] : '';
+            $status_log[] = $v['pay_status'] ? ShoporderController::$pay_status_data[$v['pay_status']] : "";
+            $log_list[$k]['status_log'] = implode('|', array_filter($status_log));
 
         }
         $shop = Shop::findOne($data['shop_id']);
-        return $this->render('detail', [
+        $param = [
             'model' => $model,
             'order_info' => $data,
-            'log_list'=>$log_list,
+            'log_list' => $log_list,
             'status_type' => ShoporderController::$status_data,
             'ship_status_type' => ShoporderController::$ship_status_data,
             'pay_status_type' => ShoporderController::$pay_status_data,
             'pay_type_data' => ShoporderController::$pay_type_data,
             'shop_name' => $shop['shop_name'],
-        ]);
+        ];
+        return $this->render('detail', $param);
     }
-
-
 }

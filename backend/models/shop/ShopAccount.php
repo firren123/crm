@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * @category  admin
+ * @category  Admin
  * @package   ShopAccount.php
  * @author    liuwei <liuwei@iyangpin.com>
  * @time      2015/5/29 0029 下午 6:07
@@ -16,15 +16,23 @@
 
 namespace backend\models\shop;
 
-
+/**
+ * Class ShopAccount
+ * @category  PHP
+ * @package   ShopAccount
+ * @author    liuwei <liuwei@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
 class ShopAccount extends ShopBase
 {
     /**
      * 数据表
-     *
      * @return string
      */
-    public static function tableName(){
+    public static function tableName()
+    {
         return '{{%shop_accounts}}';
     }
 }

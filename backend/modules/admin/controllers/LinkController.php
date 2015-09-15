@@ -2,11 +2,11 @@
 /**
  *
  * @category  CRM
- * @package   友情链接
+ * @package   LinkController
  * @author    youyong <youyong@iyangpin.com>
  * @time      2015/4/17 18:01
- * @copyright 灵韬致胜（北京）科技发展有限公司
- * @license   http://admin.com
+ * @copyright 2015 灵韬致胜（北京）科技发展有限公司
+ * @license   i500m http://admin.com
  * @link      youyong@iyangpin.com
  */
 namespace backend\modules\admin\controllers;
@@ -22,6 +22,15 @@ use backend\controllers\BaseController;
 use yii\data\Pagination;
 use yii\web\UploadedFile;
 
+/**
+ * Class LinkController
+ * @category  PHP
+ * @package   LinkController
+ * @author    youyong <youyong@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
 class LinkController extends BaseController
 {
     /**
@@ -35,7 +44,7 @@ class LinkController extends BaseController
      */
     public function actionIndex()
     {
-        $cond['status'] = [0,2];
+        $cond['status'] = [0, 2];
         $title = RequestHelper::get('title');
         $and_where = [];
         if (!empty($title)) {
@@ -47,9 +56,9 @@ class LinkController extends BaseController
         $page = RequestHelper::get('page', 1);
         $pageSize = $this->size;
         $model = new Link();
-        $list = $model->getPageList($cond, '*', $order, $page, $pageSize,$and_where);
+        $list = $model->getPageList($cond, '*', $order, $page, $pageSize, $and_where);
         $data['is_number'] = 1;
-        $total = $model->getCount($cond,$and_where);
+        $total = $model->getCount($cond, $and_where);
         $pages = new Pagination(['totalCount' => $total, 'pageSize' => $this->size]);
         return $this->render('index', ['list' => $list, 'pages' => $pages, 'title' => $title]);
     }
@@ -75,10 +84,10 @@ class LinkController extends BaseController
                 $model->addError('title', '站点名称 不能重复');
             } else {
                 if ($file) {
-                    $file_size=$file->size;//大小
-                    $file_type=$file->type;//类型
-                    $size = 1024*1024*1;
-                    if ($file_type!='image/jpeg') {
+                    $file_size = $file->size;//大小
+                    $file_type = $file->type;//类型
+                    $size = 1024 * 1024 * 1;
+                    if ($file_type != 'image/jpeg') {
                         $model->addError('images', '品牌图片 仅支持JPG/PNG格式.');
                     } elseif ($file_size > $size) {
                         $model->addError('images', '品牌图片 不能大于1m.');
@@ -86,7 +95,7 @@ class LinkController extends BaseController
                         //上传图片
                         $fdfs = new FastDFSHelper();
                         $ret = $fdfs->fdfs_upload_name_size($file->tempName, $file->name);
-                        $link['images'] = '/'.$ret['group_name'] . '/' . $ret['filename'];
+                        $link['images'] = '/' . $ret['group_name'] . '/' . $ret['filename'];
                         $link['create_time'] = time();
                         $result = $model->getInsert($link);
                     }
@@ -123,7 +132,7 @@ class LinkController extends BaseController
             // var_dump($_FILES);exit;
             if (empty($list)) {
                 $link['images'] = $image_url;
-                if(!$_FILES['images']['tmp_name']){
+                if (!$_FILES['images']['tmp_name']) {
                     $link['images'] = $item['images'];
                 }
                 $link['update_time'] = time();
@@ -139,11 +148,10 @@ class LinkController extends BaseController
         return $this->render('edit', ['model' => $model]);
     }
 
-    /*
-    *友情链接删除
-    *
-    * return int
-    */
+    /**
+     * 简介：友情链接删除
+     * @return int
+     */
     public function actionDelete()
     {
         $code = 0;
@@ -160,6 +168,10 @@ class LinkController extends BaseController
         return $code;
     }
 
+    /**
+     * 简介：
+     * @return int
+     */
     public function actionAjaxDelete()
     {
         $code = 0;
@@ -182,13 +194,13 @@ class LinkController extends BaseController
     public function actionWeb()
     {
         $type = RequestHelper::get('type');
-        $id = RequestHelper::get('id',0,'intval');
-        $model_branch=new Branch();
-        $city=$model_branch->getPageList(array('status'=>1));
-        if($id){
-            $cond = array('id'=>$id);
+        $id = RequestHelper::get('id', 0, 'intval');
+        $model_branch = new Branch();
+        $city = $model_branch->getPageList(array('status' => 1));
+        if ($id) {
+            $cond = array('id' => $id);
             $model = new ShopConfig();
-            if(1 == $type) {
+            if (1 == $type) {
                 $one_info = $model->getInfo(array('id' => $id), true, 'bc_id');
                 $all_info = $model_branch->getList(array('status' => 1));
                 foreach ($all_info as $key => $value) {
@@ -200,35 +212,35 @@ class LinkController extends BaseController
                 }
                 $model_city = new City();
                 $city_name = $model_city->city_one($one_info['bc_id']);
-                $city_arr = explode(',',$branch['city_id_arr']);
+                $city_arr = explode(',', $branch['city_id_arr']);
                 $city_name_arr = array();
-                foreach($city_arr as $value){
-                    $city_info=$model_city->city_one($value);
-                    array_push($city_name_arr,$city_info);
+                foreach ($city_arr as $value) {
+                    $city_info = $model_city->city_one($value);
+                    array_push($city_name_arr, $city_info);
                 }
                 $info = $model->getInfo($cond);
 
-                return $this->render('web',['info'=>$info,'city'=>$city,'city_name'=>$city_name,'branch'=>$branch,'city_name_arr'=>$city_name_arr,'type'=>$type]);
-            }else{
+                return $this->render('web', ['info' => $info, 'city' => $city, 'city_name' => $city_name, 'branch' => $branch, 'city_name_arr' => $city_name_arr, 'type' => $type]);
+            } else {
 
                 $info = $model->getInfo($cond);
-                return $this->render('web',['info'=>$info,'city'=>$city,'city_name'=>'','branch'=>'','city_name_arr'=>'','type'=>$type]);
+                return $this->render('web', ['info' => $info, 'city' => $city, 'city_name' => '', 'branch' => '', 'city_name_arr' => '', 'type' => $type]);
 
             }
 
-        }else{
+        } else {
             $info = array(
-                'id'=>0,
+                'id' => 0,
                 'free_shipping' => '',
                 'send_price' => '',
-                'freight'=> '',
-                'bc_id'=>0,
-                'community_num' =>'',
-                'price_limit' =>1
+                'freight' => '',
+                'bc_id' => 0,
+                'community_num' => '',
+                'price_limit' => 1
             );
-            $branch = array('id'=>0);
-            $city_name = array('id'=>0,'name'=>'请选择');
-            return $this->render('web',['info'=>$info,'city'=>$city,'city_name'=>$city_name,'branch'=>$branch,'city_name_arr'=>array('id'=>0),'type'=>$type]);
+            $branch = array('id' => 0);
+            $city_name = array('id' => 0, 'name' => '请选择');
+            return $this->render('web', ['info' => $info, 'city' => $city, 'city_name' => $city_name, 'branch' => $branch, 'city_name_arr' => array('id' => 0), 'type' => $type]);
         }
     }
 
@@ -237,44 +249,44 @@ class LinkController extends BaseController
      *
      * Author songjiankang@iyangpin.com
      *
-     * @return 无返回值
+     * @return null
      */
     public function actionAddweb()
     {
         $info = RequestHelper::post('info');
         $type = RequestHelper::post('type');
         $model = new ShopConfig();
-        if($info['id']) {
+        if ($info['id']) {
             $where_arr = array(
-                'id'=>$info['id']
+                'id' => $info['id']
             );
             $set_arr = $info;
-            $result = $model->updateOneRecord($where_arr,'',$set_arr);
-            if(1 == $result['result']){
-                if($type == 2){
+            $result = $model->updateOneRecord($where_arr, '', $set_arr);
+            if (1 == $result['result']) {
+                if ($type == 2) {
                     return $this->redirect('userweb');
-                }else{
+                } else {
                     return $this->redirect('indexweb');
                 }
 
-            }else{
-                return $this->error('修改失败','/admin/link/indexweb');
+            } else {
+                return $this->error('修改失败', '/admin/link/indexweb');
             }
-        }else{
-            if(2 == $type){
+        } else {
+            if (2 == $type) {
                 $info = array(
-                    'free_shipping'=> $info['free_shipping'],
-                    'send_price'=> $info['send_price'],
-                    'freight'=> $info['freight'],
-                    'bc_id'=> 0,
-                    'community_num'=> 0,
-                    'price_limit'=> 0,
-                    'type'=>$type
+                    'free_shipping' => $info['free_shipping'],
+                    'send_price' => $info['send_price'],
+                    'freight' => $info['freight'],
+                    'bc_id' => 0,
+                    'community_num' => 0,
+                    'price_limit' => 0,
+                    'type' => $type
                 );
                 $model->add($info);
                 return $this->redirect('userweb');
             }
-            $info['type']=$type;
+            $info['type'] = $type;
             $model->add($info);
             return $this->redirect('indexweb');
         }
@@ -293,19 +305,19 @@ class LinkController extends BaseController
         $title = RequestHelper::get('title');
         $model = new ShopConfig();
         $city_model = new City();
-        $city_info =$city_model->all_city();
-        $city_list=array();
+        $city_info = $city_model->all_city();
+        $city_list = array();
         $page = RequestHelper::get('page', 1);
         $order = 'id desc';
         $pageSize = $this->size;
-        foreach($city_info as $key =>$value){
+        foreach ($city_info as $key => $value) {
             $city_list[$value['id']] = $value['name'];
         }
-        $cond='';
+        $cond = '';
         $conf = 'TYPE = 1';
-        if(!empty($title)) {
-            $pos = (strpos($title,"'"));
-            if(false === $pos){
+        if (!empty($title)) {
+            $pos = (strpos($title, "'"));
+            if (false === $pos) {
                 $cond .= "name LIKE '%" . $title . "%' ";
                 $city_all = $city_model->getList($cond);
                 if (!empty($city_all)) {
@@ -324,44 +336,39 @@ class LinkController extends BaseController
                 } else {
                     $conf = '1=2';
                 }
-          }else{
+            } else {
                 $conf = '1=2';
             }
+        } else {
+            $conf .= ' and 1=1';
         }
-        else{
-            $conf.= ' and 1=1';
-        }
-        $info = $model->getPageList($conf,'*',$order,$page,$pageSize);
+        $info = $model->getPageList($conf, '*', $order, $page, $pageSize);
         $total = $model->getCount($conf);
         $pages = new Pagination(['totalCount' => $total, 'pageSize' => $this->size]);
-//        var_dump($city_list);
-//        var_dump($info);exit;
-        return $this->render('indexweb',['info'=>$info,'pages'=> $pages,'city_list'=>$city_list,'type'=>1]);
+        return $this->render('indexweb', ['info' => $info, 'pages' => $pages, 'city_list' => $city_list, 'type' => 1]);
     }
 
     /**
-     * ajax获取分公司对应的城市
-     *
+     * Ajax获取分公司对应的城市
      * Author songjiankang@iyangpin.com
-     *
      * @return json 返回值说明
      */
     public function actionAjax()
     {
         $id = RequestHelper::post('id');
         $model_branch = new Branch();
-        $data = $model_branch->getInfo(array('status'=>1,'id'=>$id),true,'city_id_arr');
+        $data = $model_branch->getInfo(array('status' => 1, 'id' => $id), true, 'city_id_arr');
         $city = $data['city_id_arr'];
-        $city_name_arr=array();
-        if(!empty($city)){
-            $city_arr=explode(',',$city);
-            foreach($city_arr as $value) {
+        $city_name_arr = array();
+        if (!empty($city)) {
+            $city_arr = explode(',', $city);
+            foreach ($city_arr as $value) {
                 $model_city = new City();
                 $city_name = $model_city->city_one($value);
                 $city_name_arr[$city_name['id']] = $city_name['name'];
             }
             echo json_encode($city_name_arr);
-        }else{
+        } else {
             echo json_encode($city_name_arr);
         }
     }
@@ -376,24 +383,29 @@ class LinkController extends BaseController
     public function actionDelweb()
     {
         $id = RequestHelper::post('id');
-        $arr_id = explode(',',$id);
-        foreach($arr_id as $value){
+        $arr_id = explode(',', $id);
+        foreach ($arr_id as $value) {
             $model = new ShopConfig();
-            $where_arr = array('id'=>$value);
+            $where_arr = array('id' => $value);
             $result = $model->delOneRecord($where_arr);
         }
-        echo json_encode(array('status'=>1));
+        echo json_encode(array('status' => 1));
     }
 
-    public function  actionCheck(){
+    /**
+     * 简介：
+     * @return string 返回值说明
+     */
+    public function actionCheck()
+    {
         $bc_id = RequestHelper::post('bc_id');
         $id = RequestHelper::post('id');
         $model_config = new ShopConfig();
-        $list = $model_config->check($bc_id,$id);
-        if(!empty($list)){
-            echo json_encode(array('status'=>0,'message'=>'配置已存在'));
-        }else{
-            echo json_encode(array('status'=>1));
+        $list = $model_config->check($bc_id, $id);
+        if (!empty($list)) {
+            echo json_encode(array('status' => 0, 'message' => '配置已存在'));
+        } else {
+            echo json_encode(array('status' => 1));
         }
 
     }
@@ -405,14 +417,14 @@ class LinkController extends BaseController
      *
      * @return string 返回值说明
      */
-    public function actionUserweb(){
+    public function actionUserweb()
+    {
         $cond = 'type = 2';
         $model = new ShopConfig();
         $info = $model->getPageList($cond);
         $count = $model->getCount($cond);
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->size]);
-        return $this->render('indexweb',['info'=>$info,'pages'=>$pages,'type'=>2,'city_list'=>array('0'=>'')]);
+        return $this->render('indexweb', ['info' => $info, 'pages' => $pages, 'type' => 2, 'city_list' => array('0' => '')]);
     }
-
-
 }
+

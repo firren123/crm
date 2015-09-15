@@ -22,17 +22,29 @@ use yii\base\Model;
 use common\helpers\CurlHelper;
 use yii\db\ActiveRecord;
 use linslin\yii2\curl;
+
+/**
+ * Class SensitiveKeywords
+ * @category  PHP
+ * @package   SensitiveKeywords
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
 class SensitiveKeywords extends I500Base
 {
 
-
+    /**
+     * 简介：
+     * @return string
+     */
     public static function tableName()
     {
         return '{{%sensitive_keywords}}';
     }
 
     /**
-     *
      * 简介：定义过滤规则
      * @author  lichenjun@iyangpin.com。
      * @return array
@@ -41,7 +53,7 @@ class SensitiveKeywords extends I500Base
     {
         return [
             //不可为空的字段
-            [['keyword','status'],'required'],
+            [['keyword', 'status'], 'required'],
         ];
     }
 
@@ -49,10 +61,11 @@ class SensitiveKeywords extends I500Base
     /**
      * 简介：列表
      * @author  zhoujun+lichenjun<lichenjun@iyangpin.com>
-     * @param array $data
+     * @param array $data   x
+     * @param int   $offset x
      * @return mixed
      */
-    public function show($data=array(), $offset)
+    public function show($data = array(), $offset =null)
     {
         $list = $this->find()
             ->orderBy('id asc')
@@ -66,8 +79,9 @@ class SensitiveKeywords extends I500Base
     /**
      * 简介：添加
      * @author  zhoujun+lichenjun<lichenjun@iyangpin.com>。
-     * @param array $data
-     * @return mixed
+     * @param string $keyword x
+     * @param int    $status  x
+     * @return bool
      */
     public function add($keyword, $status)
     {
@@ -76,10 +90,12 @@ class SensitiveKeywords extends I500Base
         $infoS = $this->save();
         return $infoS;
     }
+
     /**
-     * @purpose:敏感词删除
-     * @name: del
-     * @return array
+     * 简介：敏感词删除
+     * @param int $id x
+     * @return false|int
+     * @throws \Exception
      */
     public function del($id)
     {
@@ -91,20 +107,24 @@ class SensitiveKeywords extends I500Base
     /**
      * 简介：修改状态
      * @author  zhoujun+lichenjun<lichenjun@iyangpin.com>
-     * @param $data
+     * @param array $data cc
      * @return mixed
      */
     public function UpdateStatus($data)
     {
         $customer = SensitiveKeywords::findOne($data['id']);
-        $customer->status = $customer['status']==0?1:0;
+        $customer->status = $customer['status'] == 0 ? 1 : 0;
         $ret = $customer->save();
         return $ret;
     }
+
+    /**
+     * 简介：
+     * @return int|string
+     */
     public function total()
     {
         $total = $this->find()->count();
         return $total;
     }
-
 }

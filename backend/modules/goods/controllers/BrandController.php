@@ -64,7 +64,7 @@ class BrandController extends BaseController
             $brand_list = $brand_model->getList($brand_cond, 'brand_id');
             if (!empty($brand_list)) {
                 $ids_data = array();
-                foreach ($brand_list as $k=>$v) {
+                foreach ($brand_list as $k => $v) {
                     $ids_data[] = $v['brand_id'];
                 }
             }
@@ -83,7 +83,7 @@ class BrandController extends BaseController
         $list = $model->getPageList($cond, '*', $order, $page, $pageSize, $where);
         $brand_data = [];
         if ($list) {
-            foreach ($list as $k=>$v) {
+            foreach ($list as $k => $v) {
                 $brand_cond['brand_id'] = $v['id'];
                 $number = $product_model->getCount($brand_cond);
                 $brand_data[]=$v;
@@ -187,7 +187,7 @@ class BrandController extends BaseController
                 $list_brand[$v['category_id']] = $v['category_id'];//把键值变成和category_id一样的值
 
             }
-            foreach ($cate_list as $k=>$v) {
+            foreach ($cate_list as $k => $v) {
                 $data[] = $v;
                 $data[$k]['checked'] =  empty($list_brand[$v['id']]) ? '' : 1;//是否已经选中
             }

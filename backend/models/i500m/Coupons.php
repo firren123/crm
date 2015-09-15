@@ -6,7 +6,7 @@
  * 文件介绍2
  *
  * @category  PHP
- * @package   admin
+ * @package   Admin
  * @filename  Coupons.php
  * @author    lichenjun <lichenjun@iyangpin.com>
  * @copyright 2015 www.i500m.com
@@ -19,8 +19,16 @@
 
 namespace backend\models\i500m;
 
-use common\helpers\CurlHelper;
 
+/**
+ * Class Coupons
+ * @category  PHP
+ * @package   Coupons
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
 class Coupons extends I500Base
 {
     /**
@@ -35,9 +43,8 @@ class Coupons extends I500Base
 
     /**
      * 查询用户已经存在优惠券的数量
-     *
-     * @param: $user_id
-     * @param: $coupon_type_id
+     * @param int $user_id        x
+     * @param int $coupon_type_id x
      * @return array
      */
     public function getUserIdCoupons($user_id, $coupon_type_id)
@@ -51,22 +58,19 @@ class Coupons extends I500Base
 
     /**
      * 简介：
-     * @author  lichenjun@iyangpin.com。
-     * @param $type_id
+     * @param int $type_id type_id
      * @return array|mixed
      */
     public function getListCoupons($type_id)
     {
-//        if (empty($type_id)) return array();
-//        $model = new CurlHelper();
-//        $url = 'admin/coupons/getcouponlist?type_id=' . $type_id;
-//        $response = $model->get($url, 'server');
-//        return $response;
+
     }
+
     /**
-     * 优惠券列表
-     * @param $id
-     * @param $order_sn
+     * 简介：优惠券列表
+     * @param int $id       x
+     * @param int $order_sn x
+     * @param int $status   x
      * @return int
      */
     public function getCoupons($id, $order_sn, $status)
@@ -78,7 +82,7 @@ class Coupons extends I500Base
         $model_cond = "order_sn='" . $order_sn . "' and id=" . $id;
         $data = array();
         $data['order_sn'] = $status==0?'':$order_sn;
-        $data['used_time'] = $status==0?'0000-00-00 00:00:00':date('Y-m-d H:i:s',time());
+        $data['used_time'] = $status == 0 ? '0000-00-00 00:00:00' : date('Y-m-d H:i:s', time());
         $data['status'] = $status;
         $list = $this->updateInfo($data, $model_cond);
         if ($list) {

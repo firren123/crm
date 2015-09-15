@@ -44,11 +44,11 @@ class ManagetypeController extends BaseController
         $page = RequestHelper::get('page', 1);
         $pageSize = $this->size;
         $model = new ManageType();
-        $list = $model->getPageList($cond, '*', $order, $page, $pageSize,$and_where);
+        $list = $model->getPageList($cond, '*', $order, $page, $pageSize, $and_where);
         $num = 0;
         $data = array();
-        if(!empty($list)){
-            foreach($list as $key=>$value){
+        if (!empty($list)) {
+            foreach ($list as $key => $value) {
                 $data[] = $value;
                 $shop_model = new Shop();
                 $num = $shop_model->getCount(['manage_type'=>$value['id']]);
@@ -58,7 +58,7 @@ class ManagetypeController extends BaseController
         //var_dump($data);exit;
 
         $model = new ManageType();
-        $total = $model->getCount($cond,$and_where);
+        $total = $model->getCount($cond, $and_where);
         $pages = new Pagination(['totalCount' => $total, 'pageSize' => $this->size]);
         return $this->render('index', ['data' => $data, 'pages' => $pages, 'name' => $name, 'total' => $total]);
     }

@@ -20,6 +20,7 @@ use common\helpers\RequestHelper;
 use backend\controllers\BaseController;
 use backend\models\shop\ShopVerify;
 use backend\models\i500m\Log;
+
 //use backend\models\i500m\City;
 //use backend\models\i500m\District;
 //use backend\models\i500m\ManageType;
@@ -325,9 +326,9 @@ class ShopverifyController extends BaseController
                     $model_shopcommunity->resetCommunity($shop_id);
                 }
                 //日志
-                $account_time = date("Y-m-d H:i:s",time());
+                $account_time = date("Y-m-d H:i:s", time());
                 $log = new Log();
-                $log_info = '管理员 '.\Yii::$app->user->identity->username .'在【商家资料修改审核】中审核通过了商家id为'.$shop_id.'的商家'.$account_time;
+                $log_info = '管理员 ' . \Yii::$app->user->identity->username . '在【商家资料修改审核】中审核通过了商家id为' . $shop_id . '的商家' . $account_time;
                 $log->recordLog($log_info, 2);
 
                 echo "1";
@@ -386,9 +387,9 @@ class ShopverifyController extends BaseController
         if (1 == $arr_result['result']) {
 
             //日志
-            $account_time = date("Y-m-d H:i:s",time());
+            $account_time = date("Y-m-d H:i:s", time());
             $log = new Log();
-            $log_info = '管理员 '.\Yii::$app->user->identity->username .'在【商家资料修改审核】中驳回了商家id为'.$shop_id.'的商家审核'.$account_time;
+            $log_info = '管理员 ' . \Yii::$app->user->identity->username . '在【商家资料修改审核】中驳回了商家id为' . $shop_id . '的商家审核' . $account_time;
             $log->recordLog($log_info, 2);
 
             echo "1";

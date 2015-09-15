@@ -402,8 +402,6 @@ class ShopController extends BaseController
         }
 
 
-
-
         //筛选条件界面用省市区 start
         //  获取全部省  //z20150525m 改为获取已开通的省
         //$arr_where = array('status' => 1);
@@ -495,8 +493,6 @@ class ShopController extends BaseController
         );
         //echo "<pre>";print_r($arr_select_manage_type);echo "</pre>";exit;
         //获取店铺类型（经营种类） end
-
-
 
 
         //状态(0、删除 1、禁用 2、正常)
@@ -761,7 +757,7 @@ class ShopController extends BaseController
         $arr_cur_district_list = array();
         $city_id = isset($arr_shop_info['city']) ? intval($arr_shop_info['city']) : 0;
         if ($city_id > 0) {
-            $arr_where = array('city_id'=> $city_id);
+            $arr_where = array('city_id' => $city_id);
             $str_field = 'id,name';
             $arr_order = array('sort' => SORT_ASC);
             $arr_cur_district_list = $model_district->getList2(
@@ -776,7 +772,7 @@ class ShopController extends BaseController
         //echo "<pre>";print_r($arr_cur_district_list);echo "</pre>";exit;
 
         //全部店铺类型列表
-        $arr_where = array('status'=> 2);
+        $arr_where = array('status' => 2);
         $str_field = 'id,name';
         $arr_order = array('sort' => SORT_ASC);
         $arr_all_manage_type_list = $model_managetype->getList2(
@@ -948,8 +944,7 @@ class ShopController extends BaseController
         //$model_shop = new Shop();
 
 
-
-        $arr_where = array('status'=> 2);
+        $arr_where = array('status' => 2);
         $str_field = 'id,name';
         $arr_order = array('sort' => SORT_ASC);
         $arr_all_manage_type_list = $model_managetype->getList2(
@@ -962,7 +957,7 @@ class ShopController extends BaseController
         );
         //echo "<pre>";print_r($arr_all_manage_type_list);echo "</pre>";exit;
 
-        $arr_where = array('status'=> 1);
+        $arr_where = array('status' => 1);
         $str_field = 'id,name,province_id';
         $arr_order = array('sort' => SORT_ASC);
         $arr_all_branch_list = $model_crmbranch->getList2(
@@ -1192,8 +1187,6 @@ class ShopController extends BaseController
             $str_field
         );
         //echo "<pre>";print_r($arr_cur_business);echo "</pre>";exit;
-
-
 
 
         //状态(0、删除 1、禁用 2、正常) key有序
@@ -1493,7 +1486,6 @@ class ShopController extends BaseController
         }
 
 
-
         if ($position_x != '') {
             $arr_set['position_x'] = $position_x;
         }
@@ -1682,7 +1674,6 @@ class ShopController extends BaseController
             echo json_encode(array('code' => '400', 'data' => array(), 'msg' => '操作失败:无权限添加此市数据'));
             return;
         }
-
 
 
         $arr_set = array();
@@ -1910,19 +1901,19 @@ class ShopController extends BaseController
      *
      * Author zhengyu@iyangpin.com
      *
-     * @param int    $type 类型
-     * @param string $msg  数据
+     * @param int $type 类型
+     * @param string $msg 数据
      *
      * @return void
      */
     private function _outputUploadResult($type = 0, $msg = '')
     {
         $str_return = "<script"
-            ." type='text/javascript'>"
+            . " type='text/javascript'>"
             . "parent.upload_return(" . $type . ",'" . $msg . "');"
             . '</script>';
         //return $str_return;
-        echo  $str_return;
+        echo $str_return;
         return;
     }
 
@@ -2011,7 +2002,6 @@ class ShopController extends BaseController
 
         return;
     }
-
 
 
     /**
@@ -2219,7 +2209,7 @@ class ShopController extends BaseController
             $arr_district_list = array();
             $city_id = isset($arr_city_list[0]['id']) ? intval($arr_city_list[0]['id']) : 0;
             if ($city_id > 0) {
-                $arr_where = array('city_id'=> $city_id);
+                $arr_where = array('city_id' => $city_id);
                 $str_field = 'id,name';
                 $arr_order = array('sort' => SORT_ASC);
                 $arr_district_list = $model_district->getList2(
@@ -2301,7 +2291,7 @@ class ShopController extends BaseController
             $arr_district_list = array();
             $city_id = isset($arr_city_list[0]['id']) ? intval($arr_city_list[0]['id']) : 0;
             if ($city_id > 0) {
-                $arr_where = array('city_id'=> $city_id);
+                $arr_where = array('city_id' => $city_id);
                 $str_field = 'id,name';
                 $arr_order = array('sort' => SORT_ASC);
                 $arr_district_list = $model_district->getList2(
@@ -2363,7 +2353,6 @@ class ShopController extends BaseController
         echo json_encode($arr_return);
         return;
     }
-
 
 
 }

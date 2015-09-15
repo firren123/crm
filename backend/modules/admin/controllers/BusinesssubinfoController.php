@@ -124,5 +124,4 @@ class BusinesssubinfoController extends BaseController
         return $this->render('del', []);
 
     }
-
 }

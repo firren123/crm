@@ -185,7 +185,12 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
-    public static function getDB(){
+
+    /**
+     * Removes password reset token
+     */
+    public static function getDB()
+    {
         return \Yii::$app->db_500m;
     }
 }

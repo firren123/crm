@@ -16,11 +16,19 @@
 
 namespace backend\models\i500m;
 
-
-class ProductSku extends I500Base{
+/**
+ * Class ProductSku
+ * @category  PHP
+ * @package   ProductSku
+ * @author    liuwei <liuwei@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class ProductSku extends I500Base
+{
     /**
      * 数据库
-     *
      * @return string
      */
     public static function tableName()

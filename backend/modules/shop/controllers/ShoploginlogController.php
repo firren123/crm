@@ -13,6 +13,7 @@
  * @link      liuwei@iyangpin.com
  */
 namespace backend\modules\shop\controllers;
+
 use backend\controllers\BaseController;
 use backend\models\shop\ShopLoginLog;
 use common\helpers\RequestHelper;
@@ -30,6 +31,7 @@ use yii\data\Pagination;
 class ShoploginlogController extends BaseController
 {
     public $size = 20;
+
     /**
      * 列表页
      *
@@ -48,7 +50,7 @@ class ShoploginlogController extends BaseController
         $cond = ['!=', 'shop_id', 0];
         $data = $model->getPageList($cond, '*', 'id desc', $page, $size, $and_where);
         $total = $model->getCount($cond, $and_where);
-        $pages = new Pagination(['totalCount' =>$total, 'pageSize' => $size]);
+        $pages = new Pagination(['totalCount' => $total, 'pageSize' => $size]);
         $param = [
             'data' => $data,
             'total' => $total,

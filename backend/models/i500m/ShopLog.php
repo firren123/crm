@@ -14,16 +14,32 @@
  * @link      renyineng@iyangpin.com
  */
 namespace backend\models\i500m;
+
 use common\helpers\CommonHelper;
 
+/**
+ * Class ShopLog
+ * @category  PHP
+ * @package   ShopLog
+ * @author    renyineng <renyineng@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
 class ShopLog extends I500Base
 {
-
-    public static function getDB(){
+    /**
+     * 简介：
+     * @return \yii\db\Connection
+     */
+    public static function getDB()
+    {
         return \Yii::$app->db;
     }
+
     /**
-     * @inheritdoc
+     * 简介：
+     * @return string
      */
     public static function tableName()
     {
@@ -31,27 +47,31 @@ class ShopLog extends I500Base
     }
 
     /**
-     * @inheritdoc
+     * 简介：
+     * @return string
      */
     public function rules()
     {
         return [
-            [['id', 'log_type','shop_id'], 'integer'],
+            [['id', 'log_type', 'shop_id'], 'integer'],
             [['id', 'log_type'], 'required'],
             ['log_time', 'default', 'value' => date("Y-m-d H:i:s", time())],
             [['log_info', 'os', 'browser', 'ip_address'], 'string', 'max' => 255]
         ];
     }
+
     /**
      * 记录日志
      * @param string $info     日志内容
      * @param int    $log_type 日志类型
      * @return bool|mixed
      */
-    public function recordLog($info = '', $log_type=1)
+    public function recordLog($info = '', $log_type = 1)
     {
         $admin_id = \Yii::$app->user->identity->id;
-        if (empty($admin_id)) return false;
+        if (empty($admin_id)) {
+            return false;
+        }
         $model = clone $this;
         $model->admin_id = $admin_id;
         $model->ip_address = CommonHelper::getIp();
@@ -63,21 +83,33 @@ class ShopLog extends I500Base
         return $re;
     }
 
-    public function total($where=null)
+    /**
+     * 简介：
+     * @param null $where where
+     * @return int|string
+     */
+    public function total($where = null)
     {
-        if($where){
+        if ($where) {
             $total = $this->find()->where($where)->count();
             return $total;
-        }else{
+        } else {
             $total = $this->find()->count();
             return $total;
         }
 
     }
 
-    public function show($data=array(),$offset,$where=null)
+    /**
+     * 简介：
+     * @param array $data   x
+     * @param null  $offset x
+     * @param null  $where  x
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function show($data = array(), $offset =null, $where = null)
     {
-        if($where){
+        if ($where) {
             $list = $this->find()
                 ->where($where)
                 ->offset($offset)
@@ -86,7 +118,7 @@ class ShopLog extends I500Base
                 ->asArray()
                 ->all();
             return $list;
-        }else{
+        } else {
             $list = $this->find()
                 ->offset($offset)
                 ->limit($data['size'])
@@ -96,5 +128,4 @@ class ShopLog extends I500Base
             return $list;
         }
     }
-
 }

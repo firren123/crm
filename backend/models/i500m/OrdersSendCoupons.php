@@ -28,7 +28,6 @@ class OrdersSendCoupons extends I500Base
 {
     /**
      * 数据表连接
-     *
      * @return string
      */
     public static function tableName()

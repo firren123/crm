@@ -31,7 +31,6 @@ class Category extends I500Base
 {
     /**
      * 数据库
-     *
      * @return string
      */
     public static function tableName()
@@ -41,7 +40,6 @@ class Category extends I500Base
 
     /**
      * 规则
-     *
      * @return array
      */
     public function rules()
@@ -55,8 +53,7 @@ class Category extends I500Base
     }
     /**
      * 删除商品分类
-     *
-     * @param: int $id
+     * @param int $id id
      * @return int
      * @throws \Exception
      */
@@ -76,8 +73,7 @@ class Category extends I500Base
     }
     /**
      * 批量删除
-     *
-     * @param: string $ids
+     * @param string $ids ids
      * @return int
      */
     public function getBatchDelete($ids)
@@ -85,22 +81,23 @@ class Category extends I500Base
         if (empty($ids)) {
             return 0;
         } else {
-            $result = $this->deleteAll(" id in (".$ids.")");
-            if ($result==true) {
+            $result = $this->deleteAll(" id in (" . $ids . ")");
+            if ($result == true) {
                 return 200;
             } else {
                 return 0;
             }
         }
     }
+
     /**
-     * 分类名称是否存在
-     *
-     * @param: $name
-     * @param: NULL $id
+     * 简介：
+     * @author  lichenjun@iyangpin.com。
+     * @param string $name x
+     * @param null   $id   x
      * @return array|null|ActiveRecord
      */
-    public function getDetailsByName($name, $id=NULL)
+    public function getDetailsByName($name, $id = null)
     {
         $list = array();
         if (!empty($name)) {
@@ -114,15 +111,14 @@ class Category extends I500Base
     }
     /**
      * 添加
-     *
-     * @param: array $data
+     * @param array $data x
      * @return bool
      */
     public function getInsert($data = array())
     {
         $re = false;
         if ($data) {
-            foreach ($data as $k=>$v) {
+            foreach ($data as $k => $v) {
                 $this->$k = $v;
             }
             $result = $this->save();
@@ -133,6 +129,11 @@ class Category extends I500Base
         return $re;
     }
 
+    /**
+     * 简介：
+     * @param int $cate_first_id x
+     * @return array|null|ActiveRecord
+     */
     public function cate_info($cate_first_id)
     {
         $list = $this->find()->select('name')->where("id=$cate_first_id")->asArray()->one();

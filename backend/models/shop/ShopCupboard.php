@@ -17,17 +17,43 @@
 
 namespace backend\models\shop;
 
-class ShopCupboard extends ShopBase{
-    public static function tableName(){
+/**
+ * Class ShopCupboard
+ * @category  PHP
+ * @package   ShopCupboard
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class ShopCupboard extends ShopBase
+{
+    /**
+     * 简介：
+     * @return string
+     */
+    public static function tableName()
+    {
         return '{{%shop_cupboard}}';
     }
+
+    /**
+     * 简介：
+     * @return array
+     */
     public function attributeLabels()
     {
         return array(
             'status' => '状态',
         );
     }
-    public function rules(){
+
+    /**
+     * 简介：
+     * @return array
+     */
+    public function rules()
+    {
         return [
             //不可为空的字段
             //[['remark'],'required'],
@@ -35,16 +61,21 @@ class ShopCupboard extends ShopBase{
         ];
     }
 
-    public function getlist($where=null)
+    /**
+     * 简介：
+     * @param null $where where
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function getlist($where = null)
     {
-        if($where){
+        if ($where) {
             $list = $this->find()
                 ->where($where)
                 ->orderBy('id desc')
                 ->asArray()
                 ->all();
             return $list;
-        }else{
+        } else {
             $list = $this->find()
                 ->orderBy('id desc')
                 ->asArray()

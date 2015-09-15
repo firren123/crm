@@ -8,19 +8,27 @@
  * @category  Admin
  * @package   Storage
  * @author    liubaocheng <liubaocheng@iyangpin.com>
- * @time      15/5/26 下午2:33 
- * @copyright 灵韬致胜（北京）科技发展有限公司
- * @license   http://www.i500m.com
+ * @time      15/5/26 下午2:33
+ * @copyright 2015 灵韬致胜（北京）科技发展有限公司
+ * @license   i500m http://www.i500m.com
  * @link      liubaocheng@iyangpin.com
  */
 
 namespace backend\models\i500m;
 
-
-class CrmPurchaseStorage extends I500Base{
+/**
+ * Class CrmPurchaseStorage
+ * @category  PHP
+ * @package   CrmPurchaseStorage
+ * @author    liubaocheng <liubaocheng@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class CrmPurchaseStorage extends I500Base
+{
     /**
      * 表名
-     *
      * @return string
      */
     public static function tableName()
@@ -43,7 +51,6 @@ class CrmPurchaseStorage extends I500Base{
         );
     }
     /**
-     *
      * 简介：定义过滤规则
      * @author  liubaocheng@iyangpin.com。
      * @return array
@@ -51,8 +58,6 @@ class CrmPurchaseStorage extends I500Base{
     public function rules()
     {
         return [
-            //不可为空的字段
-//            [['name','title','status'],'required'],
         ];
     }
 

@@ -18,37 +18,67 @@
 
 namespace backend\models\shop;
 
-use backend\models\i500m\OrderDetail;
-use backend\models\i500m\OrderLog;
-use backend\models\i500m\Product;
-use common\helpers\CurlHelper;
 use linslin\yii2\curl;
-class CupboardAgreement extends ShopBase{
-    public static function tableName(){
+
+/**
+ * Class CupboardAgreement
+ * @category  PHP
+ * @package   CupboardAgreement
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class CupboardAgreement extends ShopBase
+{
+    /**
+     * 简介：
+     * @return string
+     */
+    public static function tableName()
+    {
         return '{{%cupboard_agreement}}';
     }
+
+    /**
+     * 简介：
+     * @return array
+     */
     public function attributeLabels()
     {
         return array(
             'status' => '协议审核状态',
         );
     }
-    public function rules(){
+
+    /**
+     * 简介：
+     * @return array
+     */
+    public function rules()
+    {
         return [
             //不可为空的字段
-            [['cupboard_period'],'required'],
-            [['description'],'required'],
-            ['status','default','value'=>0] ,
+            [['cupboard_period'], 'required'],
+            [['description'], 'required'],
+            ['status', 'default', 'value' => 0],
 
         ];
     }
 
-    public function getInfo($cond = array(), $as_array = true){
+    /**
+     * 简介：
+     * @param array $cond     条件
+     * @param bool  $as_array 是否数组
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public function getInfo($cond = array(), $as_array = true)
+    {
         $info = array();
-        if($cond){
-            if($as_array){
+        if ($cond) {
+            if ($as_array) {
                 $info = $this->find()->where($cond)->asArray()->one();
-            }else{
+            } else {
                 $info = $this->find()->where($cond)->one();
             }
         }
@@ -56,14 +86,20 @@ class CupboardAgreement extends ShopBase{
 
     }
 
-    public function updateInfo($status,$id)
+    /**
+     * 简介：
+     * @param array $status x
+     * @param array $id     x
+     * @return bool
+     */
+    public function updateInfo($status, $id)
     {
-        if($id) {
+        if ($id) {
             $coupon = CupboardAgreement::findOne($id);
             $coupon->status = $status;
             $coupon->update_time = date("Y-m-d H:i:s");
             return $coupon->save();
-        }else{
+        } else {
             return false;
         }
     }

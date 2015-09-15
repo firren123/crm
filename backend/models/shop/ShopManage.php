@@ -15,6 +15,7 @@
  * @link      http://www.i500m.com/
  */
 namespace backend\models\shop;
+
 /**
  * ShopManage - model
  *
@@ -35,6 +36,7 @@ class ShopManage extends ShopBase
     {
         return '{{%shop_manage}}';//经营信息表
     }
+
     /**
      * 规则
      * @return array
@@ -45,6 +47,7 @@ class ShopManage extends ShopBase
             //不可为空的字段
         ];
     }
+
     /**
      * 简介：所有数据
      * @author  weitonghe@iyangpin.com
@@ -52,11 +55,12 @@ class ShopManage extends ShopBase
      */
     public function getAllData()
     {
-        $all=$this->find()
+        $all = $this->find()
             ->asArray()
             ->all();
         return $all;
     }
+
     /**
      * 简介：添加商家合同经营基本信息
      *
@@ -67,7 +71,7 @@ class ShopManage extends ShopBase
     public function insertOneData($msg)
     {
         $ShopManage_model = new ShopManage();
-        foreach ($msg as $k=>$v) {
+        foreach ($msg as $k => $v) {
             $ShopManage_model->$k = $v;
         }
         $result = $ShopManage_model->save();

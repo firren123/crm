@@ -46,9 +46,20 @@ class News extends I500Base
      * @param int    $page      当前页数
      * @param int    $size      每页显示条数
      * @param array  $and_where 特殊条件
+     *
      * @return array
      */
-    public function getNewsList($where=[],$field='*',$order='id desc',$page=1,$size=10,$and_where)
+    /**
+     * 简介：
+     * @param array  $where     条件
+     * @param string $field     字段
+     * @param string $order     排序
+     * @param int    $page      当前页数
+     * @param int    $size      每页显示条数
+     * @param array  $and_where 特殊条件
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function getNewsList($where = [], $field = '*', $order = 'id desc', $page = 1, $size = 10, $and_where = null)
     {
         $rs = [];
         if (!empty($where)) {

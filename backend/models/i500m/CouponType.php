@@ -18,19 +18,37 @@
 
 
 namespace backend\models\i500m;
+
 use backend\models\i500m\I500Base;
 use Yii;
 use yii\base\Model;
 use common\helpers\CurlHelper;
 use yii\db\ActiveRecord;
 
-
+/**
+ * Class CouponType
+ * @category  PHP
+ * @package   CouponType
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
 class CouponType extends I500Base
 {
+    /**
+     * 简介：
+     * @return string
+     */
     public static function tableName()
     {
         return '{{%coupons_type}}';
     }
+
+    /**
+     * 简介：
+     * @return array
+     */
     public function attributeLabels()
     {
         return array(
@@ -59,22 +77,25 @@ class CouponType extends I500Base
 
         );
     }
-    public function rules(){
+
+    /**
+     * 简介：
+     * @return array
+     */
+    public function rules()
+    {
         return [
             //不可为空的字段
-          [['type_name','send_type','par_value','min_amount','consumer_points','start_time','expired_time','used_status','number','limit_num'],'required'],
+            [['type_name', 'send_type', 'par_value', 'min_amount', 'consumer_points', 'start_time', 'expired_time', 'used_status', 'number', 'limit_num'], 'required'],
             //去掉首尾空格
-//          [['shop_id', 'cate_id','product_id', 'brand_id'], 'trim'],
-//            //
-//            [['start_time', 'expired_time'], 'date'],
-//            //设置默认值
-//            ['add_time', 'default', 'value' => date('Y-m-d H:i:s',time())],
-//            //integer 是否是整数
-//            [['consumer_points', 'limit_num','par_value','number','min_amount'], 'number'],
         ];
     }
 
-
+    /**
+     * 简介：
+     * @param int $type_id type_id
+     * @return array|null|ActiveRecord
+     */
     public function getTypeArr($type_id)
     {
         $arr = $this->find()
@@ -86,12 +107,12 @@ class CouponType extends I500Base
     }
 
     /**
-     * @purpose:优惠券分类列表
-     * @name: getList
-     * @param array $data
-     * @return mixed
+     * 简介：优惠券分类列表
+     * @param array $data   x
+     * @param int   $offset x
+     * @return array|\yii\db\ActiveRecord[]
      */
-    public function show_coupon($data = array(),$offset)
+    public function show_coupon($data = array(), $offset)
     {
         $list = $this->find()
             ->offset($offset)
@@ -102,27 +123,36 @@ class CouponType extends I500Base
         return $list;
     }
     /**
-     * @purpose:优惠券分类详情
-     * @name: getDetails
-     * @param $id
+     * 优惠券分类详情
+     * name getDetails
+     * @param int $id x
      * @return mixed
      */
-    public function getDetails($id){
-        $list= $this->find()->asArray()->where('type_id='.$id)->one();
+    public function getDetails($id)
+    {
+        $list = $this->find()->asArray()->where('type_id=' . $id)->one();
         return $list;
     }
-    public function getUpdateStatus($id,$status){
-        $result ='';
+
+    /**
+     * 简介：
+     * @author  lichenjun@iyangpin.com。
+     * @param int $id     id
+     * @param int $status id
+     * @return bool|string
+     */
+    public function getUpdateStatus($id, $status)
+    {
+        $result = '';
         $customer = $this->findOne($id);
         $customer->status = $status;
-        $result=$customer->save();
+        $result = $customer->save();
         return $result;
     }
 
     /**
-     * @purpose:添加
-     * @name: add
-     * @param $data
+     * 添加
+     * @param array $data data
      * @return mixed
      */
     public function add($data)
@@ -133,19 +163,29 @@ class CouponType extends I500Base
         return $response;
     }
 
+    /**
+     * 简介：
+     * @return int|string
+     */
     public function total()
     {
         $total = $this->find()->count();
         return $total;
     }
-    public function getDetail($id){
+
+    /**
+     * 简介：
+     * @param int $id x
+     * @return array|null|ActiveRecord
+     */
+    public function getDetail($id)
+    {
         $list= $this->find()->asArray()->where('type_id='.$id)->one();
         return $list;
     }
     /**
      * 添加
-     *
-     * @param: array $data
+     * @param array $data data
      * @return bool
      */
     public function getInsert($data = array())
@@ -153,7 +193,7 @@ class CouponType extends I500Base
         $re = 0;
         if ($data) {
             $model = clone $this;
-            foreach ($data as $k=>$v) {
+            foreach ($data as $k => $v) {
                 $model->$k = $v;
             }
             $result = $model->save();
@@ -163,6 +203,4 @@ class CouponType extends I500Base
         }
         return $re;
     }
-
-
 }

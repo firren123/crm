@@ -15,6 +15,7 @@
  * @link      http://www.i500m.com/
  */
 namespace backend\models\shop;
+
 /**
  * ShopBank - model
  *
@@ -35,6 +36,7 @@ class ShopBank extends ShopBase
     {
         return '{{%shop_bank}}';//开户银行信息表
     }
+
     /**
      * 规则
      * @return array
@@ -45,18 +47,20 @@ class ShopBank extends ShopBase
             //不可为空的字段
         ];
     }
+
     /**
      * 查询一条数据  显示字段值
      * @return array|\yii\db\ActiveRecord[]
      */
     public function bank()
     {
-        $all=$this->find()
+        $all = $this->find()
             ->select("id,name")
             ->asArray()
             ->all();
         return $all;
     }
+
     /**
      * 查询一条数据
      *
@@ -66,7 +70,7 @@ class ShopBank extends ShopBase
      */
     public function getOneBank($where)
     {
-        $all=$this->find()
+        $all = $this->find()
             ->select("id,name")
             ->where($where)
             ->asArray()

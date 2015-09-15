@@ -19,14 +19,23 @@
 
 namespace backend\models\i500m;
 
-
-class Menu extends I500Base{
+/**
+ * Class Menu
+ * @category  PHP
+ * @package   Menu
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class Menu extends I500Base
+{
     /**
      * 简介：数据库表名
-     * @author  lichenjun@iyangpin.com。
      * @return string
      */
-    public static function tableName(){
+    public static function tableName()
+    {
         return '{{%crm_menu}}';
     }
     /**
@@ -47,9 +56,7 @@ class Menu extends I500Base{
         );
     }
     /**
-     *
      * 简介：定义过滤规则
-     * @author  lichenjun@iyangpin.com。
      * @return array
      */
     public function rules()
@@ -60,7 +67,11 @@ class Menu extends I500Base{
         ];
     }
 
-
+    /**
+     * 简介：
+     * @param int $role_id x
+     * @return array
+     */
     public function getMenuList($role_id = 0)
     {
         $list = [];

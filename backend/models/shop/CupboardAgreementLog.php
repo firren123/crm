@@ -21,26 +21,58 @@ namespace backend\models\shop;
 
 use common\helpers\CommonHelper;
 
-class CupboardAgreementLog extends ShopBase{
-    public static function tableName(){
+/**
+ * Class CupboardAgreementLog
+ * @category  PHP
+ * @package   CupboardAgreementLog
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class CupboardAgreementLog extends ShopBase
+{
+    /**
+     * 简介：
+     * @return string
+     */
+    public static function tableName()
+    {
         return '{{%cupboard_agreement_log}}';
     }
+
+    /**
+     * 简介：
+     * @return array
+     */
     public function attributeLabels()
     {
-        return array(
-        );
+        return array();
     }
-    public function rules(){
+
+    /**
+     * 简介：
+     * @return array
+     */
+    public function rules()
+    {
         return [
         ];
     }
 
-    public function getInfo($cond = array(), $as_array = true){
+    /**
+     * 简介：
+     * @param array $cond     x
+     * @param bool  $as_array x
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public function getInfo($cond = array(), $as_array = true)
+    {
         $info = array();
-        if($cond){
-            if($as_array){
+        if ($cond) {
+            if ($as_array) {
                 $info = $this->find()->where($cond)->asArray()->one();
-            }else{
+            } else {
                 $info = $this->find()->where($cond)->one();
             }
         }
@@ -51,16 +83,18 @@ class CupboardAgreementLog extends ShopBase{
 
     /**
      * 记录日志
-     * @param array $data     日志内容
+     * @param array $data 日志内容
      * @return bool|mixed
      */
     public function recordLog($data = [])
     {
         $admin_id = \Yii::$app->user->id;
-        if (empty($admin_id)) return false;
+        if (empty($admin_id)) {
+            return false;
+        }
         $re = false;
         if ($data) {
-            foreach ($data as $k=>$v) {
+            foreach ($data as $k => $v) {
                 $this->$k = $v;
             }
             $this->create_time = date('Y-m-d H:i:s');
@@ -70,6 +104,4 @@ class CupboardAgreementLog extends ShopBase{
         }
         return $re;
     }
-
-
 }

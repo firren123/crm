@@ -13,6 +13,7 @@
  * @link      liuwei@iyangpin.com
  */
 namespace backend\modules\shop\controllers;
+
 use backend\controllers\BaseController;
 use backend\models\i500m\Branch;
 use backend\models\i500m\City;
@@ -36,9 +37,10 @@ use yii\helpers\ArrayHelper;
 class RebateController extends BaseController
 {
     public $config = [
-        '500m'=>['amount'=>30, 'reduce'=>5, 'cat_id'=>3043],
-        'other'=>['amount'=>30, 'reduce'=>1],
+        '500m' => ['amount' => 30, 'reduce' => 5, 'cat_id' => 3043],
+        'other' => ['amount' => 30, 'reduce' => 1],
     ];
+
     /**
      * 商家返利列表
      *
@@ -53,7 +55,7 @@ class RebateController extends BaseController
         $branch_list = $branch_model->getList($branch_cond);
         $branch_data = [];
         if ($branch_list) {
-            foreach ($branch_list as $k=>$v) {
+            foreach ($branch_list as $k => $v) {
                 $branch_data[$v['id']] = $v;
             }
         }
@@ -64,11 +66,11 @@ class RebateController extends BaseController
         $city_list = $city_model->getList($city_cond, 'id,name');
         $city_data = [];
         if ($city_list) {
-            foreach ($city_list as $k=>$v) {
+            foreach ($city_list as $k => $v) {
                 $city_data[$v['id']] = $v;
             }
         }
-        $cond['status'] = [0,1];
+        $cond['status'] = [0, 1];
         //搜索
         $search = RequestHelper::get('Search');
         if (!empty($search['branch_id'])) {
@@ -76,7 +78,7 @@ class RebateController extends BaseController
             $data['id'] = $search['branch_id'];
             $city_id = $branch_model->getInfo($data, true, 'city_id_arr');
             $ids = explode(',', $city_id['city_id_arr']);
-            $city_item = $city_model->getList(array('id'=>$ids));
+            $city_item = $city_model->getList(array('id' => $ids));
 
         }
         if (!empty($search['city_id'])) {
@@ -100,20 +102,20 @@ class RebateController extends BaseController
         //返现列表结合 分公司和城市
         $data = [];
         if ($list) {
-            foreach ($list as $key=>$value) {
+            foreach ($list as $key => $value) {
                 $data[] = $value;
                 $data[$key]['branch_name'] = empty($branch_data[$value['branch_id']]) ? '--' : $branch_data[$value['branch_id']]['name'];
                 $data[$key]['city_name'] = empty($city_data[$value['city_id']]) ? '--' : $city_data[$value['city_id']]['name'];
-                if ($value['status']==1) {
+                if ($value['status'] == 1) {
                     $settled_total += $value['money'];
                 }
-                if ($value['status']==2) {
+                if ($value['status'] == 2) {
                     $unsettled_total += $value['money'];
                 }
             }
         }
         $total = $model->getCount($cond);
-        $pages = new Pagination(['totalCount' =>$total, 'pageSize' => $size]);
+        $pages = new Pagination(['totalCount' => $total, 'pageSize' => $size]);
         $param = [
             'list' => $data,
             'total' => $total,
@@ -137,8 +139,8 @@ class RebateController extends BaseController
         $total = 0;
         $treasure_total = 0;
         $other_total = 0;
-        $total_treasure =0;
-        $total_other =0;
+        $total_treasure = 0;
+        $total_other = 0;
         $id = RequestHelper::get('id');
         $model = new ShopRebate();
         $order_model = new UserOrder();
@@ -151,7 +153,7 @@ class RebateController extends BaseController
             $order_cond['shop_id'] = $item['shop_id'];
             $start_time = $item['create_time'];
             $end_time = date('Y-m-d', strtotime('+1 day', strtotime($item['create_time'])));
-            $map = ['status'=>1, 'ship_status'=>5,'shop_id'=>$item['shop_id']];
+            $map = ['status' => 1, 'ship_status' => 5, 'shop_id' => $item['shop_id']];
             $order_data = $order_model->find()->select('shop_id,order_sn')->where($map)
                 ->andWhere(['!=', 'pay_site_id', 1])
                 ->andWhere(['>=', 'ship_status_time', $start_time])
@@ -173,13 +175,13 @@ class RebateController extends BaseController
                     $product_ids[] = $v['p_id'];//获取商品id数组
                 }
                 $product = new Product();
-                $p_list = $product->getList(['id'=>$product_ids], 'id,cate_first_id');
+                $p_list = $product->getList(['id' => $product_ids], 'id,cate_first_id');
                 $p_list = ArrayHelper::index($p_list, 'id');
-                foreach ($list as $key=>$value) {
+                foreach ($list as $key => $value) {
                     $data[] = $value;
-                    $data[$key]['attribute_str'] =  empty($value['attribute_str']) ? '--' : implode(' ', explode('_', $value['attribute_str']));;
+                    $data[$key]['attribute_str'] = empty($value['attribute_str']) ? '--' : implode(' ', explode('_', $value['attribute_str']));;
                     $cat_id = $p_list[$value['p_id']]['cate_first_id'];
-                    if ($cat_id == $config['500m']['cat_id'] ) { //是珍品
+                    if ($cat_id == $config['500m']['cat_id']) { //是珍品
                         $data[$key]['cate_name'] = '珍品';
                         $treasure_total += $value['total'];
                     } else {
@@ -187,17 +189,17 @@ class RebateController extends BaseController
                         $other_total += $value['total'];
                     }
                 }
-                if ($treasure_total>0) {
-                    $total +=floor($treasure_total/$config['500m']['amount']) * $config['500m']['reduce'];
-                    $total_treasure +=floor($treasure_total/$config['500m']['amount']) * $config['500m']['reduce'];
+                if ($treasure_total > 0) {
+                    $total += floor($treasure_total / $config['500m']['amount']) * $config['500m']['reduce'];
+                    $total_treasure += floor($treasure_total / $config['500m']['amount']) * $config['500m']['reduce'];
                 }
-                if ($other_total>0) {
-                    $total +=floor($other_total/$config['other']['amount']) * $config['other']['reduce'];
-                    $total_other +=floor($other_total/$config['other']['amount']) * $config['other']['reduce'];
+                if ($other_total > 0) {
+                    $total += floor($other_total / $config['other']['amount']) * $config['other']['reduce'];
+                    $total_other += floor($other_total / $config['other']['amount']) * $config['other']['reduce'];
                 }
             }
         }
-        return $this->render('detail', ['list'=>$data, 'treasure_total'=>$total_treasure,'other_total'=>$total_other,'total'=>$total]);
+        return $this->render('detail', ['list' => $data, 'treasure_total' => $total_treasure, 'other_total' => $total_other, 'total' => $total]);
     }
 
     /**
@@ -214,7 +216,7 @@ class RebateController extends BaseController
         $city_id = $branch_model->getInfo($data, true, 'city_id_arr');
         $ids = explode(',', $city_id['city_id_arr']);
         $city = new City();
-        $data = $city->getList(array('id'=>$ids));
+        $data = $city->getList(array('id' => $ids));
         echo json_encode($data);
     }
 

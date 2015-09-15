@@ -102,8 +102,14 @@ class BusinessinfoController extends BaseController
         if ($list) {
             foreach ($list as $v) {
 
-                $shop_where = ['and', ['=','status', 2], ['=', 'business_status', 1],['=', 'workflow', 4], ['=', 'business_id', $v['id']], ['>=', 'create_time', $date_m], ['<=', 'create_time', time()]];
-
+                $shop_where = [
+                    'and',
+                    ['=','status', 2],
+                    ['=', 'business_status', 1],
+                    ['=', 'workflow', 4],
+                    ['=', 'business_id', $v['id']],
+                    ['>=', 'create_time', $date_m], ['<=', 'create_time', time()]
+                ];
                 $shop_num = $shop->getCount($shop_where);
                 $v['shop_num'] = $shop_num;
 
@@ -134,8 +140,18 @@ class BusinessinfoController extends BaseController
             $list_arr[0] = "请选择";
             $list_arr[$v['id']] = $v['name'];
         }
-
-        return $this->render('index', ['count' => $count, 'pages'=> $pages, 'page_count' => $page_count, 'list' => $info, 'name' => $name, 'bc' => $bc, 'mobile' => $mobile, 'branch_arr' => $list_arr, 'admin_id' => $admin_id]);
+        $param = [
+            'count' => $count,
+            'pages'=> $pages,
+            'page_count' => $page_count,
+            'list' => $info,
+            'name' => $name,
+            'bc' => $bc,
+            'mobile' => $mobile,
+            'branch_arr' => $list_arr,
+            'admin_id' => $admin_id
+        ];
+        return $this->render('index', $param);
 
     }
 
@@ -525,7 +541,8 @@ class BusinessinfoController extends BaseController
             $list_arr[0] = "请选择";
             $list_arr[$v['id']] = $v['name'];
         }
-        return $this->render('group', ['name' => $name, 'data' => $list, 'branch_arr' => $list_arr,'count' => $count, 'pages'=> $pages, 'page_count' => $page_count, 'admin_bc_id' => $this->is_head_company]);
+        $param = ['name' => $name, 'data' => $list, 'branch_arr' => $list_arr,'count' => $count, 'pages'=> $pages, 'page_count' => $page_count, 'admin_bc_id' => $this->is_head_company];
+        return $this->render('group', $param);
     }
 
     /**

@@ -1,4 +1,19 @@
 <?php
+/**
+ * 简介1
+ *
+ * PHP Version 5
+ *
+ * @category  PHP
+ * @package   Admin
+ * @filename  User.php
+ * @author    xxx <xxx@iyangpin.com>
+ * @copyright 2015 www.i500m.com
+ * @license   http://www.i500m.com/ i500m license
+ * @datetime  15/8/13 上午10:07
+ * @version   SVN: 1.0
+ * @link      http://www.i500m.com/
+ */
 namespace common\models;
 
 use Yii;
@@ -9,17 +24,25 @@ use yii\web\IdentityInterface;
 
 /**
  * User model
+ * property integer $id
+ * property string $username
+ * property string $password_hash
+ * property string $password_reset_token
+ * property string $email
+ * property string $auth_key
+ * property integer $status
+ * property integer $created_at
+ * property integer $updated_at
+ * property string $password write-only password
  *
- * @property integer $id
- * @property string $username
- * @property string $password_hash
- * @property string $password_reset_token
- * @property string $email
- * @property string $auth_key
- * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
- * @property string $password write-only password
+ * Class      Module
+ *
+ * @category  PHP
+ * @package   Module
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -27,7 +50,8 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 1;
 
     /**
-     * @inheritdoc
+     * 简介：
+     * @return null
      */
     public static function tableName()
     {
@@ -35,7 +59,8 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
+     * 简介：
+     * @return null
      */
     public function behaviors()
     {
@@ -45,7 +70,8 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
+     * 简介：
+     * @return null
      */
     public function rules()
     {
@@ -56,7 +82,9 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
+     * 简介：
+     * @param int|string $id id
+     * @return null|static
      */
     public static function findIdentity($id)
     {
@@ -64,7 +92,11 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
+     * 简介：
+     * @param mixed $token x
+     * @param null  $type  x
+     * @return null|static
+     * @throws NotSupportedException
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
@@ -72,10 +104,9 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Finds user by username
-     *
-     * @param string $username
-     * @return static|null
+     * 简介：Finds user by username
+     * @param string $username username
+     * @return null|static
      */
     public static function findByUsername($username)
     {
@@ -83,10 +114,9 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Finds user by password reset token
-     *
+     * 简介：Finds user by password reset token
      * @param string $token password reset token
-     * @return static|null
+     * @return null|static
      */
     public static function findByPasswordResetToken($token)
     {
@@ -94,17 +124,18 @@ class User extends ActiveRecord implements IdentityInterface
             return null;
         }
 
-        return static::findOne([
-            'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
-        ]);
+        return static::findOne(
+            [
+                'password_reset_token' => $token,
+                'status' => self::STATUS_ACTIVE,
+            ]
+        );
     }
 
     /**
-     * Finds out if password reset token is valid
-     *
+     * 简介：Finds out if password reset token is valid
      * @param string $token password reset token
-     * @return boolean
+     * @return bool
      */
     public static function isPasswordResetTokenValid($token)
     {
@@ -113,12 +144,13 @@ class User extends ActiveRecord implements IdentityInterface
         }
         $expire = Yii::$app->params['user.passwordResetTokenExpire'];
         $parts = explode('_', $token);
-        $timestamp = (int) end($parts);
+        $timestamp = (int)end($parts);
         return $timestamp + $expire >= time();
     }
 
     /**
-     * @inheritdoc
+     * 简介：
+     * @return null
      */
     public function getId()
     {
@@ -126,7 +158,8 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
+     * 简介：
+     * @return null
      */
     public function getAuthKey()
     {
@@ -134,7 +167,9 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
+     * 简介：
+     * @param string $authKey Key
+     * @return bool
      */
     public function validateAuthKey($authKey)
     {
@@ -142,20 +177,9 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Validates password
-     *
-     * @param string $password password to validate
-     * @return boolean if password provided is valid for current user
-     */
-//    public function validatePassword($password)
-//    {
-//        return Yii::$app->security->validatePassword($password, $this->password_hash);
-//    }
-
-    /**
-     * Generates password hash from password and sets it to the model
-     *
-     * @param string $password
+     * 简介：Generates password hash from password and sets it to the model
+     * @param string $password password
+     * @return null
      */
     public function setPassword($password)
     {
@@ -163,7 +187,8 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Generates "remember me" authentication key
+     * 简介：Generates "remember me" authentication key
+     * @return null
      */
     public function generateAuthKey()
     {
@@ -171,7 +196,8 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Generates new password reset token
+     * 简介：Generates new password reset token
+     * @return null
      */
     public function generatePasswordResetToken()
     {
@@ -179,33 +205,36 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Removes password reset token
+     * 简介：Removes password reset token
+     * @return null
      */
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
     }
+
     /**
-     * Validates password
-     *
+     * 简介：Validates password
      * @param string $password password to validate
      * @return boolean if password provided is valid for current user
      */
     public function validatePassword($password)
     {
-        echo $password;exit();
-        if(md5($this->salt.md5($password)) != $this->password)
-        {
+        if (md5($this->salt . md5($password)) != $this->password) {
             return false; //密码不正确
-        }
-        else if($this->status == 1) {
+        } elseif ($this->status == 1) {
             return false; //用户未激活
-        }
-        else {
+        } else {
             return true; //验证成功
         }
     }
-    public static function getDB(){
+
+    /**
+     * 简介：
+     * @return mixed
+     */
+    public static function getDB()
+    {
         return \Yii::$app->db_500m;
     }
 }

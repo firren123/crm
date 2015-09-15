@@ -13,6 +13,7 @@
  * @link      liuwei@iyangpin.com
  */
 namespace backend\models\shop;
+
 /**
  * ShopPurchase
  *
@@ -36,13 +37,14 @@ class ShopPurchase extends ShopBase
 
     /**
      * 单行函数说明
-     * @param array $cond
-     * @param string $field
-     * @param string $order
-     * @param int $page
-     * @param int $size
-     * @param string $and_where
-     * @param string $where
+     *
+     * @param array  $cond      array
+     * @param string $field     field
+     * @param string $order     order
+     * @param int    $page      page
+     * @param int    $size      size
+     * @param string $and_where array
+     * @param string $where     where
      *
      * @return array|\yii\db\ActiveRecord[]
      */
@@ -56,26 +58,27 @@ class ShopPurchase extends ShopBase
                 ->andWhere($and_where)
                 ->andWhere($where)
                 ->orderBy($order)
-                ->offset(($page-1) * $size)
+                ->offset(($page - 1) * $size)
                 ->limit($size)
                 ->asArray()
                 ->all();
         }
         return $list;
     }
+
     /**
      * 单行函数说明
      *
-     * @param array $cond
-     * @param string $and_where
-     * @param string $where
+     * @param array  $cond      x
+     * @param string $and_where x
+     * @param string $where     x
      *
      * @return int|string
      */
     public function getCounts($cond = array(), $and_where = '', $where = '')
     {
         $num = 0;
-        if ($cond || $and_where ||$where) {
+        if ($cond || $and_where || $where) {
             $num = $this->find()->where($cond)->andWhere($and_where)->andWhere($where)->count();
         }
         return $num;

@@ -16,17 +16,28 @@
  */
 
 namespace backend\modules\admin\controllers;
+
 use backend\controllers\BaseController;
 use backend\models\i500m\SensitiveKeywords;
 use backend\models\i500m\Log;
 use common\helpers\RequestHelper;
 use yii\data\Pagination;
+
+/**
+ * Class SensitiveKeywordsController
+ * @category  PHP
+ * @package   SensitiveKeywordsController
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
 class SensitiveKeywordsController extends BaseController
 {
     public $size = 10;
 
     /**
-     * @purpose:敏感词列表
+     * 敏感词列表
      * @name: actionIndex
      * @return string
      */
@@ -44,7 +55,7 @@ class SensitiveKeywordsController extends BaseController
     }
 
     /**
-     * @purpose:敏感词添加
+     * 敏感词添加
      * @name: actionAdd
      * @return string
      */
@@ -68,7 +79,7 @@ class SensitiveKeywordsController extends BaseController
     }
 
     /**
-     * @purpose:敏感词删除
+     * 敏感词删除
      * @name: actionDel
      * @return string
      */
@@ -93,39 +104,24 @@ class SensitiveKeywordsController extends BaseController
         }
     }
     /**
-     * @purpose:敏感词状态更新
+     * 敏感词状态更新
      * @name: actionUp
      * @return string
      */
     public function actionUp()
     {
-        $id = RequestHelper::get('id',1,'intval');
+        $id = RequestHelper::get('id', 1, 'intval');
         $model = new SensitiveKeywords();
         $info = $model->UpdateStatus(array('id'=>$id));
         if ($info) {
             $log = new Log();
             $log_info = '管理员 '.\Yii::$app->user->identity->username .'更改了ID为'.$id.'的敏感词状态';
             $log->recordLog($log_info, 10);
-            echo "1";exit;
+            echo "1";
+            exit;
         } else {
-            echo "0";exit;
+            echo "0";
+            exit;
         }
     }
 }
-//    /**
-//     * @purpose:敏感词状态更新
-//     * @name: actionUp
-//     * @return string
-//     */
-//    public function actionUp()
-//    {
-//        $id = RequestHelper::get('id',1,'intval');
-//        $model = new SensitiveKeywords();
-//        $info = $model->UpdateStatus(array('id'=>$id));
-//        if ($info['code']==200) {
-//            echo "1";exit;
-//        } else {
-//            echo "0";exit;
-//        }
-//    }
-//}

@@ -122,31 +122,31 @@ class CommonHelper extends BaseCommonHelps
         $agent = \Yii::$app->request->getUserAgent();
         if (stripos($agent, 'win') && stripos($agent, 'nt 6.1')) {
             $os = 'Windows 7';
-        } else if (stripos($agent, 'win') && (stripos($agent, 'nt 6.3') || stripos($agent, 'nt 6.2'))) {
+        } elseif (stripos($agent, 'win') && (stripos($agent, 'nt 6.3') || stripos($agent, 'nt 6.2'))) {
             $os = 'Windows 8';
-        } else if (stripos($agent, 'win') && stripos($agent, 'nt 6.0')) {
+        } elseif (stripos($agent, 'win') && stripos($agent, 'nt 6.0')) {
             $os = 'Windows Vista';
-        } else if (stripos($agent, 'win') && stripos($agent, 'nt 5.2')) {
+        } elseif (stripos($agent, 'win') && stripos($agent, 'nt 5.2')) {
             $os = 'Windows Server 2003';
-        } else if (stripos($agent, 'win') && stripos($agent, 'nt 5.1')) {
+        } elseif (stripos($agent, 'win') && stripos($agent, 'nt 5.1')) {
             $os = 'Windows XP';
-        } else if (stripos($agent, 'win') && stripos($agent, 'nt 5')) {
+        } elseif (stripos($agent, 'win') && stripos($agent, 'nt 5')) {
             $os = 'Windows Server 2000';
-        } else if (stripos($agent, 'win') && stripos($agent, 'nt')) {
+        } elseif (stripos($agent, 'win') && stripos($agent, 'nt')) {
             $os = 'Windows NT';
-        } else if (stripos($agent, 'win') && stripos($agent, '32')) {
+        } elseif (stripos($agent, 'win') && stripos($agent, '32')) {
             $os = 'Windows 32';
-        } else if (stripos($agent, 'linux')) {
+        } elseif (stripos($agent, 'linux')) {
             $os = 'Linux';
-        } else if (stripos($agent, 'unix')) {
+        } elseif (stripos($agent, 'unix')) {
             $os = 'Unix';
-        } else if (stripos($agent, 'Mac') && stripos($agent, 'PC')) {
+        } elseif (stripos($agent, 'Mac') && stripos($agent, 'PC')) {
             $os = 'Macintosh';
-        } else if (stripos($agent, 'Mac') && stripos($agent, 'os')) {
+        } elseif (stripos($agent, 'Mac') && stripos($agent, 'os')) {
             $os = 'Mac OS';
-        } else if (stripos($agent, 'FreeBSD')) {
+        } elseif (stripos($agent, 'FreeBSD')) {
             $os = 'FreeBSD';
-        } else if (stripos($agent, 'offline')) {
+        } elseif (stripos($agent, 'offline')) {
             $os = 'offline';
         } else {
             $os = 'Unknown';

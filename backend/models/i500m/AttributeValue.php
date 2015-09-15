@@ -16,7 +16,8 @@ use yii\helpers\ArrayHelper;
 class AttributeValue extends I500Base
 {
     /**
-     * @inheritdoc
+     * 简介：
+     * @return string
      */
     public static function tableName()
     {
@@ -24,7 +25,8 @@ class AttributeValue extends I500Base
     }
 
     /**
-     * @inheritdoc
+     * 简介：
+     * @return array
      */
     public function rules()
     {
@@ -35,7 +37,8 @@ class AttributeValue extends I500Base
     }
 
     /**
-     * @inheritdoc
+     * 简介：
+     * @return array
      */
     public function attributeLabels()
     {
@@ -46,60 +49,60 @@ class AttributeValue extends I500Base
             'weight' => '属性值权重，默认从小到大',
         ];
     }
+
+    /**
+     * 简介：
+     * @param int   $attr_id ID
+     * @param array $data    数据
+     * @return bool
+     */
     public function insertValue($attr_id, $data)
     {
-        if (empty($attr_id) || empty($data)) return false;
+        if (empty($attr_id) || empty($data)) {
+            return false;
+        }
         //$attribute['Attribute']
         $value = [];
         $re = false;
         if (!empty($data['attr_value'])) {
-            foreach ($data['attr_value'] as $k=>$v) {
-                if (empty($v)){
+            foreach ($data['attr_value'] as $k => $v) {
+                if (empty($v)) {
                     continue;
                 }
                 //$value[$k]['attr_value'] = $v;
-                $value[] = [$attr_id,$v,ArrayHelper::getValue($data,'weight.'.$k,99)];
+                $value[] = [$attr_id, $v, ArrayHelper::getValue($data, 'weight.' . $k, 99)];
 
 
             }
             //var_dump($value);exit();
             if (!empty($value)) {
-                $re = self::getDB()->createCommand()->batchInsert('attribute_value',['attr_id','attr_value','weight'],$value)->execute();
+                $re = self::getDB()->createCommand()->batchInsert('attribute_value', ['attr_id', 'attr_value', 'weight'], $value)->execute();
 
             }
 
         }
         return $re;
     }
+
+    /**
+     * 简介：
+     * @param array $data 数据
+     * @return bool
+     */
     public function updateValue($data)
     {
-        if (empty($data)) return false;
-        //var_dump($data);
-        foreach ($data as $k=>$v) {
-            if (empty($v[0])){
+        if (empty($data)) {
+            return false;
+        }
+        foreach ($data as $k => $v) {
+            if (empty($v[0])) {
                 unset($data[$k]);
                 continue;
             }
-            //$model = $this->findOne($k);
-            //var_dump($model);
-            //$value['AttributeValue'] = ['attr_value'=>$v[0],'weight'=>ArrayHelper::getValue($v,1,99)];
-            //$value[] = ['attr_value'=>$v[0],'weight'=>ArrayHelper::getValue($v,1,99)];
             self::getDB()->createCommand()
-                ->update('attribute_value',['attr_value'=>$v[0],'weight'=>ArrayHelper::getValue($v,1,99)],'id='.$k)
+                ->update('attribute_value', ['attr_value' => $v[0], 'weight' => ArrayHelper::getValue($v, 1, 99)], 'id=' . $k)
                 ->execute();
-           // var_dump($value);
-//            if (!empty($model)) {
-//                $model->load($value['AttributeValue']);
-//                //var_dump($model->errors);
-//                $re = $model->save();
-//                //var_dump($re);
-//            }
-           // var_dump($value);exit();
         }
-
-
-       // var_dump($value);exit();
-
         return true;
     }
 }
