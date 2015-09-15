@@ -132,48 +132,48 @@ class ShopcontractController extends BaseController
         $ShopContractMsg = [
             //基本信息
             'htnumber' => RequestHelper::post('htnumber'),                          //合同号
-            'shop_contract_name' => RequestHelper::post('shop_contract_name'),                //注册名称
-            'registered_address' => RequestHelper::post('registered_address'),                //注册地址
-            'registered_id' => RequestHelper::post('registered_id'),                     //注册登记号
-            'registered_capital' => RequestHelper::post('registered_capital'),                //注册资本
-            'legal_representative' => RequestHelper::post('legal_representative'),              //法定代表人
-            'email' => RequestHelper::post('email'),                             //电子邮箱
-            'document_type' => RequestHelper::post('document_type'),                     //证件类型
-            'document_number' => RequestHelper::post('document_number'),                   //证件号
+            'shop_contract_name' => RequestHelper::post('shop_contract_name'),      //注册名称
+            'registered_address' => RequestHelper::post('registered_address'),      //注册地址
+            'registered_id' => RequestHelper::post('registered_id'),                //注册登记号
+            'registered_capital' => RequestHelper::post('registered_capital'),      //注册资本
+            'legal_representative' => RequestHelper::post('legal_representative'),  //法定代表人
+            'email' => RequestHelper::post('email'),                                //电子邮箱
+            'document_type' => RequestHelper::post('document_type'),                //证件类型
+            'document_number' => RequestHelper::post('document_number'),            //证件号
             'contacts' => RequestHelper::post('contacts'),                          //联系人
-            'contacts_umber' => RequestHelper::post('contacts_umber'),                    //联系电话
-            'company_nature' => implode(',', RequestHelper::post('company_nature')),      //公司性质
-            'company_nature_other' => RequestHelper::post('company_nature_other'),              //公司性质其他信息
+            'contacts_umber' => RequestHelper::post('contacts_umber'),              //联系电话
+            'company_nature' => implode(',', RequestHelper::post('company_nature')),//公司性质
+            'company_nature_other' => RequestHelper::post('company_nature_other'),  //公司性质其他信息
             //服务信息
-            'common_contacts' => RequestHelper::post('common_contacts'),                   //同店面联系人    0、是   1、否
-            'common_contacts_job' => RequestHelper::post('common_contacts_job'),               //职务
-            'common_contacts_name' => RequestHelper::post('common_contacts_name'),              //联系人
-            'common_contacts_phone' => RequestHelper::post('common_contacts_phone'),             //电话
+            'common_contacts' => RequestHelper::post('common_contacts'),            //同店面联系人    0、是   1、否
+            'common_contacts_job' => RequestHelper::post('common_contacts_job'),    //职务
+            'common_contacts_name' => RequestHelper::post('common_contacts_name'),  //联系人
+            'common_contacts_phone' => RequestHelper::post('common_contacts_phone'),//电话
             'business_hours' => RequestHelper::post('business_hours_start') . ',' . RequestHelper::post('business_hours_end'),//营业时间   上午,下午
-            'area' => RequestHelper::post('area'),                              //面积
-            'community_name' => RequestHelper::post('community_name'),                    //所在社区名称
-            'monthly_turnover' => RequestHelper::post('monthly_turnover'),                  //月均营业额
+            'area' => RequestHelper::post('area'),                                  //面积
+            'community_name' => RequestHelper::post('community_name'),              //所在社区名称
+            'monthly_turnover' => RequestHelper::post('monthly_turnover'),          //月均营业额
             //清算信息
-            'account_type' => RequestHelper::post('account_type'),                      //账户类型  0、银行账号    1、支付宝账号
-            'alipay_name' => RequestHelper::post('alipay_name'),                       //支付宝账号
-            'bank_id' => RequestHelper::post('bank_id'),                           //开户银行
-            'bank_province' => RequestHelper::post('bank_province'),                     //所在省份
-            'bank_city' => RequestHelper::post('bank_city'),                         //所在城市
-            //'bank_branch_id'     => RequestHelper::post('bank_branch'),                       //所在支行的ID保存到表里的bank_branch_id(支行ID)里
-            'bank_branch' => RequestHelper::post('bank_branch'),                       //银行支行
-            'bank_number' => RequestHelper::post('bank_number'),                       //银行卡号
-            'bankcard_username' => RequestHelper::post('bankcard_username'),                 //开户名称
+            'account_type' => RequestHelper::post('account_type'),                  //账户类型  0、银行账号    1、支付宝账号
+            'alipay_name' => RequestHelper::post('alipay_name'),                    //支付宝账号
+            'bank_id' => RequestHelper::post('bank_id'),                            //开户银行
+            'bank_province' => RequestHelper::post('bank_province'),                //所在省份
+            'bank_city' => RequestHelper::post('bank_city'),                        //所在城市
+            //'bank_branch_id'     => RequestHelper::post('bank_branch'),           //所在支行的ID保存到表里的bank_branch_id(支行ID)里
+            'bank_branch' => RequestHelper::post('bank_branch'),                    //银行支行
+            'bank_number' => RequestHelper::post('bank_number'),                    //银行卡号
+            'bankcard_username' => RequestHelper::post('bankcard_username'),        //开户名称
             //结算信息
-            'settlement_cycle' => RequestHelper::post('settlement_cycle'),                  //结算周期
-            'service_charge' => RequestHelper::post('service_charge'),                    //服务费用方式   0、固定服务费    1、服务佣金
-            'fixed_service_charge' => RequestHelper::post('fixed_service_charge'),              //固定服务费
-            'service_commission' => RequestHelper::post('service_commission'),                //服务佣金
+            'settlement_cycle' => RequestHelper::post('settlement_cycle'),          //结算周期
+            'service_charge' => RequestHelper::post('service_charge'),              //服务费用方式   0、固定服务费    1、服务佣金
+            'fixed_service_charge' => RequestHelper::post('fixed_service_charge'),  //固定服务费
+            'service_commission' => RequestHelper::post('service_commission'),      //服务佣金
             //其他信息
-            'start_time' => RequestHelper::post('start_time'),                        //起止时间
+            'start_time' => RequestHelper::post('start_time'),                      //起止时间
             'end_time' => RequestHelper::post('end_time'),
-            'counterman' => RequestHelper::post('counterman'),                        //业务员
+            'counterman' => RequestHelper::post('counterman'),                      //业务员
             //备注信息
-            'remark' => RequestHelper::post('remark'),                            //备注
+            'remark' => RequestHelper::post('remark'),                              //备注
             'create_time' => date('Y-m-d H:i:s', time())
         ];
         //判断月均营业额是否为空值
@@ -257,9 +257,9 @@ class ShopcontractController extends BaseController
         $ShopManageMsg = [
             'contract_id' => $result,
             'business_name' => RequestHelper::post('store_registration_name'), //店面注册名称
-            'business_address' => RequestHelper::post('business_address'),        //经营地址
-            'create_time' => date('Y-m-d H:i:s', time()),                    //备注信息
-            'htnumber' => $ShopContractMsg['htnumber']                     //合同号
+            'business_address' => RequestHelper::post('business_address'),     //经营地址
+            'create_time' => date('Y-m-d H:i:s', time()),                      //备注信息
+            'htnumber' => $ShopContractMsg['htnumber']                         //合同号
         ];
         //经营范围;
         $business_scope = RequestHelper::post('business_scope');
@@ -292,9 +292,18 @@ class ShopcontractController extends BaseController
         if (empty($ShopContract_model_result)) {
             return $this->error('未知错误 ，请重试!', 'index');
         }
+        $init_array = [
+            'document_type_data' => $this->document_type_data,       //证件类型
+            'company_nature_data' => $this->company_nature_data,     //公司性质
+            'account_type_data' => $this->account_type_data,         //账户类型
+            'settlement_cycle_data' => $this->settlement_cycle_data, //结算周期
+            'business_scope_data' => $this->business_scope_data,     //经营范围
+        ];
         if (!empty($ShopContract_model_result)) {
-            $ShopContract_model_result['company_nature'] = explode(',', $ShopContract_model_result['company_nature']);//公司性质
-            $ShopContract_model_result['business_hours'] = explode(',', $ShopContract_model_result['business_hours']);//营业时间
+            $ShopContract_model_result['company_nature'] = explode(',', $ShopContract_model_result['company_nature']);   //公司性质
+            $ShopContract_model_result['business_hours'] = explode(',', $ShopContract_model_result['business_hours']);   //营业时间
+            $ShopContract_model_result['start_time']     = substr($ShopContract_model_result['start_time'], 0, 10);//合同开始时间
+            $ShopContract_model_result['end_time']       = substr($ShopContract_model_result['end_time'], 0, 10);  //合同结束时间
         }
         unset($cond['id']);
         $ShopManage_model = new ShopManage();         //经营信息表
@@ -332,7 +341,8 @@ class ShopcontractController extends BaseController
             'shop' => $ShopManage_model_result,
             'province' => $Province_model_result,
             'city' => $City_model_result,
-            'business' => $Business_model_result
+            'business' => $Business_model_result,
+            'init_array' => $init_array
         ];
         return $this->render('edit', $data_info);
     }
