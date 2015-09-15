@@ -23,6 +23,7 @@ use common\helpers\RequestHelper;
 use backend\controllers\BaseController;
 use backend\models\i500m\Supplier;
 use backend\models\i500m\SupplierGoods;
+use backend\models\i500m\SupplierGoodsLimit;
 use backend\models\i500m\Category;
 use backend\models\i500m\Province;
 
@@ -277,189 +278,76 @@ class GoodscheckController extends BaseController
      */
     public function actionDetail()
     {
-        $shop_id = RequestHelper::get('id', 0, 'intval');
-        if ($shop_id <= 0) {
-            echo "参数错误";
+        $goods_id = RequestHelper::get('id', 0, 'intval');
+        if ($goods_id <= 0) {
+            echo "参数错误.";
             return;
         }
 
-        $model_shop = new Shop();
+        $model_sp_goods = new SupplierGoods();
+        $model_sp = new Supplier();
+        $model_cate = new Category();
+        $model_sp_goodslimit = new SupplierGoodsLimit();
         $model_province = new Province();
-        $model_city = new City();
-        $model_district = new District();
-        $model_managetype = new ManageType();
-        $model_crmbranch = new CrmBranch();
-        $model_business = new Business();
 
-        //商家详情
-        $arr_where = array('id' => $shop_id);
-        $arr_shop_info = $model_shop->getOneRecord(
-            $arr_where,
+        //商品详情
+        $arr_goods_info = $model_sp_goods->getOneRecord(
+            array('id' => $goods_id),
             $this->_default_str_andwhere,
             $this->_default_str_field
         );
-        //echo "<pre>arr_shop_info=";print_r($arr_shop_info);echo "</pre>";exit;
-
-
-        //分公司权限
-        $branch_province_id = $this->province_id;
-        $arr_branch_city_list = $this->city_id;
-        if ($branch_province_id != $this->_global_province_id && intval($arr_shop_info['province']) != $branch_province_id) {
-            $this->redirect("/shop/shop/index");
+        if (empty($arr_goods_info)) {
+            echo "商品id错误.";
             return;
         }
-        if (!in_array($this->_global_city_id, $arr_branch_city_list) && !in_array(intval($arr_shop_info['city']), $arr_branch_city_list)) {
-            $this->redirect("/shop/shop/index");
-            return;
+        //echo "<pre>arr_goods_info=";print_r($arr_goods_info);echo "</pre>";exit;
+
+        //供应商详情
+        $arr_sp_info = $model_sp->getOneRecord(
+            array('id' => $arr_goods_info['supplier_id']),
+            $this->_default_str_andwhere,
+            $this->_default_str_field
+        );
+        //echo "<pre>arr_sp_info=";print_r($arr_sp_info);echo "</pre>";exit;
+
+        //获取分类名
+        $arr_cate_info = $model_cate->getOneRecord(
+            array('id' => $arr_goods_info['category_id']),
+            $this->_default_str_andwhere,
+            'id,name,status'
+        );
+        //echo "<pre>arr_cate_info=";print_r($arr_cate_info);echo "</pre>";exit;
+
+        //获取销售限制地区
+        $arr_tmp = $model_sp_goodslimit->getList2(
+            array('goods_id' => $arr_goods_info['id']),
+            $this->_default_str_andwhere,
+            array('province_id' => SORT_ASC),
+            'goods_id,province_id',
+            $this->_default_int_offset,
+            $this->_default_int_limit
+        );
+        $arr_province = array();
+        foreach ($arr_tmp as $tmp_value) {
+            $arr_province[] = $tmp_value['province_id'];
         }
 
-
-        $arr_where = array('id' => $arr_shop_info['province']);
-        $str_field = 'id,name';
-        $arr_cur_province = $model_province->getOneRecord(
-            $arr_where,
+        $arr_province_limit = $model_province->getList2(
+            array('id' => $arr_province),
             $this->_default_str_andwhere,
-            $str_field
+            array('id' => SORT_ASC),
+            'id,name',
+            $this->_default_int_offset,
+            $this->_default_int_limit
         );
-        //echo "<pre>";print_r($arr_cur_province);echo "</pre>";exit;
-
-        $arr_where = array('id' => $arr_shop_info['city']);
-        $str_field = 'id,name';
-        $arr_cur_city = $model_city->getOneRecord(
-            $arr_where,
-            $this->_default_str_andwhere,
-            $str_field
-        );
-        //echo "<pre>";print_r($arr_cur_city);echo "</pre>";exit;
-
-        $arr_where = array('id' => $arr_shop_info['district']);
-        $str_field = 'id,name';
-        $arr_cur_district = $model_district->getOneRecord(
-            $arr_where,
-            $this->_default_str_andwhere,
-            $str_field
-        );
-        //echo "<pre>";print_r($arr_cur_district);echo "</pre>";exit;
-
-        $arr_where = array('id' => $arr_shop_info['manage_type']);
-        $str_field = 'id,name';
-        $arr_cur_manage_type = $model_managetype->getOneRecord(
-            $arr_where,
-            $this->_default_str_andwhere,
-            $str_field
-        );
-        //echo "<pre>";print_r($arr_cur_manage_type);echo "</pre>";exit;
-
-        $arr_where = array('id' => $arr_shop_info['branch_id']);
-        $str_field = 'id,name';
-        $arr_cur_branch = $model_crmbranch->getOneRecord(
-            $arr_where,
-            $this->_default_str_andwhere,
-            $str_field
-        );
-        //echo "<pre>";print_r($arr_cur_branch);echo "</pre>";exit;
-
-        $arr_where = array('id' => $arr_shop_info['business_id']);
-        $str_field = 'id,name';
-        $arr_cur_business = $model_business->getOneRecord(
-            $arr_where,
-            $this->_default_str_andwhere,
-            $str_field
-        );
-        //echo "<pre>";print_r($arr_cur_business);echo "</pre>";exit;
-
-
-        //状态(0、删除 1、禁用 2、正常) key有序
-        $map_status = array(
-            '1' => '禁用',
-            '0' => '删除',
-            '2' => '正常',
-        );
-        //营业状态，默认1营业，2打烊
-        $map_business_status = array(
-            '1' => '营业',
-            '2' => '打烊'
-        );
-        //是否是自提点 0否 1是  key有序
-        $map_take_point = array(
-            '1' => '是',
-            '0' => '否'
-        );
-        //是否是i500专营,默认0=否,1=是
-        $map_is_i500 = array(
-            '0' => '否',
-            '1' => '是',
-        );
-
-        //介绍字符串处理
-        if (isset($arr_shop_info['introduction'])) {
-            //过滤html、js、css   数据库中存的是已转实体的html标签
-            //echo $arr_shop_info['introduction'];exit;
-            $arr_shop_info['introduction'] = htmlspecialchars_decode($arr_shop_info['introduction']);
-            //echo $arr_shop_info['introduction'];exit;
-            $arr_shop_info['introduction'] = stripslashes($arr_shop_info['introduction']);
-            //echo $arr_shop_info['introduction'];exit;
-            $arr_shop_info['introduction'] = trim($arr_shop_info['introduction']);
-            $arr_shop_info['introduction'] = strip_tags($arr_shop_info['introduction']);
-            //echo $arr_shop_info['introduction'];exit;
-            $arr_shop_info['introduction'] = preg_replace(
-                '/<script[^>]*?>(.*?)<\/script>/si',
-                '',
-                $arr_shop_info['introduction']
-            );
-            $arr_shop_info['introduction'] = preg_replace(
-                '/<style[^>]*?>(.*?)<\/style>/si',
-                '',
-                $arr_shop_info['introduction']
-            );
-            $arr_replace = array(
-                "\t" => ' ',
-                "\r\n" => ' ',
-                "\r" => ' ',
-                "\n" => ' ',
-            );
-            $arr_shop_info['introduction'] = strtr($arr_shop_info['introduction'], $arr_replace);
-            $arr_shop_info['introduction'] = trim($arr_shop_info['introduction']);
-            //echo $arr_shop_info['introduction'];exit;
-        }
-        //echo $arr_shop_info['introduction'];exit;
-
-
-        //z20150806 如果关联了合同，显示银行账户信息
-        if ($arr_shop_info['htnumber'] != '') {
-            $model_shop_contract = new ShopContract();
-            $arr_contract_info = $model_shop_contract->getOneRecord(
-                array('htnumber' => $arr_shop_info['htnumber']),
-                $this->_default_str_andwhere,
-                'bank_name,bank_branch,bank_number,bankcard_username'
-            );
-            if (!empty($arr_contract_info)
-                && isset($arr_contract_info['bank_name'])
-                && isset($arr_contract_info['bank_branch'])
-                && isset($arr_contract_info['bank_number'])
-                && isset($arr_contract_info['bankcard_username'])
-            ) {
-                $arr_shop_info['bank_name'] = $arr_contract_info['bank_name'];
-                $arr_shop_info['bank_branch'] = $arr_contract_info['bank_branch'];
-                $arr_shop_info['bank_number'] = $arr_contract_info['bank_number'];
-                $arr_shop_info['bankcard_username'] = $arr_contract_info['bankcard_username'];
-            }
-        }
-        //echo "<pre>";print_r($arr_shop_info);echo "</pre>";exit;
+        //echo "<pre>arr_province_limit=";print_r($arr_province_limit);echo "</pre>";exit;
 
 
         $arr_view_data = array(
-            'arr_shop_info' => $arr_shop_info,
-            'arr_cur_province' => $arr_cur_province,
-            'arr_cur_city' => $arr_cur_city,
-            'arr_cur_district' => $arr_cur_district,
-            'arr_cur_manage_type' => $arr_cur_manage_type,
-            'map_status' => $map_status,
-            'map_business_status' => $map_business_status,
-            'map_take_point' => $map_take_point,
-            'arr_cur_branch' => $arr_cur_branch,
-            'arr_cur_business' => $arr_cur_business,
-            'map_is_i500' => $map_is_i500,
+            'arr_goods_info' => $arr_goods_info,
+            'arr_sp_info' => $arr_sp_info,
+            'arr_cate_info' => $arr_cate_info,
+            'arr_province_limit' => $arr_province_limit,
         );
         echo $this->render('detail', $arr_view_data);
         return;
