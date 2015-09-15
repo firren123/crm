@@ -10,5 +10,7 @@ author zy
 .zcss_table_list td{padding:3px 2px;}
 
 .zcss_tac{text-align:center;}
+.zcss_tar{text-align:right;}
 .zcss_w100{width:100%;}
 
+.zcss_fc_red{color:red;}

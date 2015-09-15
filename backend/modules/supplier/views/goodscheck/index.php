@@ -44,6 +44,8 @@ $this->title = "商家列表";
 .zcss_td_op a{padding:0 10px;}
 
 .zcss_span1{padding:0 0 0 10px;}
+
+.zcss_table_list td{padding:3px 10px;}
 </style>
 
 
@@ -80,21 +82,51 @@ $this->title = "商家列表";
 <div style="width:100%;overflow-x:auto;">
     <table class="zcss_table_list"><tbody>
         <tr>
-            <th style="width:70px;">商品名称</th>
-            <th style="width:210px;">操作</th>
+            <th style="">商品名称</th>
+            <th style="width:60px;">分类</th>
+            <th style="width:140px;">条形码</th>
+            <th style="width:80px;">供货价</th>
+            <th style="width:80px;">建议售价</th>
+            <th style="width:150px;">供应商名称</th>
+            <th style="width:80px;">操作</th>
         </tr>
         <?php foreach($arr_goods_list as $a_row){ ?>
             <tr>
-                <td class="zjs_id zcss_tac"><?php if(isset($a_row['title'])){echo $a_row['title'];} ?></td>
+                <td class=""><?php if(isset($a_row['title'])){echo $a_row['title'];} ?></td>
+                <td class="zcss_tac">
+                    <?php if(isset($a_row['category_id']) && isset($map_cate_list[$a_row['category_id']])){ ?>
+                        <?php if($map_cate_list[$a_row['category_id']]['status']==2){ ?>
+                            <?php echo $map_cate_list[$a_row['category_id']]['name']; ?>
+                        <?php }else{ ?>
+                            <span class="zcss_fc_red" title="此分类不可用"><?php echo $map_cate_list[$a_row['category_id']]['name']; ?></span>
+                        <?php } ?>
+                    <?php }else{ ?>
+                        <span class="zcss_fc_red">无分类</span>
+                    <?php } ?>
+                </td>
+                <td class="zcss_tac"><?php if(isset($a_row['bar_code'])){echo $a_row['bar_code'];} ?></td>
+                <td class="zcss_tar"><?php if(isset($a_row['supply_price'])){echo $a_row['supply_price'];} ?></td>
+                <td class="zcss_tar"><?php if(isset($a_row['selling_price'])){echo $a_row['selling_price'];} ?></td>
+                <td class="">
+                    <?php if(isset($a_row['supplier_id']) && isset($map_sp_list[$a_row['supplier_id']])){ ?>
+                        <?php if($map_sp_list[$a_row['supplier_id']]['status']==1){ ?>
+                            <?php echo $map_sp_list[$a_row['supplier_id']]['company_name']; ?>
+                        <?php }else{ ?>
+                            <span class="zcss_fc_red" title="此供应商不可用"><?php echo $map_sp_list[$a_row['supplier_id']]['company_name']; ?></span>
+                        <?php } ?>
+                    <?php }else{ ?>
+                        <span class="zcss_fc_red">无供应商</span>
+                    <?php } ?>
+                </td>
+
                 <td class="zcss_td_op zcss_tac">
-                    <a href="/shop/shop/detail?id=<?php if(isset($a_row['id'])){echo $a_row['id'];} ?>" target="_blank">详情</a>
-                    <a href="/shop/shop/edit?id=<?php if(isset($a_row['id'])){echo $a_row['id'];} ?>" target="_blank">修改</a>
+                    <a href="/supplier/goodscheck/detail?id=<?php if(isset($a_row['id'])){echo $a_row['id'];} ?>" target="_blank">详情</a>
                 </td>
             </tr>
         <?php } ?>
         <?php if($record_count==0){ ?>
             <tr>
-                <td colspan="9" class="zcss_tac">无数据</td>
+                <td colspan="7" class="zcss_tac">无数据</td>
             </tr>
         <?php } ?>
         </tbody></table>
