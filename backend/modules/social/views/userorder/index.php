@@ -110,7 +110,13 @@ $this->title = "用户订单列表";
                             <td colspan="2"><?= $item['dis_amount'];?></td>
                             <td colspan="2"><?php echo isset($status_data[$item['status']]) ? $status_data[$item['status']] : ''; ?></td>
                             <td colspan="2"><?php if(isset($pay_status_data[$item['pay_status']])){echo $pay_status_data[$item['pay_status']];}else{echo '未知';};?></td>
-                            <td colspan="2"><?php if(isset($ship_status_data[$item['pay_method_id']])){echo $ship_status_data[$item['pay_method_id']];}else{echo '未知';};?></td>
+                            <td colspan="2">
+                                <?php
+                                if(isset($pay_site_list[$item['pay_method_id']])){
+                                    echo $pay_site_list[$item['pay_method_id']];
+                                }else{
+                                    echo '未知';};
+                                ?></td>
                             <td colspan="2"><?php if(isset($ship_status_data[$item['ship_status']])){ echo $ship_status_data[$item['ship_status']];}else{ echo "未知";};?></td>
                             <td colspan="2"><?= $item['create_time'];?></td>
                             <td colspan="2"><?= $item['consignee'];?></td>
