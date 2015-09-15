@@ -243,12 +243,25 @@ class GoodscheckController extends BaseController
         //echo "<pre>map_cate_list=";print_r($map_cate_list);echo "</pre>";exit;
 
 
+        $arr_all_cate = $model_cate->getList2(
+            array('level' => 1, 'status' => 2),
+            $this->_default_str_andwhere,
+            array('id' => SORT_ASC),
+            'id,name',
+            $this->_default_int_offset,
+            $this->_default_int_limit
+        );
+        //echo "<pre>arr_all_cate=";print_r($arr_all_cate);echo "</pre>";exit;
+
+
         $arr_view_data = array(
             'arr_select_param' => $arr_select_param,
             'arr_goods_list' => $arr_goods_list,
             'pages' => $pages,
+            'record_count' => $record_count,
             'map_sp_list' => $map_sp_list,
             'map_cate_list' => $map_cate_list,
+            'arr_all_cate' => $arr_all_cate,
         );
         echo $this->render('index', $arr_view_data);
         return;
