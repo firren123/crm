@@ -196,15 +196,16 @@ class ExchangeController extends BaseController
             $data['status'] = $status;
             $data['contact_shop'] = $contact[0];
             $data['contact_user'] = $contact[1];
-            $data['remark'] = $remark;
             $data['operator_id'] = $this->admin_id;
             $data['operator_name'] = \Yii::$app->user->identity->username;
 
             if ($status == 0) {
                 $ex_data['status'] = 4;
+                $data['remark'] = $remark;
             }
             if ($status == 1) {
                 $ex_data['status'] = 1;
+                $data['remark'] = "";
             }
 
             $ex_data['operator_id'] = $this->admin_id;
@@ -254,15 +255,16 @@ class ExchangeController extends BaseController
             $data['status'] = $status;
             $data['contact_shop'] = $contact[0];
             $data['contact_user'] = $contact[1];
-            $data['remark'] = $remark;
             $data['operator_id'] = $this->admin_id;
             $data['operator_name'] = \Yii::$app->user->identity->username;
 
             if ($status == 0) {
                 $ex_data['status'] = 4;
+                $data['remark'] = $remark;
             }
             if ($status == 1) {
                 $ex_data['status'] = 1;
+                $data['remark'] = "";
             }
 
             $ex_data['operator_id'] = $this->admin_id;

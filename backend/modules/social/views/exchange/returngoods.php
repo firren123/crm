@@ -57,8 +57,8 @@ $form = ActiveForm::begin([
     <th><span class="red">*</span>审核:</th>
     <td colspan="5" width="80%">
         <div class="radio">
-            <label><input type="radio" name="status" value="0"> 审核驳回</label>
-            <label><input type="radio" name="status"  value="1"> 审核通过</label>
+            <label><input type="radio" class="bh" name="status" value="0"> 审核驳回</label>
+            <label><input type="radio" class="tg" name="status"  value="1"> 审核通过</label>
         </div>
     </td>
 </tr>
@@ -72,7 +72,7 @@ $form = ActiveForm::begin([
 <tr>
     <th><span class="red">*</span>驳回理由:</th>
     <td>
-        <textarea id="remark" name="remark" class="form-control"></textarea>
+        <textarea id="remark"  name="remark" class="form-control"></textarea>
     </td>
 </tr>
 </table>
@@ -88,6 +88,12 @@ $form = ActiveForm::begin([
 <?php ActiveForm::end(); ?>
 <script type="text/javascript">
 $(function(){
+    $(".tg").click(function(){
+        $("#remark").attr('readonly','readonly');
+    })
+    $(".bh").click(function(){
+        $("#remark").removeAttr('readonly');
+    })
     $(".sub_ok").click(function(){
         var status = $.trim($('input:radio:checked').val());
         var remark = $.trim($("#remark").val());
