@@ -25,6 +25,15 @@ use common\helpers\RequestHelper;
 use yii\data\Pagination;
 use yii\web\Controller;
 
+/**
+ * UserdiscussController
+ *
+ * @category Admin
+ * @package  UserdiscussController
+ * @author   liuwei <liuwei@iyangpin.com>
+ * @license  http://www.i500m.com/ license
+ * @link     liuwei@iyangpin.com
+ */
 class UserdiscussController extends BaseController
 {
     public $enableCsrfValidation = false;
@@ -38,10 +47,10 @@ class UserdiscussController extends BaseController
     public function actionIndex()
     {
         //var_dump($this->city_id);exit;
-        $cid= implode(',',$this->city_id);
-        if($cid == 999){
+        $cid= implode(',', $this->city_id);
+        if ($cid == 999) {
             $cond =! '';
-        }else{
+        } else {
             $cond = "city_id in (".$cid.")";
         }
         $userName = RequestHelper::get('user_name');
@@ -54,9 +63,9 @@ class UserdiscussController extends BaseController
         $page = RequestHelper::get('page', 1);
         $pageSize = $this->size;
         $model =new Userdiscuss();
-        $list = $model->getPageList($cond, '*', $order, $page, $pageSize,$and_where);
+        $list = $model->getPageList($cond, '*', $order, $page, $pageSize, $and_where);
         $data['is_number'] = 1;
-        $total = $model->getCount($cond,$and_where);
+        $total = $model->getCount($cond, $and_where);
         $pages = new Pagination(['totalCount' =>$total, 'pageSize' => $this->size]);
         return $this->render('index', ['list'=>$list,'pages'=>$pages,'userName'=>$userName]);
     }
@@ -72,7 +81,7 @@ class UserdiscussController extends BaseController
         if ($_POST) {
             $status = RequestHelper::post('type', 0);
             $ids = RequestHelper::post('id', array());
-            $arr=implode(',',$ids);
+            $arr=implode(',', $ids);
             if (!empty($ids) and $status != 0) {
                 $model = new Userdiscuss();
                 $cond = " id in (" . $arr . ")";
@@ -85,10 +94,10 @@ class UserdiscussController extends BaseController
                 }
                 $result = $model->updateInfo($data, $cond);
                 if ($result == true) {
-                    return $this->success('审核成功','/admin/userdiscuss/index');
+                    return $this->success('审核成功', '/admin/userdiscuss/index');
                 }
             }
-            return $this->success('审核失败','/admin/userdiscuss/index');
+            return $this->success('审核失败', '/admin/userdiscuss/index');
         }
     }
 
@@ -99,22 +108,21 @@ class UserdiscussController extends BaseController
      */
     public function actionUp()
     {
-        if($_GET){
+        if ($_GET) {
             $id = RequestHelper::get('id');
             $cond = 'id=' . $id;
             $model = new Userdiscuss();
             $where = array();
-            $where['status'] = RequestHelper::get('status',0,'intval');
-            $ret = $model->updateInfo($where,$cond);
+            $where['status'] = RequestHelper::get('status', 0, 'intval');
+            $ret = $model->updateInfo($where, $cond);
             //var_dump($ret);exit;
-            if($ret == true){
+            if ($ret == true) {
                 echo 1;
                 exit;
-            }else{
+            } else {
                 echo 2;
                 exit;
             }
         }
     }
-
 }

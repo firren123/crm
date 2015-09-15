@@ -39,7 +39,7 @@ class CategoryTree
      * @param string $lists  全部数据
      * @param array  $fields 字段名
      */
-    public function __construct($lists='',$fields = array())
+    public function __construct($lists = '', $fields = array())
     {
         $this->_lists              = $lists;
         $this->_fields['cid']      = $fields['0'] ? $fields['0'] : 'cid';
@@ -118,4 +118,3 @@ class CategoryTree
         return $this->_formatList;
     }
 }
-?>

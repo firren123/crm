@@ -182,7 +182,7 @@ class UserorderController extends CommonController
                 $oldRefundCoupon = $this->oldRefundCoupon($order_sn);
             }
 
-        } else if ($order_info['pay_status'] == 2 && $order_info['ship_status'] != 5) {
+        } elseif ($order_info['pay_status'] == 2 && $order_info['ship_status'] != 5) {
             //支付完成，没有收货的,全部退
             $refund_money = $order_info['total'] + $order_info['dis_amount'];
             //判断是否使用优惠券
@@ -397,6 +397,4 @@ class UserorderController extends CommonController
         echo json_encode(array('code' => 100, 'date' => '审核失败'));
         exit;
     }
-
-
 }

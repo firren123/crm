@@ -50,7 +50,7 @@ class Brand extends I500Base
     {
         $re = false;
         if ($data) {
-            foreach ($data as $k=>$v) {
+            foreach ($data as $k => $v) {
                 $this->$k = $v;
             }
             $result = $this->save();

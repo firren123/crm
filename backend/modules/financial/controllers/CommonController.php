@@ -151,6 +151,4 @@ class CommonController extends BaseController
         }
         return 0;
     }
-
-
 }

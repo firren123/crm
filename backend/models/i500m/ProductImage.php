@@ -46,7 +46,7 @@ class ProductImage extends I500Base
         $re = false;
         if ($data) {
             $model = clone $this;
-            foreach ($data as $k=>$v) {
+            foreach ($data as $k => $v) {
                 $model->$k = $v;
             }
             $re= $model->save();
@@ -83,7 +83,7 @@ class ProductImage extends I500Base
         $re = 0;
         if ($data) {
             $model = clone $this;
-            foreach ($data as $k=>$v) {
+            foreach ($data as $k => $v) {
                 $model->$k = $v;
             }
             $result = $model->save();

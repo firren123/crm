@@ -94,10 +94,10 @@ class Warehouse extends I500Base
     /**
      * 库房名称是否存在
      * @param string $name x
-     * @param NULL   $id   x
+     * @param null   $id   x
      * @return array|null|\yii\db\ActiveRecord
      */
-    public function getDetailsByName($name, $id = NULL)
+    public function getDetailsByName($name, $id = null)
     {
         $list = array();
         if (!empty($name)) {

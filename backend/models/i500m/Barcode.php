@@ -6,7 +6,7 @@
  * 文件介绍2
  *
  * @category  PHP
- * @package   admin
+ * @package   Admin
  * @filename  UserOrder.php
  * @author    lichenjun <lichenjun@iyangpin.com>
  * @copyright 2015 www.i500m.com
@@ -16,11 +16,19 @@
  * @link      http://www.i500m.com/
  */
 
-
 namespace backend\models\i500m;
 
-
-class Barcode extends I500Base{
+/**
+ * Class Barcode
+ * @category  PHP
+ * @package   Barcode
+ * @author    lichenjun <lichenjun@iyangpin.com>
+ * @copyright 2015 www
+ * @license   http://www.i500m.com/ i500m license
+ * @link      http://www.i500m.com/
+ */
+class Barcode extends I500Base
+{
 
     /**
      * 数据库
@@ -31,6 +39,4 @@ class Barcode extends I500Base{
     {
         return '{{%product_barcode}}';
     }
-
-
 }
