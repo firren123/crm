@@ -143,7 +143,8 @@ class SuppliersController extends BaseController
                     }
 
                     //日志
-                    $content = "供货方:".$data['supplier_name'].",联系人：".$data['name'].",联系电话:".$data['mobile'].",电子邮箱:".$data['email'].",仓库编号:".$data['storage_sn'].",仓库名称:".$data['storage_name'].",入库订单号:".$data['code'].",入库说明:".$data['remark'];
+                    $content = "供货方:".$data['supplier_name'].",联系人：".$data['name'].",联系电话:".$data['mobile'].",电子邮箱:".$data['email'];
+                    $content .=",仓库编号:".$data['storage_sn'].",仓库名称:".$data['storage_name'].",入库订单号:".$data['code'].",入库说明:".$data['remark'];
                     $log_model->recordLog($content, 8);
                     return $this->success('提交数据成功！！！', '/storage/suppliers/supplier-list');
                 }
