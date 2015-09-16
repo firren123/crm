@@ -363,15 +363,40 @@ class GoodscheckController extends BaseController
      */
     public function actionAjax()
     {
-        $act = RequestHelper::post('act', '', 'trim');
-        if ($act == 'edit') {
-            $this->_editSubmit();
+        $type = RequestHelper::get('type', '', 'trim');
+        if ($type == 'pass') {
+            $this->_passCheck();
             return;
-        }
-        if ($act == 'add') {
-            $this->_addSubmit();
+        } elseif ($type == 'reject') {
+            $this->_rejectCheck();
             return;
+        } elseif ($type == 'xxxx') {
+        } else {
         }
+        return;
+    }
+
+    /**
+     * 审核-通过
+     *
+     * Author zhengyu@iyangpin.com
+     *
+     * @return void
+     */
+    private function _passCheck()
+    {
+
+    }
+
+    /**
+     * 审核-驳回
+     *
+     * Author zhengyu@iyangpin.com
+     *
+     * @return void
+     */
+    private function _rejectCheck()
+    {
 
     }
 
