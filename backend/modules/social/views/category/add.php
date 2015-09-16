@@ -80,8 +80,8 @@ $form = ActiveForm::begin([
 
 </div>
 <?= $form->field($model, 'sort')->input('text',['style'=>'width:200px'])->label('排序名称') ; ?>
-<?= $form->field($model, 'status')->radioList(['1'=>'可用','2'=>'禁用'])->label('是否可用'); ?>
-<?= $form->field($model, 'is_deleted')->radioList(['1'=>'不显示','2'=>'显示'])->label('显示'); ?>
+<?= $form->field($model, 'status')->radioList(['1'=>'禁用','2'=>'可用'])->label('是否禁用'); ?>
+<?= $form->field($model, 'is_deleted')->radioList(['1'=>'删除','2'=>'未删除'])->label('是否删除'); ?>
 <?= $form->field($model, 'description')->textarea()->label('类型描述') ; ?>
 <?= $form->field($model, 'pid')->label('')->hiddenInput(); ?>
     <div class="form-actions">
