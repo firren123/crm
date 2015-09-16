@@ -52,7 +52,7 @@ class CommonController extends BaseController
         $orderModel = new UserOrder();
         $order_info = $orderModel->getInfo(['order_sn' => $order_sn]);
         $time_7 = date('Y-m-d H:i:s', strtotime('-7 day'));
-        if ($order_info['ship_status_time'] < $time_7) {
+        if ($order_info['create_time'] < $time_7) {
             return false;
         }
         return 1;
