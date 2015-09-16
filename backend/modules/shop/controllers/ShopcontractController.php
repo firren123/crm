@@ -28,7 +28,7 @@ use yii\data\Pagination;
 use common\helpers\FastDFSHelper;
 
 /**
- * CashController
+ * ShopcontractController
  *
  * @category CRM
  * @package  ShopcontractController
