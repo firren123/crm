@@ -17,6 +17,7 @@
 
 $map_field_name = array(
     'id' => 'id',
+    'bar_code' => '条形码',
     'title' => '商品名称',
     'sub_title' => '副标题',
     'sn' => '商品编码',
@@ -28,7 +29,6 @@ $map_field_name = array(
     'supply_price' => '供货价',
     'selling_price' => '建议售价',
     'unit' => '单位',
-    'bar_code' => '条形码',
     'net_weight' => '净重',
     'gross_weight' => '毛重',
     'size' => '产品尺寸',
@@ -48,6 +48,7 @@ $this->title = "供应商商品详情";
 <link type="text/css" rel="stylesheet" href="/css/zcommon.css?<?php echo \Yii::$app->params['cssVersion']; ?>" />
 
 <script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/zcommon.js"></script>
 
 <style type="text/css">
 .zcss_table1 th{font-weight:bold;}
@@ -71,6 +72,18 @@ $this->title = "供应商商品详情";
     </ul>
 
     <table class="zcss_table1"><tbody>
+
+        <tr>
+            <td colspan="2">
+                <span class="zcss_fc_red zcss_fs_16">
+                <?php if($existed_product_id==0){ ?>
+                    此商品的条形码在标准库中 <b>不存在</b>
+                <?php }else{ ?>
+                    此商品的条形码在标准库中 <b>已存在</b>， <a href="/goods/product/details?id=<?php echo $existed_product_id; ?>" target="_blank">标准库中此条形码的商品</a>
+                <?php } ?>
+                </span>
+            </td>
+        </tr>
 
         <?php foreach($map_field_name as $field=>$name){ ?>
             <tr>
@@ -101,12 +114,38 @@ $this->title = "供应商商品详情";
 
 
         <tr>
+            <td colspan="2">
+                <span class="zcss_fc_red zcss_fs_16">
+                <?php if($existed_product_id==0){ ?>
+                    此商品的条形码在标准库中 <b>不存在</b>
+                <?php }else{ ?>
+                    此商品的条形码在标准库中 <b>已存在</b>， <a href="/goods/product/details?id=<?php echo $existed_product_id; ?>" target="_blank">标准库中此条形码的商品</a>
+                <?php } ?>
+                </span>
+            </td>
+        </tr>
+
+
+        <tr>
             <td colspan="2" class="zcss_tac">
                 <input type="radio" name="zname_radio_1" id="zid_radio_1" class="zjs_radio" value="1" />
                 <label for="zid_radio_1">通过</label>
 
                 <input type="radio" name="zname_radio_1" id="zid_radio_2" class="zjs_radio" value="2" style="margin:0 0 0 100px;" />
                 <label for="zid_radio_2">驳回</label>
+            </td>
+        </tr>
+        <tr class="zjs_tr_hide zjs_tr_price" style="display:none;">
+            <td rowspan="2">设置价格</td>
+            <td>
+                <span>进货价：</span>
+                <input type="text" class="zjs_text_jhj" />
+            </td>
+        </tr>
+        <tr class="zjs_tr_hide zjs_tr_price" style="display:none;">
+            <td>
+                <span>铺货价：</span>
+                <input type="text" class="zjs_text_phj" />
             </td>
         </tr>
         <tr class="zjs_tr_hide zjs_tr_reason" style="display:none;">
@@ -140,7 +179,7 @@ $(function()
         var value=$(this).val();
         $(".zjs_tr_hide").hide();
         if (value == 1) {
-            //nothing
+            $(".zjs_tr_price").show();
         } else if (value == 2) {
             $(".zjs_tr_reason").show();
         } else {
@@ -164,8 +203,14 @@ function submit()
 
     var act='';
     var reason='';
+    var jhj=0;
+    var phj=0;
     if(status=='1'){
         act='pass';
+        jhj=$(".zjs_text_jhj").val();
+        phj=$(".zjs_text_phj").val();
+        if(z_check_money(jhj)==0){alert("进货价格式错误");return;}
+        if(z_check_money(phj)==0){alert("铺货价格式错误");return;}
     } else if(status=='2'){
         act='reject';
         reason=$(".zjs_text_reason").val();
@@ -179,7 +224,9 @@ function submit()
         "/supplier/goodscheck/ajax?type="+act,
         {
             "goods_id":goods_id,
-            "reason":reason
+            "reason":reason,
+            "jhj":jhj,
+            "phj":phj
         },
         function(str)
         {

@@ -26,6 +26,7 @@ use backend\models\i500m\SupplierGoods;
 use backend\models\i500m\SupplierGoodsLimit;
 use backend\models\i500m\Category;
 use backend\models\i500m\Province;
+use backend\models\i500m\Product;
 
 
 /**
@@ -289,6 +290,7 @@ class GoodscheckController extends BaseController
         $model_cate = new Category();
         $model_sp_goodslimit = new SupplierGoodsLimit();
         $model_province = new Province();
+        $model_product = new Product();
 
         //商品详情
         $arr_goods_info = $model_sp_goods->getOneRecord(
@@ -301,6 +303,18 @@ class GoodscheckController extends BaseController
             return;
         }
         //echo "<pre>arr_goods_info=";print_r($arr_goods_info);echo "</pre>";exit;
+
+        //检查此商品条形码是否在标准库已存在
+        $existed_product_id = 0;
+        $arr_product_info = $model_product->getOneRecord(
+            array('bar_code' => $arr_goods_info['bar_code']),
+            $this->_default_str_andwhere,
+            'id'
+        );
+        if (isset($arr_product_info['id'])) {
+            $existed_product_id = intval($arr_product_info['id']);
+        }
+
 
         //供应商详情
         $arr_sp_info = $model_sp->getOneRecord(
@@ -348,6 +362,7 @@ class GoodscheckController extends BaseController
             'arr_sp_info' => $arr_sp_info,
             'arr_cate_info' => $arr_cate_info,
             'arr_province_limit' => $arr_province_limit,
+            'existed_product_id' => $existed_product_id,
         );
         echo $this->render('detail', $arr_view_data);
         return;
@@ -376,6 +391,7 @@ class GoodscheckController extends BaseController
         return;
     }
 
+
     /**
      * 审核-通过
      *
@@ -385,6 +401,43 @@ class GoodscheckController extends BaseController
      */
     private function _passCheck()
     {
+        $goods_id = RequestHelper::post('goods_id', 0, 'intval');
+        $jhj = RequestHelper::post('jhj', 0, 'floatval');
+        $phj = RequestHelper::post('phj', 0, 'floatval');
+
+        $model_sp_goods = new SupplierGoods();
+
+        //修改商品状态
+        $arr_result = $model_sp_goods->updateOneRecord(
+            array('id' => $goods_id),
+            $this->_default_str_andwhere,
+            array('status' => 4, 'reason' => '')
+        );
+        if (!$arr_result || $arr_result['result'] == 0) {
+            echo json_encode(array('result' => 0, 'msg' => '操作失败(01).'));
+            return;
+        }
+
+        //获取供应商商品详情
+        $arr_goods_info = $model_sp_goods->getOneRecord(
+            array('id' => $goods_id),
+            $this->_default_str_andwhere,
+            $this->_default_str_field
+        );
+
+        $model_product = new Product();
+
+        //同步到标准库
+        //  检查此商品条形码是否在标准库已存在
+        $existed_product_id = 0;
+        $arr_product_info = $model_product->getOneRecord(
+            array('bar_code' => $goods_id),
+            $this->_default_str_andwhere,
+            'id'
+        );
+        if (empty($arr_product_info)) {
+            //
+        }
 
     }
 
@@ -397,7 +450,8 @@ class GoodscheckController extends BaseController
      */
     private function _rejectCheck()
     {
-
+        $goods_id = RequestHelper::post('goods_id', 0, 'intval');
+        $reason = RequestHelper::post('reason', '', 'trim');
     }
 
 
