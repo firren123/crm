@@ -60,7 +60,11 @@ class UserorderController extends BaseController
     public $enableCsrfValidation = false;
     public $pay_status_data = array(
         0 => '未支付',
+        1 => '支付中',
         2 => '已支付',
+        3 => '退款中',
+        4 => '退款成功',
+        5 => '退款失败'
     );
     public $ship_status_data = array(
         -1 => '全部',
