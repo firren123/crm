@@ -125,25 +125,25 @@ $this->title = '商家合同信息修改';
         </tr>
         <tr>
             <th colspan="1" class="td1"><label class="mark">*</label>合同号：</th>
-            <th colspan="1" class="td2"><input name="htnumber" class="htnumber" value="<?= $list['htnumber'];?>"></th>
+            <th colspan="1" class="td2"><input type="text" name="htnumber" class="htnumber HtNum_Reg" value="<?= $list['htnumber'];?>"></th>
         </tr>
         <tr>
             <td class="td1"><label class="mark">*</label>注册名称：</td>
-            <td ><label><input name="shop_contract_name" class="shop_contract_name" value="<?= $list['shop_contract_name'];?>"></label></td>
+            <td ><label><input type="text" name="shop_contract_name" class="shop_contract_name NotNull" value="<?= $list['shop_contract_name'];?>"></label></td>
             <td class="td1"><label class="mark">*</label>注册地址：</td>
-            <td ><label><input name="registered_address" class="registered_address" value="<?= $list['registered_address'];?>"></label></td>
+            <td ><label><input type="text" name="registered_address" class="registered_address NotNull" value="<?= $list['registered_address'];?>"></label></td>
         </tr>
         <tr>
             <td class="td1"><label class="mark">*</label>注册登记号：</td>
-            <td ><label><input name="registered_id" class="registered_id" value="<?= $list['registered_id'];?>"></label></td>
+            <td ><label><input type="text" name="registered_id" class="registered_id NotNull" value="<?= $list['registered_id'];?>"></label></td>
             <td class="td1">注册资本：</td>
-            <td ><label><input name="registered_capital" class="registered_capital" value="<?= $list['registered_capital'];?>"></label></td>
+            <td ><label><input type="text" name="registered_capital" class="registered_capital" value="<?= $list['registered_capital'];?>"></label></td>
         </tr>
         <tr>
             <td class="td1"><label class="mark">*</label>法定代表人：</td>
-            <td ><label><input name="legal_representative" class="legal_representative" value="<?= $list['legal_representative'];?>"></label></td>
+            <td ><label><input name="legal_representative" class="legal_representative NotNull" value="<?= $list['legal_representative'];?>"></label></td>
             <td class="td1">邮箱：</td>
-            <td ><label><input name="email" class="email" value="<?= $list['email'];?>"></label></td>
+            <td ><label><input name="email" class="email Email_Reg Null" value="<?= $list['email'];?>"></label></td>
         </tr>
         <tr>
             <td class="td1"><label class="mark">*</label>证件类型：</td>
@@ -159,13 +159,13 @@ $this->title = '商家合同信息修改';
                 </select>
             </td>
             <td class="td1"><label class="mark">*</label>证件号：</td>
-            <td ><label><input name="document_number" class="document_number" value="<?= $list['document_number'];?>"></label></td>
+            <td ><label><input name="document_number" class="document_number DocumentNum_Reg" value="<?= $list['document_number'];?>"></label></td>
         </tr>
         <tr>
             <td class="td1"><label class="mark">*</label>联系人：</td>
-            <td ><label><input name="contacts" class="contacts" value="<?= $list['contacts'];?>"></label></td>
+            <td ><label><input name="contacts" class="contacts NotNull" value="<?= $list['contacts'];?>"></label></td>
             <td class="td1"><label class="mark">*</label>联系电话：</td>
-            <td ><label><input name="contacts_umber" class="contacts_umber" value="<?= $list['contacts_umber'];?>"></label></td>
+            <td ><label><input name="contacts_umber" class="contacts_umber Mobile_Reg" value="<?= $list['contacts_umber'];?>"></label></td>
         </tr>
         <tr>
             <td colspan="1" class="td1"><label class="mark">*</label>公司性质：</td>
@@ -192,7 +192,7 @@ $this->title = '商家合同信息修改';
         </tr>
         <tr>
             <td colspan="1" class="td1"><label class="mark">*</label>店面注册名称：</td>
-            <td colspan="3" class="td2"><input name="business_name" class="business_name" value="<?= $shop['business_name'];?>"></td>
+            <td colspan="3" class="td2"><input name="business_name" class="business_name NotNull" value="<?= $shop['business_name'];?>"></td>
         </tr>
         <tr>
             <td colspan="1" class="td1"><label class="mark">*</label>经营范围：</td>
@@ -210,7 +210,7 @@ $this->title = '商家合同信息修改';
         </tr>
         <tr>
             <td colspan="1" class="td1"><label class="mark">*</label>经营地址：</td>
-            <td colspan="3"><input name="business_address" class="business_address" value="<?= $shop['business_address'];?>" style="width:500px;"></td>
+            <td colspan="3"><input name="business_address" class="business_address NotNull" value="<?= $shop['business_address'];?>" style="width:500px;"></td>
         </tr>
     </table>
     <table style="border-bottom: 1px solid #D5692B; width: 1000px; height: auto;">
@@ -219,9 +219,9 @@ $this->title = '商家合同信息修改';
         </tr>
         <tr >
             <td class="td1"><label class="mark">*</label>日常联系人姓名：</td>
-            <td class="td2"><input name="common_contacts_name" class="common_contacts_name" value="<?= $list['common_contacts_name'];?>"></td>
+            <td class="td2"><input name="common_contacts_name" class="common_contacts_name NotNull" value="<?= $list['common_contacts_name'];?>"></td>
             <td class="td1"><label class="mark">*</label>电话：</td>
-            <td><input name="common_contacts_phone" class="common_contacts_phone" value="<?= $list['common_contacts_phone'];?>"></td>
+            <td><input name="common_contacts_phone" class="common_contacts_phone Mobile_Reg" value="<?= $list['common_contacts_phone'];?>"></td>
         </tr>
         <tr>
             <td class="td1">职务：</td>
@@ -250,7 +250,7 @@ $this->title = '商家合同信息修改';
         </tr>
         <tr>
             <td class="td1"><label class="mark">*</label>所在社区名称：</td>
-            <td colspan="3"><input name="community_name" class="community_name" value="<?= $list['community_name'];?>" style="width:500px;"></td>
+            <td colspan="3"><input name="community_name" class="community_name NotNull" value="<?= $list['community_name'];?>" style="width:500px;"></td>
         </tr>
     </table>
     <table style="border-bottom: 1px solid #D5692B; width: 1000px; height: auto;">
@@ -291,7 +291,7 @@ $this->title = '商家合同信息修改';
                             </select>
                         </td>
                         <td class="td1"><label class="mark">*</label>开户支行：</td>
-                        <td><input type="text" name="" value="<?= $list['bank_branch'];?>"></td>
+                        <td><input type="text" name="bank_branch" class="bank_branch NotNull" value="<?= $list['bank_branch'];?>"></td>
                     </tr>
                     <tr>
                         <td class="td1"><label class="mark">*</label>所在省份：</td>
@@ -321,9 +321,9 @@ $this->title = '商家合同信息修改';
                     </tr>
                     <tr>
                         <td class="td1"><label class="mark">*</label>银行卡号：</td>
-                        <td><input name="bank_number" class="bank_number" value="<?= $list['bank_number'];?>" size="40"></td>
+                        <td><input name="bank_number" class="bank_number BankCardNum_Reg" value="<?= $list['bank_number'];?>" size="40"></td>
                         <td class="td1"><label class="mark">*</label>开户名称：</td>
-                        <td><label><input name="bankcard_username" class="bankcard_username" value="<?= $list['bankcard_username'];?>"></label></td>
+                        <td><label><input name="bankcard_username" class="bankcard_username NotNull" value="<?= $list['bankcard_username'];?>"></label></td>
                     </tr>
                 </table>
             </td>
@@ -363,13 +363,13 @@ $this->title = '商家合同信息修改';
         </tr>
         <tr>
             <td class="td1"><label class="mark">*</label>起止时间</td>
-            <td class="td2">开始时间：<input type="text" onFocus="WdatePicker({isShowClear:true,readOnly:false})" value="<?= $list['start_time'];?>"></td>
-            <td>结束时间：<input type="text" onFocus="WdatePicker({isShowClear:true,readOnly:false})" value="<?= $list['end_time'];?>"></td>
+            <td class="td2">开始时间：<input type="text" name="start_time" class="start_time" onFocus="WdatePicker({isShowClear:true,readOnly:false})" value="<?= $list['start_time'];?>"></td>
+            <td>结束时间：<input type="text" name="end_time" class="end_time" onFocus="WdatePicker({isShowClear:true,readOnly:false})" value="<?= $list['end_time'];?>"></td>
         </tr>
         <tr>
             <td class="td1"><label class="mark">*</label>业务员信息</td>
             <td>
-                <label>业务员ID：<label style="color:red;"><input name="business_id" class="business_id" value="<?= $business['id'];?>"></label></label>
+                <label>业务员ID：<label style="color:red;"><input name="business_id" class="business_id CounterManId_Reg" value="<?= $business['id'];?>"></label></label>
             </td>
             <td>
                 <label>业务员姓名：<label style="color:red;"><?= $business['name'];?></label></label>
@@ -527,4 +527,61 @@ $this->title = '商家合同信息修改';
             );
         }
     }
+</script>
+<script type="text/javascript">
+//验证数据规则
+    //数字
+    var Email_Reg        = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$/;
+    var Mobile_Reg       = /^1\d{10}$/;
+    var Phone_Reg        = /^\d{3}-\d{8}|\d{4}-\d{7}$/;
+    var QQ_Reg           = /^[1-9][0-9]{4,10}$/;
+    var Float_Reg        = /^\d+(\.\d+)?$/;
+    var BankCardNum_Reg  = /^[0-9]{0,30}$/;
+    var DocumentNum_Reg  = /^[1-9]\d{16}(\d|x|X)$/;
+    var CounterManId_Reg = /^\d+$/;
+    var ImageFile_Reg    = /^.+.[jpg|gif|bmp|bnp|png]$/;
+    var HtNum_Reg        = /^BJ[0-9]{6}$/;
+
+    var Reg = new Array();
+    Reg['Email_Reg']        = Email_Reg;
+    Reg['Mobile_Reg']       = Mobile_Reg;
+    Reg['Phone_Reg']        = Phone_Reg;
+    Reg['QQ_Reg']           = QQ_Reg;
+    Reg['Float_Reg']        = Float_Reg;
+    Reg['BankCardNum_Reg']  = BankCardNum_Reg;
+    Reg['DocumentNum_Reg']  = DocumentNum_Reg;
+    Reg['CounterManId_Reg'] = CounterManId_Reg;
+    Reg['ImageFile_Reg']    = ImageFile_Reg;
+    Reg['HtNum_Reg']        = HtNum_Reg;
+$(document).ready(function(){
+    $("input").blur(function(){
+        var Val   = $(this).val();
+        //验证空值
+        if (Val.length==0) {
+            $(this).css('borderColor' ,'#A94442');
+            return;
+        }
+        //验证规则
+        var Class = $(this).attr("class");
+        var LastSpaceIndex = Class.lastIndexOf(" ")+1;
+        if (Class.length<0 || LastSpaceIndex-1<0) {
+            return;
+        }
+        var x;
+        //console.log(Class.substr(LastSpaceIndex));
+        for (x in Reg) {
+            //console.log(x);
+            if (x==Class.substr(LastSpaceIndex)) {
+                if (Reg[x].test(Val)) {
+                    $(this).css('borderColor' ,'#ddd');
+                } else {
+                    $(this).css('borderColor' ,'#A94442');
+                }
+            }
+        }
+        //alert($(this).attr("class").substr(LastSpaceIndex));
+    });
+});
+    //字符
+
 </script>
