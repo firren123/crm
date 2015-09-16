@@ -16,6 +16,7 @@
  */
 $this->title = "帖子管理";
 use yii\widgets\LinkPager;
+use yii\helpers\Html;
 ?>
 <legends  style="fond-size:12px;">
     <legend>帖子管理</legend>
@@ -82,7 +83,7 @@ use yii\widgets\LinkPager;
                         <td><?= $item['id'];?></td>
                         <td><?= $item['mobile'];?></td>
                         <td><?php if(isset($forum_list[$item['forum_id']])){ echo $forum_list[$item['forum_id']]; } ;?></td>
-                        <td><?= $item['title'];?></td>
+                        <td><?= Html::encode($item['title']);?></td>
                         <td><?= $item['thumbs'];?></td>
                         <td><?= $item['views'];?></td>
                         <td><?= $item['comment_num']; ?></td>
