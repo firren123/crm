@@ -151,7 +151,7 @@ class ExchangeController extends BaseController
      */
     public function actionView()
     {
-        $this->layout='dialog';
+        //$this->layout='dialog';
         $id = RequestHelper::get('id', 0, 'intval');
         $order_sn = RequestHelper::get('order_sn', '', 'trim');
         if ($id == 0) {
