@@ -84,13 +84,13 @@ use yii\helpers\Html;
                         <td><?= $item['mobile'];?></td>
                         <td><?php if(isset($forum_list[$item['forum_id']])){ echo $forum_list[$item['forum_id']]; } ;?></td>
                         <td><?= Html::encode($item['title']);?></td>
-                        <td><?= $item['thumbs'];?></td>
-                        <td><?= $item['views'];?></td>
-                        <td><?= $item['comment_num']; ?></td>
+                        <td><?= Html::encode($item['thumbs']);?></td>
+                        <td><?= Html::encode($item['views']);?></td>
+                        <td><?= Html::encode($item['comment_num']); ?></td>
                         <td><?= $item['top']==1?'是':'否';?></td>
                         <td><?= $item['status']==1?'禁用':'可用';?></td>
                         <td><?= $item['is_deleted']==1?'已删除':'正常';?></td>
-                        <td><?= $item['create_time'];?></td>
+                        <td><?= Html::encode($item['create_time']);?></td>
                         <td>
                             <a style="cursor:pointer" onclick="Delete(<?= $item['id'];?>)">删除</a>|
                             <a style="cursor:pointer" href="/social/post/edit?id=<?= $item['id'];?>">修改</a>|
