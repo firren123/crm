@@ -117,11 +117,9 @@ class ShopcontractController extends Controller
             echo $run_id = $ret[0]['run_id'] + 1;
             $new_time = date('Y-m-d H:i:s');
             $info = [];
-
+            var_dump($v['shop_contract_name']);
             $info['run_id'] = $run_id; //'107' 自增
             $info['run_name'] = CommonHelper::utf8ToGbk("商家合同审批(" . $new_time . ")");  //商家合同审批(2015-08-10 09:11:57) 按照格式填写
-            var_dump($info['run_name']);
-            var_dump("商家合同审批(" . $new_time . ")");
             $info['begin_user'] = 'BJ1013'; //BJ1013 固定一人
             $info['begin_time'] = $new_time;  //2015-08-10 09:11:57 当前时间
             $info['flow_auto_num'] = 0; //0
