@@ -300,7 +300,6 @@ class ShopcontractController extends BaseController
             'business_scope_data' => $this->business_scope_data,     //经营范围
         ];
         if (!empty($ShopContract_model_result)) {
-            $ShopContract_model_result['company_nature'] = explode(',', $ShopContract_model_result['company_nature']);   //公司性质
             $ShopContract_model_result['business_hours'] = explode(',', $ShopContract_model_result['business_hours']);   //营业时间
             $ShopContract_model_result['start_time']     = substr($ShopContract_model_result['start_time'], 0, 10);//合同开始时间
             $ShopContract_model_result['end_time']       = substr($ShopContract_model_result['end_time'], 0, 10);  //合同结束时间
@@ -315,21 +314,21 @@ class ShopcontractController extends BaseController
             $ShopManage_model_result['business_scope'] = explode(',', $ShopManage_model_result['business_scope']);     //经营范围
             unset($cond['contract_id']);
         }
-        $Province_model = new Province();           //省
-        $Province_model_result = [];
-        if (!empty($ShopContract_model_result)) {
-            $cond['id'] = $ShopContract_model_result['bank_province'];
-            $field = 'name';
-            $Province_model_result = $Province_model->getInfo($cond, true, $field);
-        }
-        $City_model = new City();               //市
-        $City_model_result = [];
-        if (!empty($ShopContract_model_result)) {
-            $cond['id'] = $ShopContract_model_result['bank_city'];
-            $field = 'name';
-            $City_model_result = $City_model->getInfo($cond, true, $field);
-        }
-        $Business_model = new Business();           //业务员
+
+        //省份列表
+        $Province_model = new Province();
+        $Province_result = $Province_model->province();
+        //省份对应的城市列表
+        $City_model = new City();
+        $Province_City_result = $City_model->city($ShopContract_model_result['bank_province']);
+
+        //银行列表
+        $Bank_model = new ShopBank();
+        $Bank_result = $Bank_model->bank();
+
+        //业务员
+        $Business_model = new Business();
+
         $Business_model_result = [];
         if (!empty($ShopContract_model_result)) {
             $cond['id'] = $ShopContract_model_result['counterman'];
@@ -339,11 +338,13 @@ class ShopcontractController extends BaseController
         $data_info = [
             'list' => $ShopContract_model_result,
             'shop' => $ShopManage_model_result,
-            'province' => $Province_model_result,
-            'city' => $City_model_result,
+            'province_list' => $Province_result,
+            'Province_City_list' => $Province_City_result,
+            'bank_list' => $Bank_result,
             'business' => $Business_model_result,
             'init_array' => $init_array
         ];
+        //var_dump($ShopContract_model_result);exit;
         return $this->render('edit', $data_info);
     }
 
