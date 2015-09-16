@@ -36,7 +36,7 @@ $this->title = '退换货订单详情';
                                 foreach($data['image'] as $v):
                              ?>
                             <div style='width: 60px;'>
-                                <div style='float: left;margin: 10px 10px 10px 10px'><img width='30' height='20' src="<?=$v?>"/></div>
+                                <div style='float: left;margin: 10px 10px 10px 10px'><img width='30' height='20' src="<?=$img_url.$v?>"/></div>
                             </div>
                             <?php endforeach; }?>
                         </td>

@@ -23,6 +23,7 @@ use backend\models\i500m\RefundGoods;
 use backend\models\i500m\RefundOperationLog;
 use backend\models\i500m\RefundOrder;
 use backend\models\i500m\Shop;
+use backend\models\shop\ShopProduct;
 use backend\models\social\ExChange;
 use backend\models\social\ExChangeChecked;
 use backend\models\social\Order;
@@ -169,7 +170,7 @@ class ExchangeController extends BaseController
         } else {
             $list = array();
         }
-        return $this->render('view', ['data'=>$list]);
+        return $this->render('view', ['data'=>$list, 'img_url' =>\yii::$app->params['imgHost']]);
     }
 
     /**
@@ -179,6 +180,9 @@ class ExchangeController extends BaseController
     public function actionCheck()
     {
         $id = RequestHelper::get('id', 0, 'intval');
+        $shop_id = RequestHelper::get('shop_id', 0, 'intval');
+        $num = RequestHelper::get('num', 0, 'intval');
+        $product_id = RequestHelper::get('product_id', '', 'trim');
         $status = RequestHelper::post('status', 0, 'intval');
         $contact = RequestHelper::post('contact', '', 'trim');
         $remark = RequestHelper::post('remark', '', 'trim');
@@ -192,6 +196,7 @@ class ExchangeController extends BaseController
             }
             $model = new ExChange();
             $checked = new ExChangeChecked();
+            $Stock = new ShopProduct();
             $data['ex_id'] = RequestHelper::post('ex_id', 0, 'intval');
             $data['status'] = $status;
             $data['contact_shop'] = $contact[0];
@@ -206,6 +211,9 @@ class ExchangeController extends BaseController
             if ($status == 1) {
                 $ex_data['status'] = 1;
                 $data['remark'] = "";
+                $shop['shop_id'] = RequestHelper::post('shop_id', 0, 'intval');
+                $shop['num'] = RequestHelper::post('num', 0, 'intval');
+                $shop['product_id'] = RequestHelper::post('product_id', '', 'trim');
             }
 
             $ex_data['operator_id'] = $this->admin_id;
@@ -214,6 +222,12 @@ class ExchangeController extends BaseController
             $ex_info = $model->updateOneRecord($where, '', $ex_data);
             if ($ex_info['result'] == 1) {
                 $checked->insertOneRecord($data);
+                if (!empty($shop)) {
+                    $shop_where = ['and', ['=', 'product_id', $shop['product_id']], ['=', 'shop_id', $shop['shop_id']]];
+                    $shop_info = $Stock->getOneRecord($shop_where, '', '*');
+                    $shop_data['product_number'] = $shop_info['product_number']-$shop['num'];
+                    $Stock->updateOneRecord($shop_where, '', $shop_data);
+                }
                 return $this->success('审核成功！！！', '/social/exchange/index');
             } else {
                 return $this->error('审核失败！！！', '/social/exchange/index');
@@ -221,7 +235,10 @@ class ExchangeController extends BaseController
         }
 
         $data = array(
-            'ex_id'=> $id
+            'ex_id'=> $id,
+            'shop_id'=> $shop_id,
+            'num'=> $num,
+            'product_id'=> $product_id
         );
         return $this->render('check', $data);
     }
