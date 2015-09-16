@@ -40,7 +40,8 @@ class SiteController extends BaseController
      *
      * @return string
      */
-    public function actionIndex(){
+    public function actionIndex()
+    {
         return $this->render('index', ['ceshi'=>$this->cesshi]);
     }
 

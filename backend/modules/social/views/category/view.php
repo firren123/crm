@@ -90,16 +90,16 @@ $this->title = '查看服务类型详情';
         </td>
     </tr>
     <tr>
-        <th>是否可用</th>
+        <th>是否禁用</th>
         <td colspan="5" width="80%">
-            <?php if($item['status']==1){ echo '可用';}else{ echo "禁用";}?>
+            <?php if($item['status']==1){ echo '禁用';}else{ echo "可用";}?>
 
         </td>
     </tr>
     <tr>
-        <th>是否显示</th>
+        <th>是否删除</th>
         <td colspan="5" width="80%">
-            <?php if($item['is_deleted']==1){ echo '不显示';}else{ echo "显示";}?>
+            <?php if($item['is_deleted']==1){ echo '已删除';}else{ echo "未删除";}?>
         </td>
     </tr>
     <tr>

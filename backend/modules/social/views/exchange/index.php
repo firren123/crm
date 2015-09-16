@@ -122,13 +122,13 @@ $this->title = '退换货列表';
                         <td>
                             <?php if($item['status']==0){?>
                                 <?php if($item['type']==2){?>
-                                <a class="checked" href="/social/exchange/check?id=<?=$item['id']?>">审核</a>&nbsp;|&nbsp;
+                                <a class="checked" href="/social/exchange/check?id=<?=$item['id']?>&shop_id=<?=$item['shop_id']?>&product_id=<?=$item['product_id']?>&num=<?=$item['number']?>">审核</a>&nbsp;|&nbsp;
                                 <?php }?>
                                 <?php if($item['type']==1){?>
                                     <a class="checked" href="/social/exchange/return-goods?id=<?=$item['id']?>&order_sn=<?=$item['order_sn']?>&apply_time=<?=$item['apply_time']?>">审核</a>&nbsp;|&nbsp;
                                 <?php }?>
                             <?php } ?>
-                            <a class="view" href="javascript:;">详情</a>
+                            <a class="view" href="/social/exchange/view?id=<?=$item['id']?>&order_sn=<?=$item['order_sn']?>">详情</a>
                         </td>
                     </tr>
             <?php
@@ -169,15 +169,16 @@ $this->title = '退换货列表';
                 k.showModal();
                 return false;
             }
-            var d = dialog({
+            /*var d = dialog({
                 url:'/social/exchange/view?id='+id+'&order_sn='+order_sn,
                 title: '退换货订单详情',
                 width: '70em',
+                height:'35em',
                 okValue: '确定',
                 lock: true,
                 ok: function () {}
             })
-            d.showModal();
+            d.showModal();*/
         })
     })
 </script>

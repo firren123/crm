@@ -73,7 +73,7 @@ class CategoryController extends BaseController
     public function actionAdd()
     {
         $model = new ServiceCategory();
-        $model['status'] = 1;
+        $model['status'] = 2;
         $model['sort'] = 99;
         $model['is_deleted'] = 2;
         $model['pid'] = RequestHelper::get('p_id', 0);

@@ -29,16 +29,17 @@ $this->title = '退换货订单详情';
                         <td><?=$data['id']?></td>
                         <td><?=$data['order_sn']?></td>
                         <td><?=$data['shop_name']?></td>
-                        <td>
+                        <td><div style='width: 140px;'>
                             <?php if (empty($data['image'])) {
                             echo '暂无图片';
                             }else{
-                                foreach($data['image'] as $v):
+                                foreach($data['image'] as $k=>$v):
                              ?>
-                            <div style='width: 60px;'>
-                                <div style='float: left;margin: 10px 10px 10px 10px'><img width='30' height='20' src="<?=$v?>"/></div>
-                            </div>
+
+                                <div class="img_v" id="img_<?=$k?>"  style='float: left;margin: 5px'><img width='60' height='60' src="<?=$img_url.$v?>"/></div>
+
                             <?php endforeach; }?>
+                            </div>
                         </td>
                         <td><?=$data['remark']?></td>
                     </tr>
@@ -51,5 +52,19 @@ $this->title = '退换货订单详情';
 </div>
 <span class="zjs_csrf" style="display:none;"><?php echo \Yii::$app->getRequest()->getCsrfToken(); ?></span>
 <script type="text/javascript">
+$(function(){
 
+    $(".img_v").click(function(){
+        var str = $(this).attr("id");
+        var img_url = $("#"+str+" img").attr("src");
+        var html = "";
+        html += "<div><img src="+img_url+"></div>";
+        var d = dialog({title:"提示",
+            okValue: '确定',
+            ok: function () {}
+        });
+        d.content(html);
+        d.show();
+    });
+})
 </script>
