@@ -30,7 +30,7 @@ $this->title = "用户订单列表";
 
 
         <label for="order_sn">订单号：</label>
-        <input id="order_sn" type="text" size="31" name="order_sn" value="<?php isset($order_sn) ? $order_sn : ''; ?>"
+        <input id="order_sn" type="text" size="31" name="order_sn" value="<?= isset($order_sn) ?  $order_sn : ''; ?>"
                class="form-control"/>
         <!--        <label for="name">用户名：</label>-->
         <!--        <input id="name" type="text" name="username" value="-->
