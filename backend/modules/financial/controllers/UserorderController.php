@@ -258,12 +258,12 @@ class UserorderController extends CommonController
         if (!empty($order_sn)) {
             $where['order_sn'] = $order_sn;
         }
-        $andWhere = '';
+        $andWhere = '1';
         if ($start_time) {
-            $andWhere[] = " add_time>'" . $start_time . " 00:00:00'";
+            $andWhere .= " and add_time>'" . $start_time . " 00:00:00'";
         }
         if ($end_time) {
-            $andWhere[] = " add_time<'" . $end_time . " 23:59:59'";
+            $andWhere .= " and add_time<'" . $end_time . " 23:59:59'";
         }
         $order = ['id' => SORT_DESC];
         $count = $refundOrderModel->find()->where($where)->andWhere($andWhere)->count('id');
@@ -279,7 +279,20 @@ class UserorderController extends CommonController
         if ($role_id == 20) {//客服主管
             $role['dep'] = 1;
         }
-        return $this->render('list', ['data' => $list, 'pages' => $pages, 'refund_status' => $this->refund_status, 'audit_status' => $this->audit_status, 'role' => $role]);
+
+        return $this->render(
+            'list',
+            [
+                'data' => $list,
+                'pages' => $pages,
+                'refund_status' => $this->refund_status,
+                'audit_status' => $this->audit_status,
+                'role' => $role,
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+                'order_sn' => $order_sn
+            ]
+        );
     }
 
     /**
