@@ -401,7 +401,7 @@ class GoodscheckController extends BaseController
      */
     private function _passCheck()
     {
-        echo json_encode(array('result' => 0, 'msg' => 'test操作失败(01).'));return;
+        //echo json_encode(array('result' => 0, 'msg' => 'test操作失败(01).'));return;
         //echo json_encode(array('result' => 1, 'msg' => 'test操作成功.'));return;
 
         $goods_id = RequestHelper::post('goods_id', 0, 'intval');
@@ -456,15 +456,27 @@ class GoodscheckController extends BaseController
 
         //标准库 与 供应商 商品属性对应关系
         $arr_data = array();
-        $arr_data['xxxx'] = $arr_goods_info['xxxx'];
-        $arr_data['xxxx'] = $arr_goods_info['xxxx'];
-        $arr_data['xxxx'] = $arr_goods_info['xxxx'];
-        $arr_data['xxxx'] = $arr_goods_info['xxxx'];
-        $arr_data['xxxx'] = $arr_goods_info['xxxx'];
-        $arr_data['xxxx'] = $arr_goods_info['xxxx'];
-        $arr_data['xxxx'] = $arr_goods_info['xxxx'];
-        $arr_data['xxxx'] = $arr_goods_info['xxxx'];
-        $arr_data['xxxx'] = $arr_goods_info['xxxx'];
+        $arr_data['name'] = $arr_goods_info['title'];//商品名称
+        $arr_data['image'] = $arr_goods_info['image'];//图片
+        $arr_data['description'] = $arr_goods_info['description'];//商品介绍
+        $arr_data['cate_first_id'] = $arr_goods_info['category_id'];//分类id
+        $arr_data['brand_id'] = $arr_goods_info['brand_id'];//品牌名称
+        $arr_data['origin_price'] = $arr_goods_info['selling_price'];//建议售价
+        $arr_data['bar_code'] = $arr_goods_info['bar_code'];//条形码
+        $arr_data['attr_value'] = $arr_goods_info['attr_value'];//规格值文字，空格分隔
+
+        $arr_data['status'] = 1;//0、删除 1 上架 2 下架
+        $arr_data['single'] = 2;//0正常商品 1标准库商品 2待发布商品
+        $arr_data['source'] = 2;//来源1 crm2 供应商3 外部
+
+        $arr_data['shop_id'] = 0;
+        $arr_data['begin_time'] = 0;
+        $arr_data['end_time'] = 0;
+        $arr_data['clock_begin'] = '';
+        $arr_data['clock_end'] = '';
+        $arr_data['day_count'] = 0;
+        $arr_data['aid'] = 0;
+
 
         $arr_param = array();
 
@@ -472,13 +484,13 @@ class GoodscheckController extends BaseController
             $arr_data['sale_price'] = $jhj;//进货价
             $arr_data['shop_price'] = $phj;//铺货价
 
-            $arr_result = $this->_insertStandard($arr_data, $arr_param);
+            $arr_result = $model_product->insertOneRecord($arr_data);
             echo json_encode($arr_result);
             return;
         } elseif ($type == 'update') {
-            $arr_param['existed_product_id'] = $existed_product_id;
+            $arr_param['id'] = $existed_product_id;
 
-            $arr_result = $this->_updateStandard($arr_data, $arr_param);
+            $arr_result = $model_product->updateOneRecord($arr_param, array(), $arr_data);
             echo json_encode($arr_result);
             return;
         } else {
@@ -491,46 +503,6 @@ class GoodscheckController extends BaseController
 
 
     /**
-     * 向标准库插入新记录
-     *
-     * Author zhengyu@iyangpin.com
-     *
-     * @param array $arr_data  供应商商品数据，key是标准库的字段名
-     * @param array $arr_param 其他参数
-     *
-     * @return array array('result'=>1/0,'data'=>array,'msg'=>string)
-     */
-    private function _insertStandard($arr_data, $arr_param = array())
-    {
-        $model_product = new Product();
-
-        $arr_where = array();
-        $arr_where['xxxx'] = $arr_param['xxxx'];
-
-
-    }
-
-    /**
-     * 更新标准库记录
-     *
-     * Author zhengyu@iyangpin.com
-     *
-     * @param array $arr_data  供应商商品数据，key是标准库的字段名
-     * @param array $arr_param 其他参数
-     *
-     * @return array array('result'=>1/0,'data'=>array,'msg'=>string)
-     */
-    private function _updateStandard($arr_data, $arr_param = array())
-    {
-        $model_product = new Product();
-
-        $arr_where = array();
-        $arr_where['xxxx'] = $arr_param['xxxx'];
-
-
-    }
-
-    /**
      * 审核-驳回
      *
      * Author zhengyu@iyangpin.com
@@ -539,7 +511,7 @@ class GoodscheckController extends BaseController
      */
     private function _rejectCheck()
     {
-        echo json_encode(array('result' => 0, 'msg' => 'test操作失败(01).'));return;
+        //echo json_encode(array('result' => 0, 'msg' => 'test操作失败(01).'));return;
         //echo json_encode(array('result' => 1, 'msg' => 'test操作成功.'));return;
 
         $goods_id = RequestHelper::post('goods_id', 0, 'intval');
