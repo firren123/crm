@@ -89,6 +89,7 @@ $form = ActiveForm::begin([
     </div>
 <?php ActiveForm::end(); ?>
 <input type="hidden" id="img_url" value="<?= \Yii::$app->params['imgHost']; ?>"/>
+<input type="hidden" id="f_id" value="<?= $model->id; ?>"/>
 <script type="text/javascript">
     $(function(){
         $(".btn-primary").click(function(){
@@ -100,10 +101,10 @@ $form = ActiveForm::begin([
         });
 
         $("#filePicker1").click(function(){
-            var f_id = $("#forum-pid").val();
+            var f_id = $("#f_id").val();
             var d = dialog({
                 url:'/public/phone?f_id='+f_id,
-                title: '选择图片',
+                title: '选择图片'
 
             });
             d.showModal();
