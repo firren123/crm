@@ -452,6 +452,22 @@ class GoodscheckController extends BaseController
     {
         $goods_id = RequestHelper::post('goods_id', 0, 'intval');
         $reason = RequestHelper::post('reason', '', 'trim');
+
+        $model_sp_goods = new SupplierGoods();
+
+        //修改商品状态
+        $arr_result = $model_sp_goods->updateOneRecord(
+            array('id' => $goods_id),
+            $this->_default_str_andwhere,
+            array('status' => 3, 'reason' => $reason)
+        );
+        if (!$arr_result || $arr_result['result'] == 0) {
+            echo json_encode(array('result' => 0, 'msg' => '操作失败(01).'));
+            return;
+        }
+
+        echo json_encode(array('result' => 1, 'msg' => '操作成功.'));
+        return;
     }
 
 

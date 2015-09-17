@@ -148,6 +148,18 @@ $this->title = "供应商商品详情";
                 <input type="text" class="zjs_text_phj" />
             </td>
         </tr>
+        <?php if($existed_product_id>0){ ?>
+        <tr class="zjs_tr_hide zjs_tr_cover" style="display:none;">
+            <td>
+                <span>是否覆盖：</span>
+            </td>
+            <td>
+                <span>是否覆盖标准库中与此条形码相同的商品：</span>
+                <label for="zid_radio_cover1">覆盖</label><input type="radio" value="1" name="zid_radio_cover" id="zid_radio_cover1" class="zjs_radio_cover" />
+                <label for="zid_radio_cover2">不覆盖</label><input type="radio" value="2" name="zid_radio_cover" id="zid_radio_cover2" class="zjs_radio_cover" />
+            </td>
+        </tr>
+        <?php } ?>
         <tr class="zjs_tr_hide zjs_tr_reason" style="display:none;">
             <td>审核驳回原因</td>
             <td><input type="text" class="zjs_text_reason" style="width:99%;" /></td>
@@ -205,15 +217,29 @@ function submit()
     var reason='';
     var jhj=0;
     var phj=0;
+    var is_cover=0;
     if(status=='1'){
         act='pass';
         jhj=$(".zjs_text_jhj").val();
         phj=$(".zjs_text_phj").val();
         if(z_check_money(jhj)==0){alert("进货价格式错误");return;}
         if(z_check_money(phj)==0){alert("铺货价格式错误");return;}
+        var len_tr_cover=$(".zjs_tr_cover").length;
+        if(len_tr_cover==0){
+            //此条形码不存在
+        }else{
+            //此条形码存在
+            var radio_cover=$(".zjs_radio_cover:checked");
+            if(radio_cover.length==0){
+                alert("请选择是否覆盖");return;
+            }else{
+                is_cover=$(radio_cover).val();
+            }
+        }
     } else if(status=='2'){
         act='reject';
         reason=$(".zjs_text_reason").val();
+        if(reason.length==0){alert("请填写驳回原因");return;}
         if(reason.length>50){alert("驳回原因过长，限50字以内");return;}
     } else {
         return;
@@ -225,6 +251,7 @@ function submit()
         {
             "goods_id":goods_id,
             "reason":reason,
+            "is_cover":is_cover,
             "jhj":jhj,
             "phj":phj
         },
