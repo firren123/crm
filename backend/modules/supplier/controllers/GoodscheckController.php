@@ -404,6 +404,7 @@ class GoodscheckController extends BaseController
         $goods_id = RequestHelper::post('goods_id', 0, 'intval');
         $jhj = RequestHelper::post('jhj', 0, 'floatval');
         $phj = RequestHelper::post('phj', 0, 'floatval');
+        $is_cover = RequestHelper::post('is_cover', 0, 'intval');
 
         $model_sp_goods = new SupplierGoods();
 
@@ -431,13 +432,98 @@ class GoodscheckController extends BaseController
         //  检查此商品条形码是否在标准库已存在
         $existed_product_id = 0;
         $arr_product_info = $model_product->getOneRecord(
-            array('bar_code' => $goods_id),
+            array('bar_code' => $arr_goods_info['bar_code']),
             $this->_default_str_andwhere,
             'id'
         );
+        $type = '';// ''=对于标准库无操作， insert=插入新记录  update=更新记录
         if (empty($arr_product_info)) {
-            //
+            //此条形码在标准库 不存在
+            $type = 'insert';
+        } else {
+            //此条形码在标准库 存在
+            $existed_product_id = intval($arr_product_info['id']);
+            if ($is_cover == 1) {
+                $type = 'update';
+            } else {
+                //nothing  $type=0
+            }
         }
+
+
+        //标准库 与 供应商 商品属性对应关系
+        $arr_data = array();
+        $arr_data['xxxx'] = $arr_goods_info['xxxx'];
+        $arr_data['xxxx'] = $arr_goods_info['xxxx'];
+        $arr_data['xxxx'] = $arr_goods_info['xxxx'];
+        $arr_data['xxxx'] = $arr_goods_info['xxxx'];
+        $arr_data['xxxx'] = $arr_goods_info['xxxx'];
+        $arr_data['xxxx'] = $arr_goods_info['xxxx'];
+        $arr_data['xxxx'] = $arr_goods_info['xxxx'];
+        $arr_data['xxxx'] = $arr_goods_info['xxxx'];
+        $arr_data['xxxx'] = $arr_goods_info['xxxx'];
+
+        $arr_param = array();
+
+        if ($type == 'insert') {
+            $arr_data['sale_price'] = $jhj;//进货价
+            $arr_data['shop_price'] = $phj;//铺货价
+
+            $arr_result = $this->_insertStandard($arr_data, $arr_param);
+            echo json_encode($arr_result);
+            return;
+        } elseif ($type == 'update') {
+            $arr_param['existed_product_id'] = $existed_product_id;
+
+            $arr_result = $this->_updateStandard($arr_data, $arr_param);
+            echo json_encode($arr_result);
+            return;
+        } else {
+            //nothing
+        }
+
+        echo json_encode(array('result' => 1, 'msg' => '操作成功.'));
+        return;
+    }
+
+
+    /**
+     * 向标准库插入新记录
+     *
+     * Author zhengyu@iyangpin.com
+     *
+     * @param array $arr_data  供应商商品数据，key是标准库的字段名
+     * @param array $arr_param 其他参数
+     *
+     * @return array array('result'=>1/0,'data'=>array,'msg'=>string)
+     */
+    private function _insertStandard($arr_data, $arr_param = array())
+    {
+        $model_product = new Product();
+
+        $arr_where = array();
+        $arr_where['xxxx'] = $arr_param['xxxx'];
+
+
+    }
+
+    /**
+     * 更新标准库记录
+     *
+     * Author zhengyu@iyangpin.com
+     *
+     * @param array $arr_data  供应商商品数据，key是标准库的字段名
+     * @param array $arr_param 其他参数
+     *
+     * @return array array('result'=>1/0,'data'=>array,'msg'=>string)
+     */
+    private function _updateStandard($arr_data, $arr_param = array())
+    {
+        $model_product = new Product();
+
+        $arr_where = array();
+        $arr_where['xxxx'] = $arr_param['xxxx'];
+
 
     }
 

@@ -156,7 +156,7 @@ $this->title = "供应商商品详情";
             <td>
                 <span>是否覆盖标准库中与此条形码相同的商品：</span>
                 <label for="zid_radio_cover1">覆盖</label><input type="radio" value="1" name="zid_radio_cover" id="zid_radio_cover1" class="zjs_radio_cover" />
-                <label for="zid_radio_cover2">不覆盖</label><input type="radio" value="2" name="zid_radio_cover" id="zid_radio_cover2" class="zjs_radio_cover" />
+                <label for="zid_radio_cover2">不覆盖</label><input type="radio" value="0" name="zid_radio_cover" id="zid_radio_cover2" class="zjs_radio_cover" />
             </td>
         </tr>
         <?php } ?>
