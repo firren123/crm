@@ -245,29 +245,37 @@ function submit()
         return;
     }
 
-    $.post
-    (
-        "/supplier/goodscheck/ajax?type="+act,
-        {
+    disable_btn();
+    $.ajax({
+        "type":"post",
+        "url": "/supplier/goodscheck/ajax?type="+act,
+        "dataType":"json",
+        "data":{
             "goods_id":goods_id,
             "reason":reason,
             "is_cover":is_cover,
             "jhj":jhj,
             "phj":phj
         },
-        function(str)
-        {
-            console.log(str);return;
-            if(str=="1"){
-                alert("操作成功");
-                //console.log("操作成功");
+        "success":function(obj){
+            z_log("ajax goodscheck success");
+            if(obj.result=='1'){
                 window.location.href="/supplier/goodscheck/index";
-            } else {
-                alert("操作失败");
-                //console.log("操作失败");
+            }else{
+                alert(obj.msg);
             }
+        },
+        "error":function(){
+            z_log("ajax goodscheck error");
+        },
+        "complete":function(){
+            z_log("ajax goodscheck complete");
+            enable_btn();
         }
-    );
+    });
+
+
+
 }
 
 </script>

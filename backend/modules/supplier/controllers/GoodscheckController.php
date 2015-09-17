@@ -401,6 +401,9 @@ class GoodscheckController extends BaseController
      */
     private function _passCheck()
     {
+        echo json_encode(array('result' => 0, 'msg' => 'test操作失败(01).'));return;
+        //echo json_encode(array('result' => 1, 'msg' => 'test操作成功.'));return;
+
         $goods_id = RequestHelper::post('goods_id', 0, 'intval');
         $jhj = RequestHelper::post('jhj', 0, 'floatval');
         $phj = RequestHelper::post('phj', 0, 'floatval');
@@ -536,6 +539,9 @@ class GoodscheckController extends BaseController
      */
     private function _rejectCheck()
     {
+        echo json_encode(array('result' => 0, 'msg' => 'test操作失败(01).'));return;
+        //echo json_encode(array('result' => 1, 'msg' => 'test操作成功.'));return;
+
         $goods_id = RequestHelper::post('goods_id', 0, 'intval');
         $reason = RequestHelper::post('reason', '', 'trim');
 

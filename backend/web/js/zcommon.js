@@ -5,7 +5,27 @@
 //require json2
 
 //update 20150422 0938
+//update 20150917 1411
 
+
+
+var z_is_btn_valid = 1;
+function check_btn()
+{
+    if(typeof z_is_btn_valid!=='undefined' && (z_is_btn_valid==1 || z_is_btn_valid==0)){
+        return z_is_btn_valid;
+    }else{
+        return 1;
+    }
+}
+function disable_btn()
+{
+    z_is_btn_valid=0;
+}
+function enable_btn()
+{
+    z_is_btn_valid=1;
+}
 
 
 $(function()
