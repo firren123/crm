@@ -447,9 +447,10 @@ class GoodscheckController extends BaseController
             //此条形码在标准库 存在
             $existed_product_id = intval($arr_product_info['id']);
             if ($is_cover == 1) {
+                //更新2个价格和其他属性
                 $type = 'update';
             } else {
-                //nothing  $type=0
+                //只更新2个价格
             }
         }
 
@@ -477,28 +478,32 @@ class GoodscheckController extends BaseController
         $arr_data['day_count'] = 0;
         $arr_data['aid'] = 0;
 
+        $arr_data['sale_price'] = $jhj;//进货价
+        $arr_data['shop_price'] = $phj;//铺货价
 
         $arr_param = array();
+        $arr_param['id'] = $existed_product_id;
 
         if ($type == 'insert') {
-            $arr_data['sale_price'] = $jhj;//进货价
-            $arr_data['shop_price'] = $phj;//铺货价
-
+            //插入新记录
             $arr_result = $model_product->insertOneRecord($arr_data);
             echo json_encode($arr_result);
             return;
         } elseif ($type == 'update') {
-            $arr_param['id'] = $existed_product_id;
-
+            //覆盖，更新 2个价格和其他属性
             $arr_result = $model_product->updateOneRecord($arr_param, array(), $arr_data);
             echo json_encode($arr_result);
             return;
         } else {
-            //nothing
-        }
+            //不覆盖，仅更新2个价格
+            $arr_data = array();
+            $arr_data['sale_price'] = $jhj;//进货价
+            $arr_data['shop_price'] = $phj;//铺货价
 
-        echo json_encode(array('result' => 1, 'msg' => '操作成功.'));
-        return;
+            $arr_result = $model_product->updateOneRecord($arr_param, array(), $arr_data);
+            echo json_encode($arr_result);
+            return;
+        }
     }
 
 

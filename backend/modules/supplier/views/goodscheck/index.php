@@ -27,7 +27,7 @@ $map_field_name = array(
 
 
 use yii\widgets\LinkPager;
-$this->title = "商家列表";
+$this->title = "列表-供应商商品审核";
 
 //echo 'index-view';exit;
 

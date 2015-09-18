@@ -26,8 +26,7 @@ $map_field_name = array(
     'brand_name' => '品牌名称',
     'image' => '图片',
     'description' => '商品介绍',
-    'supply_price' => '供货价',
-    'selling_price' => '建议售价',
+
     'unit' => '单位',
     'net_weight' => '净重',
     'gross_weight' => '毛重',
@@ -38,10 +37,13 @@ $map_field_name = array(
     'logistic' => '物流单价',
     'attr_value' => '规格',
     'province_limit' => '销售地区',
+
+    'supply_price' => '供货价',
+    'selling_price' => '建议售价',
 );
 
 
-$this->title = "供应商商品详情";
+$this->title = "详情-供应商商品审核";
 
 ?>
 
@@ -154,9 +156,10 @@ $this->title = "供应商商品详情";
                 <span>是否覆盖：</span>
             </td>
             <td>
-                <span>是否覆盖标准库中与此条形码相同的商品：</span>
-                <label for="zid_radio_cover1">覆盖</label><input type="radio" value="1" name="zid_radio_cover" id="zid_radio_cover1" class="zjs_radio_cover" />
-                <label for="zid_radio_cover2">不覆盖</label><input type="radio" value="0" name="zid_radio_cover" id="zid_radio_cover2" class="zjs_radio_cover" />
+                <span>是否覆盖标准库中与此条形码相同的商品“进货价”、“铺货价”之外的属性：</span>
+                <br />
+                <input type="radio" value="1" name="zid_radio_cover" id="zid_radio_cover1" class="zjs_radio_cover" /><label for="zid_radio_cover1" style="margin:0 20px 0 0;">覆盖</label>
+                <input type="radio" value="0" name="zid_radio_cover" id="zid_radio_cover2" class="zjs_radio_cover" /><label for="zid_radio_cover2">不覆盖</label>
             </td>
         </tr>
         <?php } ?>
@@ -192,6 +195,7 @@ $(function()
         $(".zjs_tr_hide").hide();
         if (value == 1) {
             $(".zjs_tr_price").show();
+            $(".zjs_tr_cover").show();
         } else if (value == 2) {
             $(".zjs_tr_reason").show();
         } else {
