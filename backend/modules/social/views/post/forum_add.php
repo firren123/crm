@@ -79,7 +79,7 @@ $form = ActiveForm::begin([
 
 </div>
 <?= $form->field($model, 'sort')->input('text',['style'=>'width:200px','placeholder' => '999']) ; ?>
-<?= $form->field($model, 'hot')->radioList(['1'=>'是','2'=>'否']); ?>
+<?= $form->field($model, 'hot')->radioList(['1'=>'是','2'=>'否'],['class'=>'hotval']); ?>
 <?= $form->field($model, 'status')->radioList(['1'=>'禁用','2'=>'可用']); ?>
 <?= $form->field($model, 'describe')->textarea() ; ?>
 <?= $form->field($model, 'pid')->label('')->hiddenInput(); ?>
@@ -90,12 +90,20 @@ $form = ActiveForm::begin([
 <?php ActiveForm::end(); ?>
 <input type="hidden" id="img_url" value="<?= \Yii::$app->params['imgHost']; ?>"/>
 <input type="hidden" id="f_id" value="<?= $model->id; ?>"/>
+<input type="hidden" id="count" value="<?= $count; ?>" />
 <script type="text/javascript">
     $(function(){
         $(".btn-primary").click(function(){
             var img = $("#images1").val();
             if(img.length ==0){
                 alert('图片不能为空');
+                return false;
+            }
+            var hot = $("input[name='Forum[hot]']:checked").val();
+            var count = $("#count").val();
+            console.log(hot);
+            if(hot ==1 && count > 5){
+                alert('热门的设置超过6个，请修改');
                 return false;
             }
         });

@@ -357,8 +357,19 @@ class PostController extends BaseController
         $cond = 'id=' . $id;
         $item = $model->getInfo($cond, false, '*');
         $Forum = RequestHelper::post('Forum');
-
+        if ($item->pid) {
+            $count = $model->getCount(['pid'=>$item->pid,'hot'=>1]);
+        } else {
+            $count = 0;
+        }
         if (!empty($Forum)) {
+            if ($Forum['hot'] ==1) {
+                $count = $model->getCount(['pid' => $Forum['pid'], 'hot' => 1], " id <> $id");
+                if ($count > 5) {
+                    return $this->error('热门分类超过6个，请修改');
+                }
+            }
+
             $result = $model->updateInfo($Forum, $cond);
             if ($result == true) {
                 $log = new Log();
@@ -367,7 +378,7 @@ class PostController extends BaseController
                 $this->redirect('/social/post/forum-list');
             }
         }
-        return $this->render('forum_add', ['model' => $item]);
+        return $this->render('forum_add', ['model' => $item, 'count'=> $count]);
     }
 
     /**
@@ -380,6 +391,12 @@ class PostController extends BaseController
         $pid = RequestHelper::get('p_id', 0, 'intval');
         $model = new Forum();
         $model->pid = $pid;
+        if ($pid) {
+            $count = $model->getCount(['pid'=>$pid,'hot'=>1]);
+        } else {
+            $count = 0;
+        }
+
         $Forum = RequestHelper::post('Forum');
         if (!empty($Forum)) {
             $Forum['sort'] = RequestHelper::post('Forum[sort]', 999, 'intval');
@@ -392,7 +409,7 @@ class PostController extends BaseController
                 return $this->redirect('/social/post/forum-list');
             }
         }
-        return $this->render('forum_add', ['model' => $model, 'pid' => $pid]);
+        return $this->render('forum_add', ['model' => $model, 'pid' => $pid ,'count' => $count]);
     }
 
     /**
