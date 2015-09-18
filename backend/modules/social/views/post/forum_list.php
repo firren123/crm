@@ -19,6 +19,7 @@ $this->title = "帖子板块管理";
 <legends style="fond-size:12px;">
     <legend>帖子板块管理</legend>
 </legends>
+<h2>每个子分类中的热门分类不得超过6个</h2>
 <div class="tab-content">
     <div class="row-fluid">
         [<a href="/social/post/forum-add?p_id=0">添加模块</a>]
@@ -45,7 +46,7 @@ $this->title = "帖子板块管理";
                         ?>
                         <tr id="tr_<?= $item1['id']; ?>">
                             <td style="text-align: left;">　　
-                                |----<?= $item1['title']; ?>(<?= $item1['describe']; ?>)　
+                                |---- <?= $item1['hot']==1?'<b style="color:red">[热门]</b>':''; ?><?= $item1['title']; ?>(<?= $item1['describe']; ?>)　
                                 [<a href="/social/post/forum-edit?id=<?= $item1['id']; ?> ">编辑</a>]
                                 [<a href="/social/post/forum-view?f_id=<?= $item1['id']; ?>">查看板块</a>]
                                 [<a href="#" onclick="Delete(<?= $item1['id'] ?>)">删除帖子</a>]
@@ -53,7 +54,7 @@ $this->title = "帖子板块管理";
                             </td>
                         </tr>
                         <?php if (empty($list[$key][$item['id']][$key1][$item1['id']])) {
-                    } else {
+                            } else {
                         foreach ($list[$key][$item['id']][$key1][$item1['id']] as $item2):
                             ?>
                             <tr id="tr_<?= $item2['id']; ?>">
