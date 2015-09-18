@@ -27,6 +27,7 @@ use backend\models\i500m\SupplierGoodsLimit;
 use backend\models\i500m\Category;
 use backend\models\i500m\Province;
 use backend\models\i500m\Product;
+use backend\models\i500m\ProductSp;
 
 
 /**
@@ -410,6 +411,9 @@ class GoodscheckController extends BaseController
         $is_cover = RequestHelper::post('is_cover', 0, 'intval');
 
         $model_sp_goods = new SupplierGoods();
+        $model_product = new Product();
+        $model_sp = new Supplier();
+        $model_psp = new ProductSp();
 
         //修改商品状态
         $arr_result = $model_sp_goods->updateOneRecord(
@@ -429,7 +433,22 @@ class GoodscheckController extends BaseController
             $this->_default_str_field
         );
 
-        $model_product = new Product();
+        //z20150918 为了向标准库商品和供应商的对应关系表写数据,获取sp_name
+        $arr_sp_info = $model_sp->getOneRecord(
+            array('id' => $arr_goods_info['supplier_id']),
+            $this->_default_str_andwhere,
+            'id,company_name'
+        );
+        if (isset($arr_sp_info['company_name'])) {
+            $sp_name = $arr_sp_info['company_name'];
+        } else {
+            $sp_name = '';
+        }
+
+        $arr_psp_param = array();
+        $arr_psp_param['sp_id'] = $arr_goods_info['supplier_id'];
+        $arr_psp_param['sp_name'] = $sp_name;
+
 
         //同步到标准库
         //  检查此商品条形码是否在标准库已存在
@@ -484,14 +503,29 @@ class GoodscheckController extends BaseController
         $arr_param = array();
         $arr_param['id'] = $existed_product_id;
 
+        $arr_psp_param['pid'] = $existed_product_id;
         if ($type == 'insert') {
             //插入新记录
             $arr_result = $model_product->insertOneRecord($arr_data);
+
+            if (isset($arr_result['result'])
+                && $arr_result['result'] == 1
+                && isset($arr_result['data'])
+                && isset($arr_result['data']['new_id'])
+            ) {
+                $new_pid = intval($arr_result['data']['new_id']);
+                $arr_psp_param['pid'] = $new_pid;
+
+                $model_psp->insertOneRecord($arr_psp_param);
+            }
             echo json_encode($arr_result);
             return;
         } elseif ($type == 'update') {
             //覆盖，更新 2个价格和其他属性
             $arr_result = $model_product->updateOneRecord($arr_param, array(), $arr_data);
+
+            $model_psp->insertOneRecord($arr_psp_param);
+
             echo json_encode($arr_result);
             return;
         } else {
@@ -501,6 +535,9 @@ class GoodscheckController extends BaseController
             $arr_data['shop_price'] = $phj;//铺货价
 
             $arr_result = $model_product->updateOneRecord($arr_param, array(), $arr_data);
+
+            $model_psp->insertOneRecord($arr_psp_param);
+
             echo json_encode($arr_result);
             return;
         }
@@ -538,6 +575,7 @@ class GoodscheckController extends BaseController
         echo json_encode(array('result' => 1, 'msg' => '操作成功.'));
         return;
     }
+
 
 
 }
