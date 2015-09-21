@@ -28,26 +28,26 @@ $this->title ='供应商信息修改';
     //window.onload事件
     function func(){
         accounteditmsg=document.getElementById("supplier-account").value;
-        var e=document.getElementById('supplier-email');
-        regemail(e);
+//        var e=document.getElementById('supplier-email');
+//        regemail(e);
 //        var m=document.getElementById('supplier-mobile');
 //        regmobile(m);
-        var p=document.getElementById('supplier-phone');
-        regphone(p);
-        var q=document.getElementById('supplier-qq');
-        regqq(q);
+//        var p=document.getElementById('supplier-phone');
+//        regphone(p);
+//        var q=document.getElementById('supplier-qq');
+//        regqq(q);
     }
     //验证email格式
     function regemail(file){
         //alert(emailreg.test(file.value));
-        if(!emailreg.test(file.value)){
-            document.getElementById("emaillabel").style.display="block";
-            email=false;
-        }else{
-            document.getElementById("emaillabel").style.display="none";
-            email=true;
-        }
-        if(file.value==''){document.getElementById("emaillabel").style.display="none";}
+//        if(!emailreg.test(file.value)){
+//            document.getElementById("emaillabel").style.display="block";
+//            email=false;
+//        }else{
+//            document.getElementById("emaillabel").style.display="none";
+//            email=true;
+//        }
+//        if(file.value==''){document.getElementById("emaillabel").style.display="none";}
     }
     //验证手机号格式
     //    function regmobile(file){
@@ -63,26 +63,26 @@ $this->title ='供应商信息修改';
     //验证固定电话格式
     function regphone(file){
         //alert(emailreg.test(file.value));
-        if(!phonereg.test(file.value)){
-            document.getElementById("phonelabel").style.display="block";
-            phone=false;
-        }else{
-            document.getElementById("phonelabel").style.display="none";
-            phone=true;
-        }
-        if(file.value==''){document.getElementById("phonelabel").style.display="none";}
+//        if(!phonereg.test(file.value)){
+//            document.getElementById("phonelabel").style.display="block";
+//            phone=false;
+//        }else{
+//            document.getElementById("phonelabel").style.display="none";
+//            phone=true;
+//        }
+//        if(file.value==''){document.getElementById("phonelabel").style.display="none";}
     }
     //验证QQ格式
     function regqq(file){
         //alert(emailreg.test(file.value));
-        if(!QQreg.test(file.value)){
-            document.getElementById("qqlabel").style.display="block";
-            QQ=false;
-        }else{
-            document.getElementById("qqlabel").style.display="none";
-            QQ=true;
-        }
-        if(file.value==''){document.getElementById("qqlabel").style.display="none";}
+//        if(!QQreg.test(file.value)){
+//            document.getElementById("qqlabel").style.display="block";
+//            QQ=false;
+//        }else{
+//            document.getElementById("qqlabel").style.display="none";
+//            QQ=true;
+//        }
+//        if(file.value==''){document.getElementById("qqlabel").style.display="none";}
     }
     //验证账号
     function regaccount(file){
@@ -118,19 +118,7 @@ $this->title ='供应商信息修改';
         if(!account) {
             alert("账号不可用，无法提交！");
         }else{
-            if(!email) {
-                alert("邮箱格式有误，无法提交！");
-            }else{
-                if(!phone){
-                    alert("固定电话格式有误，无法提交！");
-                }else{
-                    if(!QQ){
-                        alert("QQ格式有误，无法提交！");
-                    }else{
-                        document.getElementById("login-form").submit().click;
-                    }
-                }
-            }
+            document.getElementById("login-form").submit().click;
         }
     }
 
@@ -189,4 +177,5 @@ $form = ActiveForm::begin([
 <?php ActiveForm::end(); ?>
 </div>
 </span>
+
 </body>
