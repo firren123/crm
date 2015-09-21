@@ -42,14 +42,14 @@ $this->title = '供应商信息添加';
     function regemail(file){
         //alert(emailreg.test(file.value));
 
-        if(!emailreg.test(file.value)){
-            document.getElementById("emaillabel").style.display="inline";
-            email=false;
-        }else{
-            document.getElementById("emaillabel").style.display="none";
-            email=true;
-        }
-        if(file.value==''){document.getElementById("emaillabel").style.display="none";}
+//        if(!emailreg.test(file.value)){
+//            document.getElementById("emaillabel").style.display="inline";
+//            email=false;
+//        }else{
+//            document.getElementById("emaillabel").style.display="none";
+//            email=true;
+//        }
+//        if(file.value==''){document.getElementById("emaillabel").style.display="none";}
     }
     //验证手机号格式
 //    function regmobile(file){
@@ -64,31 +64,31 @@ $this->title = '供应商信息添加';
 //    }
     //验证固定电话格式
     function regphone(file){
-        if(file.value.length==12) {
-            if (!phonereg.test(file.value)) {
-                document.getElementById("phonelabels").style.display = "inline";
-                phone = false;
-            } else {
-                document.getElementById("phonelabels").style.display = "none";
-                phone = true;
-            }
-        }else{
-            document.getElementById("phonelabels").style.display = "inline";
-            phone = false;
-        }
-        if(file.value==''){document.getElementById("phonelabels").style.display="none";}
+//        if(file.value.length==12) {
+//            if (!phonereg.test(file.value)) {
+//                document.getElementById("phonelabels").style.display = "inline";
+//                phone = false;
+//            } else {
+//                document.getElementById("phonelabels").style.display = "none";
+//                phone = true;
+//            }
+//        }else{
+//            document.getElementById("phonelabels").style.display = "inline";
+//            phone = false;
+//        }
+//        if(file.value==''){document.getElementById("phonelabels").style.display="none";}
     }
     //验证QQ格式
     function regqq(file){
         //alert(emailreg.test(file.value));
-        if(!QQreg.test(file.value)){
-            document.getElementById("qqlabel").style.display="inline";
-            QQ=false;
-        }else{
-            document.getElementById("qqlabel").style.display="none";
-            QQ=true;
-        }
-        if(file.value==''){document.getElementById("qqlabel").style.display="none";}
+//        if(!QQreg.test(file.value)){
+//            document.getElementById("qqlabel").style.display="inline";
+//            QQ=false;
+//        }else{
+//            document.getElementById("qqlabel").style.display="none";
+//            QQ=true;
+//        }
+//        if(file.value==''){document.getElementById("qqlabel").style.display="none";}
     }
     //验证账号
     function regaccount(file){
