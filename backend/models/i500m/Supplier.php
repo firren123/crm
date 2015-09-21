@@ -48,6 +48,7 @@ class Supplier extends I500Base
             [['password'], 'required', 'message' => '密码不能为空！'],
             [['contact'], 'required', 'message' => '联系人不能为空！'],
             [['sex'], 'required', 'message' => '性别不能为空！'],
+
 //            [['email'], 'required', 'message' => '电子邮箱不能为空！'],
             [['mobile'],'required','message' => '手机号不能为空！'],
 //            [['phone'], 'required', 'message' => '固定电话不能为空！'],
