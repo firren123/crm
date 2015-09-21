@@ -56,7 +56,7 @@ class SupplierController extends BaseController
             $pages = new Pagination(['totalCount' => $total, 'pageSize' => $pageSize]);
         }
         $fields = '*';
-        $order = '';
+        $order = 'id desc';
         $allUsers = $cate_model->getPartGoods($cond, $fields, $order, $page, $pageSize);
         return $this->render('index', array('list' => $allUsers, 'control' => 'sel', 'pages' => $pages, 'model' => $cate_model));
         //var_dump($alluser);
@@ -113,12 +113,9 @@ class SupplierController extends BaseController
      */
     public function actionAddgoods()
     {
-        $cate_model = new Supplier();
+        $Supplier_model = new Supplier();
         //RequestHelper::post('id',0,'intval');
         //把POST的各项数据封装在$arrmsg数组里
-        date_default_timezone_set('prc');
-        //var_dump(date('Y-m-d H:i:s',time()));
-        //var_dump($_SERVER["REMOTE_ADDR"]);
         $arrmsg = array(
             'company_name' => RequestHelper::post('company_name'),
             'account' => RequestHelper::post('account'),
@@ -132,14 +129,17 @@ class SupplierController extends BaseController
             'last_login_time' => date('Y-m-d H:i:s', time()),
             'last_login_ip' => $_SERVER["REMOTE_ADDR"]
         );
+        $count = $Supplier_model->getCount(['account'=>$arrmsg['account']]);
+        if($count){
+            return $this->error('账号已经存在，请修改！');
+        }
         //执行添加功能
-        $result = $cate_model->addGoods($arrmsg);//调用 Supplier模型的addGoods方法
+        $result = $Supplier_model->addGoods($arrmsg);//调用 Supplier模型的addGoods方法
         if ($result) {
-            $result = $cate_model->update_supplier_code($result);
-            return $this->error('添加操作成功！', 'index');
-            //return $this->success('添加操作成功！','index');
+            $Supplier_model->update_supplier_code($result);
+            return $this->success('添加操作成功！', 'index');
         } else {
-            return $this->error('添加操作失败！', 'index');
+            return $this->error('添加操作失败！');
         }
     }
 
