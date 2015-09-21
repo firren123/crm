@@ -41,7 +41,7 @@ class SupplierController extends BaseController
     {
         $cate_model = new Supplier();
         $page = RequestHelper::get('page', 1, 'intval');//获得当前的页数
-        $pageSize = 5;//设置每页显示的记录条数
+        $pageSize = 10;//设置每页显示的记录条数
 
         // 查询条件
         $id = RequestHelper::get('supplierid');
