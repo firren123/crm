@@ -79,7 +79,7 @@ $form = ActiveForm::begin([
             <td><input type="text" style="width:80px;"   name="Products[origin_price][]" value="<?= !empty($item['origin_price']) ? $item['origin_price'] : '0.00'?>"></td>
             <td><input type="text" style="width:80px;"  name="Products[sale_price][]" value="<?= !empty($item['sale_price']) ? $item['sale_price'] : '0.00' ?>"></td>
             <td><input type="text" style="width:80px;"  name="Products[shop_price][]" value="<?= !empty($item['shop_price']) ? $item['shop_price'] : '0.00' ?>"></td>
-            <td><input type="text" style="width:80px;"  name="Products[total][]" value="<?= !empty($item['total']) ? $item['total'] : '10' ?>"></td>
+            <td><input type="text" style="width:80px;"  name="Products[total][]" value="<?= !empty($item['total']) ? $item['total'] : '0' ?>"></td>
             <td><input type="text" style="width:100px;"  name="Products[bar_code][]" value="<?= !empty($item['bar_code']) ? $item['bar_code'] : '' ?>"></td>
             <td><input id="product-image" type="file" name="image[]"></td>
         </tr>
