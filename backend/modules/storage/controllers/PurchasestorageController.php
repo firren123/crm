@@ -523,7 +523,7 @@ class PurchasestorageController extends BaseController
                 $unique = $m_unique->getInfo(['bar_code'=>$v['bar_code']], true, 'unique_code', 'unique_code desc');
                 $temp = 1;
                 if ($v['good_number'] > 0) {
-                    for ($i = 0; $i < $v['good_number']; $i++ ) {
+                    for ($i = 0; $i < $v['good_number']; $i++) {
                         $tmp_code = [];
                         $tmp_code['bar_code'] = $v['bar_code'];
                         $tmp_code['product_id'] = $info['id'];
@@ -538,7 +538,7 @@ class PurchasestorageController extends BaseController
                 }
 
                 if ($v['defective_number'] > 0) {
-                    for ($i = 0; $i < $v['defective_number']; $i++ ) {
+                    for ($i = 0; $i < $v['defective_number']; $i++) {
                         $tmp_code = [];
                         $tmp_code['bar_code'] = $v['bar_code'];
                         $tmp_code['product_id'] = $info['id'];
@@ -596,7 +596,8 @@ class PurchasestorageController extends BaseController
      * @param string $storage_sn x
      * @return null
      */
-    private function _create_excel($data = [], $storage_sn = ''){
+    private function _create_excel($data = [], $storage_sn = '')
+    {
 
         $obj = new \PHPExcel();
 

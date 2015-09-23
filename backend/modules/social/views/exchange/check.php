@@ -52,11 +52,14 @@ $form = ActiveForm::begin([
 </tr>
 <tr>
     <input type="hidden" id="ex_id" name="ex_id" value="<?=$ex_id;?>">
+    <input type="hidden" id="shop_id" name="shop_id" value="<?=$shop_id;?>">
+    <input type="hidden" id="num" name="num" value="<?=$num;?>">
+    <input type="hidden" id="product_id" name="product_id" value="<?=$product_id;?>">
     <th><span class="red">*</span>审核:</th>
     <td colspan="5" width="80%">
         <div class="radio">
-            <label><input class="back" type="radio" name="status" value="0"> 审核驳回</label>
-            <label><input class="back" type="radio" name="status"  value="1"> 审核通过</label>
+            <label><input class="bh" type="radio" name="status" value="0"> 审核驳回</label>
+            <label><input class="tg" type="radio" name="status"  value="1"> 审核通过</label>
         </div>
     </td>
 </tr>
@@ -86,16 +89,12 @@ $form = ActiveForm::begin([
 <?php ActiveForm::end(); ?>
 <script type="text/javascript">
 $(function(){
-    /*$("#bh").css('display','none');
-    $(".back").click(function(){
-        var status = $.trim($('input:radio:checked').val());
-        if(status==0){
-            $("#bh").css('display','block');
-        }
-        if(status==1){
-            $("#bh").css('display','none');
-        }
-    })*/
+    $(".tg").click(function(){
+        $("#remark").attr('readonly','readonly');
+    })
+    $(".bh").click(function(){
+        $("#remark").removeAttr('readonly');
+    })
     $(".sub_ok").click(function(){
         var status = $.trim($('input:radio:checked').val());
         var remark = $.trim($("#remark").val());

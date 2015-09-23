@@ -673,6 +673,8 @@ class ProductpreController extends BaseController
                     }
                     if ($result>0) {
                         $this->redirect('/goods/productpre');
+                    } else {
+                        $this->redirect('/goods/productpre');
                     }
                 }
             }
@@ -1407,8 +1409,8 @@ class ProductpreController extends BaseController
             $result = ['code'=>101, 'msg'=>'进货价 不能为空'];
         } elseif (empty($shop_price) or count($data['shop_price'])!=count($shop_price)) {
             $result = ['code'=>101, 'msg'=>'铺货价 不能为空'];
-        } elseif (empty($total) or count($data['total'])!=count($total)) {
-            $result = ['code'=>101, 'msg'=>'库存 不能为空'];
+        } elseif (!isset($total) or count($data['total'])!=count($total)) {
+            $result = ['code'=>101, 'msg'=>'库存 不能为空或者等于0'];
         } elseif (empty($attr_value) or count($data['bar_code'])!=count($bar_code)) {
             $result = ['code'=>101, 'msg'=>'条形码 不能为空'];
         } else {
