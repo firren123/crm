@@ -44,6 +44,11 @@ return [
             'basePath' => '@backend/modules/social',
             'class' => 'backend\modules\social\Module',
         ],
+        //报表
+        'report' => [
+            'basePath' => '@backend/modules/report',
+            'class' => 'backend\modules\report\Module',
+        ],
     ],
 
 ];
