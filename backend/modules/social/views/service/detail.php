@@ -160,6 +160,10 @@ $this->title = '服务详情';
             case 'del':
                 $(".del_status").show();
                 break;
+            case 'quxiao':
+                $(".del_status").hide();
+                $(".audit_status").hide();
+                return false;
             default :
                 break;
         }

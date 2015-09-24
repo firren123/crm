@@ -6,11 +6,11 @@
  *
  * @category  PHP
  * @package   Crm
- * @filename  ServiceAuditLog.php
+ * @filename  ServiceUnit.php
  * @author    lichenjun <lichenjun@iyangpin.com>
  * @copyright 2015 www.i500m.com
  * @license   http://www.i500m.com/ i500m license
- * @datetime  15/9/23 下午5:22
+ * @datetime  15/9/23 下午7:09
  * @version   SVN: 1.0
  * @link      http://www.i500m.com/
  */
@@ -20,7 +20,7 @@ namespace backend\models\social;
 
 
 /**
- * Class ServiceAuditLog
+ * Class ServiceUnit
  * @category  PHP
  * @package   Crm
  * @author    lichenjun <lichenjun@iyangpin.com>
@@ -28,7 +28,7 @@ namespace backend\models\social;
  * @license   http://www.i500m.com/ i500m license
  * @link      http://www.i500m.com/
  */
-class ServiceAuditLog extends SocialBase
+class ServiceUnit extends SocialBase
 {
     /**
      * 简介：
@@ -37,6 +37,30 @@ class ServiceAuditLog extends SocialBase
      */
     public static function tableName()
     {
-        return "{{%i500_service_audit_log}}";
+        return "{{%i500_service_unit}}";
+    }
+
+    /**
+     * 简介：
+     * @return array
+     */
+    public function attributeLabels()
+    {
+        return array(
+            'unit' => '单位',
+            'status' =>'是否禁用',
+        );
+    }
+
+    /**
+     * 简介：定义过滤规则
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            //不可为空的字段
+            [['unit','status'],'required']
+        ];
     }
 }
