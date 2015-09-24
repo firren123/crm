@@ -42,6 +42,12 @@ class OpLog extends SocialBase
         return "{{%i500_oplog}}";
     }
 
+    /**
+     * 简介：
+     * @author  lichenjun@iyangpin.com。
+     * @param string $remark 备注
+     * @return null
+     */
     public function writeLog($remark)
     {
         $url = \Yii::$app->requestedRoute;
