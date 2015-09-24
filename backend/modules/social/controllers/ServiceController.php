@@ -58,6 +58,10 @@ class ServiceController extends BaseController
         1=>'上门服务',
         2=>'到店体验'
     ];
+    public $user_auth_status_data = [
+        1=>'认证成功',
+        2=>'认证失败'
+    ];
     /**
      * 简介：
      * @author  lichenjun@iyangpin.com。
@@ -231,6 +235,7 @@ class ServiceController extends BaseController
             [
                 'list' => $list,
                 'sex' => $this->sex,
+                'user_auth_status_data'=>$this->user_auth_status_data,
                 'audit_status_data' => $this->audit_status_data
             ]
         );
@@ -262,21 +267,32 @@ class ServiceController extends BaseController
             $log_info = '审核状态'.$this->audit_status_data[$audit_status];
         } elseif ($status != 999) {
             $where['status'] = $status;
-            $log_info = '审核状态'.$status==1?'禁用':'启用';
+            $log_info = '是否启用状态'.$status==1?'禁用':'启用';
         } elseif ($del != '') {
             $where['is_deleted'] = 1;
             $log_info = '删除状态';
         } else {
             return $this->error('参数错误');
         }
-        $ret = $model->updateInfo($where, ['id' => $id]);
-        if ($ret) {
-            $log = new OpLog();
-            $log->writeLog('服务设置修改id='.$id.'状态,'.$log_info.'|备注：'.$remark);
-            return $this->success('操作成功', 'unit');
+        $service_setting_info = $model->findOne($id);
+        if ($service_setting_info) {
+            $ret = $model->updateInfo($where, ['id' => $id]);
+            if ($ret) {
+                if ($audit_status != 999) {
+                    $serviceModel = new Service();
+                    $status = $audit_status== 2?1:2;
+                    $serviceModel->updateInfo(['user_auth_status' => $status], ['uid' => $service_setting_info['uid']]);
+                }
+                $log = new OpLog();
+                $log->writeLog('服务设置修改id=' . $id . '状态,' . $log_info . '|备注：' . $remark);
+                return $this->success('操作成功', 'unit');
+            } else {
+                return $this->error('插入失败');
+            }
         } else {
-            return $this->error('插入失败');
+            return $this->error('数据错误');
         }
+
 
     }
 

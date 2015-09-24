@@ -71,7 +71,7 @@ $this->title = '服务详情';
     </tr>
     <tr>
         <th>用户认证状态：</th>
-        <td><?=$list['user_auth_status'];?></td>
+        <td><?=isset($user_auth_status_data[$list['user_auth_status']])?$user_auth_status_data[$list['user_auth_status']]:'';?></td>
     </tr>
     <tr>
         <th>是否删除：</th>
