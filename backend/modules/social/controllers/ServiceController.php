@@ -18,9 +18,10 @@
 
 namespace backend\modules\social\controllers;
 use backend\controllers\BaseController;
+use backend\models\social\OpLog;
 use backend\models\social\Service;
-use backend\models\social\ServiceAuditLog;
 use backend\models\social\ServiceSetting;
+use backend\models\social\ServiceUnit;
 use common\helpers\RequestHelper;
 use yii\data\Pagination;
 
@@ -57,6 +58,15 @@ class ServiceController extends BaseController
         1=>'上门服务',
         2=>'到店体验'
     ];
+    /**
+     * 简介：
+     * @author  lichenjun@iyangpin.com。
+     * @return null
+     */
+    public function init()
+    {
+        parent::init();
+    }
     /**
      * 简介：服务列表
      * @author  lichenjun@iyangpin.com。
@@ -143,19 +153,23 @@ class ServiceController extends BaseController
         $where = [];
         if ($audit_status != 999) {
             $where['audit_status'] = $audit_status;
+            $log_info = '审核状态'.$this->audit_status_data[$audit_status];
         } elseif ($status != 999) {
             $where['status'] = $status;
+            $log_info = '上下架状态'.$status==1?'上架':'下架';
         } elseif ($del != '') {
             $where['is_deleted'] = 1;
+            $log_info = '删除状态';
         } else {
             return $this->error('参数错误');
         }
         $ret = $model->updateInfo($where, ['id' => $id]);
         if ($ret) {
-            $log = new ServiceAuditLog();
-            return $this->success('操作成功');
+            $log = new OpLog();
+            $log->writeLog('服务修改id='.$id.'状态,'.$log_info.'|备注：'.$remark);
+            return $this->success('操作成功', 'unit');
         } else {
-            return $this->error('插入失败');
+            return $this->error('操作失败');
         }
 
     }
@@ -223,7 +237,7 @@ class ServiceController extends BaseController
     }
 
     /**
-     * 简介：服务修改状态service-up-field
+     * 简介：服务修改状态
      * @author  lichenjun@iyangpin.com。
      * @return string
      */
@@ -245,20 +259,117 @@ class ServiceController extends BaseController
         $where = [];
         if ($audit_status != 999) {
             $where['audit_status'] = $audit_status;
+            $log_info = '审核状态'.$this->audit_status_data[$audit_status];
         } elseif ($status != 999) {
             $where['status'] = $status;
+            $log_info = '审核状态'.$status==1?'禁用':'启用';
         } elseif ($del != '') {
             $where['is_deleted'] = 1;
+            $log_info = '删除状态';
         } else {
             return $this->error('参数错误');
         }
         $ret = $model->updateInfo($where, ['id' => $id]);
         if ($ret) {
-            $log = new ServiceAuditLog();
-            return $this->success('操作成功');
+            $log = new OpLog();
+            $log->writeLog('服务设置修改id='.$id.'状态,'.$log_info.'|备注：'.$remark);
+            return $this->success('操作成功', 'unit');
         } else {
             return $this->error('插入失败');
         }
 
+    }
+
+    /**
+     * 简介：服务单位表
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionUnit()
+    {
+        $model = new ServiceUnit();
+        $page = RequestHelper::get('page', 1, 'intval');
+        $where = 1;
+
+        $count = $model->getCount($where);
+        $list = $model->getPageList($where, "*", "id desc", $page);
+        $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->size]);
+        return $this->render(
+            'unit',
+            [
+                'list' => $list,
+                'pages' => $pages,
+                'audit_status_data' => $this->audit_status_data
+            ]
+        );
+    }
+    /**
+     * 简介：服务单位表添加
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionUnitAdd()
+    {
+        $model = new ServiceUnit();
+        $post = RequestHelper::post('ServiceUnit');
+        if ($post) {
+            $model->attributes = $post;
+            if ($model->save()) {
+                $log = new OpLog();
+                $log->writeLog('添加成功服务单位:id='.$model->id);
+                return $this->success('添加成功', 'unit');
+            } else {
+                return $this->error('添加失败');
+            }
+
+        }
+        return $this->render('unit_add', ['model' => $model]);
+    }
+
+    /**
+     * 简介：服务单位表修改
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionUnitEdit()
+    {
+        $model = new ServiceUnit();
+        $id = RequestHelper::get('id', 0, 'intval');
+        $model = $model->findOne(['id' => $id]);
+        $post = RequestHelper::post('ServiceUnit');
+        if ($post) {
+            $model->attributes = $post;
+            if ($model->save()) {
+                $log = new OpLog();
+                $log->writeLog('修改服务单位,'.$model->id);
+                return $this->success('修改成功', 'unit');
+            } else {
+                return $this->error('修改失败');
+            }
+
+        }
+        return $this->render('unit_add', ['model' => $model]);
+    }
+
+    /**
+     * 简介：服务单位表删除
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionUnitDel()
+    {
+        $model = new ServiceUnit();
+        $id = RequestHelper::get('id', 0, 'intval');
+        $info = $model->findOne(['id' => $id]);
+        if ($info) {
+            if ($model->deleteAll(['id'=>$id])) {
+                $log = new OpLog();
+                $log->writeLog('修改服务单位,'.$id);
+                echo 1;
+            } else {
+                echo '修改删除失败';
+            }
+
+        }
     }
 }
