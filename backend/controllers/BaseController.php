@@ -119,7 +119,7 @@ class BaseController extends Controller
             //权限判断，去掉首页
             if ('/admin/site/index' != '/' . $url_arr[0] . '/' . $url_arr[1] . '/' . $url_arr[2]) {
                 if (!in_array($menu_info['id'], $role_menu_id_arr)) {
-                    echo "<script>alert('没有权限" . $menu_info['id'] . "');location='/admin/site/index';</script>";
+                    echo "<script>alert('没有权限');location='/admin/site/index';</script>";
                     exit;
                 }
             }
@@ -136,6 +136,7 @@ class BaseController extends Controller
         $view = \Yii::$app->view;
         $view->params['menu_list'] = $menu_l;
         $view->params['module_list'] = $new_list;
+        return true;
 
     }
 
