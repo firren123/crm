@@ -131,7 +131,7 @@ $this->title = '服务设置详情';
             </th>
         </tr>
         <tr>
-            <td><textarea id="remark" style="width: 300px;height: 80px;" name="remark"></textarea></td>
+            <td><textarea id="remark" style="width: 300px;height: 80px;border: 1px solid #999;" name="remark"></textarea></td>
         </tr>
         <tr>
             <td>
@@ -159,7 +159,7 @@ $this->title = '服务设置详情';
             </th>
         </tr>
         <tr>
-            <td><textarea id="remark" style="width: 300px;height: 80px;" name="remark"></textarea></td>
+            <td><textarea id="remark" style="width: 300px;height: 80px;border: 1px solid #999;" name="remark"></textarea></td>
         </tr>
         <tr>
             <td><input type="submit" value="提交" class="btn-primary btn"/>
@@ -185,7 +185,7 @@ $this->title = '服务设置详情';
             </th>
         </tr>
         <tr>
-            <td><textarea id="remark" style="width: 300px;height: 80px;" name="remark"></textarea></td>
+            <td><textarea id="remark" style="width: 300px;height: 80px;border: 1px solid #999;" name="remark"></textarea></td>
         </tr>
         <tr>
             <td>
