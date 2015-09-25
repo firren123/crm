@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>jQuery饼状图比例分布数据显示代码 - 站长素材</title>
+    <title>销售额示意图</title>
 
     <script type="text/javascript" src="/js/report/jquery.js"></script>
     <script type="text/javascript" src="/js/report/jsapi.js"></script>
@@ -50,8 +50,8 @@
         <thead>
         <tr>
             <th></th>
-            <th>水果</th>
-            <th>其他</th>
+            <th>水果类</th>
+            <th>非水果类</th>
             <th>多余<?php echo $total?></th>
 
 

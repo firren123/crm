@@ -136,6 +136,7 @@ class BaseController extends Controller
         $view = \Yii::$app->view;
         $view->params['menu_list'] = $menu_l;
         $view->params['module_list'] = $new_list;
+        return true;
 
     }
 
