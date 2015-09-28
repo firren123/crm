@@ -96,7 +96,7 @@ class ServiceController extends BaseController
             $where['audit_status'] = $audit_status;
         }
         $count = $model->getCount($where);
-        $list = $model->getPageList($where, "*", "id desc", $page);
+        $list = $model->getPageList($where, "*", "id desc", $page, $this->size);
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->size]);
         return $this->render(
             'index',
@@ -203,7 +203,7 @@ class ServiceController extends BaseController
             $where['audit_status'] = $audit_status;
         }
         $count = $model->getCount($where);
-        $list = $model->getPageList($where, "*", "id desc", $page);
+        $list = $model->getPageList($where, "*", "id desc", $page, $this->size);
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->size]);
         return $this->render(
             'setting',
