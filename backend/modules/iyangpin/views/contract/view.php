@@ -88,10 +88,10 @@ $form = ActiveForm::begin([
         <label class="control-label col-sm-3" for="ypcontract-brand_logo">品牌LOGO</label>
         <div class="col-sm-6">
             <?php
-            if(!empty($model->brand_logo)) {
-                $imgs = explode("###",$model->brand_logo);
-                foreach($imgs as $val){ ?>
-                    <img src="<?= \Yii::$app->params['imgHost'].$val;?>" style="width:90px;height:90px;">
+            if (!empty($model->brand_logo)) {
+                $imgs = explode("###", $model->brand_logo);
+                foreach ($imgs as $val) { ?>
+                    <img src="<?= \Yii::$app->params['imgHost'] . $val; ?>" style="width:90px;height:90px;">
                 <?php }
             }
             ?>
