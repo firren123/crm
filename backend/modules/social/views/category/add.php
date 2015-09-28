@@ -83,7 +83,6 @@ $form = ActiveForm::begin([
 <?= $form->field($model, 'status')->radioList(['1'=>'禁用','2'=>'可用'])->label('是否禁用'); ?>
 <?= $form->field($model, 'is_deleted')->radioList(['1'=>'删除','2'=>'未删除'])->label('是否删除'); ?>
 <?= $form->field($model, 'description')->textarea()->label('类型描述') ; ?>
-<?= $form->field($model, 'pid')->label('')->hiddenInput(); ?>
     <div class="form-actions">
         <?= Html::submitButton('提交', ['class' => 'btn btn-primary']) ?>
         <a class="btn cancelBtn" href="javascript:history.go(-1);">返回</a>
