@@ -90,7 +90,7 @@ class UserController extends BaseController
         $model = new User();
         $user_model = new UserInfo();
         $province_model = new Province();
-        $province_list = $province_model->getList(array('status'=>1));
+        $province_list = $province_model->getList(array('status'=>[0,1]));
         $post_user = RequestHelper::post('User');
         if (!empty($post_user)) {
             $data['mobile'] = $post_user['mobile'];
@@ -180,7 +180,7 @@ class UserController extends BaseController
         }
         $item = $user_model->getInfo(['mobile'=>$mobile]);
         $province_model = new Province();
-        $province_list = $province_model->getList(array('status'=>1));
+        $province_list = $province_model->getList(array('status'=>[0,1]));
         $city_model = new City();
         $city_list = $city_model->getList(array('province_id'=>$item['province_id']));
         $district_model = new District();
