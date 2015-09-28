@@ -38,7 +38,7 @@ use yii\data\Pagination;
  */
 class ServiceController extends BaseController
 {
-
+    public $size = 10;
     public $audit_status_data = [
         0 => '未审核',
         1 => '审核中',
