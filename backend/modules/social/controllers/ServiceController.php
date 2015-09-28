@@ -92,7 +92,7 @@ class ServiceController extends BaseController
         if ($status != 999) {
             $where['status'] = $status;
         }
-        if ($status != 999) {
+        if ($audit_status != 999) {
             $where['audit_status'] = $audit_status;
         }
         $count = $model->getCount($where);
@@ -172,7 +172,7 @@ class ServiceController extends BaseController
         if ($ret) {
             $log = new OpLog();
             $log->writeLog('服务修改id='.$id.'状态,'.$log_info.'|备注：'.$remark);
-            return $this->success('操作成功', 'unit');
+            return $this->success('操作成功', 'index');
         } else {
             return $this->error('操作失败');
         }
@@ -275,21 +275,12 @@ class ServiceController extends BaseController
         } else {
             return $this->error('参数错误');
         }
-        $service_setting_info = $model->findOne($id);
-        if ($service_setting_info) {
-            $ret = $model->updateInfo($where, ['id' => $id]);
-            if ($ret) {
-                if ($audit_status != 999) {
-                    $serviceModel = new Service();
-                    $status = $audit_status== 2?1:2;
-                    $serviceModel->updateInfo(['user_auth_status' => $status], ['uid' => $service_setting_info['uid']]);
-                }
-                $log = new OpLog();
-                $log->writeLog('服务设置修改id=' . $id . '状态,' . $log_info . '|备注：' . $remark);
-                return $this->success('操作成功', 'unit');
-            } else {
-                return $this->error('插入失败');
-            }
+
+        $ret = $model->updateInfo($where, ['id' => $id]);
+        if ($ret) {
+            $log = new OpLog();
+            $log->writeLog('服务设置修改id='.$id.'状态,'.$log_info.'|备注：'.$remark);
+            return $this->success('操作成功', 'setting');
         } else {
             return $this->error('数据错误');
         }

@@ -110,7 +110,7 @@ $this->title = '服务详情';
             </th>
         </tr>
         <tr>
-            <td><textarea id="remark" style="width: 300px;height: 80px;" name="remark"></textarea></td>
+            <td><textarea id="remark" style="width: 300px;height: 80px;border: 1px solid #999;" name="remark"></textarea></td>
         </tr>
             <tr>
                 <td><input type="submit" value="提交" class="btn-primary btn"/>
@@ -123,7 +123,7 @@ $this->title = '服务详情';
     </table>
 </dev>
 
-<dev class="del_status" style="width: 400px;height: 300px;display: none;position:absolute; left:20%; top:40%; margin:-16px 0 0 -16px; z-index:999;background: #fff;">
+<dev class="del_status" style="width: 400px;height: 300px;display: none;position:absolute; left:20%; top:40%; margin:-16px 0 0 -16px; z-index:999;background: #fff;border: 1px solid #999;">
     <table class="table table-bordered table-hover">
         <tr>
             <th colspan="10">审核服务</th>
@@ -136,7 +136,7 @@ $this->title = '服务详情';
             </th>
         </tr>
         <tr>
-            <td><textarea id="remark" style="width: 300px;height: 80px;" name="remark"></textarea></td>
+            <td><textarea id="remark" style="width: 300px;height: 80px;border: 1px solid #999;" name="remark"></textarea></td>
         </tr>
         <tr>
             <td><input type="submit" value="提交" class="btn-primary btn"/>
