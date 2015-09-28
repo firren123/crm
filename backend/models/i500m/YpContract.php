@@ -18,7 +18,6 @@
 
 namespace backend\models\i500m;
 
-
 /**
  * Class YpContract
  * @category  PHP
@@ -96,9 +95,6 @@ class YpContract extends I500Base
                 'qualification', 'product_img', 'product_logo_img', 'shop_logo_img', 'brand_logo', 'code_validity',
                 'special_requirements', 'product_info', 'remark'
             ], 'required'],
-            //['phone', 'match', 'pattern' => '/^1[0-9]{10}$/', 'message' => '{attribute}格式输入不正确'],
-            //['sn', 'match', 'pattern' => '/^[a-zA-Z0-9]{20}$/', 'message' => '{attribute}是由20英文＋数字组成'],
         ];
     }
-
 }
