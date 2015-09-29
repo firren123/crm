@@ -17,5 +17,5 @@ return array(
     'linslin\\yii2\\curl\\' => array($vendorDir . '/linslin/yii2-curl'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'alexgx\\phpexcel\\' => array($vendorDir . '/alexgx/yii2-phpexcel'),
-    'ijackwu\\yii2-ssdb\\ssdb\\' => array($vendorDir . '/ijackwu/yii2-ssdb/ssdb'),
+    'ijackwu\\ssdb\\' => array($vendorDir . '/ijackwu/yii2-ssdb/ssdb'),
 );
