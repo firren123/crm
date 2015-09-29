@@ -55,7 +55,7 @@ $this->title = "服务列表";
                     <th colspan="2">标题</th>
                     <th colspan="2">手机号</th>
                     <th colspan="2">审核状态</th>
-                    <th colspan="2">是否禁用</th>
+                    <th colspan="2">上/下架</th>
                     <th colspan="2">创建时间</th>
                     <th colspan="4">操作</th>
                 </tr>
@@ -69,7 +69,7 @@ $this->title = "服务列表";
                             <td colspan="2"><?= $item['title'];?></td>
                             <td colspan="2"><?= $item['mobile'];?></td>
                             <td colspan="2"><?php echo isset($audit_status_data[$item['audit_status']]) ? $audit_status_data[$item['audit_status']] : ''; ?></td>
-                            <td colspan="2"><?= $item['status']==1?'禁用':'可用';?></td>
+                            <td colspan="2"><?= $item['status']==1?'上架':'下架';?></td>
                             <td colspan="2"><?= $item['create_time'];?></td>
 
 
