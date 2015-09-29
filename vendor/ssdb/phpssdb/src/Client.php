@@ -1,57 +1,29 @@
 <?php
-/**
- * Connect - yii2-ssdb
- *
- * @author Jack.wu <xiaowu365@gmail.com>
- * @create_time 2015-06-02 14:29
- *
- *
- *
- */
+namespace SSDB;
 
-namespace ijackwu\ssdb;
-
-use yii\base\Component;
-
-/**
- * Class Connection
- * @package yii\SSDB
- */
-class Connection extends Component
+class Client
 {
 	private $debug = false;
 	public $sock = null;
 	private $_closed = false;
 	private $recv_buf = '';
+	private $_easy = false;
 	public $last_resp = null;
 
-	public $host = '127.0.0.1';
-	public $port = 8888;
-	public $timeout_ms=2000;
-	public $easy = true;
-
-
-	public function init()
-	{
-		parent::init();
-
-		$timeout_f = (float)$this->timeout_ms/1000;
-		$this->sock = @stream_socket_client("$this->host:$this->port", $errno, $errstr, $timeout_f);
+	public function __construct($host, $port, $timeout_ms=2000){
+		$timeout_f = (float)$timeout_ms/1000;
+		$this->sock = @stream_socket_client("$host:$port", $errno, $errstr, $timeout_f);
 		if(!$this->sock){
 			throw new Exception("$errno: $errstr");
 		}
-		$timeout_sec = intval($this->timeout_ms/1000);
-		$timeout_usec = ($this->timeout_ms - $timeout_sec * 1000) * 1000;
+		$timeout_sec = intval($timeout_ms/1000);
+		$timeout_usec = ($timeout_ms - $timeout_sec * 1000) * 1000;
 		@stream_set_timeout($this->sock, $timeout_sec, $timeout_usec);
 		if(function_exists('stream_set_chunk_size')){
 			@stream_set_chunk_size($this->sock, 1024 * 1024);
 		}
-
-		if (true === $this->easy) {
-			$this->easy();
-		}
 	}
-
+	
 	/**
 	 * After this method invoked with yesno=true, all requesting methods
 	 * will not return a Response object.
@@ -59,7 +31,7 @@ class Connection extends Component
 	 * when response is not ok(not_found, etc)
 	 */
 	public function easy(){
-		$this->easy = true;
+		$this->_easy = true;
 	}
 
 	public function close(){
@@ -123,7 +95,7 @@ class Connection extends Component
 			$pass = $this->async_auth_password;
 			$this->async_auth_password = null;
 			$auth = $this->__call('auth', array($pass));
-			if($auth->data !== true){
+			if($auth !== true){
 				throw new \Exception("Authentication failed");
 			}
 		}
@@ -140,7 +112,7 @@ class Connection extends Component
 				$resp = $this->recv_resp($cmd, $params);
 			}
 		}catch(Exception $e){
-			if($this->easy){
+			if($this->_easy){
 				throw $e;
 			}else{
 				$resp = new Response('error', $e->getMessage());
@@ -158,7 +130,7 @@ class Connection extends Component
 
 	private function check_easy_resp($cmd, $resp){
 		$this->last_resp = $resp;
-		if($this->easy){
+		if($this->_easy){
 			if($resp->not_found()){
 				return NULL;
 			}else if(!$resp->ok() && !is_array($resp->data)){

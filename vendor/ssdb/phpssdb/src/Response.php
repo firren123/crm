@@ -1,17 +1,6 @@
 <?php
-/**
- * Response - yii2-ssdb
- *
- * @author Jack.wu <xiaowu365@gmail.com>
- * @create_time 2015-06-02 14:29
- */
+namespace SSDB;
 
-namespace ijackwu\ssdb;
-
-/**
- * Class Response
- * @package SSDB
- */
 class Response
 {
 	public $cmd;

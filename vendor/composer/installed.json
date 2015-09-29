@@ -1033,49 +1033,45 @@
         ]
     },
     {
-        "name": "alexgx/yii2-phpexcel",
+        "name": "ijackwu/yii2-ssdb",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
-            "url": "https://github.com/AlexGx/yii2-phpexcel.git",
-            "reference": "da24f2b83a18092dc41c2770eb0bab7f85b7e9eb"
+            "url": "https://github.com/ijackwu/yii2-ssdb.git",
+            "reference": "dec2ec478099eda8ece0f08b3339829dcdf99ec5"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AlexGx/yii2-phpexcel/zipball/da24f2b83a18092dc41c2770eb0bab7f85b7e9eb",
-            "reference": "da24f2b83a18092dc41c2770eb0bab7f85b7e9eb",
+            "url": "https://api.github.com/repos/ijackwu/yii2-ssdb/zipball/dec2ec478099eda8ece0f08b3339829dcdf99ec5",
+            "reference": "dec2ec478099eda8ece0f08b3339829dcdf99ec5",
             "shasum": ""
         },
         "require": {
-            "phpoffice/phpexcel": "1.8.0",
             "yiisoft/yii2": "*"
         },
-        "time": "2014-08-22 06:31:24",
-        "type": "yii2-extension",
+        "require-dev": {
+            "yiisoft/yii2": "*"
+        },
+        "time": "2015-06-14 11:36:17",
+        "type": "library",
         "installation-source": "source",
         "autoload": {
             "psr-4": {
-                "alexgx\\phpexcel\\": ""
+                "ijackwu\\ssdb\\": "ssdb"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
-            "BSD-3-Clause"
+            "MIT"
         ],
         "authors": [
             {
-                "name": "Alexander Gubarev",
-                "email": "gubarev.alex@gmail.com",
-                "homepage": "http://actionmedia-labs.net"
+                "name": "Jack Wu",
+                "email": "xiaowu365@gmail.com"
             }
         ],
-        "description": "PhpExcel component extension for Yii2.",
-        "keywords": [
-            "PHPExcel",
-            "component",
-            "extension",
-            "yii"
-        ]
+        "description": "SSDB - Yii SSDB PHP Client",
+        "homepage": "https://github.com/ijackwu/yii2-ssdb"
     }
 ]
