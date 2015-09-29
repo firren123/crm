@@ -79,7 +79,7 @@ echo $this->render('_search', ['search'=>$search,'cate_list'=>$cate_list,'cate_s
                         </td>
                         <td><?= empty($item['cate_name']) ? '--' : $item['cate_name'];?></td>
                         <td><?= empty($item['cate_second_name']) ? '--' : $item['cate_second_name'];?></td>
-                        <td><?= $item['total_num'];?></td>
+                        <td><?= $item['status']==1 ? '上架' : '下架';?></td>
                         <td><?= $item['area_name'];?></td>
                         <td style="width: 10%">
                             <?php if($item['bc_id'] == $bc_id or $item['bc_id']!=$branch_id) :?>
