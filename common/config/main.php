@@ -51,6 +51,15 @@ return [
             'password'=>'4fkok0ezZDurw',
             'charset'=>'gbk',
         ],
+        'ssdb' => [
+            'class' => 'ijackwu\ssdb\Connection',
+            'host' => '118.186.247.55',
+            'port' => 8888,
+            'auth' => 'kakvi6Zfjsqvddwourzr0wfZjeckqtxj',
+            'timeout' => 2000,
+            'keyPrefix' => 'SOCIAL_API_'
+        ],
+
         'user' => [
             'identityClass' => 'common\models\Admin',
             'enableAutoLogin' => true,

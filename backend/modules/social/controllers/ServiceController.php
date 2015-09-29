@@ -24,6 +24,7 @@ use backend\models\social\Service;
 use backend\models\social\ServiceSetting;
 use backend\models\social\ServiceUnit;
 use common\helpers\RequestHelper;
+use ijackwu\ssdb\SsdbSession;
 use yii\data\Pagination;
 
 
@@ -379,5 +380,11 @@ class ServiceController extends BaseController
             }
 
         }
+    }
+
+    public function actionTest()
+    {
+        echo 123;
+        $cache = 12;
     }
 }
