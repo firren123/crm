@@ -358,8 +358,8 @@ class ProductpreController extends BaseController
                         $product['sale_profit_margin'] = round(($product['origin_price'] - $product['sale_price']) / $product['origin_price'] * 100, 2) . '%';
                         $product['shop_profit_margin'] = round(($product['origin_price'] - $product['shop_price']) / $product['origin_price'] * 100, 2) . '%';
                     } else {
-                        $product['sale_profit_margin'] = 0;
-                        $product['shop_profit_margin'] = 0;
+                        $product['sale_profit_margin'] = '0%';
+                        $product['shop_profit_margin'] = '0%';
                     }
                     $list = $model->getInsert($product);
                     if ($list > 0) {
@@ -572,8 +572,8 @@ class ProductpreController extends BaseController
                             $product['sale_profit_margin'] = round(($product['origin_price'] - $product['sale_price']) / $product['origin_price'] * 100, 2) . '%';
                             $product['shop_profit_margin'] = round(($product['origin_price'] - $product['shop_price']) / $product['origin_price'] * 100, 2) . '%';
                         } else {
-                            $product['sale_profit_margin'] = 0;
-                            $product['shop_profit_margin'] = 0;
+                            $product['sale_profit_margin'] = '0%';
+                            $product['shop_profit_margin'] = '0%';
                         }
                         $result = $model->updateInfo($product, $product_cond);
                         if ($result == 1) {
