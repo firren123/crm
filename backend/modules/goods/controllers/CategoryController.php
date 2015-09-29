@@ -55,7 +55,7 @@ class CategoryController extends BaseController
         }
         $order = 'id desc';
         $page = RequestHelper::get('page', 1);
-        $pageSize = $this->size;
+        $pageSize = 5;
         $model = new Category();
         $list = $model->getPageList($cond, '*', $order, $page, $pageSize, $where);
         $cate_list = [];
@@ -65,11 +65,12 @@ class CategoryController extends BaseController
                 $number = $product_model->getCount($cate_cond);
                 $cate_list[] = $v;
                 $cate_list[$k]['cate_status'] = $number;
+                $cate_list[$k]['data'] = $model->getList(['level'=>2, 'type'=>0, 'parent_id'=>$v['id']], '*', 'id desc', ['>', 'status', '0']);
             }
         }
         $data['is_number'] = 1;
         $total = $model->getCount($cond, $where);
-        $pages = new Pagination(['totalCount' =>$total, 'pageSize' => $this->size]);
+        $pages = new Pagination(['totalCount' =>$total, 'pageSize' => $pageSize]);
         return $this->render('index', ['data'=>$cate_list,'pages'=>$pages,'name'=>$name]);
     }
 
@@ -81,6 +82,7 @@ class CategoryController extends BaseController
     public function actionAdd()
     {
         $id = RequestHelper::get('id');
+        $pid = RequestHelper::get('p_id', 0);
         $model = new Category();
         $model_attribute = new CategoryAttribute();
         $cond ='';
@@ -89,9 +91,11 @@ class CategoryController extends BaseController
         $attribute_model = new Attribute();
         $attribute_cond = 'id!=0';
         $attribute_list = $attribute_model->getList($attribute_cond, 'id,admin_name', 'weight asc');
+        $list = [];
         if (empty($id)) {
             $model->status = 2;
             $model->sort = 999;
+            $model->parent_id = $pid;
         } else {
             $cond = 'id='.$id;
             $list = $model->getInfo($cond, true, '*');
@@ -117,11 +121,11 @@ class CategoryController extends BaseController
             $category['name'] = CommonHelper::semiangle($category['name']);
             $category['sort'] = CommonHelper::semiangle($category['sort']);
             $model->attributes = $category;
-            $category['level'] = 1;
-            $category['parent_id'] = 0;
             $category['type']= 0;
             $attribute = RequestHelper::post('attribute');
             if (empty($id)) {
+                $category['level'] = $pid==0 ? 1 :2;
+                $category['parent_id'] = $pid==0 ? 0 :$pid;
                 //添加
                 //分类图片
                 $file = UploadedFile::getInstance($model, 'img');
@@ -136,8 +140,8 @@ class CategoryController extends BaseController
                     $fast = new FastDFSHelper();
                     $ret = $fast->fdfs_upload_name_size($file->tempName, $file->name);
                     $category['img'] = '/'.$ret['group_name'] . '/' . $ret['filename'];
-                    $list = $model->getDetailsByName($category['name']);
-                    if (empty($list)) {
+                    $cate_data = $model->getDetailsByName($category['name']);
+                    if (empty($cate_data)) {
                         $result = $model->getInsert($category);
                         if ($result != 0) {
                             //日志
@@ -336,6 +340,41 @@ class CategoryController extends BaseController
             $code =1;
         }
         return $code;
+    }
+    /**
+     * 查看详情
+     *
+     * @return string
+     */
+    public function actionView()
+    {
+        $model = new Category();
+        $id = RequestHelper::get('id', 0);
+        $item = $model->getInfo(['id'=>$id]);
+        if ($item) {
+            if ($item['level']!=1) {
+                $parent_name = $model->getInfo(['id'=>$item['parent_id']], true, 'name');
+                $item['parent_name'] = empty($parent_name) ? "--" : $parent_name['name'];
+            }
+        }
+        return $this->render('view', ['item'=>$item]);
+    }
+
+    /**
+     * 二级分类列表
+     *
+     * @return array
+     */
+    public function actionList()
+    {
+        $model = new Category();
+        $id = RequestHelper::get('cate_id', 0);
+        $cond['parent_id'] = $id;
+        $cond['status'] = 2;
+        $cond['type'] = 0;
+        $cond['level'] = 2;
+        $data = $model->getList($cond, 'id,name', 'id desc');
+        echo json_encode($data);
     }
 
 }

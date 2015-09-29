@@ -656,5 +656,28 @@ function z_check_money(str)
     }
     return 1;
 }
+$(document).ready(function(){
+    $("#cate_id").change(function()
+    {
+        var cate_id=$(this).val();
+        $.get
+        (
+            "/goods/category/list?cate_id="+cate_id,
+            function(str_json)
+            {
+                obj=JSON.parse(str_json);
+
+                var html_option="<option value=''>选择二级分类</option>";
+                var len=obj.length;
+                for(var i=0;i<len;i++)
+                {
+                    html_option+='<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>';
+                }
+                $("#cate_second_id").html('选择二级分类');
+                $("#cate_second_id").append(html_option);
+            }
+        );
+    });
+});
 
 

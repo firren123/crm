@@ -88,7 +88,7 @@ class ProductController extends BaseController
         $province_item = $branch_model->getList($branch_cond, 'province_id');
         $province_conf = [];
         foreach ($province_item as $v) {
-                $province_conf['id'][] = $v['province_id'];
+            $province_conf['id'][] = $v['province_id'];
         }
         $city_data = $province_model->getlist($province_conf);
         //商品分类列表
@@ -114,22 +114,19 @@ class ProductController extends BaseController
         if (!empty($search['name'])) {
             $where = ['like', 'name', $search['name']];
         }
+        $cate_second_data = [];
         //分类搜索
         if (!empty($search['cate_id'])) {
             $cond['cate_first_id'] = $search['cate_id'];
-            $category_model = new BrandCategory();
-            //分类下的品牌id列表
-            $category_cond['category_id'] = $search['cate_id'];
-            $category_list = $category_model->getList($category_cond, 'brand_id', 'id desc');
-            if (!empty($category_list)) {
-                $category_data = array();
-                foreach ($category_list as $v) {
-                    $category_data[] = $v['brand_id'];
-                }
-                $model_cond['status'] = 2;
-                $model_cond['id'] = $category_data;
-                $brand_item = $brand_model->getList($model_cond, 'id,name', 'id desc');
-            }
+            //二级分类
+            $cate_second_cond['parent_id'] = $search['cate_id'];
+            $cate_second_cond['status'] = 2;
+            $cate_second_cond['type'] = 0;
+            $cate_second_cond['level'] = 2;
+            $cate_second_data = $cate_model->getList($cate_second_cond, 'id,name', 'id desc');
+        }
+        if (!empty($search['cate_second_id'])) {
+            $cond['cate_second_id'] = $search['cate_second_id'];
         }
         //商品id
         if (!empty($search['id'])) {
@@ -177,6 +174,7 @@ class ProductController extends BaseController
                 $cate_data[$v['id']] = $v['name'];
             }
         }
+
         $brand_data = array();
         if (!empty($brand_list)) {
             foreach ($brand_list as $k => $v) {
@@ -199,6 +197,9 @@ class ProductController extends BaseController
                 $data[$key]['area_name'] = $area_name;
                 $data[$key]['cate_name'] = empty($cate_data[$value['cate_first_id']]) ? "--" : $cate_data[$value['cate_first_id']];
                 $data[$key]['brand_name'] = empty($brand_data[$value['brand_id']]) ? "--" : $brand_data[$value['brand_id']];
+                //二级分类
+                $cate_second_item = $cate_model->getInfo(['id'=>$value['cate_second_id']], true, 'name');
+                $data[$key]['cate_second_name'] = empty($cate_second_item) ? "--" : $cate_second_item['name'];
             }
         }
         //商品数量及分页
@@ -212,7 +213,8 @@ class ProductController extends BaseController
             'search'=>$search,'bc_id'=>$bc_id,
             'city_data'=>$city_data,
             'branch_id'=>$branch_id,
-            'total'=>$total
+            'total'=>$total,
+            'cate_second_data' => $cate_second_data
         ];
         return $this->render('index', $param);
     }
@@ -1272,11 +1274,18 @@ class ProductController extends BaseController
             $list['description'] = htmlspecialchars_decode(stripslashes($list['description']));
             //分类名称
             $list['cate_name'] = '';
+            $cate_model = new Category();
             if ($list['cate_first_id']) {
-                $cate_model = new Category();
                 $cate_cond['id'] = $list['cate_first_id'];
                 $cate_list = $cate_model->getInfo($cate_cond, 'name');
                 $list['cate_name'] = empty($cate_list) ? '' : $cate_list['name'];
+            }
+            //二级分类名称
+            $list['cate_second_name'] = '';
+            if ($list['cate_second_id']) {
+                $cate_second_cond['id'] = $list['cate_second_id'];
+                $cate_second_list = $cate_model->getInfo($cate_second_cond, 'name');
+                $list['cate_second_name'] = empty($cate_second_list) ? '' : $cate_second_list['name'];
             }
             //分类品牌
             $list['brand_name'] = '';

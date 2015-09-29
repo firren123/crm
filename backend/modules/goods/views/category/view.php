@@ -6,7 +6,7 @@ $this->title = '商品分类详情';
         <li>
             <a href="/">首页</a>
         </li>
-        <li class="active"><a href="/goods/cate">商品分类管理</a></li>
+        <li class="active"><a href="/goods/category">商品分类管理</a></li>
         <li class="active">商品分类详情</li>
     </ul>
     <div class="tab-content">

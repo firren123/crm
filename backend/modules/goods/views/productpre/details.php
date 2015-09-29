@@ -37,8 +37,12 @@ $this->title = '待发布商品详情';
             <td><?= empty($list['keywords']) ? '--' : $list['keywords'];?></td>
         </tr>
         <tr>
-            <td style="width:20%;">商品分类：</td>
+            <td style="width:20%;">商品顶级分类：</td>
             <td><?= empty($list['cate_name']) ? '--' : $list['cate_name'];?></td>
+        </tr>
+        <tr>
+            <td style="width:20%;">商品二级分类：</td>
+            <td><?= empty($list['cate_second_name']) ? '--' : $list['cate_second_name'];?></td>
         </tr>
         <tr>
             <td style="width:20%;">商品品牌：</td>
@@ -48,6 +52,18 @@ $this->title = '待发布商品详情';
             <td style="width:20%;">建议售价：</td>
             <td><?= empty($list['origin_price']) ? '--' : $list['origin_price'];?></td>
         </tr> <tr>
+            <td style="width:20%;">进货价：</td>
+            <td><?= empty($list['sale_price']) ? '--' : $list['sale_price'];?></td>
+        </tr>
+        <tr>
+            <td style="width:20%;">毛利率(进货)：</td>
+            <td><?= empty($list['sale_profit_margin']) ? '--' : $list['sale_profit_margin'];?></td>
+        </tr>
+        <tr>
+            <td style="width:20%;">毛利率(铺货)：</td>
+            <td><?= empty($list['shop_profit_margin']) ? '--' : $list['shop_profit_margin'];?></td>
+        </tr>
+        <tr>
             <td style="width:20%;">进货价：</td>
             <td><?= empty($list['sale_price']) ? '--' : $list['sale_price'];?></td>
         </tr>
