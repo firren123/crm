@@ -24,8 +24,8 @@ use backend\models\social\Service;
 use backend\models\social\ServiceSetting;
 use backend\models\social\ServiceUnit;
 use common\helpers\RequestHelper;
+use backend\models\SSDB;
 use yii\data\Pagination;
-
 
 /**
  * Class ServiceController
@@ -63,6 +63,7 @@ class ServiceController extends BaseController
         1=>'认证成功',
         2=>'认证失败'
     ];
+    public $ssdb = null;
     /**
      * 简介：
      * @author  lichenjun@iyangpin.com。
@@ -71,6 +72,12 @@ class ServiceController extends BaseController
     public function init()
     {
         parent::init();
+        $obj_ssdb = new SSDB();
+        $this->ssdb = $obj_ssdb->instance();
+        if (isset($this->ssdb->result) && $this->ssdb->result == 0) {
+            echo "ssdb对象初始化失败:" . $this->ssdb->msg;
+            exit;
+        }
     }
     /**
      * 简介：服务列表
@@ -379,5 +386,34 @@ class ServiceController extends BaseController
             }
 
         }
+    }
+
+    /**
+     * 简介：测试ssdb是否通
+     * @author  lichenjun@iyangpin.com。
+     */
+    public function actionTest()
+    {
+        $obj_ssdb = new SSDB();
+        $ssdb = $obj_ssdb->instance();
+        if (isset($ssdb->result) && $ssdb->result == 0) {
+            echo "ssdb对象初始化失败:" . $ssdb->msg;
+            return;
+        }
+
+        $result = $ssdb->setx('key', 'value', 30);
+        if ($result === false) {
+            echo "ssdb set数据失败";
+            return;
+        }
+
+        $value= $ssdb->get('key');
+        var_dump($value);exit;
+        //object(SSDB\Response)#22 (4)
+        //{ ["cmd"]=> string(3) "get" ["code"]=> string(2) "ok" ["data"]=> string(5) "value" ["message"]=> NULL }
+        if ($value->code == 'ok') {
+            echo $value->data;
+        }
+        return;
     }
 }

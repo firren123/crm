@@ -53,7 +53,7 @@ $this->title = "服务器设置列表";
                 <tr>
                     <th colspan="2">ID</th>
                     <th colspan="2">手机号</th>
-                    <th colspan="2">服务名称</th>
+                    <th colspan="2">店铺名称</th>
                     <th colspan="2">审核状态</th>
                     <th colspan="2">是否禁用</th>
                     <th colspan="2">创建时间</th>

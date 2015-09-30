@@ -15,7 +15,10 @@ return array(
     'yii\\bootstrap\\' => array($vendorDir . '/yiisoft/yii2-bootstrap'),
     'yii\\' => array($vendorDir . '/yiisoft/yii2'),
     'linslin\\yii2\\curl\\' => array($vendorDir . '/linslin/yii2-curl'),
+    'ijackwu\\ssdb\\' => array($vendorDir . '/ijackwu/yii2-ssdb/ssdb'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'alexgx\\phpexcel\\' => array($vendorDir . '/alexgx/yii2-phpexcel'),
     'ijackwu\\ssdb\\' => array($vendorDir . '/ijackwu/yii2-ssdb/ssdb'),
+    //'ssdb\\' => array($vendorDir . '/ssdb/phpssdb/src'),
+    'SSDB\\' => array($vendorDir . '/ssdb/phpssdb/src'),
 );
