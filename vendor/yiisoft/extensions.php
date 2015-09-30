@@ -66,13 +66,4 @@ return array (
       '@linslin/yii2/curl' => $vendorDir . '/linslin/yii2-curl',
     ),
   ),
-  'alexgx/yii2-phpexcel' => 
-  array (
-    'name' => 'alexgx/yii2-phpexcel',
-    'version' => '9999999-dev',
-    'alias' => 
-    array (
-      '@alexgx/phpexcel' => $vendorDir . '/alexgx/yii2-phpexcel',
-    ),
-  ),
 );

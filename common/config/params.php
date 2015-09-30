@@ -20,6 +20,11 @@ return [
     'cache_key'=>'admin',
     'access_token'=>'fb54f3c5992b96d001bb16e8e92d968d',
     'COMPANY_ID' => 28,
+    'ssdb' => array(
+        'host' => '118.186.247.55',
+        'port' => '8888',
+        'auth' => 'kakvi6Zfjsqvddwourzr0wfZjeckqtxj',
+    ),
 
 
 

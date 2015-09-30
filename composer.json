@@ -20,7 +20,7 @@
         "yiisoft/yii2-swiftmailer": "*",
         "linslin/yii2-curl": "*",
         "phpoffice/phpexcel": "dev-develop",
-
+        "ijackwu/yii2-ssdb": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
