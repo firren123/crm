@@ -18,7 +18,6 @@ namespace backend\models;
 
 use Yii;
 use yii\base\Model;
-//use yii\web\Controller;
 use SSDB\Client;
 use SSDB\Exception;
 
