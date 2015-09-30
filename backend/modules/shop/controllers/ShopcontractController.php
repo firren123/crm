@@ -268,7 +268,7 @@ class ShopcontractController extends BaseController
         }
         $ShopManage_model_result = $ShopManage_model->insertOneData($ShopManageMsg);  //将经营信息插入到经营信息表里
         if ($ShopManage_model_result) {
-            $this->_addOa($ShopContractMsg, $ShopManageMsg);
+            //$this->_addOa($ShopContractMsg, $ShopManageMsg);
             return $this->success('商家合同添加操作成功！', 'index');
         } else {
             return $this->error('商家合同添加操作失败！', 'add');
