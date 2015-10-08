@@ -16,6 +16,7 @@
  */
 
 namespace backend\modules\iyangpin\controllers;
+
 use backend\controllers\BaseController;
 use backend\models\i500m\UploadFrom;
 use backend\models\i500m\YpContract;
@@ -74,9 +75,7 @@ class ContractController extends BaseController
         $page = RequestHelper::get('page', 1, 'intval');
         $shop_name = RequestHelper::get('shop_name');
         $where = array();
-        
         $where['status'] = array(0, 1, 2);
-
         $count = $model->getListCount($where);
         $list = $model->getPageList($where, "*", 'id desc ', $page, $this->size);
         $pages = new Pagination(['totalCount' => $count['num'], 'pageSize' => $this->size]);
