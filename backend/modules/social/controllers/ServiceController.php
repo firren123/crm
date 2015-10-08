@@ -270,29 +270,34 @@ class ServiceController extends BaseController
         $model = new ServiceSetting();
 
         $where = [];
+        $service_model = new Service();
+        $where2 = [];
         if ($audit_status != 999) {
             $where['audit_status'] = $audit_status;
+            $where2['user_auth_status'] = $audit_status==2?1:2;
             $log_info = '审核状态'.$this->audit_status_data[$audit_status];
         } elseif ($status != 999) {
             $where['status'] = $status;
+            $where2['servicer_info_status'] = $status==1?2:1;
             $log_info = '是否启用状态'.$status==1?'禁用':'启用';
         } elseif ($del != '') {
             $where['is_deleted'] = 1;
+            $where2['is_deleted'] = 1;
             $log_info = '删除状态';
         } else {
             return $this->error('参数错误');
         }
-
-        $ret = $model->updateInfo($where, ['id' => $id]);
-        if ($ret) {
-            $log = new OpLog();
-            $log->writeLog('服务设置修改id='.$id.'状态,'.$log_info.'|备注：'.$remark);
-            return $this->success('操作成功', 'setting');
-        } else {
-            return $this->error('数据错误');
+        $setting = $model->findOne($id);
+        if ($setting) {
+            $ret = $model->updateInfo($where, ['id' => $id]);
+            if ($ret) {
+                $log = new OpLog();
+                $service_model->updateInfo($where2, ['uid'=>$setting->uid]);
+                $log->writeLog('服务设置修改id='.$id.'状态,'.$log_info.'|备注：'.$remark);
+                return $this->success('操作成功', 'setting');
+            }
         }
-
-
+        return $this->error('数据错误');
     }
 
     /**
