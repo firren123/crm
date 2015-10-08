@@ -38,7 +38,6 @@ use backend\models\i500m\ShopOrderBlack;
 use backend\models\i500m\User;
 use backend\models\i500m\UserOrder;
 use backend\models\shop\ShopProduct;
-use common\helpers\CommonHelper;
 use common\helpers\CurlHelper;
 use common\helpers\FilePutContentHelps;
 use yii;
@@ -470,17 +469,10 @@ class UserorderController extends BaseController
     }
 
     /**
-     * 更改订单状态
-     * @param string $order_sn 订单号
-     * @param int $status //订单状态 1 确认 2取消 4发货 5收货
-     * @param int $type // 类型 1 订单确认状态 2发货状态
-     * @return int
-     */
-    /**
      * 简介：更改订单状态
      * @param int $order_sn 订单状态 1 确认 2取消 4发货 5收货
-     * @param int $status 类型 1 订单确认状态 2发货状态
-     * @param int $type 类型
+     * @param int $status   类型 1 订单确认状态 2发货状态
+     * @param int $type     类型
      * @return int
      */
     public function editOrderStatus($order_sn, $status, $type)
