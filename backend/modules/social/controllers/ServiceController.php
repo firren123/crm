@@ -23,6 +23,7 @@ use backend\models\social\OpLog;
 use backend\models\social\Service;
 use backend\models\social\ServiceSetting;
 use backend\models\social\ServiceUnit;
+use common\helpers\CurlHelper;
 use common\helpers\RequestHelper;
 use backend\models\SSDB;
 use yii\data\Pagination;
@@ -275,15 +276,15 @@ class ServiceController extends BaseController
         if ($audit_status != 999) {
             $where['audit_status'] = $audit_status;
             $where2['user_auth_status'] = $audit_status==2?1:2;
-            $log_info = '审核状态'.$this->audit_status_data[$audit_status];
+            $log_info = $this->audit_status_data[$audit_status];
         } elseif ($status != 999) {
             $where['status'] = $status;
             $where2['servicer_info_status'] = $status==1?2:1;
-            $log_info = '是否启用状态'.$status==1?'禁用':'启用';
+            $log_info = $status==1?'禁用':'启用';
         } elseif ($del != '') {
             $where['is_deleted'] = 1;
             $where2['is_deleted'] = 1;
-            $log_info = '删除状态';
+            $log_info = '删除';
         } else {
             return $this->error('参数错误');
         }
@@ -291,9 +292,15 @@ class ServiceController extends BaseController
         if ($setting) {
             $ret = $model->updateInfo($where, ['id' => $id]);
             if ($ret) {
-                $log = new OpLog();
+                //修改服务
                 $service_model->updateInfo($where2, ['uid'=>$setting->uid]);
+                //添加日志
+                $log = new OpLog();
                 $log->writeLog('服务设置修改id='.$id.'状态,'.$log_info.'|备注：'.$remark);
+                //百度推送
+                $re = CurlHelper::pushPost('3524545843427557178', $log_info, $remark);
+                var_dump($re);
+                exit;
                 return $this->success('操作成功', 'setting');
             }
         }
