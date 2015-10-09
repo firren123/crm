@@ -87,14 +87,12 @@ class WalletController extends BaseController
         if (!$list) {
             return $this->error('信息不存在');
         }
-        $list['child'] = $Withdrawal->getList(1);
+        $withdrawal_list = $Withdrawal->getList(1);
         return $this->render(
             'detail',
             [
-                'unit_data' => $this->unit_data,
-                'service_way_data' => $this->service_way_data,
                 'list' => $list,
-                'audit_status_data' => $this->audit_status_data
+                'withdrawal_list'=>$withdrawal_list,
             ]
         );
     }

@@ -428,6 +428,7 @@ class ServiceController extends BaseController
     }
     public function actionTestPush()
     {
+        //?channel_id=4517190743112883170&title=4517190743112883170&content=4517190743112883170&custom_content[id]=4517190743112883170&custom_content[title]=4517190743112883170&type=30
         $channel_id =RequestHelper::get('channel_id')?RequestHelper::get('channel_id'):'4517190743112883170';
         $log_info =RequestHelper::get('title')?RequestHelper::get('title'):'我是消息标题';
         $remark = RequestHelper::get('content')?RequestHelper::get('content'):'我是消息测试';
