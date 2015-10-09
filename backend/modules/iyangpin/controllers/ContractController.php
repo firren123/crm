@@ -16,6 +16,7 @@
  */
 
 namespace backend\modules\iyangpin\controllers;
+
 use backend\controllers\BaseController;
 use backend\models\i500m\UploadFrom;
 use backend\models\i500m\YpContract;
@@ -74,9 +75,7 @@ class ContractController extends BaseController
         $page = RequestHelper::get('page', 1, 'intval');
         $shop_name = RequestHelper::get('shop_name');
         $where = array();
-        
         $where['status'] = array(0, 1, 2);
-
         $count = $model->getListCount($where);
         $list = $model->getPageList($where, "*", 'id desc ', $page, $this->size);
         $pages = new Pagination(['totalCount' => $count['num'], 'pageSize' => $this->size]);
@@ -84,7 +83,7 @@ class ContractController extends BaseController
             'index',
             [
                 'pages' => $pages,
-                'title' => '添加合同',
+                'title' => '合同列表',
                 'list' => $list,
                 'shop_name' => $shop_name,
                 'industry_id_data'=>$this->industry_id_data,
@@ -205,10 +204,14 @@ class ContractController extends BaseController
         );
     }
 
+    /**
+     * 简介：
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
     public function actionView()
     {
         $model2 = new YpContract();
-        $post = RequestHelper::post('YpContract', array());
         $id = RequestHelper::get('id', 0, 'intval');
         $model = $model2->findOne($id);
         $model->qualification = explode(',', $model->qualification);
@@ -222,6 +225,7 @@ class ContractController extends BaseController
             ]
         );
     }
+
     /**
      * 简介：合同列表
      * @author  lichenjun@iyangpin.com。

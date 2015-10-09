@@ -12,6 +12,8 @@ return [
     'baseUrl'       => 'http://crm.test.i500m.com/',        //当前站点的URl
     'apiUrl'        => 'http://api.test.i500m.com/',          //测试地址
     'serverUrl'     => 'http://server.test.i500m.com/',       //测试地址商城网址
+    'channelUrl'    => 'http://channel.test.i500m.com/',       //测试地址通道地址
+    //http://channel.500mi.local.com/
 
     'supportEmail' => 'support@example.com',
     'user.passwordResetTokenExpire' => 3600,

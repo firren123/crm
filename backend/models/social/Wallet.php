@@ -6,19 +6,21 @@
  *
  * @category  PHP
  * @package   Crm
- * @filename  Module.php
+ * @filename  Wallet.php
  * @author    lichenjun <lichenjun@iyangpin.com>
  * @copyright 2015 www.i500m.com
  * @license   http://www.i500m.com/ i500m license
- * @datetime  15/9/24 下午1:32
+ * @datetime  15/10/9 上午9:48
  * @version   SVN: 1.0
  * @link      http://www.i500m.com/
  */
 
-namespace backend\modules\iyangpin;
+
+namespace backend\models\social;
+
 
 /**
- * Class Module
+ * Class Wallet
  * @category  PHP
  * @package   Crm
  * @author    lichenjun <lichenjun@iyangpin.com>
@@ -26,18 +28,15 @@ namespace backend\modules\iyangpin;
  * @license   http://www.i500m.com/ i500m license
  * @link      http://www.i500m.com/
  */
-class Module extends \yii\base\Module
+class Wallet extends SocialBase
 {
     /**
      * 简介：
      * @author  lichenjun@iyangpin.com。
-     * @return null
+     * @return string
      */
-    public function init()
+    public static function tableName()
     {
-        parent::init();
-
-        //$this->params['foo'] = 'bar';
-        // ...  其他初始化代码 ...
+        return "{{%i500_user_wallet}}";
     }
 }
