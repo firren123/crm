@@ -47,14 +47,22 @@ class CurlHelper extends BaseCurlHelps
         $url = \Yii::$app->params['channelUrl'].'push/push-msg-to-single-device';
         switch ($type) {
         case 10:   //审核
-            unset($data['custom_content']);
+            $data['custom_content']['type'] = 10;
             break;
         case 20:   //服务
+            $data['custom_content']['type'] = 20;
             if ($data['custom_content']['order_sn']) {
                 return array('code'=>101, 'msg'=>'服务参数错误');
             }
             break;
         case 30:   //帖子
+            $data['custom_content']['type'] = 30;
+            if (false == $data['custom_content']['title'] || false == $data['custom_content']['id']) {
+                return array('code'=>102, 'msg'=>'帖子参数错误');
+            }
+            break;
+        case 40:   //消息
+            $data['custom_content']['type'] = 40;
             if (false == $data['custom_content']['title'] || false == $data['custom_content']['id']) {
                 return array('code'=>102, 'msg'=>'帖子参数错误');
             }

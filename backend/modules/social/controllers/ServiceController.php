@@ -298,9 +298,8 @@ class ServiceController extends BaseController
                 $log = new OpLog();
                 $log->writeLog('服务设置修改id='.$id.'状态,'.$log_info.'|备注：'.$remark);
                 //百度推送
-                $re = CurlHelper::pushPost('3524545843427557178', $log_info, $remark);
-                var_dump($re);
-                exit;
+                $custom_content = ['title'=>234,'id'=>2];
+                CurlHelper::pushPost('3524545843427557178', $log_info, $remark,$custom_content,30);
                 return $this->success('操作成功', 'setting');
             }
         }
