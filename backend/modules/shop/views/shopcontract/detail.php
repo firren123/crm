@@ -103,11 +103,26 @@ $this->title = '商家合同信息详情';
         </tr>
         <tr>
             <td class="td1">合同状态：</td>
-            <td style="color: red;"><b><?php if ($list['status']) {
-                    echo "已生效";
-                }else{
-                    echo "未生效";
-                };?></b></td>
+            <td style="color: red;">
+                <b>
+                    <?php if (isset($list['status'])) {
+                        if ($list['status']==0) {
+                            echo "商家提交资料中" ;
+                        } elseif ($list['status']==1) {
+                            echo "已生效" ;
+                        }
+                        elseif ($list['status']==2) {
+                            echo "驳回" ;
+                        }
+                        elseif ($list['status']==3) {
+                            echo "待完善" ;
+                        }
+                        elseif ($list['status']==4) {
+                            echo "审核中" ;
+                        }
+                    }?>
+                </b>
+            </td>
         </tr>
     </table>
     <table style="border-bottom: 1px solid #D5692B; width: 1000px; height: auto;">

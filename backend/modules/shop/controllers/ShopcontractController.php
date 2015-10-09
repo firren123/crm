@@ -53,7 +53,7 @@ class ShopcontractController extends BaseController
     ];
     public $account_type_data = [
         0 => '银行账号',
-        1 => '支付宝账号',
+        //1 => '支付宝账号',
     ];
     public $settlement_cycle_data = [
         0 => '1天',
@@ -220,7 +220,7 @@ class ShopcontractController extends BaseController
         if ($rs_data) {
             $ShopContractMsg['IDcard_image'] = '/' . $rs_data['group_name'] . '/' . $rs_data['filename'];
         }
-        $ShopContractMsg['status'] = 0;                       //合同状态
+        $ShopContractMsg['status'] = 3;                       //合同状态
         //营业时间
         if (!empty($ShopContractMsg['business_hours'])) {
 
@@ -247,10 +247,8 @@ class ShopcontractController extends BaseController
             $ShopContractMsg['bankcard_username'] = '0';
         }
         //服务费用方式的选择
-        if ($ShopContractMsg['service_charge'] == '0') {
-            $ShopContractMsg['service_commission'] = '0.00';
-        } else {
-            $ShopContractMsg['fixed_service_charge'] = '0.00';
+        if ($ShopContractMsg['service_charge'] == '1') {
+            $ShopContractMsg['service_commission'] = $ShopContractMsg['service_commission']*0.01;//服务佣金
         }
         $result = $ShopContract_model->insertOneData($ShopContractMsg); //$result为shop_contract(合同基本信息表的主键ID)
         //经营信息表
@@ -282,7 +280,7 @@ class ShopcontractController extends BaseController
      */
     public function actionEdit()
     {
-        $id = RequestHelper::get('id', '78', '');//注册名称
+        $id = RequestHelper::get('id');//合同ID
         if (empty($id)) {
             return $this->error('未知错误 ，请重试!', 'index');
         }
@@ -346,6 +344,145 @@ class ShopcontractController extends BaseController
         ];
         //var_dump($ShopContract_model_result);exit;
         return $this->render('edit', $data_info);
+    }
+
+    /**
+     * 简介：商家合同修改操作
+     * @author  weitonghe@iyangpin.com
+     * @return  array
+     */
+    public function actionDoedit()
+    {
+        $id = RequestHelper::post('id');//合同ID
+        if (empty($id)) {
+            return $this->error('未知错误 ，请重试!', 'index');
+        }
+        $ShopContract_model = new ShopContract();
+        $ShopManage_model = new ShopManage();
+        $ShopContractMsg = [
+            //基本信息
+            'htnumber' => RequestHelper::post('htnumber'),                          //合同号
+            'shop_contract_name' => RequestHelper::post('shop_contract_name'),      //注册名称
+            'registered_address' => RequestHelper::post('registered_address'),      //注册地址
+            'registered_id' => RequestHelper::post('registered_id'),                //注册登记号
+            'registered_capital' => RequestHelper::post('registered_capital'),      //注册资本
+            'legal_representative' => RequestHelper::post('legal_representative'),  //法定代表人
+            'email' => RequestHelper::post('email'),                                //电子邮箱
+            'document_type' => RequestHelper::post('document_type'),                //证件类型
+            'document_number' => RequestHelper::post('document_number'),            //证件号
+            'contacts' => RequestHelper::post('contacts'),                          //联系人
+            'contacts_umber' => RequestHelper::post('contacts_umber'),              //联系电话
+            //'company_nature' => implode(',', RequestHelper::post('company_nature')),//公司性质
+            'company_nature' => RequestHelper::post('company_nature'),//公司性质
+            'company_nature_other' => RequestHelper::post('company_nature_other'),  //公司性质其他信息
+            //服务信息
+            'common_contacts' => RequestHelper::post('common_contacts'),            //同店面联系人    0、是   1、否
+            'common_contacts_job' => RequestHelper::post('common_contacts_job'),    //职务
+            'common_contacts_name' => RequestHelper::post('common_contacts_name'),  //联系人
+            'common_contacts_phone' => RequestHelper::post('common_contacts_phone'),//电话
+            'business_hours' => RequestHelper::post('business_hours_start') . ',' . RequestHelper::post('business_hours_end'),//营业时间   上午,下午
+            'area' => RequestHelper::post('area'),                                  //面积
+            'community_name' => RequestHelper::post('community_name'),              //所在社区名称
+            'monthly_turnover' => RequestHelper::post('monthly_turnover'),          //月均营业额
+            //清算信息
+            'account_type' => RequestHelper::post('account_type'),                  //账户类型  0、银行账号    1、支付宝账号
+            'alipay_name' => RequestHelper::post('alipay_name'),                    //支付宝账号
+            'bank_id' => RequestHelper::post('bank'),                               //开户银行
+            'bank_province' => RequestHelper::post('bank_province'),                //所在省份
+            'bank_city' => RequestHelper::post('bank_city'),                        //所在城市
+            //'bank_branch_id'     => RequestHelper::post('bank_branch'),           //所在支行的ID保存到表里的bank_branch_id(支行ID)里
+            'bank_branch' => RequestHelper::post('bank_branch'),                    //银行支行
+            'bank_number' => RequestHelper::post('bank_number'),                    //银行卡号
+            'bankcard_username' => RequestHelper::post('bankcard_username'),        //开户名称
+            //结算信息
+            'settlement_cycle' => RequestHelper::post('settlement_cycle'),          //结算周期
+            'service_charge' => RequestHelper::post('service_charge'),              //服务费用方式   0、固定服务费    1、服务佣金
+            //'fixed_service_charge' => RequestHelper::post('fixed_service_charge'),  //固定服务费
+            //'service_commission' => RequestHelper::post('service_commission'),      //服务佣金
+            //其他信息
+            'start_time' => RequestHelper::post('start_time'),                      //起止时间
+            'end_time' => RequestHelper::post('end_time'),
+            'counterman' => RequestHelper::post('business_id'),                      //业务员
+            //备注信息
+            'remark' => RequestHelper::post('remark'),                              //备注
+            'update_time' => date('Y-m-d H:i:s', time())
+        ];
+        //合同上传图片
+        $fastDfs = new FastDFSHelper();
+        $rs_data = $fastDfs->fdfs_upload('HeTong');
+        if ($rs_data) {
+            $ShopContractMsg['image'] = '/' . $rs_data['group_name'] . '/' . $rs_data['filename'];
+        }
+        //营业执照上传图片
+        //$fastDfs = new FastDFSHelper();
+        $rs_data = $fastDfs->fdfs_upload('YingYeZhiZhao');
+        if ($rs_data) {
+            $ShopContractMsg['business_licence_image'] = '/' . $rs_data['group_name'] . '/' . $rs_data['filename'];
+        }
+        //银行卡上传图片
+        //$fastDfs = new FastDFSHelper();
+        $rs_data = $fastDfs->fdfs_upload('YinHangKa');
+        if ($rs_data) {
+            $ShopContractMsg['bank_number_image'] = '/' . $rs_data['group_name'] . '/' . $rs_data['filename'];
+        }
+        //身份证上传图片
+        //$fastDfs = new FastDFSHelper();
+        $rs_data = $fastDfs->fdfs_upload('ShenFenZheng');
+        if ($rs_data) {
+            $ShopContractMsg['IDcard_image'] = '/' . $rs_data['group_name'] . '/' . $rs_data['filename'];
+        }
+        $ShopContractMsg['status'] = 3;                       //合同状态
+        //帐户类型的选择
+        if ($ShopContractMsg['account_type'] == '0') {
+            $ShopContractMsg['alipay_name'] = '';
+            //根据bank_id在shop_bank表里找到bank_name加入bank_name(开户银行名称)字段
+            $ShopBank_model = new ShopBank();
+            $where = "id='" . $ShopContractMsg['bank_id'] . "'";
+            $result = $ShopBank_model->getOneBank($where);
+            $ShopContractMsg['bank_name'] = $result['name'];
+            //根据bank_id在shop_bank表里 找到bank_name加入bank_name(开户银行名称)字段
+            //$ShopBcBank_model = new ShopBcBank();
+            //$where = "id='".$ShopContractMsg['bank_branch_id']."'";
+            //$result=$ShopBcBank_model->getOneBcBank($where);
+            //$ShopContractMsg['bank_branch']=$result['name'];
+        } else {
+            $ShopContractMsg['bank_id'] = '0';
+            $ShopContractMsg['bank_province'] = '0';
+            $ShopContractMsg['bank_city'] = '0';
+            $ShopContractMsg['bank_branch'] = '0';
+            $ShopContractMsg['bank_number'] = '0';
+            $ShopContractMsg['bankcard_username'] = '0';
+        }
+        //服务费用方式的选择
+        if ($ShopContractMsg['service_charge'] == '0') {
+            $ShopContractMsg['fixed_service_charge'] = RequestHelper::post('FuWuFeiYong');
+        } else {
+            $ShopContractMsg['service_commission'] = RequestHelper::post('FuWuFeiYong')*0.01;
+        }
+
+        $ShopContractWhere['id'] = $id;
+        $ShopContract_model->updateInfo($ShopContractMsg, $ShopContractWhere); //update合同基本信息表
+        //经营信息表
+        $ShopManageMsg = [
+            //'contract_id' => $result,
+            'business_name' => RequestHelper::post('business_name'),           //店面注册名称
+            'business_address' => RequestHelper::post('business_address'),     //经营地址
+            'htnumber' => $ShopContractMsg['htnumber'],                        //合同号
+            'update_time' => date('Y-m-d H:i:s', time())
+        ];
+        //经营范围;
+        $business_scope = RequestHelper::post('business_scope');
+        if (!empty($business_scope)) {
+            $ShopManageMsg['business_scope'] = implode(',', $business_scope);
+        }
+        $ShopManageWhere['contract_id'] = $id;
+        $ShopManage_model_result = $ShopManage_model->updateInfo($ShopManageMsg, $ShopManageWhere);  //update经营信息表
+        if ($ShopManage_model_result) {
+            //$this->_addOa($ShopContractMsg, $ShopManageMsg);
+            return $this->success('操作成功！', 'index');
+        } else {
+            return $this->error('操作失败,请重试！', 'edit?id='.$id);
+        }
     }
 
     /**
@@ -493,7 +630,7 @@ class ShopcontractController extends BaseController
             echo json_encode($Business_result);
             return;
         } else {
-            return;
+            return 0;
         }
     }
 
@@ -506,9 +643,14 @@ class ShopcontractController extends BaseController
     {
         $ShopContract_model = new ShopContract();
         $htNumber = RequestHelper::get('htnumber');
+        $id  = RequestHelper::get('id');
         if (!empty($htNumber)) {
+            $and_where = [];
+            if (!empty($id)) {
+                $and_where = ['<>', 'id', $id];
+            }
             $where['htnumber'] = $htNumber;
-            $result = $ShopContract_model->selOneInfo($where, [], 'htnumber');
+            $result = $ShopContract_model->selOneInfo($where, $and_where, 'htnumber');
             if ($result) {
                 return 0;
             } else {
@@ -527,9 +669,15 @@ class ShopcontractController extends BaseController
     {
         $ShopContract_model = new ShopContract();
         $shop_contract_name = RequestHelper::get('shop_contract_name');
+        $id  = RequestHelper::get('id');
         if (!empty($shop_contract_name)) {
+            $and_where = [];
+            if (!empty($id)) {
+                $and_where = ['<>', 'id', $id];
+                //$and_where = "id != '".$id."'";
+            }
             $where['shop_contract_name'] = $shop_contract_name;
-            $result = $ShopContract_model->selOneInfo($where, [], 'shop_contract_name');
+            $result = $ShopContract_model->selOneInfo($where, $and_where, 'shop_contract_name');
             if ($result) {
                 return 0;
             } else {
