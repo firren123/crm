@@ -6,30 +6,26 @@
  *
  * @category  PHP
  * @package   Crm
- * @filename  ServiceController.php
+ * @filename  WalletController.php
  * @author    lichenjun <lichenjun@iyangpin.com>
  * @copyright 2015 www.i500m.com
  * @license   http://www.i500m.com/ i500m license
- * @datetime  15/9/23 上午9:48
+ * @datetime  15/10/9 上午9:46
  * @version   SVN: 1.0
  * @link      http://www.i500m.com/
  */
 
 
 namespace backend\modules\social\controllers;
-
 use backend\controllers\BaseController;
-use backend\models\social\OpLog;
-use backend\models\social\Service;
-use backend\models\social\ServiceSetting;
-use backend\models\social\ServiceUnit;
-use common\helpers\CurlHelper;
+use backend\models\social\Wallet;
+use backend\models\social\Withdrawal;
 use common\helpers\RequestHelper;
-use backend\models\SSDB;
 use yii\data\Pagination;
 
+
 /**
- * Class ServiceController
+ * Class WalletController
  * @category  PHP
  * @package   Crm
  * @author    lichenjun <lichenjun@iyangpin.com>
@@ -37,49 +33,8 @@ use yii\data\Pagination;
  * @license   http://www.i500m.com/ i500m license
  * @link      http://www.i500m.com/
  */
-class ServiceController extends BaseController
+class WalletController extends BaseController
 {
-    public $size = 10;
-    public $audit_status_data = [
-        0 => '未审核',
-        1 => '审核中',
-        2 => '审核成功',
-        3 => '审核失败'
-    ];
-    public $sex = [
-        0 => '未知',
-        1 => '男',
-        2 => '女'
-    ];
-    public $unit_data = [
-        1=>'元',
-        2=>'元/次',
-        3=>'元/小时'
-    ];
-    public $service_way_data = [
-        1=>'上门服务',
-        2=>'到店体验'
-    ];
-    public $user_auth_status_data = [
-        1=>'认证成功',
-        2=>'认证失败'
-    ];
-    public $ssdb = null;
-    /**
-     * 简介：
-     * @author  lichenjun@iyangpin.com。
-     * @return null
-     */
-    public function init()
-    {
-        parent::init();
-        $obj_ssdb = new SSDB();
-        $this->ssdb = $obj_ssdb->instance();
-        if (isset($this->ssdb->result) && $this->ssdb->result == 0) {
-            echo "ssdb对象初始化失败:" . $this->ssdb->msg;
-            exit;
-        }
-    }
     /**
      * 简介：服务列表
      * @author  lichenjun@iyangpin.com。
@@ -87,35 +42,33 @@ class ServiceController extends BaseController
      */
     public function actionIndex()
     {
-        $model = new Service();
-        $title = RequestHelper::get('title');
-        $status = RequestHelper::get('status', 999, 'intval');
-        $audit_status = RequestHelper::get('audit_status', 999, 'intval');
+        $model = new Wallet();
+        $mobile = RequestHelper::get('mobile');
         $page = RequestHelper::get('page', 1, 'intval');
+        $start_time = RequestHelper::get('start_time');
+        $end_time = RequestHelper::get('end_time');
         $where = [];
-        $where['is_deleted'] = 2;
-        if ($title != '') {
-            $where['title'] = $title;
+        $andwhere = ' 1 ';
+        if ($mobile != '') {
+            $where['mobile'] = $mobile;
         }
-        if ($status != 999) {
-            $where['status'] = $status;
+        if ($start_time != '') {
+            $andwhere .=" and create_time >='$start_time'";
         }
-        if ($audit_status != 999) {
-            $where['audit_status'] = $audit_status;
+        if ($end_time != '') {
+            $andwhere.=" and create_time <='$end_time 23:59:59'";
         }
-        $count = $model->getCount($where);
-        $list = $model->getPageList($where, "*", "id desc", $page, $this->size);
+        $count = $model->getCount($where, $andwhere);
+        $list = $model->getPageList($where, "*", "id desc", $page, $this->size, $andwhere);
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->size]);
         return $this->render(
             'index',
             [
                 'list' => $list,
+                'start_time'=>$start_time,
+                'end_time'=>$end_time,
                 'pages' => $pages,
-                'title' => $title,
-                'unit_data' => $this->unit_data,
-                'service_way_data' => $this->service_way_data,
-                'audit_status' => $audit_status,
-                'audit_status_data' => $this->audit_status_data
+                'mobile' => $mobile,
             ]
         );
     }
@@ -127,12 +80,14 @@ class ServiceController extends BaseController
      */
     public function actionDetail()
     {
-        $model = new Service();
+        $model = new Wallet();
+        $Withdrawal = new Withdrawal();
         $id = RequestHelper::get('id', 0, 'intval');
         $list = $model->getInfo(['id'=>$id]);
         if (!$list) {
             return $this->error('信息不存在');
         }
+        $list['child'] = $Withdrawal->getList(1);
         return $this->render(
             'detail',
             [
@@ -299,7 +254,7 @@ class ServiceController extends BaseController
                 $log->writeLog('服务设置修改id='.$id.'状态,'.$log_info.'|备注：'.$remark);
                 //百度推送
                 $custom_content = ['title'=>234,'id'=>2];
-                CurlHelper::pushPost('4517190743112883170', $log_info, $remark, $custom_content, 30);
+                CurlHelper::pushPost('3524545843427557178', $log_info, $remark, $custom_content, 30);
                 return $this->success('操作成功', 'setting');
             }
         }
@@ -425,15 +380,5 @@ class ServiceController extends BaseController
             echo $value->data;
         }
         return;
-    }
-    public function actionTestPush()
-    {
-        $channel_id =RequestHelper::get('channel_id')?RequestHelper::get('channel_id'):'4517190743112883170';
-        $log_info =RequestHelper::get('title')?RequestHelper::get('title'):'我是消息标题';
-        $remark = RequestHelper::get('content')?RequestHelper::get('content'):'我是消息测试';
-        $custom_content = RequestHelper::get('custom_content');
-        $type = RequestHelper::get('type');
-        $ret = CurlHelper::pushPost($channel_id, $log_info, $remark, $custom_content, $type);
-        var_dump($ret);
     }
 }
