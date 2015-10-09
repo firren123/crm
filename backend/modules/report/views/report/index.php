@@ -56,7 +56,11 @@ $this->title = '报表管理';
                     ?>
                     <tr>
                         <td><?= $list['id'];?></td>
-                        <td><a href="/shop/shop/detail?id=<?= $list['shop_id']?>" target="_blank"><?= empty($list['shop_name']) ? '--': $list['shop_name']?></a></td>
+                        <td>
+                            <?php if (!empty($list['shop_name'])) :?>
+                                <a href="/shop/shop/detail?id=<?= $list['shop_id']?>" target="_blank"><?= $list['shop_name']?></a>
+                    <?php endif?>
+                    </td>
                         <td><?= $list['goods_total'];?></td>
                         <td><?= $list['total'];?></td>
                         <td><?= $list['consignee'];?></td>
