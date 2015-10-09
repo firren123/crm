@@ -38,7 +38,6 @@ use backend\models\i500m\ShopOrderBlack;
 use backend\models\i500m\User;
 use backend\models\i500m\UserOrder;
 use backend\models\shop\ShopProduct;
-use common\helpers\CommonHelper;
 use common\helpers\CurlHelper;
 use common\helpers\FilePutContentHelps;
 use yii;
@@ -74,12 +73,12 @@ class UserorderController extends BaseController
         3 => '已发货(部分)',
         4 => '已发货',
         5 => '已收货',
-        6 => '商家确认订单'
     );
     public $status_data = array(
         0 => '未确认',
         1 => '已确认',
         2 => '已取消',
+        4 => '商家接单',
         6 => '取消中',
         -1 => '删除',
     );
@@ -470,17 +469,10 @@ class UserorderController extends BaseController
     }
 
     /**
-     * 更改订单状态
-     * @param string $order_sn 订单号
-     * @param int $status //订单状态 1 确认 2取消 4发货 5收货
-     * @param int $type // 类型 1 订单确认状态 2发货状态
-     * @return int
-     */
-    /**
      * 简介：更改订单状态
      * @param int $order_sn 订单状态 1 确认 2取消 4发货 5收货
-     * @param int $status 类型 1 订单确认状态 2发货状态
-     * @param int $type 类型
+     * @param int $status   类型 1 订单确认状态 2发货状态
+     * @param int $type     类型
      * @return int
      */
     public function editOrderStatus($order_sn, $status, $type)
@@ -610,6 +602,10 @@ class UserorderController extends BaseController
             echo "订单没有确认，不能再次分配订单";
             exit;
         }
+        if ($order_info['status'] == 4) {
+            echo "商家已经接单，不能再次分配订单";
+            exit;
+        }
         //判断订单是否确认超过5分钟
         if ($new_time_5 < $order_info['allocate_time']) {
             echo "订单没有确认没有超过5分钟，不能再次分配订单";
@@ -716,7 +712,7 @@ class UserorderController extends BaseController
         $shopModel = new Shop();
         //把订单中商家添加到黑名单中。
         $order_info = $orderModel->getInfo(['order_sn' => $order_sn]);
-        if ($order_info['ship_status'] > 0) {
+        if ($order_info['status'] ==4) {
             return $this->ajaxReturn(102, '商家已经确认订单，不能转移');
         }
         $ShopOrderBlack = new ShopOrderBlack();
@@ -777,7 +773,7 @@ class UserorderController extends BaseController
             //记录日志
             $order_log = new OrderLog();
             $map['o_id'] = $order_info['id'];
-            $map['oper'] = '修改用户收货信息';
+            $map['oper'] = '修改订单商家信息';
             $map['order_sn'] = $order_sn;
             $map['log_info'] = '把用户订单所属商家ID：' . $order_info['shop_id'] . ',修改成：' . $shop_id;
             $order_log->recordLog($map);//操作备注

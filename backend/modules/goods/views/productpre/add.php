@@ -33,6 +33,7 @@ $this->title = '添加待发布商品基本信息';
 <?= $this->registerJsFile("@web/js/news.js");?>
 <?= $this->registerJsFile("@web/plug/ueditor/ueditor.config.js");?>
 <?= $this->registerJsFile("@web/plug/ueditor/ueditor.all.min.js");?>
+<?= $this->registerJsFile("@web/js/goods/product.js");?>
 <legends  style="fond-size:12px;">
     <ul class="breadcrumb">
         <li>
@@ -54,7 +55,8 @@ $form = ActiveForm::begin([
 <?= $form->field($model, 'title')->label('副标题/简介')->input('text',['style'=>'width:400px']) ; ?>
 <?= $form->field($model, 'keywords')->label('关键词')->input('text',['style'=>'width:400px']) ; ?>
 <input type="hidden" id="act" value="add" name="add">
-<?= $form->field($model, 'cate_first_id')->dropDownList(ArrayHelper::map($cate_list,'id','name'),array('id'=>'cate_id'))->label('分类'); ?>
+<?= $form->field($model, 'cate_first_id')->dropDownList(ArrayHelper::map($cate_list,'id','name'),array('id'=>'cate_id'))->label('顶级分类'); ?>
+<?= $form->field($model, 'cate_second_id')->dropDownList(ArrayHelper::map([['id'=>0,'name'=>'选择二级分类']],'id','name'),array('id'=>'cate_second_id'))->label('二级分类'); ?>
 <div class="form-group field-product-brand_id required">
     <label class="control-label col-sm-3" for="product-description">品牌</label>
     <div class="col-sm-6" style="width: 85%">

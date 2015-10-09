@@ -13,7 +13,7 @@
             <option value="1" <?php if(!empty($use_system) and $use_system==1):?>selected="selected"<?php endif;?>>i500</option>
             <option value="2" <?php if(!empty($use_system) and $use_system==2):?>selected="selected"<?php endif;?>>社交平台系统</option>
         </select>
-        <label for="name">优惠券名称：</label>
+        <label for="name">用户名称：</label>
         <input id="name" type="text" name="name" value="<?= empty($name) ? '' : $name?>" class="form-control">
         <button id="yw3" class="btn btn-primary" name="yt0" type="submit">搜索</button>
     </form>

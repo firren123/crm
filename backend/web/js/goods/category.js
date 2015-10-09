@@ -24,7 +24,6 @@ function Delete(id){
     }else{
         return false;
     }
-
 }
 clickCheckbox();
 /**

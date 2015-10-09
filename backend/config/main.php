@@ -49,6 +49,10 @@ return [
             'basePath' => '@backend/modules/report',
             'class' => 'backend\modules\report\Module',
         ],
+        'iyangpin' => [
+            'basePath' => '@backend/modules/iyangpin',
+            'class' => 'backend\modules\iyangpin\Module',
+        ],
     ],
 
 ];

@@ -3,72 +3,59 @@ use yii\widgets\LinkPager;
 $this->title = '商品分类管理';
 ?>
 <script type="text/javascript" src="/js/goods/category.js"></script>
-<legends  style="fond-size:12px;">
-    <legend>商品分类管理</legend>
+    <legends  style="fond-size:12px;">
+        <legend>商品分类管理</legend>
     </legends>
 <?php
-echo $this->render('_search', ['name'=>$name]);
+echo $this->render('_search');
 ?>
-
-<a id="yw0" class="btn btn-primary" href="/goods/category/add" style="margin-bottom:20px;">添加分类</a>
 <div class="tab-content">
     <div class="row-fluid">
+        [<a href="/goods/category/add?p_id=0">添加分类</a>]
         <table class="table table-bordered table-hover">
             <tbody>
-                <tr>
-                    <th style="width: 8%">
-                        <input type="checkbox" id="check" name="check" class="findtitall chooseAll" />全选
-                    </th>
-                    <th>分类ID</th>
-                    <th>分类名称</th>
-                    <th>分类图片</th>
-                    <th>排序</th>
-                    <th>是否显示</th>
-                    <th>操作</th>
-                </tr>
-            </tbody>
-            <tfoot>
-                <?php if(empty($data)) {
-                    echo '<tr><td style="text-align:center;">暂无记录</td></tr>';
-                }else{
-                    foreach ($data as $item):
-                        ?>
-                        <tr>
-                            <td>
-                                <input type="checkbox" name="ids[]" value="<?php echo $item['id'] ?>" id="brandid" class="check"/>
-                            </td>
-                            <td><?= $item['id'];?></td>
-                            <td><?= $item['name'];?></td>
-                            <td><img src="<?= empty($item['img']) ? '/images/05_mid.jpg' :\Yii::$app->params['imgHost'].$item['img'];?>" style="width: 100px;height: 100px;" ></td>
-                            <td><?= $item['sort'];?></td>
-                            <td><?= $item['status']==1 ? '隐藏' : '显示';?></td>
-                            <td>
-                                <?php if($item['cate_status']==0):?>
-                                <a style="cursor:pointer" onclick="Delete(<?= $item['id'];?>)">删除</a> |
-                                <?php endif?>
-                        <a style="cursor:pointer" href="/goods/category/add?id=<?= $item['id'];?>">修改</a> </td>
-                        </tr>
-                    <?php endforeach;
-                }
+            <?php if (empty($data)) {
+            } else {
                 ?>
-
-            <tr style="display: none">
-                <td colspan="7">
-                    <div id="egw0" class="pull-right" style="position:relative">
-                        <input type="hidden" id="token" value="<?php echo Yii::$app->getRequest()->getCsrfToken(); ?>" />
-                        <button id="delete_all" class="bulk-actions-btn btn btn-danger btn-small active" type="button" name="yt1" onclick="checkSelectd()">删除所选</button>
-                        <div class="bulk-actions-blocker" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; display: none;"></div>
-                    </div>
-                </td>
-            </tr>
-            </tfoot>
+            <?php
+                foreach ($data as $key => $item):
+                    ?>
+                    <tr id="tr_<?= $item['id']; ?>">
+                        <td style="text-align: left;">
+                            <?= $item['name']; ?>(<?= $item['status']==1 ? '隐藏' : '显示';?>)　
+                            [<a href="/goods/category/add?p_id=<?= $item['id']; ?> ">添加子分类</a>]　
+                            [<a href="/goods/category/add?id=<?= $item['id']; ?>">编辑</a>]
+                            [<a href="/goods/category/view?id=<?= $item['id']; ?>">查看</a>]
+                            <?php if (empty($item['data'])) :
+                                ?>
+                                [<a onclick="Delete(<?= $item['id'];?>)" href="javascript:void(0)">删除</a>]
+                            <?php endif?>
+                        </td>
+                    </tr>
+                    <?php
+                        if (!empty($item['data'])) {
+                            foreach ($item['data'] as $data):
+                                ?>
+                                <tr id="tr_<?= $data['id']; ?>">
+                                    <td style="text-align: left;">　　
+                                        |----<?= $data['name']; ?>(<?= $data['status']==1 ? '隐藏' : '显示';?>)　
+                                        <!--                                [<a href="/social/categorygory/add?p_id=--><?//= $item1['id']; ?><!-- ">添加子类型</a>]-->
+                                        [<a href="/goods/category/add?id=<?= $data['id']; ?> ">编辑</a>]
+                                        [<a href="/goods/category/view?id=<?= $data['id']; ?>">查看</a>]
+                                            [<a onclick="Delete(<?= $data['id']; ?>)" href="javascript:void(0)">删除</a>]
+                                    </td>
+                                </tr>
+                                <?php
+                            endforeach;
+                        }
+                endforeach;
+            }
+            ?>
+            </tbody>
 
         </table>
         <div class="pagination pull-right">
-        <?= LinkPager::widget(['pagination' => $pages]); ?>
-            </div>
+            <?= LinkPager::widget(['pagination' => $pages]); ?>
+        </div>
     </div>
 </div>
-<script>
-    clickCheckbox();
-</script>

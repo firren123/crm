@@ -12,6 +12,8 @@ return [
     'baseUrl'       => 'http://crm.test.i500m.com/',        //当前站点的URl
     'apiUrl'        => 'http://api.test.i500m.com/',          //测试地址
     'serverUrl'     => 'http://server.test.i500m.com/',       //测试地址商城网址
+    'channelUrl'    => 'http://channel.test.i500m.com/',       //测试地址通道地址
+    //http://channel.500mi.local.com/
 
     'supportEmail' => 'support@example.com',
     'user.passwordResetTokenExpire' => 3600,
@@ -20,6 +22,11 @@ return [
     'cache_key'=>'admin',
     'access_token'=>'fb54f3c5992b96d001bb16e8e92d968d',
     'COMPANY_ID' => 28,
+    'ssdb' => array(
+        'host' => '118.186.247.55',
+        'port' => '8888',
+        'auth' => 'kakvi6Zfjsqvddwourzr0wfZjeckqtxj',
+    ),
 
 
 

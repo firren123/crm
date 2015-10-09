@@ -7,7 +7,7 @@ $this->title = '标准库管理';
     <legend>标准库管理</legend>
 </legends>
 <?php
-echo $this->render('_search', ['search'=>$search,'cate_list'=>$cate_list,'brand_list'=>$brand_list,'city_data'=>$city_data]);
+echo $this->render('_search', ['search'=>$search,'cate_list'=>$cate_list,'cate_second_data'=>$cate_second_data,'city_data'=>$city_data]);
 ?>
 <!--<a id="yw0" class="btn btn-primary" href="/goods/product/add" style="margin-bottom:10px;">添加标准库</a>-->
 
@@ -21,17 +21,15 @@ echo $this->render('_search', ['search'=>$search,'cate_list'=>$cate_list,'brand_
                 <th style="width: 8%">
                     <input type="checkbox" id="check" name="check" class="findtitall chooseAll" />全选
                 </th>
-                <th style="width: 5%">ID</th>
                 <th style="width: 10%">商品名称</th>
                 <th style="width: 10%">商品属性</th>
                 <th>条形码</th>
-                <th width="130px">进货价</th>
-                <th width="130px">建议售价</th>
-                <th width="130px">铺货价</th>
-                <th>分类</th>
-                <th>上下架</th>
-                <th>是否推荐</th>
-                <th>库存</th>
+                <th style="width: 8%">进货价</th>
+                <th style="width: 8%">建议售价</th>
+                <th style="width: 8%">铺货价</th>
+                <th style="width: 8%">顶级分类</th>
+                <th style="width: 8%">二级分类</th>
+                <th style="width: 8%">上下架</th>
                 <th style="width: 10%">限定区域</th>
                 <th>操作</th>
             </tr>
@@ -48,7 +46,6 @@ echo $this->render('_search', ['search'=>$search,'cate_list'=>$cate_list,'brand_
                             <input type="checkbox" name="ids[]" value="<?php echo $item['id'] ?>" id="brandid" class="check"/>
                     <?php endif;?>
                         </td>
-                        <td><?= $item['id'];?></td>
                         <td><?= $item['name'];?></td>
                         <td><?= empty($item['attr_value']) ? "--" : $item['attr_value'];?></td>
                         <td><?= empty($item['bar_code']) ? '--' :$item['bar_code'];?></td>
@@ -81,9 +78,8 @@ echo $this->render('_search', ['search'=>$search,'cate_list'=>$cate_list,'brand_
                             </p>
                         </td>
                         <td><?= empty($item['cate_name']) ? '--' : $item['cate_name'];?></td>
+                        <td><?= empty($item['cate_second_name']) ? '--' : $item['cate_second_name'];?></td>
                         <td><?= $item['status']==1 ? '上架' : '下架';?></td>
-                        <td><?= $item['is_hot']==1 ? '是' : '否';?></td>
-                        <td><?= $item['total_num'];?></td>
                         <td><?= $item['area_name'];?></td>
                         <td style="width: 12%">
                             <?php if($item['bc_id'] == $bc_id or $item['bc_id']!=$branch_id) :?>
