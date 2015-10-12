@@ -36,6 +36,13 @@ use yii\data\Pagination;
  */
 class WalletController extends BaseController
 {
+    //提现状态
+    public $status_data = [
+        1=> '提交申请',
+        2=> '处理中',
+        3=> '提现到账成功',
+        4=> '提现到账失败'
+    ];
     /**
      * 简介：服务列表
      * @author  lichenjun@iyangpin.com。
@@ -109,12 +116,14 @@ class WalletController extends BaseController
      */
     public function actionWalLog()
     {
+        $this->layout ='dialog';
         $WithdrawalLog = new WithdrawalLog();
         $id = RequestHelper::get('id', 0, 'intval');
-        $list = $WithdrawalLog->getList(['id'=>$id]);
+        $list = $WithdrawalLog->getList(['withdrawal_id'=>$id]);
         return $this->render(
             'detail_log',
             [
+                'status_data'=>$this->status_data,
                 'list' => $list,
             ]
         );
