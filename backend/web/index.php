@@ -9,15 +9,14 @@ require(__DIR__ . '/../config/bootstrap.php');
 $intRemoteIp = ip2long($_SERVER['REMOTE_ADDR']);
 if (($intRemoteIp - ip2long('192.168.33.000')) * ($intRemoteIp - ip2long('192.168.33.255')) > 0) {
     $config = array_merge(
-        require(__DIR__ . '/../../common/config/main-local.php'),
-        require(__DIR__ . '/../config/main-local.php')
-    );
-} else {
-    $config = array_merge(
         require(__DIR__ . '/../../common/config/main.php'),
         require(__DIR__ . '/../config/main.php')
     );
+} else {
+    $config = array_merge(
+        require(__DIR__ . '/../../common/config/main-local.php'),
+        require(__DIR__ . '/../config/main-local.php')
+    );
 }
-
 $application = new yii\web\Application($config);
 $application->run();
