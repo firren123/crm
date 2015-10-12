@@ -53,13 +53,13 @@ $this->title = '商家合同列表';
             <?php
                 foreach ($list as $k=>$v) {
             ?>
-            <tr onclick="window.location.href='/shop/shopcontract/detail?id='+<?= $list[$k]['id']?>" onmouseover="this.style.backgroundColor='#aaaaaa';return true;" onmouseout="this.style.backgroundColor='#ffffff';return true;">
-                <td><?= $list[$k]['htnumber'];?></td>
-                <td><?= $list[$k]['shop_contract_name'];?></td>
-                <td><?= $list[$k]['contacts'];?></td>
-                <td><?= $list[$k]['contacts_umber'];?></td>
-                <td><?= $list[$k]['counterman'];?></td>
-                <td>
+            <tr onmouseover="this.style.backgroundColor='#aaaaaa';return true;" onmouseout="this.style.backgroundColor='#ffffff';return true;">
+                <td class="link"><?= $list[$k]['htnumber'];?></td>
+                <td class="link"><?= $list[$k]['shop_contract_name'];?></td>
+                <td class="link"><?= $list[$k]['contacts'];?></td>
+                <td class="link"><?= $list[$k]['contacts_umber'];?></td>
+                <td class="link"><?= $list[$k]['counterman'];?></td>
+                <td class="link">
                     <?php if (isset($list[$k]['status'])) {
                         if ($list[$k]['status']==0) {
                             echo "商家提交资料中" ;
@@ -78,11 +78,12 @@ $this->title = '商家合同列表';
                     }?>
                 </td>
                 <td>
-                    <a href="#">合同完善</a>
                     <?php
                     if (isset($list[$k]['status']) && $list[$k]['status']==3) {
                     ?>
-                        &nbsp;|&nbsp;<a href="#">提交到OA审核</a>
+                        <a href="edit?id=<?= $list[$k]['id'] ?>">合同完善</a>
+                        &nbsp;|&nbsp;
+                        <a href="edit?id=<?= $list[$k]['id'] ?>" onClick="if(confirm('确定要提交审核？'))return true;return false;">提交到OA审核</a>
                     <?php
                     }
                     ?>
@@ -96,4 +97,11 @@ $this->title = '商家合同列表';
     <div class="pages">
         <?= \yii\widgets\LinkPager::widget(['pagination' => $pages]) ?>
     </div>
+    <script type="text/javascript">
+        $(document).ready(function(){
+           $(".link").click(function(){
+               window.location.href='/shop/shopcontract/detail?id='+<?= $list[$k]['id']?>;
+           });
+        });
+    </script>
 </div>
