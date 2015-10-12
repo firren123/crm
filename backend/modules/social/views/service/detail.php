@@ -27,7 +27,7 @@ $this->title = '服务详情';
 </div>
 <table class="table table-bordered table-hover">
     <tr>
-        <th>用户ID：</th>
+        <th width="100px">用户ID：</th>
         <td><?=$list['uid'];?></td>
     </tr>
     <tr>
