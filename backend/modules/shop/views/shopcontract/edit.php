@@ -720,7 +720,7 @@ $(document).ready(function(){
             if ($(this).is(':checked')) {
                 business_scope_is_ok = true;
             }
-            console.log('onload经营范围:'+business_scope_is_ok);
+            //console.log('onload经营范围:'+business_scope_is_ok);
         }
         if (element.id == 'business_address_is_ok') {//经营地址
             if (element.value.length!=0) {
@@ -1014,6 +1014,7 @@ $(document).ready(function(){
             //console.log('公司性质:'+company_nature_is_ok);
             return;
         }
+        //公司性质其他信息
         if ($(this).attr("name")=='company_nature_other') {
             if ($.trim($(this).val())=='') {
                 company_nature_is_ok = false;
@@ -1026,11 +1027,11 @@ $(document).ready(function(){
 
         //经营范围处理
         if ($(this).attr("name")=='business_scope[]') {
-            console.log($(this).attr("name"));
+            //console.log($(this).attr("name"));
             //console.log($(this).val());
             //console.log($(this).is(':checked'));
             $("input[type='checkbox'").each(function (index, element) {
-                console.log(index);
+                //console.log(index);
                 if (element.checked) {
                     business_scope_is_ok = true;return false;
                 } else {
@@ -1038,7 +1039,7 @@ $(document).ready(function(){
                 }
             });
             //console.log($("input:[name='business_scope']:checked").val());
-            console.log('经营范围:'+business_scope_is_ok);
+            //console.log('经营范围:'+business_scope_is_ok);
             return;
         }
 
