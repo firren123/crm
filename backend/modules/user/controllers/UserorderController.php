@@ -123,6 +123,7 @@ class UserorderController extends BaseController
         $ship_status = RequestHelper::get('ship_status', -1, 'intval');
         $shop_name = RequestHelper::get('shop_name', '');
         $page = RequestHelper::get('page', 1, 'intval');
+        $down = RequestHelper::get('down',0,'intval');
         $where = array();
         $user_model = new User();
         $andWhere = [];
@@ -193,6 +194,47 @@ class UserorderController extends BaseController
         }
         $andWhere = empty($andWhere) ? '' : implode(' and ', $andWhere);
         $model = new UserOrder();
+        if ($down == 1) {
+            error_reporting(E_ALL);
+            $objPHPExcel = new \PHPExcel();
+            $title = ['店铺名称','用户名','订单号','下单时间','支付状态','支付方式','发货状态','订单金额','优惠金额','商品名称','商品金额','条形码','收货人','手机号','地址'];
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue("A".$i, $i+$b)
+                ->setCellValue("B".$i, $i+$b)
+                ->setCellValue("C".$i, $i+$b)
+                ->setCellValue("D".$i, $i+$b)
+                ->setCellValue("E".$i, $i+$b)
+                ->setCellValue("F".$i, $i+$b)
+                ->setCellValue("G".$i, $i+$b)
+                ->setCellValue("H".$i, $i+$b)
+                ->setCellValue("I".$i, $i+$b)
+                ->setCellValue("J".$i, $i+$b);
+            for ($i = 0; $i < 100; $i++) {
+                for ($b = 0; $b < 9; $b++) {
+                    $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue("A".$i, $i+$b)
+                        ->setCellValue("B".$i, $i+$b)
+                        ->setCellValue("C".$i, $i+$b)
+                        ->setCellValue("D".$i, $i+$b)
+                        ->setCellValue("E".$i, $i+$b)
+                        ->setCellValue("F".$i, $i+$b)
+                        ->setCellValue("G".$i, $i+$b)
+                        ->setCellValue("H".$i, $i+$b)
+                        ->setCellValue("I".$i, $i+$b)
+                        ->setCellValue("J".$i, $i+$b);
+                }
+                /*以下就是对处理Excel里的数据， 横着取数据，主要是这一步，其他基本都不要改*/
+
+            }
+            $name = time();
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="'.$name.'.xls"');
+            header('Cache-Control: max-age=0');
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            ob_clean();
+            $objWriter->save('php://output');
+            exit;
+        }
         $count = $model->getListCount($where, $andWhere);
         $list = $model->getList2($where, $andWhere, ['create_time' => SORT_DESC], "*", ($page - 1) * $this->size, $this->size);
         $result_arr = [];
