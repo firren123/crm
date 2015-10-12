@@ -21,21 +21,21 @@ return [
         ],
         'db'    => [
             'class'=>'yii\db\Connection',
-            'dsn'=>'mysql:host=118.186.247.55;dbname=shop',
+            'dsn'=>'mysql:host=127.0.0.1;dbname=shop',
             'username'=>'shop',
             'password'=>'shop',
             'charset'=>'utf8',
         ],
         'db_500m'    => [
             'class'=>'yii\db\Connection',
-            'dsn'=>'mysql:host=118.186.247.55;dbname=500m_new',
+            'dsn'=>'mysql:host=127.0.0.1;dbname=500m_new',
             'username'=>'500m',
             'password'=>'500m',
             'charset'=>'utf8',
         ],
         'db_pay'    => [
             'class'=>'yii\db\Connection',
-            'dsn'=>'mysql:host=118.186.247.55;dbname=pay',
+            'dsn'=>'mysql:host=127.0.0.1;dbname=pay',
             'username'=>'500m',
             'password'=>'500m',
             'charset'=>'utf8',
@@ -49,7 +49,7 @@ return [
         ],
         'db_social'    => [
             'class'=>'yii\db\Connection',
-            'dsn'=>'mysql:host=118.186.247.55;dbname=i500_social',
+            'dsn'=>'mysql:host=127.0.0.1;dbname=i500_social',
             'username'=>'500m',
             'password'=>'500m',
             'charset'=>'utf8',

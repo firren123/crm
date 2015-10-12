@@ -79,6 +79,7 @@ class ShopcontractController extends Controller
     {
         $connection = \Yii::$app->db_oa;
         $time = date("Y-m-d H:i:s", strtotime("-1 hour"));
+        $now_time = date("Y-m-d H:i:s");
         $sql = 'select run_id from flow_run_prcs where DELIVER_TIME>"' . $time . '" and FLOW_PRCS =6 and PRCS_FLAG = 4';
         $ret = $connection->createCommand($sql)->queryAll();
         if ($ret) {
@@ -86,7 +87,7 @@ class ShopcontractController extends Controller
             foreach ($ret as $k => $v) {
                 $sql = 'select data_93 as crm_id from flow_data_160 where run_id = ' . $v['run_id'];
                 $crm_ids = $connection->createCommand($sql)->queryAll();
-                $t = $shopContractModel->updateInfo(['status' => 1], ['id' => $crm_ids[0]['crm_id']]);
+                $t = $shopContractModel->updateInfo(['status' => 1, 'update_time' => $now_time], ['id' => $crm_ids[0]['crm_id']]);
                 if ($t) {
                     echo $v['crm_id'] . "success\n";
                 } else {
