@@ -48,6 +48,7 @@ $this->title = '商家合同列表';
                 <th>电话</th>
                 <th>业务员ID</th>
                 <th>状态</th>
+                <th>操作</th>
             </tr>
             <?php
                 foreach ($list as $k=>$v) {
@@ -58,7 +59,34 @@ $this->title = '商家合同列表';
                 <td><?= $list[$k]['contacts'];?></td>
                 <td><?= $list[$k]['contacts_umber'];?></td>
                 <td><?= $list[$k]['counterman'];?></td>
-                <td><?php if($list[$k]['status']){echo "已生效" ;}else{ echo"未生效";} ?></td>
+                <td>
+                    <?php if (isset($list[$k]['status'])) {
+                        if ($list[$k]['status']==0) {
+                            echo "商家提交资料中" ;
+                        } elseif ($list[$k]['status']==1) {
+                            echo "已生效" ;
+                        }
+                        elseif ($list[$k]['status']==2) {
+                            echo "驳回" ;
+                        }
+                        elseif ($list[$k]['status']==3) {
+                            echo "待完善" ;
+                        }
+                        elseif ($list[$k]['status']==4) {
+                            echo "审核中" ;
+                        }
+                    }?>
+                </td>
+                <td>
+                    <a href="#">合同完善</a>
+                    <?php
+                    if (isset($list[$k]['status']) && $list[$k]['status']==3) {
+                    ?>
+                        &nbsp;|&nbsp;<a href="#">提交到OA审核</a>
+                    <?php
+                    }
+                    ?>
+                </td>
             </tr>
             <?php
             }
