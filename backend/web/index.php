@@ -1,4 +1,5 @@
 <?php
+var_dump($_SERVER);
 defined('YII_DEBUG') or define('YII_DEBUG', true);
 defined('YII_ENV') or define('YII_ENV', 'dev');
 require(__DIR__ . '/../../vendor/autoload.php');
@@ -8,15 +9,18 @@ require(__DIR__ . '/../config/bootstrap.php');
 
 $intRemoteIp = ip2long($_SERVER['REMOTE_ADDR']);
 if (($intRemoteIp - ip2long('192.168.33.000')) * ($intRemoteIp - ip2long('192.168.33.255')) > 0) {
+    echo '测试';
     $config = array_merge(
         require(__DIR__ . '/../../common/config/main.php'),
         require(__DIR__ . '/../config/main.php')
     );
 } else {
+    echo '本地';
     $config = array_merge(
         require(__DIR__ . '/../../common/config/main-local.php'),
         require(__DIR__ . '/../config/main-local.php')
     );
 }
+exit;
 $application = new yii\web\Application($config);
 $application->run();
