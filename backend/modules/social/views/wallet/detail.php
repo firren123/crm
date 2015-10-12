@@ -83,7 +83,10 @@ $this->title = '钱包详情';
                 <td colspan="2"><?= $item['expect_arrival_time'];?></td>
                 <td colspan="2"><?= $item['arrival_time'];?></td>
                 <td colspan="4">
-                    <a href="#" class="log" m="<?= $item['id'];?>">详情</a>
+                    <a href="#" class="log" m="<?= $item['id'];?>">
+                        <div style="height: 30px;width: 30px;background: url('/images/code_br.jpg') no-repeat -710px -599px">
+                        </div>
+                    </a>
                 </td>
             </tr>
         <?php } }?>
@@ -98,9 +101,13 @@ $this->title = '钱包详情';
         $(".log").click(function(){
             var id = $(this).attr("m");
             var d = dialog({
-                url: '/social/wallet/detail-log?id='+id,
+                'title':'提现流程',
+                okValue: '关闭',
+                fixed: true,
+                url: '/social/wallet/wal-log?id='+id,
                 content: '提现日志',
-                quickClose: true
+                quickClose: true,
+                ok: function () {}
             });
             d.show();
             return false;
