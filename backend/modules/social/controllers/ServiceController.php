@@ -73,12 +73,12 @@ class ServiceController extends BaseController
     public function init()
     {
         parent::init();
-//        $obj_ssdb = new SSDB();
-//        $this->ssdb = $obj_ssdb->instance();
-//        if (isset($this->ssdb->result) && $this->ssdb->result == 0) {
-//            echo "ssdb对象初始化失败:" . $this->ssdb->msg;
-//            exit;
-//        }
+        $obj_ssdb = new SSDB();
+        $this->ssdb = $obj_ssdb->instance();
+        if (isset($this->ssdb->result) && $this->ssdb->result == 0) {
+            echo "ssdb对象初始化失败:" . $this->ssdb->msg;
+            exit;
+        }
     }
     /**
      * 简介：服务列表
