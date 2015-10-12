@@ -30,35 +30,81 @@ $this->title = '钱包详情';
         <th colspan="2">ID</th>
         <th colspan="2">用户ID</th>
         <th colspan="2">手机号</th>
-        <th colspan="2">充值余额</th>
-        <th colspan="2">订单收益</th>
-        <th colspan="2">红包</th>
+        <th colspan="4">充值余额</th>
+        <th colspan="4">订单收益</th>
+        <th colspan="4">红包</th>
         <th colspan="2">积分</th>
+        <th colspan="2">创建时间</th>
     </tr>
-    <?php if(empty($list)) {
-        echo '<tr><td colspan="24" style="text-align:center;">暂无记录</td></tr>';
-    }else{
-    foreach($list as $item){
-    ?>
     <tr>
-        <td colspan="2"><?= $item['id'];?></td>
-        <td colspan="2"><?= $item['uid'];?></td>
-        <td colspan="2"><?= $item['mobile'];?></td>
-        <td colspan="2"><?= $item['money'];?></td>
-        <td colspan="2"><?= $item['money_earnings'];?></td>
-        <td colspan="2"><?= $item['money_giving'];?></td>
-        <td colspan="2"><?= $item['integral'];?></td>
-        <td colspan="2"><?= $item['create_time'];?></td>
+        <td colspan="2"><?= $list['id'];?></td>
+        <td colspan="2"><?= $list['uid'];?></td>
+        <td colspan="2"><?= $list['mobile'];?></td>
+        <td colspan="4"><?= $list['money'];?></td>
+        <td colspan="4"><?= $list['money_earnings'];?></td>
+        <td colspan="4"><?= $list['money_giving'];?></td>
+        <td colspan="2"><?= $list['integral'];?></td>
+        <td colspan="2"><?= $list['create_time'];?></td>
+    </tr>
+</table>
+<table class="table table-bordered table-hover">
+    <tr>
+        <td colspan="30">提现详细</td>
+    </tr>
+    <tr>
+        <th colspan="2">ID</th>
+        <th colspan="2">用户ID</th>
+        <th colspan="2">手机号</th>
+        <th colspan="2">姓名</th>
+        <th colspan="2">银行卡号</th>
+        <th colspan="2">提现金额</th>
+        <th colspan="2">状态</th>
+        <th colspan="2">提现时间</th>
+        <th colspan="2">预计到账时间</th>
+        <th colspan="2">到账时间</th>
+        <th colspan="2">操作</th>
 
     </tr>
-    <? } ?>
+
+    <?php if(empty($withdrawal_list)) {
+        echo '<tr><td colspan="30" style="text-align:center;">暂无记录</td></tr>';
+    }else{
+        foreach($withdrawal_list as $item){
+            ?>
+            <tr>
+                <td colspan="2"><?= $item['id'];?></td>
+                <td colspan="2"><?= $item['uid'];?></td>
+                <td colspan="2"><?= $item['mobile'];?></td>
+                <td colspan="2"><?= $item['real_name'];?></td>
+                <td colspan="2"><?= $item['bank_card'];?></td>
+                <td colspan="2"><?= $item['money'];?></td>
+                <td colspan="2"><?= $item['status'];?></td>
+                <td colspan="2"><?= $item['create_time'];?></td>
+                <td colspan="2"><?= $item['expect_arrival_time'];?></td>
+                <td colspan="2"><?= $item['arrival_time'];?></td>
+                <td colspan="4">
+                    <a href="#" class="log" m="<?= $item['id'];?>">详情</a>
+                </td>
+            </tr>
+        <?php } }?>
+
     <tr>
-        <td colspan="10">
-            <a class="btn btn-primary" href="javascript:history.go(-1);">返回</a>
-            <button id="tongguo" class="btn btn-primary">审核</button>
-            <button id="del" class="btn btn-primary">删除</button>
-        </td>
+        <td colspan="30"><?= \yii\widgets\LinkPager::widget(['pagination' => $pages]); ?></td>
     </tr>
 
 </table>
+<script>
+    $(function(){
+        $(".log").click(function(){
+            var id = $(this).attr("m");
+            var d = dialog({
+                url: '/social/wallet/detail-log?id='+id,
+                content: '提现日志',
+                quickClose: true
+            });
+            d.show();
+            return false;
+        });
+    });
 
+</script>
