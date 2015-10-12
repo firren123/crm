@@ -123,6 +123,7 @@ class UserorderController extends BaseController
         $ship_status = RequestHelper::get('ship_status', -1, 'intval');
         $shop_name = RequestHelper::get('shop_name', '');
         $page = RequestHelper::get('page', 1, 'intval');
+        $down = RequestHelper::get('down',0,'intval');
         $where = array();
         $user_model = new User();
         $andWhere = [];
@@ -193,6 +194,9 @@ class UserorderController extends BaseController
         }
         $andWhere = empty($andWhere) ? '' : implode(' and ', $andWhere);
         $model = new UserOrder();
+        if ($down == 1) {
+
+        }
         $count = $model->getListCount($where, $andWhere);
         $list = $model->getList2($where, $andWhere, ['create_time' => SORT_DESC], "*", ($page - 1) * $this->size, $this->size);
         $result_arr = [];
