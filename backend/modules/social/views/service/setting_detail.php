@@ -175,15 +175,11 @@ $this->title = '服务设置详情';
 <dev class="del_status" style="width: 400px;height: 300px;display: none;position:absolute; left:20%; top:40%; margin:-16px 0 0 -16px; z-index:999;background: #fff;">
     <table class="table table-bordered table-hover">
         <tr>
-            <th colspan="10">删除服务</th>
+            <th colspan="10">删除店铺</th>
         </tr>
         <!--        <form action="/social/service/service-up-field" method="post">-->
         <?php $form = ActiveForm::begin(['id' => 'login-form','action' => '/social/service/service-setting-up-field',]); ?>
-        <tr>
-            <th class="ok_info">
-                删除服务
-            </th>
-        </tr>
+
         <tr>
             <td><textarea id="remark" style="width: 300px;height: 80px;border: 1px solid #999;" name="remark"></textarea></td>
         </tr>
