@@ -54,11 +54,26 @@ $this->title = '商家合同列表';
                 foreach ($list as $k=>$v) {
             ?>
             <tr onmouseover="this.style.backgroundColor='#aaaaaa';return true;" onmouseout="this.style.backgroundColor='#ffffff';return true;">
-                <td class="link"><?= $list[$k]['htnumber'];?></td>
-                <td class="link"><?= $list[$k]['shop_contract_name'];?></td>
-                <td class="link"><?= $list[$k]['contacts'];?></td>
-                <td class="link"><?= $list[$k]['contacts_umber'];?></td>
-                <td class="link"><?= $list[$k]['counterman'];?></td>
+                <td class="link">
+                    <?= $list[$k]['htnumber'];?>
+                    <input type="hidden" class="id_value" value="<?= $list[$k]['id'];?>"/>
+                </td>
+                <td class="link">
+                    <?= $list[$k]['shop_contract_name'];?>
+                    <input type="hidden" class="id_value" value="<?= $list[$k]['id'];?>"/>
+                </td>
+                <td class="link">
+                    <?= $list[$k]['contacts'];?>
+                    <input type="hidden" class="id_value" value="<?= $list[$k]['id'];?>"/>
+                </td>
+                <td class="link">
+                    <?= $list[$k]['contacts_umber'];?>
+                    <input type="hidden" class="id_value" value="<?= $list[$k]['id'];?>"/>
+                </td>
+                <td class="link">
+                    <?= $list[$k]['counterman'];?>
+                    <input type="hidden" class="id_value" value="<?= $list[$k]['id'];?>"/>
+                </td>
                 <td class="link">
                     <?php if (isset($list[$k]['status'])) {
                         if ($list[$k]['status']==0) {
@@ -76,7 +91,9 @@ $this->title = '商家合同列表';
                             echo "审核中" ;
                         }
                     }?>
+                    <input type="hidden" class="id_value" value="<?= $list[$k]['id'];?>"/>
                 </td>
+
                 <td>
                     <?php
                     if (isset($list[$k]['status']) && $list[$k]['status']==3) {
@@ -100,7 +117,7 @@ $this->title = '商家合同列表';
     <script type="text/javascript">
         $(document).ready(function(){
            $(".link").click(function(){
-               window.location.href='/shop/shopcontract/detail?id='+<?= $list[$k]['id']?>;
+                window.location.href='/shop/shopcontract/detail?id='+$(this).find('.id_value').val();
            });
         });
     </script>
