@@ -123,7 +123,7 @@ class UserorderController extends BaseController
         $ship_status = RequestHelper::get('ship_status', -1, 'intval');
         $shop_name = RequestHelper::get('shop_name', '');
         $page = RequestHelper::get('page', 1, 'intval');
-        $down = RequestHelper::get('down',0,'intval');
+        $down = RequestHelper::get('down', 0, 'intval');
         $where = array();
         $user_model = new User();
         $andWhere = [];
