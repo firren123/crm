@@ -112,15 +112,13 @@ class ReportController extends BaseController
         }
         $order_detail_list = $order_detail_model->getList($order_detail_cond, 'total', 'id desc');
         $fruits_total = 0;
-        //百分比
-        $fruits = '0%';
         if ($order_detail_list) {
             foreach ($order_detail_list as $value) {
                 $fruits_total += $value['total'];
             }
-            $fruits = round(($fruits_total/$number)*100, 1).'%';
         }
-
+        //百分比
+        $fruits = $number>0 ? round(($fruits_total/$number)*100, 1).'%' : '0%';
         //商品数量及分页
         $total = $model->getCounts($cond, $where, $and_where);
         $pages = new Pagination(['totalCount' =>$total, 'pageSize' => $size]);
