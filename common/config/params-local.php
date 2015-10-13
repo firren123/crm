@@ -23,7 +23,7 @@ return [
     'access_token'=>'fb54f3c5992b96d001bb16e8e92d968d',
     'COMPANY_ID' => 28,
     'ssdb' => array(
-        'host' => '127.0.0.1',
+        'host' => '10.0.0.10',
         'port' => '8888',
         'auth' => 'kakvi6Zfjsqvddwourzr0wfZjeckqtxj',
     ),

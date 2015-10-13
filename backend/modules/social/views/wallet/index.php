@@ -66,7 +66,11 @@ $this->title = "钱包列表";
                             <td colspan="2"><?= $item['integral'];?></td>
                             <td colspan="2"><?= $item['create_time'];?></td>
                             <td colspan="4">
-                                <a href="<?= '/social/wallet/detail?id='.$item['id'];?>">详情</a>
+
+                                <a href="<?= '/social/wallet/detail?id='.$item['id'];?>">
+                                    <div style="height: 30px;width: 30px;background: url('/images/code_br.jpg') no-repeat -710px -599px">
+                                    </div>
+                                </a>
                             </td>
                         </tr>
                     <?php } }?>

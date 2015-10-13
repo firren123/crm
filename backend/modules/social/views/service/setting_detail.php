@@ -20,14 +20,14 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = '服务设置详情';
+$this->title = '店铺设置详情';
 
 ?>
-<div class="breadcrumbs">您现在的位置：<a href="/">首页</a><span>&gt;</span><a href="/social/service/setting">服务设置</a><span>&gt;</span><span>服务设置详情</span>
+<div class="breadcrumbs">您现在的位置：<a href="/">首页</a><span>&gt;</span><a href="/social/service/setting">店铺设置</a><span>&gt;</span><span>店铺设置详情</span>
 </div>
     <table class="table table-bordered table-hover">
     <tr>
-        <th>用户ID：</th>
+        <th width="100px">用户ID：</th>
         <td><?=$list['uid'];?></td>
     </tr>
     <tr>
@@ -35,11 +35,11 @@ $this->title = '服务设置详情';
         <td><?=$list['mobile'];?></td>
     </tr>
     <tr>
-        <th>服务名称：</th>
+        <th>店铺名称：</th>
         <td><?=$list['name'];?></td>
     </tr>
     <tr>
-        <th>服务描述：</th>
+        <th>店铺描述：</th>
         <td><?=Html::decode($list['description']);?></td>
     </tr>
     <tr>
@@ -120,7 +120,7 @@ $this->title = '服务设置详情';
 <dev class="audit_status" style="width: 400px;height: 300px;display: none;position:absolute; left:20%; top:40%; margin:-16px 0 0 -16px; z-index:999;background: #fff;">
     <table class="table table-bordered table-hover">
         <tr>
-            <th colspan="10">审核服务</th>
+            <th colspan="10">审核店铺</th>
         </tr>
         <!--        <form action="/social/service/service-up-field" method="post">-->
         <?php $form = ActiveForm::begin(['id' => 'login-form','action' => '/social/service/service-setting-up-field',]); ?>
@@ -148,7 +148,7 @@ $this->title = '服务设置详情';
 <dev class="jinyong_status" style="width: 400px;height: 300px;display: none;position:absolute; left:20%; top:40%; margin:-16px 0 0 -16px; z-index:999;background: #fff;">
     <table class="table table-bordered table-hover">
         <tr>
-            <th colspan="10">是否禁用服务</th>
+            <th colspan="10">是否禁用店铺</th>
         </tr>
         <!--        <form action="/social/service/service-up-field" method="post">-->
         <?php $form = ActiveForm::begin(['id' => 'login-form','action' => '/social/service/service-setting-up-field',]); ?>
@@ -175,15 +175,11 @@ $this->title = '服务设置详情';
 <dev class="del_status" style="width: 400px;height: 300px;display: none;position:absolute; left:20%; top:40%; margin:-16px 0 0 -16px; z-index:999;background: #fff;">
     <table class="table table-bordered table-hover">
         <tr>
-            <th colspan="10">删除服务</th>
+            <th colspan="10">删除店铺</th>
         </tr>
         <!--        <form action="/social/service/service-up-field" method="post">-->
         <?php $form = ActiveForm::begin(['id' => 'login-form','action' => '/social/service/service-setting-up-field',]); ?>
-        <tr>
-            <th class="ok_info">
-                删除服务
-            </th>
-        </tr>
+
         <tr>
             <td><textarea id="remark" style="width: 300px;height: 80px;border: 1px solid #999;" name="remark"></textarea></td>
         </tr>
