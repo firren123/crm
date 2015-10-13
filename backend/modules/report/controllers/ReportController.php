@@ -118,7 +118,7 @@ class ReportController extends BaseController
             }
         }
         //百分比
-        $fruits = round(($fruits_total/$number)*100, 1).'%';
+        $fruits = $number>0 ? round(($fruits_total/$number)*100, 1).'%' : '0%';
         //商品数量及分页
         $total = $model->getCounts($cond, $where, $and_where);
         $pages = new Pagination(['totalCount' =>$total, 'pageSize' => $size]);

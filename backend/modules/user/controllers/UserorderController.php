@@ -123,7 +123,7 @@ class UserorderController extends BaseController
         $ship_status = RequestHelper::get('ship_status', -1, 'intval');
         $shop_name = RequestHelper::get('shop_name', '');
         $page = RequestHelper::get('page', 1, 'intval');
-        $down = RequestHelper::get('down',0,'intval');
+        $down = RequestHelper::get('down', 0, 'intval');
         $where = array();
         $user_model = new User();
         $andWhere = [];
@@ -216,8 +216,6 @@ class UserorderController extends BaseController
                 ->setCellValue("N".$i, $title[13])
                 ->setCellValue("O".$i, $title[14]);
             $list = $model->getList2($where, $andWhere, ['create_time' => SORT_DESC], "*");
-            $result_arr = [];
-//            var_dump($this->pay_site_id_data);exit;
             $productModel = new Product();
             foreach ($list as $k => $v) {
                 $username_info = $user_model->getInfo(array('id' => $v['user_id']), true, 'username');
