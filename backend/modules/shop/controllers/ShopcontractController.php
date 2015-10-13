@@ -711,6 +711,7 @@ class ShopcontractController extends BaseController
         }
         $shopContractModel->updateInfo(['status' => 4], $where);//更新合同的状态
         $shop_manage_model = new ShopManage();
+        $approve_code = 'BJ1055';//合同审核人
         foreach ($data_info as $k => $v) {
             $ShopManageMsg = $shop_manage_model->getList(['contract_id' => $v['id']]);
             $ShopManageMsg = $ShopManageMsg[0];
@@ -721,7 +722,7 @@ class ShopcontractController extends BaseController
             //var_dump($v['shop_contract_name']);
             $info['run_id'] = $run_id; //'107' 自增
             $info['run_name'] = CommonHelper::utf8ToGbk("商家合同审批(" . $new_time . ")");  //商家合同审批(2015-08-10 09:11:57) 按照格式填写
-            $info['begin_user'] = 'BJ1013'; //BJ1013 固定一人
+            $info['begin_user'] = $approve_code;
             $info['begin_time'] = $new_time;  //2015-08-10 09:11:57 当前时间
             $info['flow_auto_num'] = 0; //0
             $info['data_76'] = CommonHelper::utf8ToGbk($v['shop_contract_name']);  //测试注册名称
@@ -777,7 +778,7 @@ class ShopcontractController extends BaseController
             $data['run_id'] = $run_id; //'107' 自增
             $data['RUN_NAME'] = CommonHelper::utf8ToGbk('商家合同审批(' . $new_time . ')'); //商家合同审批1(2015-08-10 09:11:57)
             $data['FLOW_ID'] = '160';              //合同表ID
-            $data['BEGIN_USER'] = 'BJ1013';        //BJ1013  流程发起人ID
+            $data['BEGIN_USER'] = $approve_code;
             $data['BEGIN_DEPT'] = 43;              //流程发起人部门ID
             $data['BEGIN_TIME'] = $new_time;   //流程实例创建时间
             $data['DEL_FLAG'] = 0; //删除标记(0-未删除,1-已删除)删除后流程实例可在工作销毁中确实删除或还原
@@ -788,7 +789,7 @@ class ShopcontractController extends BaseController
             $data2 = [];
             $data2['RUN_ID'] = $run_id;
             $data2['PRCS_ID'] = '1';  //流程实例步骤ID
-            $data2['USER_ID'] = 'BJ1013';  //用户ID
+            $data2['USER_ID'] = $approve_code;
             $data2['PRCS_TIME'] = $new_time; //工作接收时间
             $data2['DELIVER_TIME'] = '0000-00-00 00:00:00'; //工作转交/办结时间
             $data2['PRCS_FLAG'] = '2';   //步骤状态(1-未接收,2-办理中,3-转交下一步，下一步经办人无人接收,4-已办结,5-自由流程预设步骤,6-已挂起,)
