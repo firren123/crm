@@ -17,6 +17,7 @@
 
 
 namespace backend\modules\social\controllers;
+
 use backend\controllers\BaseController;
 use backend\models\social\Wallet;
 use backend\models\social\Withdrawal;
