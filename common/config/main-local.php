@@ -47,8 +47,8 @@ return [
         'db_oa'    => [
             'class'=>'yii\db\Connection',
             'dsn'=>'mysql:host=10.0.0.10;dbname=td_oa',
-            'username'=>'oadev',
-            'password'=>'4fkok0ezZDurw',
+            'username'=>'500m',
+            'password'=>'500m',
             'charset'=>'gbk',
         ],
         'ssdb' => [
