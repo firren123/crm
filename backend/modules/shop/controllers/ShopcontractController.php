@@ -721,7 +721,7 @@ class ShopcontractController extends BaseController
             //var_dump($v['shop_contract_name']);
             $info['run_id'] = $run_id; //'107' 自增
             $info['run_name'] = CommonHelper::utf8ToGbk("商家合同审批(" . $new_time . ")");  //商家合同审批(2015-08-10 09:11:57) 按照格式填写
-            $info['begin_user'] = 'BJ1013'; //BJ1013 固定一人
+            $info['begin_user'] = 'BJ1107'; //BJ1013 固定一人
             $info['begin_time'] = $new_time;  //2015-08-10 09:11:57 当前时间
             $info['flow_auto_num'] = 0; //0
             $info['data_76'] = CommonHelper::utf8ToGbk($v['shop_contract_name']);  //测试注册名称
