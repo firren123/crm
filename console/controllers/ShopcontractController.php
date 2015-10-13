@@ -80,7 +80,7 @@ class ShopcontractController extends Controller
         $connection = \Yii::$app->db_oa;
         $time = date("Y-m-d H:i:s", strtotime("-1 hour"));
         $now_time = date("Y-m-d H:i:s");
-        echo $sql = 'select run_id from flow_run_prcs where DELIVER_TIME>"' . $time . '" and FLOW_PRCS =6 and PRCS_FLAG = 4';
+        $sql = 'select run_id from flow_run_prcs where DELIVER_TIME>"' . $time . '" and FLOW_PRCS =6 and PRCS_FLAG = 4';
         $ret = $connection->createCommand($sql)->queryAll();
         if ($ret) {
             $shopContractModel = new ShopContract();
@@ -91,9 +91,9 @@ class ShopcontractController extends Controller
                     $crm_id = $crm_ids[0]['crm_id'];
                     $t = $shopContractModel->updateInfo(['status' => 1, 'update_time' => $now_time], ['id' => $crm_id]);
                     if ($t) {
-                        echo $v['crm_id'] . "success\n";
+                        echo $crm_id . "success\n";
                     } else {
-                        echo $v['crm_id'] . "error\n";
+                        echo $crm_id . "error\n";
                     }
                 }
             }
