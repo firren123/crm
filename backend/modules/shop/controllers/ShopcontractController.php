@@ -410,30 +410,30 @@ class ShopcontractController extends BaseController
             'remark' => RequestHelper::post('remark'),                              //备注
             'update_time' => date('Y-m-d H:i:s', time())
         ];
-        //合同上传图片
-        $fastDfs = new FastDFSHelper();
-        $rs_data = $fastDfs->fdfs_upload('HeTong');
-        if ($rs_data) {
-            $ShopContractMsg['image'] = '/' . $rs_data['group_name'] . '/' . $rs_data['filename'];
-        }
-        //营业执照上传图片
-        //$fastDfs = new FastDFSHelper();
-        $rs_data = $fastDfs->fdfs_upload('YingYeZhiZhao');
-        if ($rs_data) {
-            $ShopContractMsg['business_licence_image'] = '/' . $rs_data['group_name'] . '/' . $rs_data['filename'];
-        }
-        //银行卡上传图片
-        //$fastDfs = new FastDFSHelper();
-        $rs_data = $fastDfs->fdfs_upload('YinHangKa');
-        if ($rs_data) {
-            $ShopContractMsg['bank_number_image'] = '/' . $rs_data['group_name'] . '/' . $rs_data['filename'];
-        }
-        //身份证上传图片
-        //$fastDfs = new FastDFSHelper();
-        $rs_data = $fastDfs->fdfs_upload('ShenFenZheng');
-        if ($rs_data) {
-            $ShopContractMsg['IDcard_image'] = '/' . $rs_data['group_name'] . '/' . $rs_data['filename'];
-        }
+//        //合同上传图片
+//        $fastDfs = new FastDFSHelper();
+//        $rs_data = $fastDfs->fdfs_upload('HeTong');
+//        if ($rs_data) {
+//            $ShopContractMsg['image'] = '/' . $rs_data['group_name'] . '/' . $rs_data['filename'];
+//        }
+//        //营业执照上传图片
+//        //$fastDfs = new FastDFSHelper();
+//        $rs_data = $fastDfs->fdfs_upload('YingYeZhiZhao');
+//        if ($rs_data) {
+//            $ShopContractMsg['business_licence_image'] = '/' . $rs_data['group_name'] . '/' . $rs_data['filename'];
+//        }
+//        //银行卡上传图片
+//        //$fastDfs = new FastDFSHelper();
+//        $rs_data = $fastDfs->fdfs_upload('YinHangKa');
+//        if ($rs_data) {
+//            $ShopContractMsg['bank_number_image'] = '/' . $rs_data['group_name'] . '/' . $rs_data['filename'];
+//        }
+//        //身份证上传图片
+//        //$fastDfs = new FastDFSHelper();
+//        $rs_data = $fastDfs->fdfs_upload('ShenFenZheng');
+//        if ($rs_data) {
+//            $ShopContractMsg['IDcard_image'] = '/' . $rs_data['group_name'] . '/' . $rs_data['filename'];
+//        }
         $ShopContractMsg['status'] = 3;                       //合同状态
         //帐户类型的选择
         if ($ShopContractMsg['account_type'] == '0') {
@@ -704,9 +704,12 @@ class ShopcontractController extends BaseController
         if (empty($where['id'])) {
             return $this->error('操作错误！', 'index');
         }
-        $shopContractModel->updateInfo(['status' => 4], $where);//更新合同的状态
         //$where = ['<', 'id', 43];
         $data_info = $shopContractModel->getList($where);
+        if (empty($data_info) || !isset($data_info[0]) || empty($data_info[0]['htnumber'])) {
+            return $this->error('请先完善合同信息！', 'index');
+        }
+        $shopContractModel->updateInfo(['status' => 4], $where);//更新合同的状态
         $shop_manage_model = new ShopManage();
         foreach ($data_info as $k => $v) {
             $ShopManageMsg = $shop_manage_model->getList(['contract_id' => $v['id']]);

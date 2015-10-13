@@ -83,7 +83,7 @@ $this->title = '商家合同列表';
                     ?>
                         <a href="edit?id=<?= $list[$k]['id'] ?>">合同完善</a>
                         &nbsp;|&nbsp;
-                        <a href="edit?id=<?= $list[$k]['id'] ?>" onClick="if(confirm('确定要提交审核？'))return true;return false;">提交到OA审核</a>
+                        <a href="addoa?id=<?= $list[$k]['id'] ?>" onClick="if(confirm('确定要提交审核？'))return true;return false;">提交到OA审核</a>
                     <?php
                     }
                     ?>
