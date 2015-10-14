@@ -20,6 +20,7 @@ namespace console\controllers;
 
 use backend\models\i500m\Business;
 use backend\models\i500m\City;
+use backend\models\i500m\Shop;
 use backend\models\shop\ShopContract;
 use backend\models\shop\ShopManage;
 use common\helpers\CommonHelper;
@@ -84,6 +85,7 @@ class ShopcontractController extends Controller
         $ret = $connection->createCommand($sql)->queryAll();
         if ($ret) {
             $shopContractModel = new ShopContract();
+            $shopModel = new Shop();
             foreach ($ret as $k => $v) {
                 $sql = 'select data_93 as crm_id from flow_data_160 where run_id = ' . $v['run_id'];
                 $crm_ids = $connection->createCommand($sql)->queryAll();
@@ -91,6 +93,8 @@ class ShopcontractController extends Controller
                     $crm_id = $crm_ids[0]['crm_id'];
                     $t = $shopContractModel->updateInfo(['status' => 1, 'update_time' => $now_time], ['id' => $crm_id]);
                     if ($t) {
+                        //500m_new.shop workflow=6  2015-10-14 renyineng 提的需求
+                        $shopModel->updateInfo(['workflow' => 6], ['contract_id' => $crm_id]);
                         echo $crm_id . "success\n";
                     } else {
                         echo $crm_id . "error\n";
