@@ -17,31 +17,44 @@
 
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
-$this->title = "服务列表";
+$this->title = "服务订单列表";
 
 ?>
 <script type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 
 
 <div class="wide form">
-    <form id="search-form" class="well form-inline" action="/social/service/index" method="get">
-        <label for="title">标题：</label>
-        <input id="title" type="text" name="title" value="<?= $title;?>" class="form-control">
+    <form id="search-form" class="well form-inline" action="/social/service/order" method="get">
+        <dl>
+            <dd>
+                <label for="mobile">用户手机号：</label>
+                <input id="mobile" type="text" name="mobile" value="<?= $mobile;?>" class="form-control">
+                <label for="service_mobile">服务方手机号：</label>
+                <input id="service_mobile" type="text" name="service_mobile" value="<?= $service_mobile;?>" class="form-control">
+            </dd>
+        </dl>
+        <dl>
+            <dd>
+                <label for="status">订 单 状 态：</label>
+                <select id="status" name="status" class="form-control">
+                    <option  value="999">全部</option>
+                    <?php foreach($order_status_data as $k => $v){ ?>
+                        <option <?php if($k == $status){echo " selected ";}?> value="<?= $k; ?>"><?= $v; ?></option>
+                    <?php } ?>
 
-        <label for="status">状态：</label>
-        <select id="status" name="audit_status" class="form-control">
-            <option  value="999">全部</option>
-            <?php foreach($audit_status_data as $k => $v){ ?>
-                <option <?php if($k == $audit_status){echo " selected ";}?> value="<?= $k; ?>"><?= $v; ?></option>
-            <?php } ?>
+                </select>
+                <label for="mobile">支付状态：</label>
+                <select id="status" name="pay_status" class="form-control">
+                    <option  value="999">全部</option>
+                    <?php foreach($order_pay_status_data as $k => $v){ ?>
+                        <option <?php if($k == $pay_status){echo " selected ";}?> value="<?= $k; ?>"><?= $v; ?></option>
+                    <?php } ?>
 
-        </select>
-        <!---->
-        <!--        <label for="start_time">开始时间：</label>-->
-        <!--        <input id="start_time" type="text" id="start_time" name="start_time" onFocus="WdatePicker({isShowClear:true,readOnly:false})" value="--><?php //if(isset($start_time)){echo $start_time; };?><!--" class="form-control">-->
-        <!--        <label for="end_time">结束时间：</label>-->
-        <!--        <input id="end_time" type="text" name="end_time" onFocus="WdatePicker({isShowClear:true,readOnly:false})" value="--><?php //if(isset($end_time)){echo $end_time; };?><!--" class="form-control">-->
-        <button id="sub" class="btn btn-primary" name="yt0" type="submit">搜索</button>
+                </select>
+                <button id="sub" class="btn btn-primary" name="yt0" type="submit">搜索</button>
+            </dd>
+        </dl>
+
     </form>
 </div>
 
@@ -51,12 +64,13 @@ $this->title = "服务列表";
             <table  class="table table-bordered table-hover">
                 <tbody>
                 <tr>
+
                     <th colspan="2">ID</th>
-                    <th colspan="2">标题</th>
-                    <th colspan="2">手机号</th>
-                    <th colspan="2">审核状态</th>
-                    <th colspan="2">上/下架</th>
-                    <th colspan="2">创建时间</th>
+                    <th colspan="2">时间</th>
+                    <th colspan="2">用户手机号</th>
+                    <th colspan="2">服务方手机号</th>
+                    <th colspan="2">订单状态</th>
+                    <th colspan="2">支付状态</th>
                     <th colspan="4">操作</th>
                 </tr>
                 <?php if(empty($list)) {
@@ -66,16 +80,13 @@ $this->title = "服务列表";
                         ?>
                         <tr>
                             <td colspan="2"><?= $item['id'];?></td>
-                            <td colspan="2"><?= $item['title'];?></td>
-                            <td colspan="2"><?= $item['mobile'];?></td>
-                            <td colspan="2"><?php echo isset($audit_status_data[$item['audit_status']]) ? $audit_status_data[$item['audit_status']] : ''; ?></td>
-                            <td colspan="2"><?= $item['status']==1?'上架':'下架';?></td>
                             <td colspan="2"><?= $item['create_time'];?></td>
-
-
-
+                            <td colspan="2"><?= $item['mobile'];?></td>
+                            <td colspan="2"><?= $item['service_mobile'];?></td>
+                            <td colspan="2"><?= $order_status_data[$item['status']];?></td>
+                            <td colspan="2"><?= $order_pay_status_data[$item['pay_status']];?></td>
                             <td colspan="4">
-                                <a href="<?= '/social/service/detail?id='.$item['id'];?>">详情</a>
+                                <a href="<?= '/social/service/order-detail?id='.$item['id'];?>">详情</a>
                             </td>
                         </tr>
                     <?php } }?>

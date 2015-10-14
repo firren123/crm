@@ -21,8 +21,10 @@ namespace backend\modules\social\controllers;
 use backend\controllers\BaseController;
 use backend\models\social\OpLog;
 use backend\models\social\Service;
+use backend\models\social\ServiceOrder;
 use backend\models\social\ServiceSetting;
 use backend\models\social\ServiceUnit;
+use backend\models\social\UserBasicInfo;
 use common\helpers\CurlHelper;
 use common\helpers\RequestHelper;
 use backend\models\SSDB;
@@ -63,6 +65,19 @@ class ServiceController extends BaseController
     public $user_auth_status_data = [
         1=>'认证成功',
         2=>'认证失败'
+    ];
+    public $order_status_data = [
+        0=>'未确认',
+        1=>'已经确认',
+        2=>'已经取消',
+        3=>'进行中',
+        4=>'等待体验方确认',
+        5=>'待评价'
+    ];
+    public $order_pay_status_data = [
+        0=>'未支付',
+        1=>'已支付',
+        2=>'已退款',
     ];
     public $ssdb = null;
     /**
@@ -343,7 +358,6 @@ class ServiceController extends BaseController
             } else {
                 return $this->error('添加失败');
             }
-
         }
         return $this->render('unit_add', ['model' => $model]);
     }
@@ -396,8 +410,94 @@ class ServiceController extends BaseController
     }
 
     /**
+     * 简介：服务设置列表
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionOrder()
+    {
+        $model = new ServiceOrder();
+        $mobile = RequestHelper::get('mobile');
+        $pay_status = RequestHelper::get('pay_status', 999, 'intval');
+        $status = RequestHelper::get('status', 999, 'intval');
+        $service_mobile = RequestHelper::get('service_mobile');
+        $page = RequestHelper::get('page', 1, 'intval');
+        $where = [];
+        if ($mobile != '') {
+            $where['mobile'] = $mobile;
+        }
+        if ($service_mobile != '') {
+            $where['service_mobile'] = $service_mobile;
+        }
+
+        if ($pay_status != 999) {
+            $where['pay_status'] = $pay_status;
+        }
+        if ($status != 999) {
+            $where['status'] = $status;
+        }
+        $and_where = '';
+        if (!empty($start_time)) {
+            $and_where .='create_time >'. $start_time;
+        }
+        if (!empty($end_time)) {
+            $and_where .= 'create_time <'. $end_time;
+        }
+        if (empty($where)) {
+            $where = 1;
+        }
+        $count = $model->getCount($where, $and_where);
+        $list = $model->getPageList($where, "*", "id desc", $page, $this->size, $and_where);
+        $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->size]);
+        return $this->render(
+            'order',
+            [
+                'list' => $list,
+                'pages' => $pages,
+                'mobile' => $mobile,
+                'status' => $status,
+                'pay_status' => $pay_status,
+                'service_mobile' => $service_mobile,
+                'order_pay_status_data'=>$this->order_pay_status_data,
+                'order_status_data'=>$this->order_status_data,
+            ]
+        );
+
+    }
+
+    /**
+     * 简介：服务设置详情
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionOrderDetail()
+    {
+        $model = new ServiceOrder();
+        $id = RequestHelper::get('id', 0, 'intval');
+        $list = $model->getInfo(['id'=>$id]);
+        if (!$list) {
+            return $this->error('信息不存在');
+        }
+        $userInfoMpdel = new UserBasicInfo();
+        $uidName = $userInfoMpdel->getInfo(['uid'=>$list['uid']]);
+        $list['uid_name'] = $uidName['nickname'];
+        $ServiceName = $userInfoMpdel->getInfo(['uid'=>$list['service_uid']]);
+        $list['service_name'] = $ServiceName['nickname'];
+        return $this->render(
+            'order_detail',
+            [
+                'list' => $list,
+                'sex' => $this->sex,
+                'order_pay_status_data'=>$this->order_pay_status_data,
+                'order_status_data'=>$this->order_status_data
+            ]
+        );
+    }
+
+    /**
      * 简介：测试ssdb是否通
      * @author  lichenjun@iyangpin.com。
+     * @return null
      */
     public function actionTest()
     {
@@ -422,9 +522,14 @@ class ServiceController extends BaseController
         }
         return;
     }
+
+    /**
+     * 简介：百度推送信息
+     * @author  lichenjun@iyangpin.com。
+     * @return null
+     */
     public function actionTestPush()
     {
-        //?channel_id=4517190743112883170&title=4517190743112883170&content=4517190743112883170&custom_content[id]=4517190743112883170&custom_content[title]=4517190743112883170&type=30
         $channel_id =RequestHelper::get('channel_id')?RequestHelper::get('channel_id'):'4517190743112883170';
         $log_info =RequestHelper::get('title')?RequestHelper::get('title'):'我是消息标题';
         $remark = RequestHelper::get('content')?RequestHelper::get('content'):'我是消息测试';

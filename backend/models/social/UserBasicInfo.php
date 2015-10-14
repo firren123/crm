@@ -6,11 +6,11 @@
  *
  * @category  PHP
  * @package   Crm
- * @filename  ServiceOrder.php
+ * @filename  UserBasicInfo.php
  * @author    lichenjun <lichenjun@iyangpin.com>
  * @copyright 2015 www.i500m.com
  * @license   http://www.i500m.com/ i500m license
- * @datetime  15/10/14 上午11:51
+ * @datetime  15/10/14 下午2:43
  * @version   SVN: 1.0
  * @link      http://www.i500m.com/
  */
@@ -20,7 +20,7 @@ namespace backend\models\social;
 
 
 /**
- * Class ServiceOrder
+ * Class UserBasicInfo
  * @category  PHP
  * @package   Crm
  * @author    lichenjun <lichenjun@iyangpin.com>
@@ -28,7 +28,7 @@ namespace backend\models\social;
  * @license   http://www.i500m.com/ i500m license
  * @link      http://www.i500m.com/
  */
-class ServiceOrder extends SocialBase
+class UserBasicInfo extends SocialBase
 {
     /**
      * 简介：
@@ -37,7 +37,6 @@ class ServiceOrder extends SocialBase
      */
     public static function tableName()
     {
-        return "{{%i500_service_order}}";
+        return "{{%i500_user_basic_info}}";
     }
-
 }

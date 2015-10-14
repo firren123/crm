@@ -24,6 +24,7 @@ $config = array_merge(
     require(__DIR__ . '/common/config/main-local.php'),
     require(__DIR__ . '/console/config/main-local.php')
 );
+//$config =require(__DIR__ . '/console/config/main-local.php');
 $application = new yii\console\Application($config);
 $exitCode = $application->run();
 exit($exitCode);
