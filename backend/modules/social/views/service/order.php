@@ -86,7 +86,7 @@ $this->title = "服务订单列表";
                             <td colspan="2"><?= $order_status_data[$item['status']];?></td>
                             <td colspan="2"><?= $order_pay_status_data[$item['pay_status']];?></td>
                             <td colspan="4">
-                                <a href="<?= '/social/service/order-detail?id='.$item['id'];?>">详情</a>
+                                <a href="<?= '/social/service/order-detail?order_sn='.$item['order_sn'];?>">详情</a>
                             </td>
                         </tr>
                     <?php } }?>
