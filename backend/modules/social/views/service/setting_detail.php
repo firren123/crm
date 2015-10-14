@@ -82,40 +82,12 @@ $this->title = '店铺设置详情';
         <tr>
             <td colspan="10">
                 <a class="btn btn-primary" href="javascript:history.go(-1);">返回</a>
-                <button id="tongguo" class="btn btn-primary">审核</button>
                 <button id="jinyong" class="btn btn-primary">启/禁用</button>
                 <button id="del" class="btn btn-primary">删除</button>
             </td>
         </tr>
 
 </table>
-<dev class="audit_status" style="width: 400px;height: 300px;display: none;position:absolute; left:20%; top:40%; margin:-16px 0 0 -16px; z-index:999;background: #fff;">
-    <table class="table table-bordered table-hover">
-        <tr>
-            <th colspan="10">审核店铺</th>
-        </tr>
-        <!--        <form action="/social/service/service-up-field" method="post">-->
-        <?php $form = ActiveForm::begin(['id' => 'login-form','action' => '/social/service/service-setting-up-field',]); ?>
-        <tr>
-            <th class="ok_info">
-                <input type="radio" name="audit_status" value="2"/>通过
-                <input type="radio" name="audit_status" value="3"/>驳回
-            </th>
-        </tr>
-        <tr>
-            <td><textarea id="remark" style="width: 300px;height: 80px;border: 1px solid #999;" name="remark"></textarea></td>
-        </tr>
-        <tr>
-            <td>
-                <input type="submit" value="提交" class="btn-primary btn"/>
-                <button id="quxiao" class="btn cancelBtn">取消</button>
-            </td>
-        </tr>
-        <input type="hidden" name="id" value="<?= $list['id']; ?>"/>
-        <input type="hidden" id="_csrf" name="YII_CSRF_TOKEN" value="<?php echo \Yii::$app->getRequest()->getCsrfToken(); ?>" />
-        <?php ActiveForm::end(); ?>
-    </table>
-</dev>
 
 <dev class="jinyong_status" style="width: 400px;height: 300px;display: none;position:absolute; left:20%; top:40%; margin:-16px 0 0 -16px; z-index:999;background: #fff;">
     <table class="table table-bordered table-hover">
@@ -171,10 +143,6 @@ $this->title = '店铺设置详情';
     $("button").click(function(){
         var id = $(this).attr("id");
         switch (id){
-            case 'tongguo':
-                title = '审核';
-                $(".audit_status").show();
-                break;
             case 'del':
                 $(".del_status").show();
                 break;

@@ -87,7 +87,10 @@ return [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'ZZ9OX6n9bdunMW3iB-8IYdNGdJAnbMSp',
+            'enableCookieValidation' => true,
+            'enableCsrfValidation' => true,
         ],
+
     ],
 
     'params' => $params,
