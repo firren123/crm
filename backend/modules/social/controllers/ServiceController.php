@@ -197,7 +197,6 @@ class ServiceController extends BaseController
         $model = new ServiceSetting();
         $name = RequestHelper::get('name');
         $status = RequestHelper::get('status', 999, 'intval');
-        $audit_status = RequestHelper::get('audit_status', 999, 'intval');
         $page = RequestHelper::get('page', 1, 'intval');
         $where = [];
         $where['is_deleted'] = 2;
@@ -207,9 +206,7 @@ class ServiceController extends BaseController
         if ($status != 999) {
             $where['status'] = $status;
         }
-        if ($audit_status != 999) {
-            $where['audit_status'] = $audit_status;
-        }
+
         $count = $model->getCount($where);
         $list = $model->getPageList($where, "*", "id desc", $page, $this->size);
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->size]);
@@ -219,7 +216,6 @@ class ServiceController extends BaseController
                 'list' => $list,
                 'pages' => $pages,
                 'name' => $name,
-                'audit_status'=>$audit_status,
                 'audit_status_data' => $this->audit_status_data
             ]
         );

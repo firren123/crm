@@ -63,34 +63,6 @@ $this->title = '店铺设置详情';
         <td><?=$list['lat'];?></td>
     </tr>
     <tr>
-        <th>用户名称：</th>
-        <td><?=$list['user_name'];?></td>
-    </tr>
-    <tr>
-        <th>用户身份证：</th>
-        <td><?=$list['user_card'];?></td>
-    </tr>
-    <tr>
-        <th>用户性别：</th>
-        <td><?=$sex[$list['user_sex']];?></td>
-    </tr>
-    <tr>
-        <th>用户年龄：</th>
-        <td><?=$list['user_age'];?></td>
-    </tr>
-    <tr>
-        <th>用户所在地：</th>
-        <td><?=$list['user_home'];?></td>
-    </tr>
-    <tr>
-        <th>用户简介：</th>
-        <td><?=$list['user_description'];?></td>
-    </tr>
-    <tr>
-        <th>审核状态：</th>
-        <td><?=$audit_status_data[$list['audit_status']];?></td>
-    </tr>
-    <tr>
         <th>是否禁用：</th>
         <td><?=$list['status']==1?'禁用':'可用';?></td>
     </tr>
