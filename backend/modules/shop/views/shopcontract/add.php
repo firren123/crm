@@ -695,7 +695,7 @@ $this->title = '商家合同添加';
     var document_numberreg=/^[1-9]\d{16}(\d|x|X)$/;
     var countermanidreg=/^\d+$/;
     var is_file_image = false;//图片
-    var file_image_reg = /^.+.[jpg|gif|bmp|bnp|png]$/;
+    var file_image_reg = /^.+.[jpg|gif|bmp|bnp|png]$/i;
     var htnumberreg = /^BJ[0-9]{6}$/;
     //简单验证 二代身份证 格式
     function regdocument_number(file){
@@ -1423,7 +1423,7 @@ $form = ActiveForm::begin([
                 <th colspan="4">其他信息</th>
             </tr>
             <tr>
-                <td><label class="mark">*</label>起止时间</td>
+                <td><label class="mark">*</label>合同起止时间</td>
                 <td>
                     <label for="start_time" style="float: left;  margin-top: 8px; width: 100px;" >开始时间：</label>
                     <input style="float: left; width: 120px;" id="start_time" type="text"  name="start_time" onkeyup="notnull(this)" onblur="check_start_time(this)" onchange="checktimes()" onFocus="WdatePicker({isShowClear:true,readOnly:false})" value="<?php if(isset($start_time)){echo $start_time; };?>" class="form-control">
@@ -1453,7 +1453,7 @@ $form = ActiveForm::begin([
                 </td>
                 <td colspan="3">
                     <div style="width: 200px; height: 200px;" id="preview">
-                        <img style="width: 200px;height: 200px;" src="/images/05_mid.jpg" />
+                        <img style="width: 200px;height: 200px;" src="" />
                     </div>
                 </td>
             </tr>
@@ -1466,7 +1466,7 @@ $form = ActiveForm::begin([
                 </td>
                 <td colspan="3">
                     <div style="width: 200px; height: 200px;" id="preview1">
-                        <img style="width: 200px;height: 200px;" src="/images/05_mid.jpg" />
+                        <img style="width: 200px;height: 200px;" src="" />
                     </div>
                 </td>
             </tr>
@@ -1479,7 +1479,7 @@ $form = ActiveForm::begin([
                 </td>
                 <td colspan="3">
                     <div style="width: 200px; height: 200px;" id="preview2">
-                        <img style="width: 200px;height: 200px;" src="/images/05_mid.jpg" />
+                        <img style="width: 200px;height: 200px;" src="" />
                     </div>
                 </td>
             </tr>
@@ -1493,7 +1493,7 @@ $form = ActiveForm::begin([
                 </td>
                 <td colspan="3">
                     <div style="width: 200px; height: 200px;" id="preview3">
-                        <img style="width: 200px;height: 200px;" src="/images/05_mid.jpg" />
+                        <img style="width: 200px;height: 200px;" src="" />
                     </div>
                 </td>
             </tr>
