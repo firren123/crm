@@ -469,6 +469,7 @@ $this->title = '商家合同信息完善';
         <a class="btn cancelBtn" href="javascript:history.go(-1);">取消</a>
         <input type="hidden" name="_csrf" value="<?php echo \Yii::$app->getRequest()->getCsrfToken(); ?>"/>
         <input type="hidden" id="id"  name="id" value="<?= $list['id']; ?>"/>
+        <input type="hidden" name="shop_id" value="<?= $list['shop_id']; ?>"/>
     </form>
 </div>
 <script type="text/javascript">

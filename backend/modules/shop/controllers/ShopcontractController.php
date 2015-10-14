@@ -18,6 +18,7 @@ use backend\controllers\BaseController;
 use backend\models\i500m\City;
 use backend\models\i500m\Province;
 use backend\models\i500m\Business;
+use backend\models\i500m\Shop;
 use backend\models\shop\ShopContract;
 use backend\models\shop\ShopManage;
 use backend\models\shop\ShopBank;
@@ -480,6 +481,22 @@ class ShopcontractController extends BaseController
         }
         $ShopManageWhere['contract_id'] = $id;
         $ShopManage_model_result = $ShopManage_model->updateInfo($ShopManageMsg, $ShopManageWhere);  //update经营信息表
+
+        //更新商家信息
+        $shop_id = RequestHelper::post('shop_id');
+        if (!empty($shop_id)) {
+            $shop_where['id'] = $shop_id;
+            $shop_data['shop_name'] = $ShopManageMsg['business_name'];
+            $shop_data['email'] = $ShopContractMsg['email'];
+            $shop_data['contact_name'] = $ShopContractMsg['email'];
+            $shop_data['mobile'] = $ShopContractMsg['contacts_umber'];
+            $shop_data['phone'] = $ShopContractMsg['common_contacts_phone'];
+            $shop_data['hours'] = str_replace(",", "~", $ShopContractMsg['business_hours']);
+            $shop_data['address'] = $ShopManageMsg['business_address'];
+            $shop_model = new Shop();
+            $shop_model->updateInfo($shop_data, $shop_where);
+        }
+
         if ($ShopManage_model_result) {
             //$this->_addOa($ShopContractMsg, $ShopManageMsg);
             return $this->success('操作成功！', 'index');
