@@ -558,7 +558,7 @@ class ShopcontractController extends BaseController
     public function actionDownloadimg()
     {
         $img_src = RequestHelper::get('img_src');
-        if ($img_src == '/images/05_mid.jpg') {
+        if ($img_src == '') {
             return $this->error('图片下载失败 ，请重试!', 'index');
         } else {
             //下载

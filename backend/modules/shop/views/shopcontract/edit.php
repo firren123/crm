@@ -374,7 +374,7 @@ $this->title = '商家合同信息完善';
                 <th colspan="4">其他信息</th>
             </tr>
             <tr>
-                <td class="td1"><label class="mark">*</label>起止时间</td>
+                <td class="td1"><label class="mark">*</label>合同起止时间</td>
                 <td class="td2">开始时间：<input type="text" id="start_time_is_ok" name="start_time" class="start_time Time_Reg" onFocus="WdatePicker({isShowClear:true,readOnly:false})" value="<?= $list['start_time'];?>"></td>
                 <td>结束时间：<input type="text" id="end_time_is_ok" name="end_time" class="end_time Time_Reg" onFocus="WdatePicker({isShowClear:true,readOnly:false})" value="<?= $list['end_time'];?>"></td>
             </tr>
@@ -395,13 +395,13 @@ $this->title = '商家合同信息完善';
                     <a class="a_looked" name="HeTong" id="a_looked_HeTong">查看</a>&nbsp;&nbsp;&nbsp;&nbsp;
                     <a class="a_choose" name="HeTong">重新选择</a>
                     <input id="HeTongPic" type="file" name="HeTong" onchange="previewImage(this)"/>
-                    <input type="hidden" id="HeTongPic_img_is_ok" class="a_i" value="<?php if(empty($list['image'])){echo "/images/05_mid.jpg";}else{echo \Yii::$app->params['imgHost'].$list['image'];} ?>">
+                    <input type="hidden" id="HeTongPic_img_is_ok" class="a_i" value="<?php if(empty($list['image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['image'];} ?>">
                 </td>
             </tr>
             <tr>
                 <td colspan="4">
                     <div id="preview_HeTongPic">
-                        <img id="HeTongPic_img" style=" display: none; max-width: 1000px; height: auto;" src="<?php if(empty($list['image'])){echo "/images/05_mid.jpg";}else{echo \Yii::$app->params['imgHost'].$list['image'];} ?>" />
+                        <img id="HeTongPic_img" style=" display: none; max-width: 1000px; height: auto;" src="<?php if(empty($list['image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['image'];} ?>" />
                     </div>
                 </td>
             </tr>
@@ -411,13 +411,13 @@ $this->title = '商家合同信息完善';
                     <a class="a_looked" name="YingYeZhiZhao" id="a_looked_YingYeZhiZhao">查看</a>&nbsp;&nbsp;&nbsp;&nbsp;
                     <a class="a_choose" name="YingYeZhiZhao">重新选择</a>
                     <input id="YingYeZhiZhaoPic" type="file" name="YingYeZhiZhao" onchange="previewImage(this)"/>
-                    <input type="hidden" id="YingYeZhiZhaoPic_img_is_ok" class="b_i" value="<?php if(empty($list['business_licence_image'])){echo "/images/05_mid.jpg";}else{echo \Yii::$app->params['imgHost'].$list['business_licence_image'];} ?>">
+                    <input type="hidden" id="YingYeZhiZhaoPic_img_is_ok" class="b_i" value="<?php if(empty($list['business_licence_image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['business_licence_image'];} ?>">
                 </td>
             </tr>
             <tr>
                 <td colspan="4">
                     <div id="preview_YingYeZhiZhaoPic">
-                        <img id="YingYeZhiZhaoPic_img" style=" display: none; max-width: 1000px; height: auto;" src="<?php if(empty($list['business_licence_image'])){echo "/images/05_mid.jpg";}else{echo \Yii::$app->params['imgHost'].$list['business_licence_image'];} ?>" />
+                        <img id="YingYeZhiZhaoPic_img" style=" display: none; max-width: 1000px; height: auto;" src="<?php if(empty($list['business_licence_image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['business_licence_image'];} ?>" />
                     </div>
                 </td>
             </tr>
@@ -427,13 +427,13 @@ $this->title = '商家合同信息完善';
                     <a class="a_looked" name="YinHangKa" id="a_looked_YinHangKa">查看</a>&nbsp;&nbsp;&nbsp;&nbsp;
                     <a class="a_choose" name="YinHangKa">重新选择</a>
                     <input id="YinHangKaPic" type="file" name="YinHangKa" onchange="previewImage(this)"/>
-                    <input type="hidden" id="YinHangKaPic_img_is_ok" class="c_i" value="<?php if(empty($list['bank_number_image'])){echo "/images/05_mid.jpg";}else{echo \Yii::$app->params['imgHost'].$list['bank_number_image'];} ?>">
+                    <input type="hidden" id="YinHangKaPic_img_is_ok" class="c_i" value="<?php if(empty($list['bank_number_image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['bank_number_image'];} ?>">
                 </td>
             </tr>
             <tr>
                 <td colspan="4">
                     <div id="preview_YinHangKaPic">
-                        <img id="YinHangKaPic_img" style=" display: none; max-width: 1000px; height: auto;" src="<?php if(empty($list['bank_number_image'])){echo "/images/05_mid.jpg";}else{echo \Yii::$app->params['imgHost'].$list['bank_number_image'];} ?>" />
+                        <img id="YinHangKaPic_img" style=" display: none; max-width: 1000px; height: auto;" src="<?php if(empty($list['bank_number_image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['bank_number_image'];} ?>" />
                     </div>
                 </td>
             </tr>
@@ -443,13 +443,13 @@ $this->title = '商家合同信息完善';
                     <a class="a_looked" name="ShenFenZheng" id="a_looked_ShenFenZheng">查看</a>&nbsp;&nbsp;&nbsp;&nbsp;
                     <a class="a_choose" name="ShenFenZheng">重新选择</a>
                     <input id="ShenFenZhengPic" type="file" name="ShenFenZheng" onchange="previewImage(this)"/>
-                    <input type="hidden" id="ShenFenZhengPic_img_is_ok" class="d_i" value="<?php if(empty($list['IDcard_image'])){echo "/images/05_mid.jpg";}else{echo \Yii::$app->params['imgHost'].$list['IDcard_image'];} ?>">
+                    <input type="hidden" id="ShenFenZhengPic_img_is_ok" class="d_i" value="<?php if(empty($list['IDcard_image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['IDcard_image'];} ?>">
                 </td>
             </tr>
             <tr>
                 <td colspan="4">
                     <div id="preview_ShenFenZhengPic">
-                        <img id="ShenFenZhengPic_img" style=" display: none; max-width: 1000px; height: auto;" src="<?php if(empty($list['IDcard_image'])){echo "/images/05_mid.jpg";}else{echo \Yii::$app->params['imgHost'].$list['IDcard_image'];} ?>" />
+                        <img id="ShenFenZhengPic_img" style=" display: none; max-width: 1000px; height: auto;" src="<?php if(empty($list['IDcard_image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['IDcard_image'];} ?>" />
                     </div>
                 </td>
             </tr>
@@ -553,7 +553,7 @@ $this->title = '商家合同信息完善';
     var BankCardNum_Reg  = /^[0-9]{16}$|^[0-9]{19}$|^[0-9]{21}$/;
     var DocumentNum_Reg  = /^[1-9]\d{16}(\d|x|X)$/;
     var CounterManId_Reg = /^\d+$/;
-    var ImageFile_Reg    = /^.+.[jpg|gif|bmp|bnp|png]$/;
+    var ImageFile_Reg    = /^.+.[jpg|gif|bmp|bnp|png]$/i;
     var HtNum_Reg        = /^BJ[0-9]{6}$/;
 
     var Reg = new Array();
@@ -833,7 +833,7 @@ $(document).ready(function(){
             }
         }
         if (element.id == 'HeTongPic_img_is_ok') {//合同图片
-            if (element.value!='/images/05_mid.jpg') {
+            if (element.value!='') {
                 HeTongPic_img_is_ok = true;
             } else {
                 HeTongPic_img_is_ok = false;
