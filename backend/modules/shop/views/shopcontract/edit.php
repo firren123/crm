@@ -52,7 +52,7 @@ $this->title = '商家合同信息完善';
         });
     });
 
-    var file_image_reg = /^.+.[jpg|gif|bmp|bnp|png]$/;
+    var file_image_reg = /^.+.[jpg|gif|bmp|bnp|png]$/i;
 
     function previewImage(file) {
         if (!file_image_reg.test(file.value)) {
