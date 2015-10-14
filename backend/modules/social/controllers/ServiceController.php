@@ -78,6 +78,7 @@ class ServiceController extends BaseController
         0=>'未支付',
         1=>'已支付',
         2=>'已退款',
+        3=>'退款中',
     ];
     public $ssdb = null;
     /**
@@ -473,8 +474,8 @@ class ServiceController extends BaseController
     public function actionOrderDetail()
     {
         $model = new ServiceOrder();
-        $id = RequestHelper::get('id', 0, 'intval');
-        $list = $model->getInfo(['id'=>$id]);
+        $order_sn = RequestHelper::get('order_sn');
+        $list = $model->getInfo(['order_sn'=>$order_sn]);
         if (!$list) {
             return $this->error('信息不存在');
         }
