@@ -2,9 +2,13 @@
 use yii\widgets\LinkPager;
 $this->title = '退换货订单详情';
 ?>
-<legends  style="fond-size:12px;">
-    <legend>退换货订单详情</legend>
-</legends>
+<ul class="breadcrumb">
+    <li>
+        <a href="/">首页</a>
+    </li>
+    <li><a href="/social/exchange/index">退换货列表</a></li>
+    <li class="active">详情</li>
+</ul>
 
 <div class="tab-content">
 
