@@ -337,7 +337,7 @@ $this->title = '用户订单详情';
             if(s == 1 ){
                     userOrder.editShopBut();
             }else if(s >0){
-                alert('订单状态现在已经无法转移');
+                alert('订单状态无法转移');
                 return false;
             }else{
                 alert('请先确认订单');
