@@ -79,7 +79,7 @@ $this->title = '用户订单详情';
                     <dd><?php echo $order_info['total']; ?></dd>
                 </dl>
                 <dl>
-                    <dt>支付状态:</dt>
+                    <dt>支付状态：</dt>
                     <dd>
                         <?php if(isset($order_info['pay_status'])){
                             echo  isset($pay_status_type[$order_info['pay_status']]) ? $pay_status_type[$order_info['pay_status']] : '';

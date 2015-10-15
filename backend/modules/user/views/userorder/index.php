@@ -73,7 +73,8 @@ $this->title = "用户订单列表";
         <input id="start_time" type="text" id="start_time" name="start_time" onFocus="WdatePicker({isShowClear:true,readOnly:false})" value="<?php if(isset($start_time)){echo $start_time; };?>" class="form-control">
         <label for="end_time">结束时间：</label>
         <input id="end_time" type="text" name="end_time" onFocus="WdatePicker({isShowClear:true,readOnly:false})" value="<?php if(isset($end_time)){echo $end_time; };?>" class="form-control">
-        <button id="sub" class="btn btn-primary" name="yt0" type="submit">搜索</button>
+        <input type="checkbox" name="down" value="1"/>是否下载
+        <button id="sub" class="btn btn-primary" name="yt0" type="submit">搜索/下载</button>
     </form>
 </div>
 

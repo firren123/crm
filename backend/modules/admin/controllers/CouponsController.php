@@ -82,7 +82,7 @@ class CouponsController extends BaseController
         }
         $and_where = [];
         if (!empty($name)) {
-            $and_where = ['like', 'type_name', $name];
+            $and_where = ['like', 'mobile', $name];
         }
         if ($use_system==1) {
             $data = $model->getPageList($cond, '*', 'id desc', $page, $this->size, $and_where);

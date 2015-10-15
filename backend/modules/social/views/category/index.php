@@ -36,7 +36,7 @@ echo $this->render('_search', ['search'=>$search]);
                         <tr id="tr_<?= $item1['id']; ?>">
                             <td style="text-align: left;">　　
                                 |----<?= $item1['name']; ?>(<?= $item1['description']; ?>)　
-                                [<a href="/social/category/add?p_id=<?= $item1['id']; ?> ">添加子类型</a>]
+<!--                                [<a href="/social/category/add?p_id=--><?//= $item1['id']; ?><!-- ">添加子类型</a>]-->
                                 [<a href="/social/category/edit?id=<?= $item1['id']; ?> ">编辑</a>]
                                 [<a href="/social/category/view?id=<?= $item1['id']; ?>">查看</a>]
                         <?php if (empty($list[$key][$item['id']][$key1][$item1['id']])) :

@@ -38,7 +38,6 @@ use backend\models\i500m\ShopOrderBlack;
 use backend\models\i500m\User;
 use backend\models\i500m\UserOrder;
 use backend\models\shop\ShopProduct;
-use common\helpers\CommonHelper;
 use common\helpers\CurlHelper;
 use common\helpers\FilePutContentHelps;
 use yii;
@@ -74,12 +73,12 @@ class UserorderController extends BaseController
         3 => '已发货(部分)',
         4 => '已发货',
         5 => '已收货',
-        6 => '商家确认订单'
     );
     public $status_data = array(
         0 => '未确认',
         1 => '已确认',
         2 => '已取消',
+        4 => '商家接单',
         6 => '取消中',
         -1 => '删除',
     );
@@ -124,6 +123,7 @@ class UserorderController extends BaseController
         $ship_status = RequestHelper::get('ship_status', -1, 'intval');
         $shop_name = RequestHelper::get('shop_name', '');
         $page = RequestHelper::get('page', 1, 'intval');
+        $down = RequestHelper::get('down', 0, 'intval');
         $where = array();
         $user_model = new User();
         $andWhere = [];
@@ -194,6 +194,93 @@ class UserorderController extends BaseController
         }
         $andWhere = empty($andWhere) ? '' : implode(' and ', $andWhere);
         $model = new UserOrder();
+        if ($down == 1) {
+            error_reporting(E_ALL);
+            $objPHPExcel = new \PHPExcel();
+            $title = ['店铺名称','用户名','订单号','下单时间','支付状态','支付方式','发货状态','订单金额','优惠金额','商品名称','商品金额','条形码','收货人','手机号','地址'];
+            $i = 1;
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue("A".$i, $title[0])
+                ->setCellValue("B".$i, $title[1])
+                ->setCellValue("C".$i, $title[2])
+                ->setCellValue("D".$i, $title[3])
+                ->setCellValue("E".$i, $title[4])
+                ->setCellValue("F".$i, $title[5])
+                ->setCellValue("G".$i, $title[6])
+                ->setCellValue("H".$i, $title[7])
+                ->setCellValue("I".$i, $title[8])
+                ->setCellValue("J".$i, $title[9])
+                ->setCellValue("K".$i, $title[10])
+                ->setCellValue("L".$i, $title[11])
+                ->setCellValue("M".$i, $title[12])
+                ->setCellValue("N".$i, $title[13])
+                ->setCellValue("O".$i, $title[14]);
+            $list = $model->getList2($where, $andWhere, ['create_time' => SORT_DESC], "*");
+            $productModel = new Product();
+            foreach ($list as $k => $v) {
+                $username_info = $user_model->getInfo(array('id' => $v['user_id']), true, 'username');
+                $username = $username_info['username'];
+                $shop = $shop_m->getInfo(array('id' => $v['shop_id']), true, "shop_name");
+                $shop_name = $shop['shop_name'];
+                $order_info_model = new OrderDetail();
+                $info = $order_info_model->getList(array('order_sn' => $v['order_sn']));
+                foreach ($info as $kk => $vv) {
+                    $code_bar = $productModel->getInfo(array('id' => $vv['p_id']), true, 'bar_code');
+                    $pay_status_data ='';
+                    $pay_site_id_data = '';
+                    $ship_status_data = '';
+                    if (isset($this->pay_status_data[$v['pay_status']])) {
+                        $pay_status_data = $this->pay_status_data[$v['pay_status']];
+                    }
+                    if (isset($this->pay_site_id_data[$v['pay_site_id']])) {
+                        $pay_site_id_data = $this->pay_site_id_data[$v['pay_site_id']];
+                    }
+                    if (isset($this->ship_status_data[$v['ship_status']])) {
+                        $ship_status_data = $this->ship_status_data[$v['ship_status']];
+                    }
+                    $i++;
+                    $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue("A" . $i, $shop_name)//店铺名称
+                        ->setCellValueExplicit("B" . $i, $username, \PHPExcel_Cell_DataType::TYPE_STRING)//用户名
+                        ->setCellValueExplicit("C" . $i, $v['order_sn'], \PHPExcel_Cell_DataType::TYPE_STRING)//订单号
+                        ->setCellValue("D" . $i, $v['create_time'])//下单时间
+                        ->setCellValue("E" . $i, $pay_status_data)//支付状态
+                        ->setCellValue("F" . $i, $pay_site_id_data)//支付方式
+                        ->setCellValue("G" . $i, $ship_status_data)//发货状态
+                        ->setCellValue("H" . $i, $v['total'])//订单金额
+                        ->setCellValue("I" . $i, $v['dis_amount'])//优惠金额
+                        ->setCellValue("J" . $i, $vv['name'])//商品名称
+                        ->setCellValue("K" . $i, $vv['price'])//商品金额
+                        ->setCellValueExplicit("L" . $i, $code_bar['bar_code'], \PHPExcel_Cell_DataType::TYPE_STRING)//条形码
+                        ->setCellValue("M" . $i, $v['consignee'])//收货人
+                        ->setCellValueExplicit("N" . $i, $v['mobile'], \PHPExcel_Cell_DataType::TYPE_STRING)//手机号
+                        ->setCellValue("O" . $i, $v['address']);   //地址
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(21);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(35);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(16);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(12);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(12);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(12);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(12);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(12);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(12);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(12);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(16);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(30);
+
+                }
+            }
+            $name = '用户订单'.time();
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="'.$name.'.xls"');
+            header('Cache-Control: max-age=0');
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            ob_clean();
+            $objWriter->save('php://output');
+            exit;
+        }
         $count = $model->getListCount($where, $andWhere);
         $list = $model->getList2($where, $andWhere, ['create_time' => SORT_DESC], "*", ($page - 1) * $this->size, $this->size);
         $result_arr = [];
@@ -470,17 +557,10 @@ class UserorderController extends BaseController
     }
 
     /**
-     * 更改订单状态
-     * @param string $order_sn 订单号
-     * @param int $status //订单状态 1 确认 2取消 4发货 5收货
-     * @param int $type // 类型 1 订单确认状态 2发货状态
-     * @return int
-     */
-    /**
      * 简介：更改订单状态
      * @param int $order_sn 订单状态 1 确认 2取消 4发货 5收货
-     * @param int $status 类型 1 订单确认状态 2发货状态
-     * @param int $type 类型
+     * @param int $status   类型 1 订单确认状态 2发货状态
+     * @param int $type     类型
      * @return int
      */
     public function editOrderStatus($order_sn, $status, $type)
@@ -610,6 +690,10 @@ class UserorderController extends BaseController
             echo "订单没有确认，不能再次分配订单";
             exit;
         }
+        if ($order_info['status'] == 4) {
+            echo "商家已经接单，不能再次分配订单";
+            exit;
+        }
         //判断订单是否确认超过5分钟
         if ($new_time_5 < $order_info['allocate_time']) {
             echo "订单没有确认没有超过5分钟，不能再次分配订单";
@@ -716,7 +800,7 @@ class UserorderController extends BaseController
         $shopModel = new Shop();
         //把订单中商家添加到黑名单中。
         $order_info = $orderModel->getInfo(['order_sn' => $order_sn]);
-        if ($order_info['ship_status'] > 0) {
+        if ($order_info['status'] ==4) {
             return $this->ajaxReturn(102, '商家已经确认订单，不能转移');
         }
         $ShopOrderBlack = new ShopOrderBlack();
@@ -777,7 +861,7 @@ class UserorderController extends BaseController
             //记录日志
             $order_log = new OrderLog();
             $map['o_id'] = $order_info['id'];
-            $map['oper'] = '修改用户收货信息';
+            $map['oper'] = '修改订单商家信息';
             $map['order_sn'] = $order_sn;
             $map['log_info'] = '把用户订单所属商家ID：' . $order_info['shop_id'] . ',修改成：' . $shop_id;
             $order_log->recordLog($map);//操作备注

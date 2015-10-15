@@ -29,6 +29,7 @@ $this->title = '编辑待发布商品';
 <?= $this->registerJsFile("@web/js/news.js");?>
 <?= $this->registerJsFile("@web/plug/ueditor/ueditor.config.js");?>
 <?= $this->registerJsFile("@web/plug/ueditor/ueditor.all.min.js");?>
+<?= $this->registerJsFile("@web/js/goods/product.js");?>
 <legends  style="fond-size:12px;">
     <ul class="breadcrumb">
         <li>
@@ -49,7 +50,9 @@ $form = ActiveForm::begin([
     <?= $form->field($model, 'name')->label('商品名称')->input('text',['style'=>'width:400px']) ; ?>
     <?= $form->field($model, 'title')->label('副标题/简介')->input('text',['style'=>'width:400px']) ; ?>
     <?= $form->field($model, 'keywords')->label('关键词')->input('text',['style'=>'width:400px']) ; ?>
-<?= $form->field($model, 'cate_first_id')->dropDownList(ArrayHelper::map($cate_list,'id','name'),array('id'=>'cate_id'))->label('分类'); ?>
+<?= $form->field($model, 'cate_first_id')->dropDownList(ArrayHelper::map($cate_list,'id','name'),array('id'=>'cate_id'))->label('顶级分类'); ?>
+<?= $form->field($model, 'cate_second_id')->dropDownList(ArrayHelper::map($cate_second_list,'id','name'),array('id'=>'cate_second_id'))->label('二级分类'); ?>
+
 <div class="form-group field-product-brand_id required">
     <label class="control-label col-sm-3" for="product-description">品牌</label>
     <div class="col-sm-6" style="width: 85%">
@@ -79,7 +82,7 @@ $form = ActiveForm::begin([
             <td><input type="text" style="width:80px;"   name="Products[origin_price][]" value="<?= !empty($item['origin_price']) ? $item['origin_price'] : '0.00'?>"></td>
             <td><input type="text" style="width:80px;"  name="Products[sale_price][]" value="<?= !empty($item['sale_price']) ? $item['sale_price'] : '0.00' ?>"></td>
             <td><input type="text" style="width:80px;"  name="Products[shop_price][]" value="<?= !empty($item['shop_price']) ? $item['shop_price'] : '0.00' ?>"></td>
-            <td><input type="text" style="width:80px;"  name="Products[total][]" value="<?= !empty($item['total']) ? $item['total'] : '10' ?>"></td>
+            <td><input type="text" style="width:80px;"  name="Products[total][]" value="<?= !empty($item['total_num']) ? $item['total_num'] : '0' ?>"></td>
             <td><input type="text" style="width:100px;"  name="Products[bar_code][]" value="<?= !empty($item['bar_code']) ? $item['bar_code'] : '' ?>"></td>
             <td><input id="product-image" type="file" name="image[]"></td>
         </tr>

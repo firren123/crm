@@ -49,6 +49,11 @@ class UserorderController extends CommonController
         2 => '审核通过',
         3 => '审核驳回'
     ];
+    public $from_data_data = [
+        0 => 'i500项目',
+        1 => '论坛店铺',
+        2 => '服务订单',
+    ];
 
     /**
      * 退换货首页
@@ -251,12 +256,15 @@ class UserorderController extends CommonController
         $order_sn = RequestHelper::get('order_sn');
         $start_time = RequestHelper::get('start_time');
         $end_time = RequestHelper::get('end_time');
-
+        $from_data = RequestHelper::get('from_data', 999, 'intval');
 
         $refundOrderModel = new RefundOrder();
         $where = array();
         if (!empty($order_sn)) {
             $where['order_sn'] = $order_sn;
+        }
+        if ($from_data != 999) {
+            $where['from_data'] = $from_data;
         }
         $andWhere = '1';
         if ($start_time) {
@@ -287,6 +295,8 @@ class UserorderController extends CommonController
                 'pages' => $pages,
                 'refund_status' => $this->refund_status,
                 'audit_status' => $this->audit_status,
+                'from_data_data'=>$this->from_data_data,
+                'from_data' => $from_data,
                 'role' => $role,
                 'start_time' => $start_time,
                 'end_time' => $end_time,

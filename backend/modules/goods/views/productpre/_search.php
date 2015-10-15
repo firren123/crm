@@ -5,7 +5,7 @@
         <label for="name">商品名称：</label>
         <input id="name" type="text" name="Search[name]" value="<?= empty($search['name']) ? '' : $search['name']?>" class="form-control">
 
-        <label id="two" for="name">商品分类：</label>
+        <label id="two" for="name">顶级分类：</label>
         <select id="cate_id" class="SearchForm_type" name="Search[cate_id]">
             <option value="">全部分类</option>
             <?php if(!empty($cate_list)) :?>
@@ -14,13 +14,23 @@
                 <?php endforeach;?>
             <?php endif;?>
         </select>
-        <label id="two" for="name">是否推荐：</label>
+        <label id="two" for="name">二级分类：</label>
+        <select id="cate_second_id" class="SearchForm_type" name="Search[cate_second_id]">
+            <option value="">二级分类</option>
+            <?php if(!empty($cate_second_data)) :?>
+                <?php foreach($cate_second_data as $list) :?>
+                    <option value="<?= $list['id'];?>" <?php if(!empty($search['cate_second_id']) and $list['id']==$search['cate_second_id']):?>selected="selected"<?php endif;?>><?= $list['name']; ?></option>
+                <?php endforeach;?>
+            <?php endif;?>
+        </select>
+        <br><br>
+        <label id="one" for="name">是否推荐：</label>
         <select id="SearchForm_type" class="SearchForm_type" name="Search[type]">
             <option selected="selected" value="">不限制</option>
             <option value="2" <?php if(!empty($search['type']) and $search['type']==2):?>selected="selected"<?php endif;?>>不推荐</option>
             <option value="1" <?php if(!empty($search['type']) and $search['type']==1):?>selected="selected"<?php endif;?>>推荐</option>
         </select>
-        <br><br>
+
         <label for="name">上下架：</label>
         <select id="SearchForm_type" class="SearchForm_type"  name="Search[status]">
             <option selected="selected" value="">不限制</option>
@@ -28,7 +38,7 @@
             <option value="1" <?php if(!empty($search['status']) and $search['status']==1):?>selected="selected"<?php endif;?>>上架</option>
         </select>
         <label id="two" for="name">限定区域：</label>
-        <select id="cate_id" class="SearchForm_type" name="Search[city_id]" style="width: 200px">
+        <select id="cate_id" class="SearchForm_type" name="Search[city_id]" style="width: 100px">
             <option selected="selected" value="">不限制</option>
             <?php if(!empty($city_data)) :?>
                 <?php foreach($city_data as $city_data) :?>

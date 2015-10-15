@@ -80,7 +80,7 @@ class ReportController extends BaseController
         if ($data) {
             foreach ($data as $key => $value) {
                 $list[$key] = $value;
-                $list[$key]['shop_name'] = $shop_data[$value['shop_id']] ? $shop_data[$value['shop_id']] : '';
+                $list[$key]['shop_name'] = !empty($shop_data[$value['shop_id']]) ? $shop_data[$value['shop_id']] : '';
             }
         }
         //没有分页的列表
@@ -118,7 +118,7 @@ class ReportController extends BaseController
             }
         }
         //百分比
-        $fruits = round(($fruits_total/$number)*100, 1).'%';
+        $fruits = $number>0 ? round(($fruits_total/$number)*100, 1).'%' : '0%';
         //商品数量及分页
         $total = $model->getCounts($cond, $where, $and_where);
         $pages = new Pagination(['totalCount' =>$total, 'pageSize' => $size]);
@@ -136,6 +136,12 @@ class ReportController extends BaseController
         ];
         echo $this->render('index', $param);
     }
+
+    /**
+     * 详情
+     *
+     * @return array
+     */
     public function actionView()
     {
         $fruits_total = RequestHelper::get('fruits_total');

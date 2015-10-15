@@ -103,11 +103,26 @@ $this->title = '商家合同信息详情';
         </tr>
         <tr>
             <td class="td1">合同状态：</td>
-            <td style="color: red;"><b><?php if ($list['status']) {
-                    echo "已生效";
-                }else{
-                    echo "未生效";
-                };?></b></td>
+            <td style="color: red;">
+                <b>
+                    <?php if (isset($list['status'])) {
+                        if ($list['status']==0) {
+                            echo "商家提交资料中" ;
+                        } elseif ($list['status']==1) {
+                            echo "已生效" ;
+                        }
+                        elseif ($list['status']==2) {
+                            echo "驳回" ;
+                        }
+                        elseif ($list['status']==3) {
+                            echo "待完善" ;
+                        }
+                        elseif ($list['status']==4) {
+                            echo "审核中" ;
+                        }
+                    }?>
+                </b>
+            </td>
         </tr>
     </table>
     <table style="border-bottom: 1px solid #D5692B; width: 1000px; height: auto;">
@@ -117,7 +132,7 @@ $this->title = '商家合同信息详情';
         <tr>
             <td colspan="1" class="td1">店面注册名称：</td>
             <td colspan="3" class="td2">
-                <label><?= $shop['business_name'];?></label>
+                <label><?php if(!empty($shop['business_name'])){echo $shop['business_name'];}?></label>
             </td>
         </tr>
         <tr>
@@ -157,7 +172,7 @@ $this->title = '商家合同信息详情';
         </tr>
         <tr>
             <td colspan="1" class="td1">经营地址：</td>
-            <td colspan="3"><label><?= $shop['business_address'];?></label></td>
+            <td colspan="3"><label><?php if(!empty($shop['business_address'])){echo $shop['business_address'];}?></label></td>
         </tr>
     </table>
     <table style="border-bottom: 1px solid #D5692B; width: 1000px; height: auto;">
@@ -166,30 +181,30 @@ $this->title = '商家合同信息详情';
         </tr>
         <tr >
             <td style="" class="td1">日常联系人姓名：</td>
-            <td style="" class="td2"><label><?= $list['common_contacts_name'];?></label></td>
+            <td style="" class="td2"><label><?php if(!empty($list['common_contacts_name'])){echo $list['common_contacts_name'];}?></label></td>
             <td style="" class="td1">电话：</td>
-            <td style="" ><label><?= $list['common_contacts_phone'];?></label></td>
+            <td style="" ><label><?php if(!empty($list['common_contacts_phone'])){echo $list['common_contacts_phone'];}?></label></td>
         </tr>
         <tr>
             <td class="td1">职务：</td>
-            <td><label><?= $list['common_contacts_job'];?></label></td>
+            <td><label><?php if(!empty($list['common_contacts_job'])){echo $list['common_contacts_job'];}?></label></td>
             <td class="td1">月均营业额：</td>
-            <td><label><?= $list['monthly_turnover'];?></label></td>
+            <td><label><?php if(!empty($list['monthly_turnover'])){echo $list['monthly_turnover'];}?></label></td>
         </tr>
         <tr>
             <td class="td1">面积：</td>
-            <td><label><?= $list['area'];?></label>&nbsp;&nbsp;M<sup>2</sup></td>
+            <td><label><?php if(!empty($list['area'])){echo $list['area'];}?></label>&nbsp;&nbsp;M<sup>2</sup></td>
             <td class="td1">营业时间：</td>
             <td >
                 上午&nbsp;
-                <label><?= $list['business_hours'][0]."：00";?></label>
+                <label><?php if(!empty($list['business_hours']) && isset($list['business_hours'][0]) && $list['business_hours'][0]!=''){echo $list['business_hours'][0]."：00";}?></label>
                 &nbsp;至&nbsp;&nbsp;下午
-                <label><?= $list['business_hours'][1]."：00";?></label>
+                <label><?php if(!empty($list['business_hours']) && isset($list['business_hours'][1])){echo $list['business_hours'][1]."：00";}?></label>
             </td>
         </tr>
         <tr>
             <td class="td1">所在社区名称：</td>
-            <td><label><?= $list['community_name'];?></label></td>
+            <td><label><?php if(!empty($list['community_name'])){echo $list['community_name'];}?></label></td>
         </tr>
     </table>
     <table style=" width: 1000px; height: auto;">
@@ -199,8 +214,8 @@ $this->title = '商家合同信息详情';
             <td colspan="3" class="td2">
                 <label>
                     <?php
-                    if ($list['account_type']==0) { echo "银行账号";}
-                    if ($list['account_type']==1) { echo "支付宝账号";}
+                    if (isset($list['account_type']) && $list['account_type']==0) { echo "银行账号";}
+                    if (isset($list['account_type']) && $list['account_type']==1) { echo "支付宝账号";}
                     ?>
                 </label>
             </td>
@@ -213,7 +228,7 @@ $this->title = '商家合同信息详情';
                     <table style="border-bottom: 1px solid #D5692B; width: 1000px; height: auto;">
                         <tr>
                             <td class="td1">支付宝账号：</td>
-                            <td><label><?= $list['alipay_name'];?></label></td>
+                            <td><label><?php if(!empty($list['alipay_name'])){echo $list['alipay_name'];}?></label></td>
                         </tr>
                     </table>
                 <?php
@@ -226,15 +241,15 @@ $this->title = '商家合同信息详情';
                         <tr><td><b>银行信息</b></td></tr>
                         <tr>
                             <td class="td1">开户银行：</td>
-                            <td class="td2"><label><?= $list['bank_name'];?></label></td>
+                            <td class="td2"><label><?php if(!empty($list['bank_name'])){echo $list['bank_name'];}?></label></td>
                             <td class="td1">开户支行：</td>
-                            <td><label><?= $list['bank_branch'];?></label></td>
+                            <td><label><?php if(!empty($list['bank_branch'])){echo $list['bank_branch'];}?></label></td>
                         </tr>
                         <tr>
                             <td class="td1">所在省份：</td>
-                            <td><label><?= $province['name'];?></label></td>
+                            <td><label><?php if(!empty($province['name'])){echo $province['name'];}?></label></td>
                             <td class="td1">所在城市：</td>
-                            <td><label><?= $city['name'];?></label></td>
+                            <td><label><?php if(!empty($city['name'])){echo $city['name'];}?></label></td>
                         </tr>
                         <tr>
                             <td class="td1">银行卡号：</td>
@@ -274,14 +289,16 @@ $this->title = '商家合同信息详情';
             <td>
                 <label>
                     <?php
-                    if ($list['settlement_cycle']==0) { echo "1天";}
-                    if ($list['settlement_cycle']==1) { echo "5天";}
-                    if ($list['settlement_cycle']==2) { echo "7天";}
-                    if ($list['settlement_cycle']==3) { echo "14天";}
-                    if ($list['settlement_cycle']==4) { echo "30天";}
-                    if ($list['settlement_cycle']==5) { echo "60天";}
-                    if ($list['settlement_cycle']==6) { echo "每月1次";}
-                    if ($list['settlement_cycle']==7) { echo "每月2次";}
+                    if (isset($list['settlement_cycle'])) {
+                        if ($list['settlement_cycle']==0) { echo "1天";}
+                        if ($list['settlement_cycle']==1) { echo "5天";}
+                        if ($list['settlement_cycle']==2) { echo "7天";}
+                        if ($list['settlement_cycle']==3) { echo "14天";}
+                        if ($list['settlement_cycle']==4) { echo "30天";}
+                        if ($list['settlement_cycle']==5) { echo "60天";}
+                        if ($list['settlement_cycle']==6) { echo "每月1次";}
+                        if ($list['settlement_cycle']==7) { echo "每月2次";}
+                    }
                     ?>
                 </label>
             </td>
@@ -292,17 +309,17 @@ $this->title = '商家合同信息详情';
             <th colspan="4">其他信息</th>
         </tr>
         <tr>
-            <td class="td1">起止时间</td>
-            <td class="td2"><label>开始时间：<?= $list['start_time'];?></label></td>
-            <td><label>结束时间：<?= $list['end_time'];?></label></td>
+            <td class="td1">合同起止时间</td>
+            <td class="td2"><label>开始时间：<?= substr($list['start_time'], 0, 10);?></label></td>
+            <td><label>结束时间：<?= substr($list['end_time'], 0, 10);?></label></td>
         </tr>
         <tr>
             <td class="td1">业务员信息</td>
             <td>
-                <label>业务员ID：<label style="color:red;"><?= $business['id'];?></label></label>
+                <label>业务员ID：<label style="color:red;"><?php if(!empty($business['id'])){echo $business['id'];} ?></label></label>
             </td>
             <td>
-                <label >业务员姓名：<label style="color:red;"><?= $business['name'];?></label></label>
+                <label >业务员姓名：<label style="color:red;"><?php if(!empty($business['name'])){echo $business['name'];} ?></label></label>
             </td>
         </tr>
     </table>
@@ -312,12 +329,12 @@ $this->title = '商家合同信息详情';
             <td colspan="1">
                 <a class="a_img">查看</a>&nbsp;&nbsp;&nbsp;&nbsp;
                 <a class="a_download">下载</a>
-                <input type="hidden" class="a_i" value="<?php if(empty($list['image'])){echo "/images/05_mid.jpg";}else{echo \Yii::$app->params['imgHost'].$list['image'];} ?>">
+                <input type="hidden" class="a_i" value="<?php if(empty($list['image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['image'];} ?>">
             </td>
         </tr>
         <tr>
             <td colspan="4">
-                <img class="img1" style=" display: none; max-width: 1000px; height: auto;" src="<?php if(empty($list['image'])){echo "/images/05_mid.jpg";}else{echo \Yii::$app->params['imgHost'].$list['image'];} ?>" />
+                <img class="img1" style=" display: none; max-width: 1000px; height: auto;" src="<?php if(empty($list['image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['image'];} ?>" />
             </td>
         </tr>
         <tr>
@@ -325,12 +342,12 @@ $this->title = '商家合同信息详情';
             <td colspan="1">
                 <a class="b_img">查看</a>&nbsp;&nbsp;&nbsp;&nbsp;
                 <a class="b_download">下载</a>
-                <input type="hidden" class="b_i" value="<?php if(empty($list['business_licence_image'])){echo "/images/05_mid.jpg";}else{echo \Yii::$app->params['imgHost'].$list['business_licence_image'];} ?>">
+                <input type="hidden" class="b_i" value="<?php if(empty($list['business_licence_image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['business_licence_image'];} ?>">
             </td>
         </tr>
         <tr>
             <td colspan="4">
-                <img class="img2" style=" display: none; max-width: 1000px; height: auto;" src="<?php if(empty($list['business_licence_image'])){echo "/images/05_mid.jpg";}else{echo \Yii::$app->params['imgHost'].$list['business_licence_image'];} ?>" />
+                <img class="img2" style=" display: none; max-width: 1000px; height: auto;" src="<?php if(empty($list['business_licence_image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['business_licence_image'];} ?>" />
             </td>
         </tr>
         <tr>
@@ -338,12 +355,12 @@ $this->title = '商家合同信息详情';
             <td colspan="1">
                 <a class="c_img">查看</a>&nbsp;&nbsp;&nbsp;&nbsp;
                 <a class="c_download">下载</a>
-                <input type="hidden" class="c_i" value="<?php if(empty($list['bank_number_image'])){echo "/images/05_mid.jpg";}else{echo \Yii::$app->params['imgHost'].$list['bank_number_image'];} ?>">
+                <input type="hidden" class="c_i" value="<?php if(empty($list['bank_number_image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['bank_number_image'];} ?>">
             </td>
         </tr>
         <tr>
             <td colspan="4">
-                <img class="img3" style=" display: none; max-width: 1000px; height: auto;" src="<?php if(empty($list['bank_number_image'])){echo "/images/05_mid.jpg";}else{echo \Yii::$app->params['imgHost'].$list['bank_number_image'];} ?>" />
+                <img class="img3" style=" display: none; max-width: 1000px; height: auto;" src="<?php if(empty($list['bank_number_image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['bank_number_image'];} ?>" />
             </td>
         </tr>
         <tr>
@@ -351,12 +368,12 @@ $this->title = '商家合同信息详情';
             <td colspan="1">
                 <a class="d_img">查看</a>&nbsp;&nbsp;&nbsp;&nbsp;
                 <a class="d_download">下载</a>
-                <input type="hidden" class="d_i" value="<?php if(empty($list['IDcard_image'])){echo "/images/05_mid.jpg";}else{echo \Yii::$app->params['imgHost'].$list['IDcard_image'];} ?>">
+                <input type="hidden" class="d_i" value="<?php if(empty($list['IDcard_image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['IDcard_image'];} ?>">
             </td>
         </tr>
         <tr>
             <td colspan="4">
-                <img class="img4" style=" display: none; max-width: 1000px; height: auto;" src="<?php if(empty($list['IDcard_image'])){echo "/images/05_mid.jpg";}else{echo \Yii::$app->params['imgHost'].$list['IDcard_image'];} ?>" />
+                <img class="img4" style=" display: none; max-width: 1000px; height: auto;" src="<?php if(empty($list['IDcard_image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['IDcard_image'];} ?>" />
             </td>
         </tr>
         <tr>
@@ -388,7 +405,7 @@ $this->title = '商家合同信息详情';
             $(".img1").slideToggle("slow");
         });
         $(".a_download").click(function(){
-            if($(".a_i").val()!='/images/05_mid.jpg'){
+            if($(".a_i").val()!=''){
                 window.location.href="/shop/shopcontract/downloadimg?img_src="+$(".a_i").val();
             }else{
                 alert('图片不存在！');
@@ -403,7 +420,7 @@ $this->title = '商家合同信息详情';
             $(".img2").slideToggle("slow");
         });
         $(".b_download").click(function(){
-            if($(".b_i").val()!='/images/05_mid.jpg'){
+            if($(".b_i").val()!=''){
                 window.location.href="/shop/shopcontract/downloadimg?img_src="+$(".b_i").val();
             }else{
                 alert('图片不存在！');
@@ -418,7 +435,7 @@ $this->title = '商家合同信息详情';
             $(".img3").slideToggle("slow");
         });
         $(".c_download").click(function(){
-            if($(".c_i").val()!='/images/05_mid.jpg'){
+            if($(".c_i").val()!=''){
                 window.location.href="/shop/shopcontract/downloadimg?img_src="+$(".c_i").val();
             }else{
                 alert('图片不存在！');
@@ -433,7 +450,7 @@ $this->title = '商家合同信息详情';
             $(".img4").slideToggle("slow");
         });
         $(".d_download").click(function(){
-            if($(".d_i").val()!='/images/05_mid.jpg'){
+            if($(".d_i").val()!=''){
                 window.location.href="/shop/shopcontract/downloadimg?img_src="+$(".d_i").val();
             }else{
                 alert('图片不存在！');

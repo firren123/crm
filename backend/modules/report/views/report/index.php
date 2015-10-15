@@ -30,7 +30,7 @@ $this->title = '报表管理';
                 <td>总成交金额:<span style="color: red"><?= number_format($number, 2 ,'.', '').'元'?></span></td>
                 <td>水果成交金额:<span style="color: red"><?= number_format($fruits_total, 2 ,'.', '').'元';?></span></td>
                 <td>水果成交百分比:<span style="color: red"><?= $fruits;?></span></td>
-                <td><a onclick="Report()" href="javascript:void(0)">查看比例图</a></td>
+                <?php if($number>0):?><td><a onclick="Report()" href="javascript:void(0)">查看销售额示意图</a></td><?php endif?>
             </tr>
             </tfoot>
             </table>
@@ -40,7 +40,6 @@ $this->title = '报表管理';
             <tbody>
             <tr>
                 <th style="width: 5%">ID</th>
-                <th style="width: 10%">订单号</th>
                 <th style="width: 10%">商家名称</th>
                 <th>商品总额</th>
                 <th width="130px">订单总额</th>
@@ -57,8 +56,11 @@ $this->title = '报表管理';
                     ?>
                     <tr>
                         <td><?= $list['id'];?></td>
-                        <td><?= $list['order_sn'];?></td>
-                        <td><a href="/shop/shop/detail?id=<?= $list['shop_id']?>" target="_blank"><?= empty($list['shop_name']) ? '--': $list['shop_name']?></a></td>
+                        <td>
+                            <?php if (!empty($list['shop_name'])) :?>
+                                <a href="/shop/shop/detail?id=<?= $list['shop_id']?>" target="_blank"><?= $list['shop_name']?></a>
+                    <?php endif?>
+                    </td>
                         <td><?= $list['goods_total'];?></td>
                         <td><?= $list['total'];?></td>
                         <td><?= $list['consignee'];?></td>
@@ -84,7 +86,7 @@ $this->title = '报表管理';
             var total = <?php echo $number?>;
             var fruits_total = <?php echo $fruits_total?>;
             var d = dialog({
-                title: "扇形示意图",
+                title: "销售额示意图",
                 url: '/report/report/view?total='+total+'&fruits_total='+fruits_total,
                 width: "500px",
                 height: "380px"
