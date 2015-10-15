@@ -408,6 +408,12 @@ class UserController extends BaseController
         }
         return json_encode($array);
     }
+
+    /**
+     * 单行函数说明
+     *
+     * @return string
+     */
     public function actionExamine()
     {
         $model = new UserInfo();
@@ -427,6 +433,12 @@ class UserController extends BaseController
         $item = $model->getOneRecord($cond);
         return $this->render('info', ['item'=>$item]);
     }
+
+    /**
+     * 单行函数说明
+     *
+     * @return string
+     */
     public function actionUpdateInfo()
     {
         $array = ['code'=>'101','msg'=>'信息不完整'];
