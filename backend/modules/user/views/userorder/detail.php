@@ -323,27 +323,25 @@ $this->title = '用户订单详情';
 <script style="text/javascript" src="/js/userorder/userOrder.js"></script>
 <script>
     $(function(){
-       $(document).on("click",".userInfoBut",function(){
+        $(document).on("click",".userInfoBut",function(){
             var id = $(this).attr("id");
-           if(id == "editUserInfo"){
-               userOrder.editBut(this);
-           }else if(id == "saveUserInfo"){
-               userOrder.saveBut(this);
-           }
-       });
+            if(id == "editUserInfo"){
+                userOrder.editBut(this);
+            }else if(id == "saveUserInfo"){
+                userOrder.saveBut(this);
+            }
+        });
         $(document).on("click",".editShopBut",function(){
             var s = $("#order_info_status").val();
             var p = $("#order_info_ship_status").val();
-            if(s == 1){
-                if(p ==0){
-                    userOrder.editShopBut();
-                }else{
-                    alert('商家已确认订单，不能再转移订单');
-                    return false;
-                }
-
+            if(s == 1 ){
+                userOrder.editShopBut();
+            }else if(s >0){
+                alert('订单状态无法转移');
+                return false;
             }else{
-                alert('请先确认订单，再转移订单');
+                alert('请先确认订单');
+                return false;
             }
 
         });
