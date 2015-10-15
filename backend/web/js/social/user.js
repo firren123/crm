@@ -144,6 +144,68 @@ var user= {
                 }
 
             });
+    },
+    //身份证审核
+    'cardStatus':function(mobile){
+        var status = $("input[name=status]:checked").val();
+        $.ajax(
+            {
+                type: "GET",
+                url: "/social/user/update-card-status",
+                data:{'status':status,'mobile':mobile},
+                asynic:false,
+                dataType:"json",
+                beforeSend:function(){
+                },
+                success: function(result)
+                {
+                    if(result['code']==='200'){
+                        gf.alert(result['msg']);
+                        window.location="/social/user";
+                    }else{
+                        gf.alert(result['msg']);
+                    }
+                }
+
+        });
+    },
+    //身份证审核
+    'examine':function(mobile){
+        var real_name = $("#realname").val();
+        var user_card = $("#user_card").val();
+        if (real_name.length<2) {
+            gf.alert("真实姓名 必须大于等于两位数");
+            return;
+        }
+        if (isNaN(user_card)) {
+            gf.alert("身份证号 必须是18位数字");
+            return;
+        } else {
+            if (user_card.length!=18) {
+                gf.alert("身份证号 必须是18位数字");
+                return;
+            }
+        }
+        $.ajax(
+            {
+                type: "GET",
+                url: "/social/user/update-info",
+                data:{'real_name':real_name,'user_card':user_card,'mobile':mobile},
+                asynic:false,
+                dataType:"json",
+                beforeSend:function(){
+                },
+                success: function(result)
+                {
+                    if(result['code']==='200'){
+                        gf.alert(result['msg']);
+                        window.location="/social/user";
+                    }else{
+                        gf.alert(result['msg']);
+                    }
+                }
+
+            });
     }
 };
 $(document).ready(function(){

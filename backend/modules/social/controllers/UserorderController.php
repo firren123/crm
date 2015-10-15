@@ -86,7 +86,7 @@ class UserorderController extends BaseController
         parent::init();
         //获取支付类型
         $pay_site = new PaySite();
-        $pay_site_arr = $pay_site->getList(1, 'id,name');
+        $pay_site_arr = $pay_site->getList('pid != 0', 'id,name');
         foreach ($pay_site_arr as $k => $v) {
             $this->pay_site_id_data[$v['id']] = $v['name'];
         }
@@ -155,7 +155,6 @@ class UserorderController extends BaseController
         }
         $shop_m = new Shop();
         if ($shop_name) {
-
             $shop_id = $shop_m->getList(array('shop_name' => $shop_name), "id");
             if ($shop_id) {
                 $arr = [];
@@ -164,14 +163,10 @@ class UserorderController extends BaseController
                 }
                 $where['shop_id'] = $arr;
             } else {
-
                 return $this->error('商家名不存在', '/social/userorder/index');
             }
-
         }
-
         if (!in_array($this->quanguo_city_id, $this->city_id)) {
-
             $where['city'] = $this->city_id;
         }
         $andWhere = empty($andWhere) ? '' : implode(' and ', $andWhere);
@@ -446,7 +441,7 @@ class UserorderController extends BaseController
                     } elseif ($order['ship_status'] == 0) {
                         return $code = 104;   //请先发货
                     }
-                    $order->pay_status = 2;
+                    $order->pay_status = 1;
                 }
                 $order->delivery_time = $time;
                 $order->ship_status = $status;
