@@ -148,7 +148,7 @@ class UserorderController extends BaseController
         }
 
         if ($pay_site_id > 0) {
-            $where['pay_site_id'] = $pay_site_id;
+            $where['pay_method_id'] = $pay_site_id;
         }
         if ($mobile) {
             $where['mobile'] = $mobile;
