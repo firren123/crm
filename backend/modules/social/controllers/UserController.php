@@ -25,6 +25,7 @@ use backend\models\social\Post;
 use backend\models\social\Service;
 use backend\models\social\User;
 use backend\models\social\UserInfo;
+use backend\models\social\UserToken;
 use common\helpers\CurlHelper;
 use common\helpers\FastDFSHelper;
 use common\helpers\RequestHelper;
@@ -341,6 +342,7 @@ class UserController extends BaseController
     {
         $model = new User();
         $post_model = new Post();
+        $token_model = new UserToken();
         $mobile = RequestHelper::get('mobile', 0);
         $status = RequestHelper::get('status', 0);
         $type = RequestHelper::get('type', 0);
@@ -355,6 +357,10 @@ class UserController extends BaseController
                 $user_result = $model->updateInfo($data, $cond);
                 if ($user_result) {
                     $result =  $post_model->updateInfo($data, $cond);
+                    $token_count = $token_model->getCount($cond);
+                    if ($status==2 and $token_count>0) {
+                        $token_model->updateInfo(['token' => ''], $cond);
+                    }
                 }
             }
             if ($result==true) {
