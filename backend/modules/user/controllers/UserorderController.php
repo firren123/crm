@@ -608,7 +608,7 @@ class UserorderController extends BaseController
         }
         //判断订单是否确认超过5分钟
         if ($new_time_5 < $order_info['allocate_time']) {
-            echo "订单没有确认没有超过5分钟，不能再次分配订单";
+            echo "订单确认没有超过5分钟，不能再次分配订单";
             exit;
         }
         FilePutContentHelps::writeFile('getShop.log', 'start' . $order_sn);
