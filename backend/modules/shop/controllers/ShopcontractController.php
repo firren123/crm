@@ -118,7 +118,17 @@ class ShopcontractController extends BaseController
         //得到银行列表
         $Bank_model = new ShopBank();
         $Bank_result = $Bank_model->bank();
-        return $this->render('add', array('ShopContract_model' => $ShopContract_model, 'Province_result' => $Province_result, 'Bank_result' => $Bank_result));
+        $init_array = [
+            'document_type_data' => $this->document_type_data,       //证件类型
+            'company_nature_data' => $this->company_nature_data,     //公司性质
+            'account_type_data' => $this->account_type_data,         //账户类型
+            'settlement_cycle_data' => $this->settlement_cycle_data, //结算周期
+            'business_scope_data' => $this->business_scope_data,     //经营范围
+            'ShopContract_model' => $ShopContract_model,
+            'Province_result' => $Province_result,
+            'Bank_result' => $Bank_result
+        ];
+        return $this->render('add', $init_array);
     }
 
     /**
@@ -302,7 +312,7 @@ class ShopcontractController extends BaseController
             'business_scope_data' => $this->business_scope_data,     //经营范围
         ];
         if (!empty($ShopContract_model_result)) {
-            $ShopContract_model_result['business_hours'] = explode(',', $ShopContract_model_result['business_hours']);   //营业时间
+            $ShopContract_model_result['business_hours'] = explode(',', $ShopContract_model_result['business_hours']); //营业时间
             $ShopContract_model_result['start_time']     = substr($ShopContract_model_result['start_time'], 0, 10);//合同开始时间
             $ShopContract_model_result['end_time']       = substr($ShopContract_model_result['end_time'], 0, 10);  //合同结束时间
         }
