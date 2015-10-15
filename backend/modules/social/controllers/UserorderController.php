@@ -86,7 +86,7 @@ class UserorderController extends BaseController
         parent::init();
         //获取支付类型
         $pay_site = new PaySite();
-        $pay_site_arr = $pay_site->getList(1, 'id,name');
+        $pay_site_arr = $pay_site->getList('pid != 0', 'id,name');
         foreach ($pay_site_arr as $k => $v) {
             $this->pay_site_id_data[$v['id']] = $v['name'];
         }
