@@ -334,16 +334,14 @@ $this->title = '用户订单详情';
         $(document).on("click",".editShopBut",function(){
             var s = $("#order_info_status").val();
             var p = $("#order_info_ship_status").val();
-            if(s == 1){
-                if(p ==0){
+            if(s == 1 ){
                     userOrder.editShopBut();
-                }else{
-                    alert('商家已确认订单，不能再转移订单');
-                    return false;
-                }
-
+            }else if(s >0){
+                alert('订单状态现在已经无法转移');
+                return false;
             }else{
-                alert('请先确认订单，再转移订单');
+                alert('请先确认订单');
+                return false;
             }
 
         });
