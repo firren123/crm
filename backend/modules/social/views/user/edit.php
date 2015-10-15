@@ -35,12 +35,6 @@ use yii\bootstrap\ActiveForm;
                     <input id="nickname" class="form-control" type="text" style="width:200px" name="User[nickname]" value="<?= $item['nickname']?>">
                 </div>
             </div>
-            <div class="form-group field-brand-name">
-                <label class="control-label col-sm-3" for="brand-name">真实姓名:</label>
-                <div class="col-sm-6">
-                    <input id="realname" class="form-control" type="text" style="width:200px" name="User[realname]" value="<?= $item['realname']?>">
-                </div>
-            </div>
             <div class="form-group field-brand-name required">
                 <label class="control-label col-sm-3" for="brand-name">性别:</label>
                 <div class="col-sm-6">

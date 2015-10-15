@@ -20,12 +20,13 @@ echo $this->render('_search', ['search'=>$search]);
                 <th style="width: 5%">ID</th>
                 <th style="width: 10%">用户名</th>
                 <th>最后登陆时间</th>
-                <th width="130px">最后登陆IP</th>
-                <th width="130px">最后登陆渠道</th>
-                <th width="130px">最后登陆来源</th>
+                <th width="100px">最后登陆IP</th>
+                <th width="100px">最后登陆渠道</th>
+                <th width="100px">最后登陆来源</th>
                 <th>登陆次数</th>
+                <th>身份证审核状态</th>
                 <th>状态</th>
-                <th>操作</th>
+                <th style="width: 100px">操作</th>
             </tr>
             </tbody>
             <tfoot>
@@ -72,8 +73,37 @@ echo $this->render('_search', ['search'=>$search]);
                             }
                             ?></td>
                         <td><?= $list['login_count'];?></td>
+                        <td>
+                            <?php
+                            if ($list['card_status']) {
+                                ?>
+                                <a href="/social/user/info?mobile=<?= $list['mobile']?>">
+                                <?php
+                                switch ($list['card_status']) {
+                                    case 0;
+                                        echo "未审核";
+                                        break;
+                                    case 1;
+                                        echo "审核中";
+                                        break;
+                                    case 2;
+                                        echo "审核通过";
+                                        break;
+                                    case 3;
+                                        echo "审核失败";
+                                        break;
+                                }
+                                ?>
+                                </a>
+                                    <?php
+                            }
+                            ?></td>
                         <td><a href="javascript:void(0)" onclick="user.updateStatus(<?= $list['status']?>,<?= $list['mobile']?>)"><?= $list['status']==2 ? "可用" : "禁用";?></a></td>
-                        <td><a href="/social/user/edit?mobile=<?= $list['mobile']?>">编辑信息</a><br><a href="/social/user/password?mobile=<?= $list['mobile']?>"> 修改密码</a></td>
+                        <td><a href="/social/user/edit?mobile=<?= $list['mobile']?>">编辑信息</a><br>
+                            <?php if ($list['card_status'] and $list['card_status']!=2) :?>
+                            <a href="/social/user/examine?mobile=<?= $list['mobile']?>">实名验证</a><br>
+                    <?php endif?>
+                            <a href="/social/user/password?mobile=<?= $list['mobile']?>"> 修改密码</a></td>
                     </tr>
 
             <?php
