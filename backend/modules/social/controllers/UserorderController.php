@@ -441,7 +441,7 @@ class UserorderController extends BaseController
                     } elseif ($order['ship_status'] == 0) {
                         return $code = 104;   //请先发货
                     }
-                    $order->pay_status = 2;
+                    $order->pay_status = 1;
                 }
                 $order->delivery_time = $time;
                 $order->ship_status = $status;
