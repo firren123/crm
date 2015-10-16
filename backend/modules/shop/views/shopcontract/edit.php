@@ -387,7 +387,7 @@ $this->title = '商家合同信息完善';
             <tr>
                 <th colspan="1" class="td1">合同图片</th>
                 <td colspan="1">
-                    <a class="a_looked" name="HeTong" id="a_looked_HeTong">查看</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a class="a_looked" name="HeTong" id="a_looked_HeTong"><?php if(empty($list['image'])){echo "";}else{echo '查看';} ?></a>&nbsp;&nbsp;&nbsp;&nbsp;
                     <a class="a_choose" name="HeTong">重新选择</a>
                     <input id="HeTongPic" type="file" name="HeTong" onchange="previewImage(this)"/>
                     <input type="hidden" id="HeTongPic_img_is_ok" class="a_i" value="<?php if(empty($list['image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['image'];} ?>">
@@ -403,7 +403,7 @@ $this->title = '商家合同信息完善';
             <tr>
                 <th colspan="1" class="td2">营业执照图片</th>
                 <td colspan="1">
-                    <a class="a_looked" name="YingYeZhiZhao" id="a_looked_YingYeZhiZhao">查看</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a class="a_looked" name="YingYeZhiZhao" id="a_looked_YingYeZhiZhao"><?php if(empty($list['business_licence_image'])){echo "";}else{echo '查看';} ?></a>&nbsp;&nbsp;&nbsp;&nbsp;
                     <a class="a_choose" name="YingYeZhiZhao">重新选择</a>
                     <input id="YingYeZhiZhaoPic" type="file" name="YingYeZhiZhao" onchange="previewImage(this)"/>
                     <input type="hidden" id="YingYeZhiZhaoPic_img_is_ok" class="b_i" value="<?php if(empty($list['business_licence_image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['business_licence_image'];} ?>">
@@ -419,7 +419,7 @@ $this->title = '商家合同信息完善';
             <tr>
                 <th colspan="1" class="td3">银行卡图片</th>
                 <td colspan="1">
-                    <a class="a_looked" name="YinHangKa" id="a_looked_YinHangKa">查看</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a class="a_looked" name="YinHangKa" id="a_looked_YinHangKa"><?php if(empty($list['bank_number_image'])){echo "";}else{echo '查看';} ?></a>&nbsp;&nbsp;&nbsp;&nbsp;
                     <a class="a_choose" name="YinHangKa">重新选择</a>
                     <input id="YinHangKaPic" type="file" name="YinHangKa" onchange="previewImage(this)"/>
                     <input type="hidden" id="YinHangKaPic_img_is_ok" class="c_i" value="<?php if(empty($list['bank_number_image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['bank_number_image'];} ?>">
@@ -435,7 +435,7 @@ $this->title = '商家合同信息完善';
             <tr>
                 <th colspan="1" class="td4">身份证图片</th>
                 <td colspan="1">
-                    <a class="a_looked" name="ShenFenZheng" id="a_looked_ShenFenZheng">查看</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a class="a_looked" name="ShenFenZheng" id="a_looked_ShenFenZheng"><?php if(empty($list['IDcard_image'])){echo "";}else{echo '查看';} ?></a>&nbsp;&nbsp;&nbsp;&nbsp;
                     <a class="a_choose" name="ShenFenZheng">重新选择</a>
                     <input id="ShenFenZhengPic" type="file" name="ShenFenZheng" onchange="previewImage(this)"/>
                     <input type="hidden" id="ShenFenZhengPic_img_is_ok" class="d_i" value="<?php if(empty($list['IDcard_image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['IDcard_image'];} ?>">
