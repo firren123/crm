@@ -120,7 +120,7 @@ class ServiceController extends BaseController
             $where['audit_status'] = $audit_status;
         }
         $count = $model->getCount($where);
-        $list = $model->getPageList($where, "*", "id desc", $page, $this->size);
+        $list = $model->getPageList($where, "*", "audit_status asc,id desc", $page, $this->size);
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->size]);
         return $this->render(
             'index',
