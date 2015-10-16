@@ -202,7 +202,6 @@ class UserController extends BaseController
         $post_user = RequestHelper::post('User');
         if (!empty($post_user)) {
             $data['nickname'] = $post_user['nickname'];
-            $data['realname'] = $post_user['realname'];
             $data['province_id'] = $post_user['province_id'];
             $data['city_id'] = $post_user['city_id'];
             $data['district_id'] = $post_user['district_id'];
