@@ -21,6 +21,7 @@ $this->title = '商家合同信息详情';
     tr{ width: 1000px; height: auto;}
     .td1{ width: 200px;}
     .td2{ width: 300px;}
+    label{word-break:normal; width:auto; display:block; white-space:pre-wrap;word-wrap : break-word ;overflow: hidden ;}
 </style>
 <div style=" width: 1000px; height: auto; ">
     <h4><a href="/" >首页</a>&gt;<a href="/shop/shopcontract/index">商家合同列表</a><span>&gt;</span>商家合同信息详情</h4>
@@ -53,12 +54,12 @@ $this->title = '商家合同信息详情';
         <tr>
             <td class="td1">证件类型：</td>
             <td >
-                <label>
+
                     <?php if ($list['document_type']==0){echo "二代身份证" ;} ?>
                     <?php if ($list['document_type']==1){echo "港澳通行证" ;} ?>
                     <?php if ($list['document_type']==2){echo "台湾通行证" ;} ?>
                     <?php if ($list['document_type']==3){echo "护照" ;} ?>
-                </label>
+
             </td>
             <td class="td1">证件号：</td>
             <td ><label><?= $list['document_number'];?></label></td>
@@ -72,33 +73,23 @@ $this->title = '商家合同信息详情';
         <tr>
             <td colspan="1"class="td1">公司性质：</td>
             <td colspan="3">
-                <label>
                     <?php
                     foreach($list['company_nature'] as $k=>$v){
                         if ($list['company_nature'][$k]==0){echo "个体商户" ;}
                        ?>
-                </label>
-                <label>
                     <?php
                         if ($list['company_nature'][$k]==1){echo "民办非企业" ;}
                     ?>
-                </label>
-                <label>
                     <?php
                         if ($list['company_nature'][$k]==2){echo "股份制" ;}
                     ?>
-                </label>
-                <label>
                     <?php
                         if ($list['company_nature'][$k]==3){echo "有限责任制" ;}
                     ?>
-                </label>
-                <label>
                     <?php
                         if ($list['company_nature'][$k]==4){echo "其他信息：".$list['company_nature_other'] ;}
                     }
                     ?>
-                </label>
             </td>
         </tr>
         <tr>
@@ -138,36 +129,28 @@ $this->title = '商家合同信息详情';
         <tr>
             <td colspan="1" class="td1">经营范围：</td>
             <td colspan="3">
-                <label>
                     <?php
                     foreach($shop['business_scope'] as $k=>$v){
                     if ($shop['business_scope'][$k] == 1) {
                         echo "日用百货";
                     }
                     ?>
-                </label>
-                <label>
                     <?php
                     if ($shop['business_scope'][$k] == 2) {
                         echo "工艺美术品";
                     }
                     ?>
-                </label>
-                <label>
                     <?php
                     if ($shop['business_scope'][$k] == 3) {
                         echo "文教用品";
                     }
                     ?>
-                </label>
-                <label>
                     <?php
                     if ($shop['business_scope'][$k] == 4) {
                         echo "副食品";
                     }
                     }
                     ?>
-                </label>
             </td>
         </tr>
         <tr>
@@ -193,13 +176,13 @@ $this->title = '商家合同信息详情';
         </tr>
         <tr>
             <td class="td1">面积：</td>
-            <td><label><?php if(!empty($list['area'])){echo $list['area'];}?></label>&nbsp;&nbsp;M<sup>2</sup></td>
+            <td><?php if(!empty($list['area'])){echo $list['area'];}?>&nbsp;&nbsp;M<sup>2</sup></td>
             <td class="td1">营业时间：</td>
             <td >
                 上午&nbsp;
-                <label><?php if(!empty($list['business_hours']) && isset($list['business_hours'][0]) && $list['business_hours'][0]!=''){echo $list['business_hours'][0]."：00";}?></label>
+                <?php if(!empty($list['business_hours']) && isset($list['business_hours'][0]) && $list['business_hours'][0]!=''){echo $list['business_hours'][0]."：00";}?>
                 &nbsp;至&nbsp;&nbsp;下午
-                <label><?php if(!empty($list['business_hours']) && isset($list['business_hours'][1])){echo $list['business_hours'][1]."：00";}?></label>
+                <?php if(!empty($list['business_hours']) && isset($list['business_hours'][1])){echo $list['business_hours'][1]."：00";}?>
             </td>
         </tr>
         <tr>
@@ -270,24 +253,19 @@ $this->title = '商家合同信息详情';
         </tr>
         <tr>
             <td class="td1">
-                <label>
                     <?php
                         if ($list['service_charge']==0) { echo "固定服务费用：";}
                         if ($list['service_charge']==1) { echo "服务佣金：";}
                     ?>
-                </label>
             </td>
             <td class="td2">
-                <label>
                     <?php
                     if ($list['service_charge']==0) { echo $list['fixed_service_charge'] ;}
                     if ($list['service_charge']==1) { echo $list['service_commission']."%";}
                     ?>
-                </label>
             </td>
             <td class="td1"><label>结算周期：</label></td>
             <td>
-                <label>
                     <?php
                     if (isset($list['settlement_cycle'])) {
                         if ($list['settlement_cycle']==0) { echo "1天";}
@@ -300,7 +278,6 @@ $this->title = '商家合同信息详情';
                         if ($list['settlement_cycle']==7) { echo "每月2次";}
                     }
                     ?>
-                </label>
             </td>
         </tr>
     </table>
@@ -316,10 +293,10 @@ $this->title = '商家合同信息详情';
         <tr>
             <td class="td1">业务员信息</td>
             <td>
-                <label>业务员ID：<label style="color:red;"><?php if(!empty($business['id'])){echo $business['id'];} ?></label></label>
+                <label>业务员ID：<span style="color:red;"><?php if(!empty($business['id'])){echo $business['id'];} ?></span></label>
             </td>
             <td>
-                <label >业务员姓名：<label style="color:red;"><?php if(!empty($business['name'])){echo $business['name'];} ?></label></label>
+                <label >业务员姓名：<span style="color:red;"><?php if(!empty($business['name'])){echo $business['name'];} ?></span></label>
             </td>
         </tr>
     </table>
