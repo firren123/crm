@@ -99,8 +99,14 @@ $this->title = '商家合同列表';
                     if (isset($list[$k]['status']) && $list[$k]['status']==3) {
                     ?>
                         <a href="edit?id=<?= $list[$k]['id'] ?>">合同完善</a>
-                        &nbsp;|&nbsp;
-                        <a href="addoa?id=<?= $list[$k]['id'] ?>" onClick="if(confirm('确定要提交审核？'))return true;return false;">提交到OA审核</a>
+                        <?php
+                        if (!empty($list[$k]['htnumber'])) {
+                        ?>
+                            &nbsp;|&nbsp;
+                            <a href="addoa?id=<?= $list[$k]['id'] ?>" onClick="if(confirm('确定要提交审核？'))return true;return false;">提交到OA审核</a>
+                    <?php
+                        }
+                        ?>
                     <?php
                     }
                     ?>
