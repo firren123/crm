@@ -192,11 +192,6 @@ $this->title = '商家合同信息完善';
                     <input id="GongSiXingZhiQiTaXinXi_Input" type="text" name="company_nature_other" value="<?= $list['company_nature_other']; ?>" style="display: <?php if ($list['company_nature']==4) {echo 'inline';} else {echo 'none';}?>" >
                 </td>
             </tr>
-            <tr>
-                <td class="td1">合同状态：</td>
-                <td style="color: red;"><b><?php if ($list['status']) {echo "已生效";} else {echo "未生效";};?></b>
-                </td>
-            </tr>
         </table>
         <table style="border-bottom: 1px solid #D5692B; width: 1000px; height: auto;">
             <tr>
