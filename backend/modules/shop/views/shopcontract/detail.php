@@ -21,7 +21,7 @@ $this->title = '商家合同信息详情';
     tr{ width: 1000px; height: auto;}
     .td1{ width: 200px;}
     .td2{ width: 300px;}
-    label{word-break:normal; width:auto; display:block; white-space:pre-wrap;word-wrap : break-word ;overflow: hidden ;}
+    label{width: 300px; word-break:normal;  display:block; white-space:pre-wrap;word-wrap : break-word ;overflow: hidden ;}
 </style>
 <div style=" width: 1000px; height: auto; ">
     <h4><a href="/" >首页</a>&gt;<a href="/shop/shopcontract/index">商家合同列表</a><span>&gt;</span>商家合同信息详情</h4>
