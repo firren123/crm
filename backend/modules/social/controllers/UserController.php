@@ -452,8 +452,8 @@ class UserController extends BaseController
             $user_card_number = mb_strlen($user_card, 'utf8');
             if ($real_name_number<2) {
                 $array = ['code'=>'101','msg'=>'真实姓名 必须大于等于两位数'];
-            } elseif (!($user_card) or $user_card_number<18) {
-                $array = ['code'=>'101','msg'=>'身份证号 必须是18位数字'];
+            } elseif ($user_card_number<18) {
+                $array = ['code'=>'101','msg'=>'身份证号 必须是18位数'];
             } else {
                 $data['realname'] = $real_name;
                 $data['user_card'] = $user_card;
