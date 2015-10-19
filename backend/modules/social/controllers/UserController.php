@@ -25,6 +25,7 @@ use backend\models\social\Post;
 use backend\models\social\Service;
 use backend\models\social\User;
 use backend\models\social\UserInfo;
+use backend\models\social\UserToken;
 use common\helpers\CurlHelper;
 use common\helpers\FastDFSHelper;
 use common\helpers\RequestHelper;
@@ -201,7 +202,6 @@ class UserController extends BaseController
         $post_user = RequestHelper::post('User');
         if (!empty($post_user)) {
             $data['nickname'] = $post_user['nickname'];
-            $data['realname'] = $post_user['realname'];
             $data['province_id'] = $post_user['province_id'];
             $data['city_id'] = $post_user['city_id'];
             $data['district_id'] = $post_user['district_id'];
@@ -341,6 +341,7 @@ class UserController extends BaseController
     {
         $model = new User();
         $post_model = new Post();
+        $token_model = new UserToken();
         $mobile = RequestHelper::get('mobile', 0);
         $status = RequestHelper::get('status', 0);
         $type = RequestHelper::get('type', 0);
@@ -355,6 +356,10 @@ class UserController extends BaseController
                 $user_result = $model->updateInfo($data, $cond);
                 if ($user_result) {
                     $result =  $post_model->updateInfo($data, $cond);
+                    $token_count = $token_model->getCount($cond);
+                    if ($status==2 and $token_count>0) {
+                        $token_model->updateInfo(['token' => ''], $cond);
+                    }
                 }
             }
             if ($result==true) {
@@ -402,6 +407,12 @@ class UserController extends BaseController
         }
         return json_encode($array);
     }
+
+    /**
+     * 单行函数说明
+     *
+     * @return string
+     */
     public function actionExamine()
     {
         $model = new UserInfo();
@@ -421,6 +432,12 @@ class UserController extends BaseController
         $item = $model->getOneRecord($cond);
         return $this->render('info', ['item'=>$item]);
     }
+
+    /**
+     * 单行函数说明
+     *
+     * @return string
+     */
     public function actionUpdateInfo()
     {
         $array = ['code'=>'101','msg'=>'信息不完整'];
@@ -434,8 +451,8 @@ class UserController extends BaseController
             $user_card_number = mb_strlen($user_card, 'utf8');
             if ($real_name_number<2) {
                 $array = ['code'=>'101','msg'=>'真实姓名 必须大于等于两位数'];
-            } elseif (!($user_card) or $user_card_number<18) {
-                $array = ['code'=>'101','msg'=>'身份证号 必须是18位数字'];
+            } elseif ($user_card_number<18) {
+                $array = ['code'=>'101','msg'=>'身份证号 必须是18位数'];
             } else {
                 $data['realname'] = $real_name;
                 $data['user_card'] = $user_card;

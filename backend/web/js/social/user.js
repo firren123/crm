@@ -177,14 +177,9 @@ var user= {
             gf.alert("真实姓名 必须大于等于两位数");
             return;
         }
-        if (isNaN(user_card)) {
-            gf.alert("身份证号 必须是18位数字");
+        if (user_card.length!=18) {
+            gf.alert("身份证号 必须是18位数");
             return;
-        } else {
-            if (user_card.length!=18) {
-                gf.alert("身份证号 必须是18位数字");
-                return;
-            }
         }
         $.ajax(
             {
