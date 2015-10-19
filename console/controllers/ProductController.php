@@ -38,8 +38,7 @@ class ProductController extends Controller
     {
         $model = new Product();
         $cond['single'] = 1;
-        $where = ['>', 'status', '0'];
-        $data = $model->getList($cond, '*', 'id asc', $where);
+        $data = $model->getList($cond, '*', 'id asc');
         $result = true;
         if (!empty($data)) {
             foreach ($data as $value) {
