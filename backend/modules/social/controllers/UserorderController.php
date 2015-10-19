@@ -61,6 +61,9 @@ class UserorderController extends BaseController
         0 => '未确认',
         1 => '已确认',
         2 => '已取消',
+        3 => '已分单',
+        4 => '商家接单',
+        5 => '已完成'
     );
     public $source_type_data = array(
         1 =>'pc',
