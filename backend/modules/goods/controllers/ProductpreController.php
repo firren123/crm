@@ -16,8 +16,6 @@
 namespace backend\modules\goods\controllers;
 
 use backend\controllers\BaseController;
-use backend\models\i500m\Attribute;
-use backend\models\i500m\AttributeValue;
 use backend\models\i500m\Brand;
 use backend\models\i500m\BrandCategory;
 use backend\models\i500m\Category;
@@ -25,7 +23,6 @@ use backend\models\i500m\CrmBranch;
 use backend\models\i500m\CrmConfig;
 use backend\models\i500m\Log;
 use backend\models\i500m\Product;
-use backend\models\i500m\ProductAttr;
 use backend\models\i500m\ProductImage;
 use backend\models\i500m\Province;
 use backend\models\shop\ShopProduct;
@@ -369,7 +366,7 @@ class ProductpreController extends BaseController
                         $log_model->recordLog($content);
                         $img_model = new ProductImage();
                         //新增商品实时同步到sphinx
-                        $url = $this->channel_url.'/sphinx/insert-goods?goods_id='.$list;
+                        $url = $this->channel_url.'/sync/sync-goods?goods_id='.$list;
                         CurlHelper::get($url, 'channel');
                         //主图添加
                         $img_data = array();
@@ -668,7 +665,7 @@ class ProductpreController extends BaseController
                                 }
                             }
                             //修改商品实时同步到sphinx
-                            $url = $this->channel_url . '/sphinx/sync-goods?goods_id=' . $id;
+                            $url = $this->channel_url . '/sync/sync-goods?goods_id=' . $id;
                             CurlHelper::get($url, 'channel');
                         }
                     } else {
@@ -696,7 +693,7 @@ class ProductpreController extends BaseController
                             $content = "管理员：".\Yii::$app->user->identity->username.",添加了一个商品id为:".$result.",商品名称为:".$product['name'].' 的商品';
                             $log_model->recordLog($content);
                             //新增商品实时同步到sphinx
-                            $url = $this->channel_url.'/sphinx/insert-goods?goods_id='.$result;
+                            $url = $this->channel_url.'/sync/sync-goods?goods_id='.$result;
                             CurlHelper::get($url, 'channel');
                             //主图添加
                             $img_data = array();
@@ -728,286 +725,6 @@ class ProductpreController extends BaseController
             'cate_second_list' => $cate_second_data
         );
         return $this->render('edit', $list);
-    }
-
-    /**
-    * 属性增加
-    *
-    * @return string
-    */
-    public function actionProductAttribute()
-    {
-        $id = RequestHelper::get('id');
-        $model = new Product();
-        $data['id'] = $id;
-        $item = $model->getInfo($data);
-        $item['attr_value'] = empty($item['attr_value']) ? '' : implode(' ', explode('_', $item['attr_value']));
-        return $this->render('attribute', ['item'=>$item]);
-    }
-
-    /**
-    * 商品属性增加
-    *
-    * @return string
-    */
-    public function actionAttributeSave()
-    {
-        $id = RequestHelper::get('id');
-        $model = new Product();
-        $attr_model = new ProductAttr();
-        $attribute_value_model = new AttributeValue();
-        $attribute_model = new Attribute();
-        $cond['product_id'] = $id;
-        $attr_list = $attr_model->getList($cond, '*', 'id asc');
-        $list = [];
-        if (!empty($attr_list)) {
-            foreach ($attr_list as $k => $v) {
-                 $attr['id'] = $v['attr_name_id'];
-                 $attr_list = $attribute_model->getInfo($attr);
-                 $data['attr_id'] = $v['attr_name_id'];
-                 $list[$k]['data'] = $attribute_value_model->getList($data);
-                 $list[$k]['name'] = $attr_list['admin_name'];
-            }
-        }
-        $item = $model->getInfo(array('id'=>$id));
-        $attr_id = RequestHelper::post('attr_id');
-        if (!empty($attr_id)) {
-            $attr_value = RequestHelper::post('attr');
-            $origin_price = RequestHelper::post('origin_price');
-            $sale_price = RequestHelper::post('sale_price', 0);
-            $shop_price = RequestHelper::post('shop_price');
-            $total_num = RequestHelper::post('total_num');
-            $bar_code = RequestHelper::post('bar_code');
-            $number = mb_strlen($bar_code, 'utf8');
-            $bar_cond['bar_code'] = $bar_code;
-            $bar_list = $model->getInfo($bar_cond);
-            if (empty($origin_price)) {
-                 return $this->error('进货价 不能为空');
-            } elseif ($shop_price<0) {
-                 return $this->error('铺货价 不能小于0');
-            } elseif ($origin_price<$sale_price) {
-                 return $this->error('建议售价 不能小于进货价');
-            } elseif (empty($bar_code)) {
-                 return $this->error('条形码 不能为空');
-            } elseif (!is_numeric($bar_code)) {
-                 return $this->error('条形码 必须是数字');
-            } elseif ($number!=13) {
-                 return $this->error('条形码 必须13位');
-            } elseif (!empty($bar_list)) {
-                 return $this->error('条形码 已经存在');
-            } else {
-                $attr_ids = [];
-                $attr_values = [];
-                foreach ($attr_value as $k => $v) {
-                    $attr_data = $attribute_value_model->getInfo(array('id'=>$v));
-                    $attr_values[] = $attr_data['attr_value'];
-                    $attr_ids[$k]['attr_name_id'] =$attr_data['attr_id'];
-                    $attr_ids[$k]['attr_value_id'] =$attr_data['id'];
-                }
-                $item_data = [];
-                $item_data['origin_price'] = $origin_price;
-                $item_data['sale_price'] = $sale_price;
-                $item_data['shop_price'] = $shop_price;
-                $item_data['total_num'] = $total_num;
-                $item_data['bar_code'] = $bar_code;
-                $item_data['attr_value'] = implode('_', $attr_values);
-                $item_data['name'] = $item['name'];
-                $item_data['sku'] = $item['sku'];
-                $item_data['image'] = $item['image'];
-                $item_data['cate_first_id'] = $item['cate_first_id'];
-                $item_data['brand_id'] = $item['brand_id'];
-                $item_data['status'] = 2;
-                $item_data['create_time'] = time();
-                $item_data['single'] = 2;
-                $item_data['description'] = $item['description'];
-                $item_data['bc_id'] = $item['bc_id'];
-                $item_data['province_id'] = $item['province_id'];
-                $item_data['is_self'] = $item['is_self'];
-                $item_data['fixed_price'] = $item['fixed_price'];
-                $item_cond['name'] =  $item_data['name'];
-                $item_cond['attr_value'] =  $item_data['attr_value'];
-                $cond_result = $model->getInfo($item_cond);
-                if (empty($cond_result)) {
-                    $img_model = new ProductImage();
-                    $product_result = $model->getInsert($item_data);
-                    $product_id = $product_result;
-                    //主图
-                    $img['image'] = $item['image'];
-                    $img['product_id'] = $product_id;
-                    $img['status'] = 2;
-                    $img['sort'] = 99;
-                    $img['create_time'] = time();
-                    $img['type'] = 1;
-                    $img_model->insertInfo($img);
-                    //属性
-                    foreach ($attr_ids as $value) {
-                        $data_item['product_id'] = $product_id;
-                        $data_item['attr_name_id'] = $value['attr_name_id'];
-                        $data_item['attr_value_id'] = $value['attr_value_id'];
-                        $attr_model->insertInfo($data_item);
-                    }
-                    if ($product_result > 0) {
-                        //日志
-                        $content = "管理员：".\Yii::$app->user->identity->username.",添加了一个商品id为:".$product_result.",商品名称为:".$item['name'].' 的商品';
-                        $log_model = new Log();
-                        $log_model->recordLog($content);
-                        //新增商品实时同步到sphinx
-                        $url = $this->channel_url.'/sphinx/insert-goods?goods_id='.$product_result;
-                        CurlHelper::get($url, 'channel');
-                        return $this->success('添加成功', '/goods/product');
-                    }
-                } else {
-                    return $this->error('属性已经存在');
-                }
-            }
-
-        }
-        return $this->render('_save', ['id'=>$id,'list'=>$list,'item'=>$item]);
-    }
-
-    /**
-    * 属性修改
-    *
-    * @return string
-    */
-    public function actionAttributeEdit()
-    {
-        $id = RequestHelper::get('id');
-        $model = new Product();
-        $attr_model = new ProductAttr();
-        $attribute_value_model = new AttributeValue();
-        $attribute_model = new Attribute();
-        $cond['product_id'] = $id;
-        $attr_list = $attr_model->getList($cond, '*', 'id asc');
-        $list = [];
-        if (!empty($attr_list)) {
-            foreach ($attr_list as $k => $v) {
-                 $attr['id'] = $v['attr_name_id'];
-                 $attr_list = $attribute_model->getInfo($attr);
-                 $data['attr_id'] = $v['attr_name_id'];
-                 $list[$k]['data'] = $attribute_value_model->getList($data);
-                 $list[$k]['name'] = $attr_list['admin_name'];
-                 $list[$k]['attr_id'] = $v['attr_value_id'];
-
-            }
-        }
-
-        $item = $model->getInfo(array('id' => $id), true, 'origin_price,sale_price,shop_price,total_num,bar_code,attr_value,name,fixed_price');
-        $attr_id = RequestHelper::post('attr_id');
-        if (!empty($attr_id)) {
-            $attr_value = RequestHelper::post('attr');
-            $origin_price = RequestHelper::post('origin_price');
-            $sale_price = RequestHelper::post('sale_price', 0);
-            $shop_price = RequestHelper::post('shop_price');
-            $total_num = RequestHelper::post('total_num');
-            $bar_code = RequestHelper::post('bar_code');
-            $number = mb_strlen($bar_code, 'utf8');
-            $bar_cond['bar_code'] = $bar_code;
-            $where = ['!=', 'id', $id];
-            $bar_list = $model->getCount($bar_cond, $where);
-            if (empty($cond_result)) {
-                if (empty($origin_price)) {
-                    return $this->error('进货价 不能为空');
-                } elseif ($shop_price<0) {
-                    return $this->error('铺货价 不能小于0');
-                } elseif ($origin_price<$sale_price) {
-                    return $this->error('建议售价 不能小于进货价');
-                } elseif (empty($bar_code)) {
-                    return $this->error('条形码 不能为空');
-                } elseif (!is_numeric($bar_code)) {
-                    return $this->error('条形码 必须是数字');
-                } elseif ($number != 13) {
-                    return $this->error('条形码 必须13位');
-                } elseif ($bar_list!=0) {
-                    return $this->error('条形码 已经存在');
-                } else {
-                    $attr_ids = [];
-                    $attr_values = [];
-                    foreach ($attr_value as $k => $v) {
-                        $attr_data = $attribute_value_model->getInfo(array('id' => $v));
-                        $attr_values[] = $attr_data['attr_value'];
-                        $attr_ids[$k]['attr_name_id'] = $attr_data['attr_id'];
-                        $attr_ids[$k]['attr_value_id'] = $attr_data['id'];
-                    }
-                    $data = [];
-                    $data['origin_price'] = $origin_price;
-                    $data['sale_price'] = $sale_price;
-                    $data['shop_price'] = $shop_price;
-                    $data['total_num'] = $total_num;
-                    $data['bar_code'] = $bar_code;
-                    $data['attr_value'] = implode('_', $attr_values);
-                    $data_conf['id'] = $id;
-                    $item_cond['name'] = $item['name'];
-                    $item_cond['attr_value'] = $data['attr_value'];
-                    $item_where = ['!=', 'id', $id];
-                    $cond_result = $model->getCount($item_cond, $item_where);
-                    if ($cond_result!=0) {
-                        return $this->error('该属性已经存在');
-                    } else {
-                        if ($data['origin_price']!=$item['origin_price']) {
-                            if ($item['fixed_price']==1) {
-                                $shop_product_model = new ShopProduct();
-                                $shop_product_model->updateInfo(['price' => $origin_price], ['product_id' => $id]);
-                            }
-                        }
-                        $result = $model->updateInfo($data, $data_conf);
-                        foreach ($attr_ids as $value) {
-                             $data_item['attr_name_id'] = $value['attr_name_id'];
-                             $data_item['attr_value_id'] = $value['attr_value_id'];
-                             $data_where['product_id'] = $id;
-                             $data_where['attr_name_id'] = $value['attr_name_id'];
-                             $attr_model->updateInfo($data_item, $data_where);
-                        }
-                        if ($result == true) {
-                            $shop_product_log_model = new ShopProductLog();
-                            //记录日志
-                            $array = array_diff($data, $item);
-                            if (!empty($array)) {
-                                $content = "管理员：" . \Yii::$app->user->identity->username . ",把商品id为:" . $id . ",商品名称为:" . $item['name'] . ' 的';
-                                if (!empty($array['attr_value'])) {
-                                    $content .= " 商品属性修改成".$array['attr_value'];
-                                }
-                                if (!empty($array['origin_price'])) {
-                                    $content .= " 商品建议售价修改成".$array['origin_price'];
-                                }
-                                if (!empty($array['sale_price'])) {
-                                    $content .= " 商品进货价修改成".$array['sale_price'];
-                                }
-                                if (!empty($array['shop_price'])) {
-                                    $content .= " 商品铺货价修改成".$array['shop_price'];
-                                }
-                                if (!empty($array['total_num'])) {
-                                    $content .= " 商品库存修改成".$array['total_num'];
-                                }
-                                if (!empty($array['bar_code'])) {
-                                    $content .= " 商品条形码修改成".$array['bar_code'];
-                                }
-                                $log_model = new Log();
-                                $log_model->recordLog($content);
-                            }
-                            $log_data = [];
-                            if ($bar_code!=$item['bar_code']) {
-                                $log_data['bar_code'] = $bar_code;
-                            }
-                            if (!empty($log_data)) {
-                                $log_data['product_id'] = $id;
-                                $result = $shop_product_log_model->getInfo(['product_id'=>$id]);
-                                if (empty($result)) {
-                                    $shop_product_log_model->insertInfo($log_data);
-                                } else {
-                                    $shop_product_log_model->updateInfo($log_data, ['product_id'=>$id]);
-                                }
-                            }
-                            //修改商品实时同步到sphinx
-                            $url = $this->channel_url.'/sphinx/sync-goods?goods_id='.$id;
-                            CurlHelper::get($url, 'channel');
-                            return $this->success('修改成功', '/goods/product/product-attribute?id='.$id);
-                        }
-                    }
-                }
-            }
-        }
-        return $this->render('_edit', ['id' => $id, 'list' => $list, 'item' => $item]);
     }
     /**
     * 详情页
@@ -1206,7 +923,7 @@ class ProductpreController extends BaseController
                 $log_model->recordLog($content);
                 $code = 1;
                 //修改商品实时同步到sphinx
-                $url = $this->channel_url.'/sphinx/sync-goods?goods_id='.$id;
+                $url = $this->channel_url.'/sync/sync-goods?goods_id='.$id;
                 CurlHelper::get($url, 'channel');
             }
         }
