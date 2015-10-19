@@ -37,7 +37,7 @@ class ProductController extends Controller
     public function actionProfit()
     {
         $model = new Product();
-        $cond['single'] = 1;
+        $cond['single'] = [0,1,2];
         $data = $model->getList($cond, '*', 'id asc');
         $result = true;
         if (!empty($data)) {
