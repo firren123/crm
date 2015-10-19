@@ -48,17 +48,69 @@ $this->title = '商家合同列表';
                 <th>电话</th>
                 <th>业务员ID</th>
                 <th>状态</th>
+                <th>操作</th>
             </tr>
             <?php
                 foreach ($list as $k=>$v) {
             ?>
-            <tr onclick="window.location.href='/shop/shopcontract/detail?id='+<?= $list[$k]['id']?>" onmouseover="this.style.backgroundColor='#aaaaaa';return true;" onmouseout="this.style.backgroundColor='#ffffff';return true;">
-                <td><?= $list[$k]['htnumber'];?></td>
-                <td><?= $list[$k]['shop_contract_name'];?></td>
-                <td><?= $list[$k]['contacts'];?></td>
-                <td><?= $list[$k]['contacts_umber'];?></td>
-                <td><?= $list[$k]['counterman'];?></td>
-                <td><?php if($list[$k]['status']){echo "已生效" ;}else{ echo"未生效";} ?></td>
+            <tr onmouseover="this.style.backgroundColor='#aaaaaa';return true;" onmouseout="this.style.backgroundColor='#ffffff';return true;">
+                <td class="link">
+                    <?= $list[$k]['htnumber'];?>
+                    <input type="hidden" class="id_value" value="<?= $list[$k]['id'];?>"/>
+                </td>
+                <td class="link">
+                    <?= $list[$k]['shop_contract_name'];?>
+                    <input type="hidden" class="id_value" value="<?= $list[$k]['id'];?>"/>
+                </td>
+                <td class="link">
+                    <?= $list[$k]['contacts'];?>
+                    <input type="hidden" class="id_value" value="<?= $list[$k]['id'];?>"/>
+                </td>
+                <td class="link">
+                    <?= $list[$k]['contacts_umber'];?>
+                    <input type="hidden" class="id_value" value="<?= $list[$k]['id'];?>"/>
+                </td>
+                <td class="link">
+                    <?= $list[$k]['counterman'];?>
+                    <input type="hidden" class="id_value" value="<?= $list[$k]['id'];?>"/>
+                </td>
+                <td class="link">
+                    <?php if (isset($list[$k]['status'])) {
+                        if ($list[$k]['status']==0) {
+                            echo "商家提交资料中" ;
+                        } elseif ($list[$k]['status']==1) {
+                            echo "已生效" ;
+                        }
+                        elseif ($list[$k]['status']==2) {
+                            echo "驳回" ;
+                        }
+                        elseif ($list[$k]['status']==3) {
+                            echo "待完善" ;
+                        }
+                        elseif ($list[$k]['status']==4) {
+                            echo "审核中" ;
+                        }
+                    }?>
+                    <input type="hidden" class="id_value" value="<?= $list[$k]['id'];?>"/>
+                </td>
+
+                <td>
+                    <?php
+                    if (isset($list[$k]['status']) && $list[$k]['status']==3) {
+                    ?>
+                        <a href="edit?id=<?= $list[$k]['id'] ?>">合同完善</a>
+                        <?php
+                        if (!empty($list[$k]['htnumber'])) {
+                        ?>
+                            &nbsp;|&nbsp;
+                            <a href="addoa?id=<?= $list[$k]['id'] ?>" onClick="if(confirm('确定要提交审核？'))return true;return false;">提交到OA审核</a>
+                    <?php
+                        }
+                        ?>
+                    <?php
+                    }
+                    ?>
+                </td>
             </tr>
             <?php
             }
@@ -68,4 +120,11 @@ $this->title = '商家合同列表';
     <div class="pages">
         <?= \yii\widgets\LinkPager::widget(['pagination' => $pages]) ?>
     </div>
+    <script type="text/javascript">
+        $(document).ready(function(){
+           $(".link").click(function(){
+                window.location.href='/shop/shopcontract/detail?id='+$(this).find('.id_value').val();
+           });
+        });
+    </script>
 </div>

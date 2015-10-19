@@ -30,7 +30,7 @@ $this->title = '报表管理';
                 <td>总成交金额:<span style="color: red"><?= number_format($number, 2 ,'.', '').'元'?></span></td>
                 <td>水果成交金额:<span style="color: red"><?= number_format($fruits_total, 2 ,'.', '').'元';?></span></td>
                 <td>水果成交百分比:<span style="color: red"><?= $fruits;?></span></td>
-                <td><a onclick="Report()" href="javascript:void(0)">查看销售额示意图</a></td>
+                <?php if($number>0):?><td><a onclick="Report()" href="javascript:void(0)">查看销售额示意图</a></td><?php endif?>
             </tr>
             </tfoot>
             </table>
@@ -56,7 +56,11 @@ $this->title = '报表管理';
                     ?>
                     <tr>
                         <td><?= $list['id'];?></td>
-                        <td><a href="/shop/shop/detail?id=<?= $list['shop_id']?>" target="_blank"><?= empty($list['shop_name']) ? '--': $list['shop_name']?></a></td>
+                        <td>
+                            <?php if (!empty($list['shop_name'])) :?>
+                                <a href="/shop/shop/detail?id=<?= $list['shop_id']?>" target="_blank"><?= $list['shop_name']?></a>
+                    <?php endif?>
+                    </td>
                         <td><?= $list['goods_total'];?></td>
                         <td><?= $list['total'];?></td>
                         <td><?= $list['consignee'];?></td>

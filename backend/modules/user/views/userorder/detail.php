@@ -335,7 +335,11 @@ $this->title = '用户订单详情';
             var s = $("#order_info_status").val();
             var p = $("#order_info_ship_status").val();
             if(s == 1 ){
+<<<<<<< HEAD
                 userOrder.editShopBut();
+=======
+                    userOrder.editShopBut();
+>>>>>>> dev
             }else if(s >0){
                 alert('订单状态无法转移');
                 return false;

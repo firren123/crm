@@ -32,9 +32,14 @@ $this->title = "用户订单列表";
         <label for="order_sn">订单号：</label>
         <input id="order_sn" type="text" size="31" name="order_sn" value="<?= isset($order_sn) ?  $order_sn : ''; ?>"
                class="form-control"/>
-        <!--        <label for="name">用户名：</label>-->
-        <!--        <input id="name" type="text" name="username" value="-->
-        <? //= isset($username)?$username:'';?><!--" class="form-control">-->
+        <label for="from_data">订单所属：</label>
+        <select id="from_data" name="from_data" class="form-control">
+            <option  value="999">全部</option>
+            <?php foreach($from_data_data as $k => $v){ ?>
+                <option <?php if($k == $from_data){echo " selected ";}?> value="<?= $k; ?>"><?= $v; ?></option>
+            <?php } ?>
+
+        </select>
         <br/><br/>
         <label for="start_time">添加开始时间：</label>
         <input id="start_time" type="text" id="start_time" name="start_time"
@@ -58,6 +63,7 @@ $this->title = "用户订单列表";
                 <tr>
                     <th>ID</th>
                     <th colspan="2">订单ID</th>
+                    <th colspan="2">订单归属</th>
                     <th colspan="2">类型</th>
                     <th colspan="2">添加时间</th>
                     <th colspan="2">金额</th>
@@ -74,9 +80,9 @@ $this->title = "用户订单列表";
                         ?>
                         <tr>
                             <td><?=$item['id']?></td>
-                            <td colspan="2"><a
-                                    href="<?= '/user/userorder/detail?order_sn=' . $item['order_sn']; ?>"><?= $item['order_sn']; ?></a>
+                            <td colspan="2"><?= $item['order_sn']; ?>
                             </td>
+                            <td colspan="2"><?= $from_data_data[$item['from_data']]; ?></td>
                             <td colspan="2">
                                 <?php if (isset($item['type'])) {
                                     echo $item['type'] == 2 ? '部分退' : '整单退';
@@ -97,10 +103,14 @@ $this->title = "用户订单列表";
                             <td colspan="4">
                                 <?php if ($item['from_data']==1) { ?>
                                     <a target="_blank" href="<?= '/social/userorder/detail?order_sn=' . $item['order_sn']; ?>">详情</a>
-                                    <?php }else{ ?>
+                                    <?php }elseif($item['from_data']==2){ ?>
+                                    <a target="_blank" href="<?= '/social/service/order-detail?order_sn=' . $item['order_sn']; ?>">详情</a>
+                                <?php
+                                    } else {
+                                    ?>
                                     <a target="_blank" href="<?= '/user/userorder/detail?order_sn=' . $item['order_sn']; ?>">详情</a>
                                 <?php
-                                    }
+                                }
                                 if ($role['fin'] == 1) {
                                     if ($item['audit_status'] == 1) { ?>
                                         &nbsp;|&nbsp;<a href="javascript:;" class="financial">财务审核</a>

@@ -695,7 +695,7 @@ $this->title = '商家合同添加';
     var document_numberreg=/^[1-9]\d{16}(\d|x|X)$/;
     var countermanidreg=/^\d+$/;
     var is_file_image = false;//图片
-    var file_image_reg = /^.+.[jpg|gif|bmp|bnp|png]$/;
+    var file_image_reg = /^.+.[jpg|gif|bmp|bnp|png]$/i;
     var htnumberreg = /^BJ[0-9]{6}$/;
     //简单验证 二代身份证 格式
     function regdocument_number(file){
@@ -1198,10 +1198,13 @@ $form = ActiveForm::begin([
                 <td ><label class="mark">*</label>证件类型</td>
                 <td >
                     <select name="document_type">
-                        <option value="0">二代身份证</option>
-                        <option value="1">港澳通行证</option>
-                        <option value="2">台湾通行证</option>
-                        <option value="3">护照</option>
+                        <?php
+                        foreach ($document_type_data as $k => $v) {
+                            ?>
+                            <option value="<?= $k ?>"><?= $v ?></option>
+                            <?php
+                        }
+                        ?>
                     <select>
                 </td>
                 <td ><label class="mark">*</label>证件号</td>
@@ -1244,10 +1247,13 @@ $form = ActiveForm::begin([
             <tr>
                 <td><label class="mark">*</label>经营范围</td>
                 <td style="text-align: left;">
-                    <input type="checkbox" id="checkbox11" name="business_scope[]" checked  value="1">日用百货&nbsp;&nbsp;
-                    <input type="checkbox" id="checkbox22" name="business_scope[]"  value="2">工艺美术品&nbsp;&nbsp;
-                    <input type="checkbox" id="checkbox33" name="business_scope[]"  value="3">文教用品&nbsp;&nbsp;
-                    <input type="checkbox" id="checkbox44" name="business_scope[]"  value="4">副食品&nbsp;&nbsp;
+                    <?php
+                    foreach ($business_scope_data as $k => $v) {
+                        ?>
+                        <input type="checkbox" id="checkbox<?php echo $k*11 ?>" name="business_scope[]" <?php if($k==1){echo 'checked';} ?>  value="<?php echo $k ?>"><?php echo $v ?>&nbsp;&nbsp;
+                    <?php
+                    }
+                    ?>
                 </td>
             </tr>
             <tr>
@@ -1406,14 +1412,13 @@ $form = ActiveForm::begin([
                 <td><label class="mark">*</label>结算周期</td>
                 <td>
                     <select id="settlement_cycle" name="settlement_cycle">
-                        <option value="0">1天</option>
-                        <option value="1">5天</option>
-                        <option value="2">7天</option>
-                        <option value="3">14天</option>
-                        <option value="4">30天</option>
-                        <option value="5">60天</option>
-                        <option value="6">每月1次</option>
-                        <option value="7">每月2次</option>
+                        <?php
+                        foreach ($settlement_cycle_data as $k => $v) {
+                            ?>
+                            <option value="<?= $k ?>"><?= $v ?></option>
+                        <?php
+                        }
+                        ?>
                     </select>
                 </td>
             </tr>
@@ -1423,7 +1428,7 @@ $form = ActiveForm::begin([
                 <th colspan="4">其他信息</th>
             </tr>
             <tr>
-                <td><label class="mark">*</label>起止时间</td>
+                <td><label class="mark">*</label>合同起止时间</td>
                 <td>
                     <label for="start_time" style="float: left;  margin-top: 8px; width: 100px;" >开始时间：</label>
                     <input style="float: left; width: 120px;" id="start_time" type="text"  name="start_time" onkeyup="notnull(this)" onblur="check_start_time(this)" onchange="checktimes()" onFocus="WdatePicker({isShowClear:true,readOnly:false})" value="<?php if(isset($start_time)){echo $start_time; };?>" class="form-control">
@@ -1453,7 +1458,7 @@ $form = ActiveForm::begin([
                 </td>
                 <td colspan="3">
                     <div style="width: 200px; height: 200px;" id="preview">
-                        <img style="width: 200px;height: 200px;" src="/images/05_mid.jpg" />
+                        <img style="width: 200px;height: 200px;" src="" />
                     </div>
                 </td>
             </tr>
@@ -1466,7 +1471,7 @@ $form = ActiveForm::begin([
                 </td>
                 <td colspan="3">
                     <div style="width: 200px; height: 200px;" id="preview1">
-                        <img style="width: 200px;height: 200px;" src="/images/05_mid.jpg" />
+                        <img style="width: 200px;height: 200px;" src="" />
                     </div>
                 </td>
             </tr>
@@ -1479,7 +1484,7 @@ $form = ActiveForm::begin([
                 </td>
                 <td colspan="3">
                     <div style="width: 200px; height: 200px;" id="preview2">
-                        <img style="width: 200px;height: 200px;" src="/images/05_mid.jpg" />
+                        <img style="width: 200px;height: 200px;" src="" />
                     </div>
                 </td>
             </tr>
@@ -1493,7 +1498,7 @@ $form = ActiveForm::begin([
                 </td>
                 <td colspan="3">
                     <div style="width: 200px; height: 200px;" id="preview3">
-                        <img style="width: 200px;height: 200px;" src="/images/05_mid.jpg" />
+                        <img style="width: 200px;height: 200px;" src="" />
                     </div>
                 </td>
             </tr>

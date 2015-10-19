@@ -29,11 +29,11 @@ $this->title = "服务器设置列表";
         <input id="name" type="text" name="name" value="<?= $name;?>" class="form-control">
 
         <label for="status">状态：</label>
-        <select id="status" name="audit_status" class="form-control">
+        <select id="status" name="status" class="form-control">
             <option  value="999">全部</option>
-            <?php foreach($audit_status_data as $k => $v){ ?>
-                <option <?php if($k == $audit_status){echo " selected ";}?> value="<?= $k; ?>"><?= $v; ?></option>
-            <?php } ?>
+            <option  value="1">禁用</option>
+            <option  value="2">可用</option>
+
 
         </select>
 <!---->
@@ -54,7 +54,6 @@ $this->title = "服务器设置列表";
                     <th colspan="2">ID</th>
                     <th colspan="2">手机号</th>
                     <th colspan="2">店铺名称</th>
-                    <th colspan="2">审核状态</th>
                     <th colspan="2">是否禁用</th>
                     <th colspan="2">创建时间</th>
                     <th colspan="4">操作</th>
@@ -68,7 +67,6 @@ $this->title = "服务器设置列表";
                             <td colspan="2"><?= $item['id'];?></td>
                             <td colspan="2"><?= $item['mobile'];?></td>
                             <td colspan="2"><?= $item['name'];?></td>
-                            <td colspan="2"><?php echo isset($audit_status_data[$item['audit_status']]) ? $audit_status_data[$item['audit_status']] : ''; ?></td>
                             <td colspan="2"><?= $item['status']==1?'禁用':'可用';?></td>
                             <td colspan="2"><?= $item['create_time'];?></td>
 

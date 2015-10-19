@@ -51,7 +51,7 @@ class CurlHelper extends BaseCurlHelps
             break;
         case 20:   //服务
             $data['custom_content']['type'] = 20;
-            if ($data['custom_content']['order_sn']) {
+            if (!$data['custom_content']['order_sn']) {
                 return array('code'=>101, 'msg'=>'服务参数错误');
             }
             break;
