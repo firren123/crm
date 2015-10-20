@@ -463,8 +463,27 @@ class UserorderController extends BaseController
      */
     public function actionGradeList()
     {
-        $shopGradeModel = new ShopGrade();
+        $page = RequestHelper::get('page', 1, 'intval');
         $mobile = RequestHelper::get('mobile');
+        $where = [];
+        if ($mobile) {
+            $where['mobile'] = $mobile;
+        }
+        if (empty($where)) {
+            $where = 1;
+        }
+        $shopGradeModel = new ShopGrade();
+        $count = $shopGradeModel->getCount($where);
+        $list = $shopGradeModel->getPageList($where, "*", "id desc", $page, $this->size);
+        $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->size]);
+        return $this->render(
+            'grade_list',
+            [
+                'mobile'=>$mobile,
+                'list'=>$list,
+                'pages'=>$pages,
+            ]
+        );
 
     }
 
