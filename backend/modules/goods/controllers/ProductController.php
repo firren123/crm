@@ -1479,17 +1479,20 @@ class ProductController extends BaseController
             $data = array();
             $shop_data = [];
             $list = [];
+            $type = 0;
             if ($number==1) {
                 $data['status'] = 1;
                 $shop_data['status'] = 2;
                 $list['name'] = '上下架';
                 $list['status'] = '上架';
+                $type = 1;
             }
             if ($number==2) {
                 $data['status'] = 2;
                 $shop_data['status'] = 3;
                 $list['name'] = '上下架';
                 $list['status'] = '下架';
+                $type = 2;
             }
             if ($number==3) {
                 $data['is_hot'] = 1;
@@ -1500,6 +1503,9 @@ class ProductController extends BaseController
             if ($result==true) {
                 //日志
                 $content = "管理员：".\Yii::$app->user->identity->username.",修改了商品id集合为:".$ids." 商品的".$list['name']."状态,".$list['name']."状态变成了:".$list['status'];
+                //修改商品实时同步到sphinx
+                $url = $this->channel_url.'/sync/batch-goods?goods_id='.$ids.'&type='.$type;
+                CurlHelper::get($url, 'channel');
                 $log_model = new Log();
                 $log_model->recordLog($content);
                 if ($number!=3) {
@@ -1752,6 +1758,9 @@ class ProductController extends BaseController
                 $data['status'] = 2;
                 $result = $model->updateInfo($data, $cond);
                 if ($result==true) {
+                    //修改商品实时同步到sphinx
+                    $url = $this->channel_url.'/sync/batch-goods?goods_id='.$id.'&type=4';
+                    CurlHelper::get($url, 'channel');
                     $array = ['code'=>200, 'msg'=>'发布成功'];
                 } else {
                     $array = ['code'=>103, 'msg'=>'系统繁忙'];
