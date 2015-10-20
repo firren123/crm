@@ -22,9 +22,11 @@ use yii\bootstrap\ActiveForm;
 
 
 ?>
-
+<legends  style="fond-size:12px;">
+    <legend>服务评论详情</legend>
+</legends>
 <div class="breadcrumbs">您现在的位置：<a href="/">首页</a><span>&gt;</span><a
-        href="/social/service/eva-list">店铺评论</a><span>&gt;</span><span>店铺评论详情</span>
+        href="/social/service/eva-list">店铺评论</a><span>&gt;</span><span>服务评论详情</span>
 </div>
 
 <table class="table table-bordered table-hover">

@@ -157,7 +157,8 @@ class ServiceController extends BaseController
                 'unit_data' => $this->unit_data,
                 'service_way_data' => $this->service_way_data,
                 'list' => $list,
-                'audit_status_data' => $this->audit_status_data
+                'audit_status_data' => $this->audit_status_data,
+                'user_auth_status_data' => $this->user_auth_status_data
             ]
         );
     }

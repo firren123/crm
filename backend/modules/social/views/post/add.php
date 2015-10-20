@@ -3,6 +3,9 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 $this->title = '修改帖子';
 ?>
+<legends  style="fond-size:12px;">
+    <legend>添加/修改帖子</legend>
+</legends>
 <script type="text/javascript" src="/js/webuploader//webuploader.js"></script>
 <style>
     .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td{

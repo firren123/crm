@@ -17,9 +17,12 @@
 
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
-$this->title = "服务列表";
+$this->title = "店铺评论列表";
 
 ?>
+<legends  style="fond-size:12px;">
+    <legend>店铺评论列表</legend>
+</legends>
 <script type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 
 

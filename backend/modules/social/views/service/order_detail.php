@@ -23,6 +23,9 @@ use yii\bootstrap\ActiveForm;
 $this->title = '服务订单详情';
 
 ?>
+<legends  style="fond-size:12px;">
+    <legend>服务订单详情</legend>
+</legends>
 <div class="breadcrumbs">您现在的位置：<a href="/">首页</a><span>&gt;</span><a
         href="/social/service/order">服务订单</a><span>&gt;</span><span>服务订单详情</span>
 </div>

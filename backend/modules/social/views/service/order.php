@@ -22,7 +22,9 @@ $this->title = "服务订单列表";
 ?>
 <script type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 
-
+<legends  style="fond-size:12px;">
+    <legend>服务订单列表</legend>
+</legends>
 <div class="wide form">
     <form id="search-form" class="well form-inline" action="/social/service/order" method="get">
         <dl>

@@ -6,6 +6,9 @@ use yii\bootstrap\ActiveForm;
 $this->title = '用户订单详情';
 
 ?>
+<legends  style="fond-size:12px;">
+    <legend>用户订单详情</legend>
+</legends>
 <div class="content fr">
     <div class="breadcrumbs">您现在的位置：<a href="/">首页</a><span>&gt;</span><a href="/social/userorder/index">用户订单</a><span>&gt;</span><span
             class="current">订单详情</span></div>

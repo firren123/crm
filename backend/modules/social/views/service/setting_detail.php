@@ -23,6 +23,9 @@ use yii\bootstrap\ActiveForm;
 $this->title = '店铺设置详情';
 
 ?>
+<legends  style="fond-size:12px;">
+    <legend>店铺设置详情</legend>
+</legends>
 <div class="breadcrumbs">您现在的位置：<a href="/">首页</a><span>&gt;</span><a href="/social/service/setting">店铺设置</a><span>&gt;</span><span>店铺设置详情</span>
 </div>
     <table class="table table-bordered table-hover">

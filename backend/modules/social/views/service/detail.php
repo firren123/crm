@@ -23,6 +23,9 @@ use yii\bootstrap\ActiveForm;
 $this->title = '服务详情';
 
 ?>
+<legends  style="fond-size:12px;">
+    <legend>服务详情</legend>
+</legends>
 <div class="breadcrumbs">您现在的位置：<a href="/">首页</a><span>&gt;</span><a href="/social/service/index">服务</a><span>&gt;</span><span>服务详情</span>
 </div>
 <table class="table table-bordered table-hover">
@@ -50,7 +53,10 @@ $this->title = '服务详情';
         <th>价格：</th>
         <td><?=$list['price'];?><?= $unit_data[$list['unit']];?></td>
     </tr>
-
+    <tr>
+        <th>图片：</th>
+        <td><img width="90px" height="90px" src="<?= \Yii::$app->params['imgHost'] . $list['image']?>" alt=""/></td>
+    </tr>
     <tr>
         <th>服务方式：</th>
         <td><?=$service_way_data[$list['service_way']];?></td>
@@ -71,7 +77,8 @@ $this->title = '服务详情';
     </tr>
     <tr>
         <th>用户认证状态：</th>
-        <td><?=isset($user_auth_status_data[$list['user_auth_status']])?$user_auth_status_data[$list['user_auth_status']]:'';?></td>
+        <td>
+            <?=isset($user_auth_status_data[$list['user_auth_status']])?$user_auth_status_data[$list['user_auth_status']]:'';?></td>
     </tr>
     <tr>
         <th>是否删除：</th>
