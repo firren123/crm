@@ -477,7 +477,7 @@ class UserorderController extends BaseController
         $list = $shopGradeModel->getPageList($where, "*", "id desc", $page, $this->size);
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->size]);
         return $this->render(
-            'grade_list',
+            'eva_list',
             [
                 'mobile'=>$mobile,
                 'list'=>$list,
@@ -494,7 +494,17 @@ class UserorderController extends BaseController
      */
     public function actionGradeDel()
     {
+        $model = new ShopGrade();
+        $id = RequestHelper::get('id', 0, 'intval');
+        $info = $model->findOne(['id' => $id]);
+        if ($info) {
+            if ($model->deleteAll(['id'=>$id])) {
+                echo 1;
+            } else {
+                echo '删除失败';
+            }
 
+        }
     }
 
     /**
@@ -504,6 +514,22 @@ class UserorderController extends BaseController
      */
     public function actionGradeDetail()
     {
+        $id = RequestHelper::get('id');
+        $where = [];
+        if ($id) {
+            $where['id'] = $id;
+        }
 
+        $evaModel = new ShopGrade();
+        $info = $evaModel->getInfo($where);
+        if ($info == false){
+            return $this->error('评论不存在');
+        }
+        return $this->render(
+            'eva_detail',
+            [
+                'list'=>$info,
+            ]
+        );
     }
 }
