@@ -568,7 +568,7 @@ class ServiceController extends BaseController
 
         $evaModel = new ServiceOrderEvaluation();
         $info = $evaModel->getInfo($where);
-        if ($info == false){
+        if ($info == false) {
             return $this->error('评论不存在');
         }
         return $this->render(
