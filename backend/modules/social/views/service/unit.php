@@ -47,9 +47,8 @@ use yii\widgets\LinkPager;
             <td><?= $item['id'];?></td>
             <td><?= $item['unit'];?></td>
             <td><?= $item['status']==1?'禁止':'正常'?></td>
-            <td><a style="cursor:pointer" onclick="unit_del(<?= $item['id'];?>)">删除</a>
-                <br/>
-                <a style="cursor:pointer" href="/social/service/unit-edit?id=<?= $item['id'];?>">修改</a> </td>
+            <td>[<a style="cursor:pointer" onclick="unit_del(<?= $item['id'];?>)">删除</a>]
+                [<a style="cursor:pointer" href="/social/service/unit-edit?id=<?= $item['id'];?>">修改</a>]</td>
         </tr>
     <?php endforeach;
 }

@@ -323,19 +323,23 @@ $this->title = '用户订单详情';
 <script style="text/javascript" src="/js/userorder/userOrder.js"></script>
 <script>
     $(function(){
-       $(document).on("click",".userInfoBut",function(){
+        $(document).on("click",".userInfoBut",function(){
             var id = $(this).attr("id");
-           if(id == "editUserInfo"){
-               userOrder.editBut(this);
-           }else if(id == "saveUserInfo"){
-               userOrder.saveBut(this);
-           }
-       });
+            if(id == "editUserInfo"){
+                userOrder.editBut(this);
+            }else if(id == "saveUserInfo"){
+                userOrder.saveBut(this);
+            }
+        });
         $(document).on("click",".editShopBut",function(){
             var s = $("#order_info_status").val();
             var p = $("#order_info_ship_status").val();
             if(s == 1 ){
+<<<<<<< HEAD
+                userOrder.editShopBut();
+=======
                     userOrder.editShopBut();
+>>>>>>> dev
             }else if(s >0){
                 alert('订单状态无法转移');
                 return false;
