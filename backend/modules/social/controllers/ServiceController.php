@@ -22,9 +22,11 @@ use backend\controllers\BaseController;
 use backend\models\social\OpLog;
 use backend\models\social\Service;
 use backend\models\social\ServiceOrder;
+use backend\models\social\ServiceOrderEvaluation;
 use backend\models\social\ServiceSetting;
 use backend\models\social\ServiceUnit;
 use backend\models\social\UserBasicInfo;
+use backend\models\social\UserPushId;
 use common\helpers\CurlHelper;
 use common\helpers\RequestHelper;
 use backend\models\SSDB;
@@ -310,8 +312,10 @@ class ServiceController extends BaseController
                 $log = new OpLog();
                 $log->writeLog('服务设置修改id='.$id.'状态,'.$log_info.'|备注：'.$remark);
                 //百度推送
-                $custom_content = ['title'=>234,'id'=>2];
-                CurlHelper::pushPost('4517190743112883170', $log_info, $remark, $custom_content, 30);
+                $pushModel = new UserPushId();
+                $pushInfo = $pushModel->getInfo(['uid'=>$setting->uid]);
+                $custom_content = ['title'=>'服务已经审核','id'=>$id];
+                CurlHelper::pushPost($pushInfo['push_id'], $log_info, $remark, $custom_content, 30);
                 return $this->success('操作成功', 'setting');
             }
         }
@@ -484,17 +488,96 @@ class ServiceController extends BaseController
         $list['uid_name'] = $uidName['nickname'];
         $ServiceName = $userInfoMpdel->getInfo(['uid'=>$list['service_uid']]);
         $list['service_name'] = $ServiceName['nickname'];
+        //订单评论
+        $service_order_evaluation_model = new ServiceOrderEvaluation();
+        $eva_list = $service_order_evaluation_model->getList(['order_sn'=>$order_sn]);
         return $this->render(
             'order_detail',
             [
                 'list' => $list,
                 'sex' => $this->sex,
+                'eva_list'=>$eva_list,
                 'order_pay_status_data'=>$this->order_pay_status_data,
                 'order_status_data'=>$this->order_status_data
             ]
         );
     }
 
+    /**
+     * 简介：评论列表
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionEvaList()
+    {
+        $page = RequestHelper::get('page', 1, 'intval');
+        $mobile = RequestHelper::get('mobile');
+        $where = [];
+        if ($mobile) {
+            $where['mobile'] = $mobile;
+        }
+        if (empty($where)) {
+            $where = 1;
+        }
+        $evaModel = new ServiceOrderEvaluation();
+        $count = $evaModel->getCount($where);
+        $list = $evaModel->getPageList($where, "*", "id desc", $page, $this->size);
+        $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->size]);
+        return $this->render(
+            'eva_list',
+            [
+                'mobile'=>$mobile,
+                'list'=>$list,
+                'pages'=>$pages,
+            ]
+        );
+    }
+
+    /**
+     * 简介：评论删除
+     * @author  lichenjun@iyangpin.com。
+     * @return null
+     */
+    public function actionEvaDel()
+    {
+        $model = new ServiceOrderEvaluation();
+        $id = RequestHelper::get('id', 0, 'intval');
+        $info = $model->findOne(['id' => $id]);
+        if ($info) {
+            if ($model->deleteAll(['id'=>$id])) {
+                echo 1;
+            } else {
+                echo '删除失败';
+            }
+
+        }
+    }
+
+    /**
+     * 简介：评论详情
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionEvaDetail()
+    {
+        $id = RequestHelper::get('id');
+        $where = [];
+        if ($id) {
+            $where['id'] = $id;
+        }
+
+        $evaModel = new ServiceOrderEvaluation();
+        $info = $evaModel->getInfo($where);
+        if ($info == false){
+            return $this->error('评论不存在');
+        }
+        return $this->render(
+            'eva_detail',
+            [
+                'list'=>$info,
+            ]
+        );
+    }
     /**
      * 简介：测试ssdb是否通
      * @author  lichenjun@iyangpin.com。
@@ -531,12 +614,13 @@ class ServiceController extends BaseController
      */
     public function actionTestPush()
     {
-        $channel_id =RequestHelper::get('channel_id')?RequestHelper::get('channel_id'):'4517190743112883170';
+        $channel_id =RequestHelper::get('channel_id')?RequestHelper::get('channel_id'):'3862737169522734802';
         $log_info =RequestHelper::get('title')?RequestHelper::get('title'):'我是消息标题';
         $remark = RequestHelper::get('content')?RequestHelper::get('content'):'我是消息测试';
+        $channel_type = RequestHelper::get('channel_type')?RequestHelper::get('channel_type'):'4';
         $custom_content = RequestHelper::get('custom_content');
         $type = RequestHelper::get('type');
-        $ret = CurlHelper::pushPost($channel_id, $log_info, $remark, $custom_content, $type);
+        $ret = CurlHelper::pushPost($channel_id, $log_info, $remark, $custom_content, $channel_type, $type);
         var_dump($ret);
     }
 }

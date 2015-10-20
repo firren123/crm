@@ -70,12 +70,37 @@ $this->title = '服务订单详情';
         <td></td>
         <td></td>
     </tr>
+</table>
+    <table class="table table-bordered table-hover">
+    <tr>
+        <th colspan="30">订单评论
+        </th>
+    </tr>
+    <tr>
+        <th colspan="20">评论内容</th>
+        <th>星级</th>
+        <th>类型</th>
+        <th>时间</th>
+        <th>状态</th>
+    </tr>
+    <?php
 
-
+    foreach ($eva_list as $k => $v) {
+        ?>
+    <tr>
+        <td colspan="20"><?= $v['content']; ?></td>
+        <td><?= $v['star']; ?></td>
+        <td><?= $v['type']==1?'体验方':'服务方'; ?></td>
+        <td><?= $v['create_time']; ?></td>
+        <td><a href="<?= $v['id']; ?>">查看评论列表</a></td>
+    </tr>
+    <?php
+    }
+    ?>
 
 
     <tr>
-        <td colspan="10">
+        <td colspan="30">
             <a class="btn btn-primary" href="javascript:history.go(-1);">返回</a>
         </td>
     </tr>

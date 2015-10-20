@@ -37,13 +37,14 @@ class CurlHelper extends BaseCurlHelps
      * @param int    $type           10=审核，20=服务，30帖子
      * @return array|mixed
      */
-    public static function pushPost($channel_id,$title,$description,$custom_content=array(), $type = 10)
+    public static function pushPost($channel_id,$title,$description,$custom_content=array(), $channel_type=4, $type = 10)
     {
         $data = [];
         $data['channel_id'] = $channel_id;
         $data['title'] = $title;
         $data['description'] = $description;
         $data['custom_content'] = $custom_content;
+        $data['channel_type'] = $channel_type;
         $url = \Yii::$app->params['channelUrl'].'push/push-msg-to-single-device';
         switch ($type) {
         case 10:   //审核
