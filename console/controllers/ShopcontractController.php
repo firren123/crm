@@ -79,7 +79,7 @@ class ShopcontractController extends Controller
     public function actionAddOa()
     {
         $connection = \Yii::$app->db_oa;
-        $time = date("Y-m-d H:i:s", strtotime("-3 hour"));
+        $time = date("Y-m-d H:i:s", strtotime("-1 hour"));
         $now_time = date("Y-m-d H:i:s");
         $sql = 'select run_id from flow_run_prcs where DELIVER_TIME>"' . $time . '" and FLOW_PRCS =6 and PRCS_FLAG = 4';
         $ret = $connection->createCommand($sql)->queryAll();
