@@ -30,6 +30,7 @@ use backend\models\shop\ShopProduct;
 use backend\models\social\Order;
 use backend\models\social\OrderDetail;
 use backend\models\social\OrderLog;
+use backend\models\social\ShopGrade;
 use common\helpers\RequestHelper;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
@@ -454,5 +455,36 @@ class UserorderController extends BaseController
             }
         }
         return $code;
+    }
+    /**
+     * 简介：ShopGrade店铺评论列表
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionGradeList()
+    {
+        $shopGradeModel = new ShopGrade();
+        $mobile = RequestHelper::get('mobile');
+
+    }
+
+    /**
+     * 简介：ShopGrade店铺评论删除
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionGradeDel()
+    {
+
+    }
+
+    /**
+     * 简介：ShopGrade店铺评论详情
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionGradeDetail()
+    {
+
     }
 }
