@@ -137,4 +137,12 @@ class FastDFSHelper
         $data = $fds->fdfs_upload('Filedata');
         echo json_encode($data);
     }
+
+    /**
+     * 简介：自动关闭链接
+     */
+    public function __destruct()
+    {
+        fastdfs_disconnect_server($this->server);
+    }
 }
