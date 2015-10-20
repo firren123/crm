@@ -951,6 +951,9 @@ class ProductpreController extends BaseController
                 $data['status'] = 1;
                 $result = $model->updateInfo($data, $cond);
                 if ($result==true) {
+                    //修改商品实时同步到sphinx
+                    $url = $this->channel_url.'/sync/batch-goods?goods_id='.$id.'&type=3';
+                    CurlHelper::get($url, 'channel');
                     $array = ['code'=>200, 'msg'=>'发布成功'];
                 } else {
                     $array = ['code'=>103, 'msg'=>'系统繁忙'];

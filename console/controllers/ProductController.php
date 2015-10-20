@@ -37,21 +37,28 @@ class ProductController extends Controller
     public function actionProfit()
     {
         $model = new Product();
-        $cond['single'] = [0,1,2];
-        $data = $model->getList($cond, '*', 'id asc');
+        $cond['single'] = [1,2];
+        $size = 1000;
+        $count = $model->getCount($cond);
+        $page = ceil($count/100);
         $result = true;
-        if (!empty($data)) {
-            foreach ($data as $value) {
-                if ($value['sale_profit_margin']=="") {
-                    //毛利率
-                    if ($value['origin_price']>0) {
-                        $values['sale_profit_margin'] = round(($value['origin_price'] - $value['sale_price']) / $value['origin_price'] * 100, 2) . '%';
-                        $values['shop_profit_margin'] = round(($value['origin_price'] - $value['shop_price']) / $value['origin_price'] * 100, 2) . '%';
-                    } else {
-                        $values['sale_profit_margin'] = '0%';
-                        $values['shop_profit_margin'] = '0%';
+        if ($count>0) {
+            for ($i = 1; $i <= $page; $i++) {
+                $data = $model->getPageList($cond, 'id,origin_price,sale_price,shop_price,sale_profit_margin,shop_profit_margin', 'id asc', $i, $size);
+                if (!empty($data)) {
+                    foreach ($data as $value) {
+                        if ($value['sale_profit_margin'] == "") {
+                            //毛利率
+                            if ($value['origin_price'] > 0) {
+                                $values['sale_profit_margin'] = round(($value['origin_price'] - $value['sale_price']) / $value['origin_price'] * 100, 2) . '%';
+                                $values['shop_profit_margin'] = round(($value['origin_price'] - $value['shop_price']) / $value['origin_price'] * 100, 2) . '%';
+                            } else {
+                                $values['sale_profit_margin'] = '0%';
+                                $values['shop_profit_margin'] = '0%';
+                            }
+                            $result = $model->updateInfo($values, ['id' => $value['id']]);
+                        }
                     }
-                    $result = $model->updateInfo($values, ['id'=>$value['id']]);
                 }
             }
         }
