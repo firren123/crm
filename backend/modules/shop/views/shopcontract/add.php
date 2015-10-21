@@ -121,7 +121,7 @@ $this->title = '商家合同信息添加';
     }
 </script>
 <div style=" width: 1000px; height: auto; ">
-    <h4><a href="/" >首页</a>&gt;<a href="/shop/shopcontract/index">商家合同列表</a><span>&gt;</span>商家合同信息完善</h4>
+    <h4><a href="/" >首页</a>&gt;<a href="/shop/shopcontract/index">商家合同列表</a><span>&gt;</span>商家合同信息添加</h4>
     <form action="showmsg" method="post" enctype="multipart/form-data">
         <table style="border-bottom: 1px solid #D5692B; width: 1000px; height: auto;">
             <tr>
