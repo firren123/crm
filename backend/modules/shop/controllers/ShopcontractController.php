@@ -232,7 +232,9 @@ class ShopcontractController extends BaseController
         }
         //服务费用方式的选择
         if ($ShopContractMsg['service_charge'] == '1') {
-            $ShopContractMsg['service_commission'] = $ShopContractMsg['service_commission']*0.01;//服务佣金
+            $ShopContractMsg['service_commission'] = RequestHelper::post('FuWuFeiYong')*0.01;//服务佣金
+        } else {
+            $ShopContractMsg['fixed_service_charge'] = RequestHelper::post('FuWuFeiYong');//固定服务费
         }
         //去掉空值
         foreach ($ShopContractMsg as $k => $v) {
