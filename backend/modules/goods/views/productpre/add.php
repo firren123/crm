@@ -119,7 +119,7 @@ $form = ActiveForm::begin([
         </script>
         <input type="hidden" id="base_url" value="<?php echo Yii::$app->params['baseUrl']; ?>">
         <input type="hidden" id="act" value="add">
-        <div class="help-block help-block-error " style="color: #a94442"> <?= \Yii::$app->getSession()->getFlash('error'); ?></div>
+        <div class="help-block help-block-error " style="color: #a94442"> <?= \Yii::$app->getSession()->getFlash('description'); ?></div>
     </div>
 </div>
 <?php if ($bc_id==$branch_id) :?>
