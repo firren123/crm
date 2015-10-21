@@ -503,6 +503,8 @@ class ShopcontractController extends BaseController
             $shop_data['phone'] = $ShopContractMsg['common_contacts_phone'];
             $shop_data['hours'] = str_replace(",", "~", $ShopContractMsg['business_hours']);
             $shop_data['address'] = $ShopManageMsg['business_address'];
+            $shop_data['province'] = $ShopContractMsg['bank_province'];
+            $shop_data['city'] = $ShopContractMsg['bank_city'];
             $shop_model = new Shop();
             $shop_model->updateInfo($shop_data, $shop_where);
         }
