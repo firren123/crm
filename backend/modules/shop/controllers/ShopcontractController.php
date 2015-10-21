@@ -189,25 +189,25 @@ class ShopcontractController extends BaseController
         ];
         //合同上传图片
         $fastDfs = new FastDFSHelper();
-        $rs_data = $fastDfs->fdfs_upload('file_name');
+        $rs_data = $fastDfs->fdfs_upload('HeTong');
         if ($rs_data) {
             $ShopContractMsg['image'] = '/' . $rs_data['group_name'] . '/' . $rs_data['filename'];
         }
         //营业执照上传图片
         //$fastDfs = new FastDFSHelper();
-        $rs_data = $fastDfs->fdfs_upload('business_licence_image');
+        $rs_data = $fastDfs->fdfs_upload('YingYeZhiZhao');
         if ($rs_data) {
             $ShopContractMsg['business_licence_image'] = '/' . $rs_data['group_name'] . '/' . $rs_data['filename'];
         }
         //银行卡上传图片
         //$fastDfs = new FastDFSHelper();
-        $rs_data = $fastDfs->fdfs_upload('bank_number_image');
+        $rs_data = $fastDfs->fdfs_upload('YinHangKa');
         if ($rs_data) {
             $ShopContractMsg['bank_number_image'] = '/' . $rs_data['group_name'] . '/' . $rs_data['filename'];
         }
         //身份证上传图片
         //$fastDfs = new FastDFSHelper();
-        $rs_data = $fastDfs->fdfs_upload('IDcard_image');
+        $rs_data = $fastDfs->fdfs_upload('ShenFenZheng');
         if ($rs_data) {
             $ShopContractMsg['IDcard_image'] = '/' . $rs_data['group_name'] . '/' . $rs_data['filename'];
         }
