@@ -31,7 +31,7 @@ echo $this->render('_search', ['search'=>$search,'cate_list'=>$cate_list,'cate_s
                 <th style="width: 8%">二级分类</th>
                 <th style="width: 8%">上下架</th>
                 <th style="width: 10%">限定区域</th>
-                <th>操作</th>
+                <th style="width: 15%">操作</th>
             </tr>
             </tbody>
             <tfoot>

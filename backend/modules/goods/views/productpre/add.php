@@ -60,7 +60,7 @@ $form = ActiveForm::begin([
 <div class="form-group field-product-brand_id required">
     <label class="control-label col-sm-3" for="product-description">品牌</label>
     <div class="col-sm-6" style="width: 85%">
-        <input id="kw" onKeyup="getContent(this);" class="form-control" style="width:400px" name="Product[brand_name]" value="<?= !empty($model['brand_id']) ? $model['brand_id'] : '' ?>"/>
+        <input id="kw" onKeyup="getContent(this);" class="form-control" style="width:400px" name="Product[brand_name]" value="<?= !empty($model['brand_id']) ? $model['brand_id'] : 'i500' ?>"/>
         <div id="append"></div>
     <div class="help-block help-block-error " style="color: #a94442"> <?= \Yii::$app->getSession()->getFlash('brand_name'); ?></div>
     </div>
@@ -81,6 +81,7 @@ $form = ActiveForm::begin([
         </tr>
         </thead>
         <tbody id="attr_value">
+        <?php if (empty($products)) :?>
         <tr style="width: 80%; margin-top: 5px">
             <td><input type="text" style="width:100px;" name="Products[attr_value][]"></td>
             <td><input type="text" style="width:80px;" value="0.00"  name="Products[origin_price][]"></td>
@@ -90,10 +91,25 @@ $form = ActiveForm::begin([
             <td><input type="text" style="width:100px;"  name="Products[bar_code][]"></td>
             <td><input id="product-image" type="file" name="image[]"></td>
         </tr>
+        <?php else :
+            foreach ($products['attr_value'] as $key => $values) :
+            ?>
+                <tr style="width: 80%; margin-top: 5px">
+                    <td><input type="text" style="width:100px;" name="Products[attr_value][]" value="<?= $values;?>"></td>
+                    <td><input type="text" style="width:80px;"   name="Products[origin_price][]" value="<?= $products['origin_price'][$key];?>"></td>
+                    <td><input type="text" style="width:80px;" name="Products[sale_price][]" value="<?= $products['sale_price'][$key];?>"></td>
+                    <td><input type="text" style="width:80px;"  name="Products[shop_price][]" value="<?= $products['shop_price'][$key];?>"></td>
+                    <td><input type="text" style="width:80px;" name="Products[total][]" value="<?= $products['total'][$key];?>"></td>
+                    <td><input type="text" style="width:100px;"  name="Products[bar_code][]" value="<?= $products['bar_code'][$key];?>"></td>
+                    <td><input id="product-image" type="file" name="image[]"></td>
+                </tr>
+        <?php
+        endforeach;
+        endif?>
         </tbody>
     </table>
-    <div class="help-block help-block-error " style="color: #a94442"> <?= \Yii::$app->getSession()->getFlash('attr_value'); ?></div>
-    <div><span style="color: red">提示:进货价<=铺货价<=建议售价</span></div>
+    <div style="color: red;padding-left:15%;padding-top:10px;"><span >提示:进货价<=铺货价<=建议售价</span></div>
+    <div class="help-block help-block-error " style="color: #a94442;padding-left:15%"> <?= \Yii::$app->getSession()->getFlash('attr_value'); ?></div>
 </div>
 <div class="form-group field-product-brand_id required">
     <label class="control-label col-sm-3" for="product-description">详情</label>
