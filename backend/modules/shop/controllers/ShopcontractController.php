@@ -260,6 +260,10 @@ class ShopcontractController extends BaseController
         //服务费用方式的选择
         if ($ShopContractMsg['service_charge'] == '1') {
             $ShopContractMsg['service_commission'] = $ShopContractMsg['service_commission']*0.01;//服务佣金
+            $ShopContractMsg['fixed_service_charge'] = 0;//固定服务费
+        } else {
+            $ShopContractMsg['service_commission'] = 0;//服务佣金
+            //$ShopContractMsg['fixed_service_charge'] = 0;//固定服务费
         }
         $result = $ShopContract_model->insertOneData($ShopContractMsg); //$result为shop_contract(合同基本信息表的主键ID)
         //经营信息表

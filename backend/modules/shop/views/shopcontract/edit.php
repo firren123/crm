@@ -1068,7 +1068,6 @@ $(document).ready(function(){
             //注册资本
             if ($(this).attr("name")=='registered_capital') {
                 if ($.trim(Val)=='') {
-                    alert($(this).attr("name"));
                     eval($(this).attr("id")+'=true');
                     $(this).css('borderColor' ,'#ddd');
                 } else {
