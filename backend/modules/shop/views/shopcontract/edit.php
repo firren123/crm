@@ -204,7 +204,7 @@ $this->title = '商家合同信息完善';
             <tr>
                 <td colspan="1" class="td1"><label class="mark">*</label>经营范围：</td>
                 <td colspan="3">
-                    <label>
+
                         <?php
                         foreach ($init_array['business_scope_data'] as $k => $v) {
                             ?>
@@ -212,7 +212,7 @@ $this->title = '商家合同信息完善';
                         <?php
                         }
                         ?>
-                    </label>
+
                 </td>
             </tr>
             <tr>

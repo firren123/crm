@@ -660,9 +660,8 @@ class ShopcontractController extends BaseController
         //$Business_result=$Business_model->find()->select('name')->where(['id' => $msg])->asArray()->one();
         if (!empty($Business_result)) {
             echo json_encode($Business_result);
-            return;
         } else {
-            return 0;
+            echo 0;
         }
     }
 
@@ -857,5 +856,6 @@ class ShopcontractController extends BaseController
                 return $this->error('操作失败！', 'index');
             }
         }
+        return $this->error('数据为空！', 'index');
     }
 }

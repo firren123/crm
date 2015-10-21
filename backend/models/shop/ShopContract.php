@@ -68,7 +68,7 @@ class ShopContract extends ShopBase
      *
      * @param array $msg 数据
      *
-     * @return primaryKey int
+     * @return string int
      */
     public function insertOneData($msg)
     {
@@ -76,7 +76,7 @@ class ShopContract extends ShopBase
         foreach ($msg as $k => $v) {
             $ShopContract_model->$k = $v;
         }
-        $result = $ShopContract_model->save();
+        $ShopContract_model->save();
         return $ShopContract_model->primaryKey;
     }
 
@@ -123,7 +123,18 @@ class ShopContract extends ShopBase
      *
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function selInfo($cond = [], $and_Cond1 = [], $and_Cond2 = [], $and_Cond3 = [], $and_Cond4 = [], $and_Cond5 = [], $field = '*', $order = 'id DESC', $page = 1, $pageSize = 10)
+    public function selInfo(
+        $cond = [],
+        $and_Cond1 = [],
+        $and_Cond2 = [],
+        $and_Cond3 = [],
+        $and_Cond4 = [],
+        $and_Cond5 = [],
+        $field = '*',
+        $order = 'id DESC',
+        $page = 1,
+        $pageSize = 10
+    )
     {
         $list = $this->find()
             ->select($field)
