@@ -153,7 +153,7 @@ class ShopcontractController extends BaseController
             'document_number' => RequestHelper::post('document_number'),            //证件号
             'contacts' => RequestHelper::post('contacts'),                          //联系人
             'contacts_umber' => RequestHelper::post('contacts_umber'),              //联系电话
-            'company_nature' => implode(',', RequestHelper::post('company_nature')),//公司性质
+            'company_nature' => RequestHelper::post('company_nature'),              //公司性质
             'company_nature_other' => RequestHelper::post('company_nature_other'),  //公司性质其他信息
             //服务信息
             'common_contacts' => RequestHelper::post('common_contacts'),            //同店面联系人    0、是   1、否
@@ -187,26 +187,6 @@ class ShopcontractController extends BaseController
             'remark' => RequestHelper::post('remark'),                              //备注
             'create_time' => date('Y-m-d H:i:s', time())
         ];
-        //判断月均营业额是否为空值
-        if (empty($ShopContractMsg['monthly_turnover'])) {
-            $ShopContractMsg['monthly_turnover'] = 0;
-        }
-        //判断职务是否为空值
-        if (empty($ShopContractMsg['common_contacts_job'])) {
-            $ShopContractMsg['common_contacts_job'] = ' ';
-        }
-        //判断面积是否为空值
-        if (empty($ShopContractMsg['area'])) {
-            $ShopContractMsg['area'] = ' ';
-        }
-        //判断邮箱是否为空值
-        if (empty($ShopContractMsg['email'])) {
-            $ShopContractMsg['email'] = ' ';
-        }
-        //判断注册资本是否为空值
-        if (empty($ShopContractMsg['registered_capital'])) {
-            $ShopContractMsg['registered_capital'] = ' ';
-        }
         //合同上传图片
         $fastDfs = new FastDFSHelper();
         $rs_data = $fastDfs->fdfs_upload('file_name');
@@ -249,21 +229,16 @@ class ShopcontractController extends BaseController
             //$where = "id='".$ShopContractMsg['bank_branch_id']."'";
             //$result=$ShopBcBank_model->getOneBcBank($where);
             //$ShopContractMsg['bank_branch']=$result['name'];
-        } else {
-            $ShopContractMsg['bank_id'] = '0';
-            $ShopContractMsg['bank_province'] = '0';
-            $ShopContractMsg['bank_city'] = '0';
-            $ShopContractMsg['bank_branch'] = '0';
-            $ShopContractMsg['bank_number'] = '0';
-            $ShopContractMsg['bankcard_username'] = '0';
         }
         //服务费用方式的选择
         if ($ShopContractMsg['service_charge'] == '1') {
             $ShopContractMsg['service_commission'] = $ShopContractMsg['service_commission']*0.01;//服务佣金
-            $ShopContractMsg['fixed_service_charge'] = 0;//固定服务费
-        } else {
-            $ShopContractMsg['service_commission'] = 0;//服务佣金
-            //$ShopContractMsg['fixed_service_charge'] = 0;//固定服务费
+        }
+        //去掉空值
+        foreach ($ShopContractMsg as $k => $v) {
+            if (empty($v)) {
+                unset($ShopContractMsg[$k]);
+            }
         }
         $result = $ShopContract_model->insertOneData($ShopContractMsg); //$result为shop_contract(合同基本信息表的主键ID)
         //经营信息表
@@ -278,6 +253,12 @@ class ShopcontractController extends BaseController
         $business_scope = RequestHelper::post('business_scope');
         if (!empty($business_scope)) {
             $ShopManageMsg['business_scope'] = implode(',', $business_scope);
+        }
+        //去掉空值
+        foreach ($ShopManageMsg as $k => $v) {
+            if (empty($v)) {
+                unset($ShopManageMsg[$k]);
+            }
         }
         $ShopManage_model_result = $ShopManage_model->insertOneData($ShopManageMsg);  //将经营信息插入到经营信息表里
         if ($ShopManage_model_result) {
@@ -463,13 +444,6 @@ class ShopcontractController extends BaseController
             //$where = "id='".$ShopContractMsg['bank_branch_id']."'";
             //$result=$ShopBcBank_model->getOneBcBank($where);
             //$ShopContractMsg['bank_branch']=$result['name'];
-        } else {
-            $ShopContractMsg['bank_id'] = '0';
-            $ShopContractMsg['bank_province'] = '0';
-            $ShopContractMsg['bank_city'] = '0';
-            $ShopContractMsg['bank_branch'] = '0';
-            $ShopContractMsg['bank_number'] = '0';
-            $ShopContractMsg['bankcard_username'] = '0';
         }
         //服务费用方式的选择
         if ($ShopContractMsg['service_charge'] == '0') {

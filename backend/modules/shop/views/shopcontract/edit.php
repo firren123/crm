@@ -148,13 +148,13 @@ $this->title = '商家合同信息完善';
             <tr>
                 <td class="td1"><label class="mark">*</label>注册登记号：</td>
                 <td ><label><input type="text" id="registered_id_is_ok" name="registered_id" class="registered_id NotNull" value="<?= $list['registered_id'];?>"></label></td>
-                <td class="td1">注册资本：</td>
+                <td class="td1">&nbsp;&nbsp;&nbsp;注册资本：</td>
                 <td ><label><input type="text" id="registered_capital_is_ok" name="registered_capital" class="registered_capital Null" value="<?= $list['registered_capital'];?>"></label></td>
             </tr>
             <tr>
                 <td class="td1"><label class="mark">*</label>法定代表人：</td>
                 <td ><label><input id="legal_representative_is_ok" name="legal_representative" class="legal_representative NotNull" value="<?= $list['legal_representative'];?>"></label></td>
-                <td class="td1">邮箱：</td>
+                <td class="td1">&nbsp;&nbsp;&nbsp;邮箱：</td>
                 <td ><label><input id="email_is_ok" name="email" class="email Email_Reg Null" value="<?= $list['email'];?>"></label></td>
             </tr>
             <tr>
@@ -231,13 +231,13 @@ $this->title = '商家合同信息完善';
                 <td><input id="common_contacts_phone_is_ok" name="common_contacts_phone" class="common_contacts_phone Mobile_Reg" value="<?= $list['common_contacts_phone'];?>"></td>
             </tr>
             <tr>
-                <td class="td1">职务：</td>
+                <td class="td1">&nbsp;&nbsp;&nbsp;职务：</td>
                 <td><label><input id="common_contacts_job_is_ok" name="common_contacts_job" class="common_contacts_job Null" value="<?= $list['common_contacts_job'];?>"></label></td>
-                <td class="td1">月均营业额：</td>
+                <td class="td1">&nbsp;&nbsp;&nbsp;月均营业额：</td>
                 <td><label><input id="monthly_turnover_is_ok" name="monthly_turnover" class="monthly_turnover Null" value="<?= $list['monthly_turnover'];?>"></label></td>
             </tr>
             <tr>
-                <td class="td1">面积：</td>
+                <td class="td1">&nbsp;&nbsp;&nbsp;面积：</td>
                 <td><label><input id="area_is_ok" name="area" class="area Null" value="<?= $list['area'];?>"></label>&nbsp;&nbsp;M<sup>2</sup></td>
                 <td class="td1"><label class="mark">*</label>营业时间：</td>
                 <td >
