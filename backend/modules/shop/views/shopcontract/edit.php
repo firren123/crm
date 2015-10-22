@@ -23,7 +23,7 @@ $this->title = '商家合同信息完善';
     .td2{ width: 300px;}
     input{ padding-bottom: 7px; padding-top: 7px; padding-left: 10px;border-radius:5px; border: 1px solid #ddd;}
     a{cursor:pointer;}
-    .a_choose+input{display: none;}
+    .a_choose~input{display: none;}
     .mark{ color: red;}
 </style>
 <script type="text/javascript" src="/js/jquery-1.10.2.min.js"></script>
@@ -41,6 +41,12 @@ $this->title = '商家合同信息完善';
                 $(this).html("查看");
             }
             $("#"+$(this).attr("name")+"Pic_img").slideToggle("slow");
+        });
+        $(".a_cancel").click(function(){
+            $(this).html("");
+            $("#"+$(this).attr("name")+"Pic").val('');
+            $("#"+$(this).attr("name")+"Pic_img").css('display', 'none');
+            $("#a_looked_"+$(this).attr("name")).html("");
         });
         $(".BeiZhu_Looked").click(function(){
             if ($(".BeiZhu").css("display")=='none') {
@@ -62,6 +68,7 @@ $this->title = '商家合同信息完善';
             return;
         }
         $('#'+'a_looked_'+file.name).html("关闭");
+        $('#'+'a_cancel_'+file.name).html("取消选择");
         eval(file.id+'_img_is_ok=true');
         //HeTongPic_img_is_ok = true;
         var MAXWIDTH = 0;
@@ -148,13 +155,13 @@ $this->title = '商家合同信息完善';
             <tr>
                 <td class="td1"><label class="mark">*</label>注册登记号：</td>
                 <td ><label><input type="text" id="registered_id_is_ok" name="registered_id" class="registered_id NotNull" value="<?= $list['registered_id'];?>"></label></td>
-                <td class="td1">注册资本：</td>
+                <td class="td1">&nbsp;&nbsp;&nbsp;注册资本：</td>
                 <td ><label><input type="text" id="registered_capital_is_ok" name="registered_capital" class="registered_capital Null" value="<?= $list['registered_capital'];?>"></label></td>
             </tr>
             <tr>
                 <td class="td1"><label class="mark">*</label>法定代表人：</td>
                 <td ><label><input id="legal_representative_is_ok" name="legal_representative" class="legal_representative NotNull" value="<?= $list['legal_representative'];?>"></label></td>
-                <td class="td1">邮箱：</td>
+                <td class="td1">&nbsp;&nbsp;&nbsp;邮箱：</td>
                 <td ><label><input id="email_is_ok" name="email" class="email Email_Reg Null" value="<?= $list['email'];?>"></label></td>
             </tr>
             <tr>
@@ -204,7 +211,7 @@ $this->title = '商家合同信息完善';
             <tr>
                 <td colspan="1" class="td1"><label class="mark">*</label>经营范围：</td>
                 <td colspan="3">
-                    <label>
+
                         <?php
                         foreach ($init_array['business_scope_data'] as $k => $v) {
                             ?>
@@ -212,7 +219,7 @@ $this->title = '商家合同信息完善';
                         <?php
                         }
                         ?>
-                    </label>
+
                 </td>
             </tr>
             <tr>
@@ -231,13 +238,13 @@ $this->title = '商家合同信息完善';
                 <td><input id="common_contacts_phone_is_ok" name="common_contacts_phone" class="common_contacts_phone Mobile_Reg" value="<?= $list['common_contacts_phone'];?>"></td>
             </tr>
             <tr>
-                <td class="td1">职务：</td>
+                <td class="td1">&nbsp;&nbsp;&nbsp;职务：</td>
                 <td><label><input id="common_contacts_job_is_ok" name="common_contacts_job" class="common_contacts_job Null" value="<?= $list['common_contacts_job'];?>"></label></td>
-                <td class="td1">月均营业额：</td>
+                <td class="td1">&nbsp;&nbsp;&nbsp;月均营业额：</td>
                 <td><label><input id="monthly_turnover_is_ok" name="monthly_turnover" class="monthly_turnover Null" value="<?= $list['monthly_turnover'];?>"></label></td>
             </tr>
             <tr>
-                <td class="td1">面积：</td>
+                <td class="td1">&nbsp;&nbsp;&nbsp;面积：</td>
                 <td><label><input id="area_is_ok" name="area" class="area Null" value="<?= $list['area'];?>"></label>&nbsp;&nbsp;M<sup>2</sup></td>
                 <td class="td1"><label class="mark">*</label>营业时间：</td>
                 <td >
@@ -404,7 +411,8 @@ $this->title = '商家合同信息完善';
                 <th colspan="1" class="td2">营业执照图片</th>
                 <td colspan="1">
                     <a class="a_looked" name="YingYeZhiZhao" id="a_looked_YingYeZhiZhao"><?php if(empty($list['business_licence_image'])){echo "";}else{echo '查看';} ?></a>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a class="a_choose" name="YingYeZhiZhao">重新选择</a>
+                    <a class="a_choose" name="YingYeZhiZhao">重新选择</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a class="a_cancel" name="YingYeZhiZhao" id="a_cancel_YingYeZhiZhao"></a>
                     <input id="YingYeZhiZhaoPic" type="file" name="YingYeZhiZhao" onchange="previewImage(this)"/>
                     <input type="hidden" id="YingYeZhiZhaoPic_img_is_ok" class="b_i" value="<?php if(empty($list['business_licence_image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['business_licence_image'];} ?>">
                 </td>
@@ -420,7 +428,8 @@ $this->title = '商家合同信息完善';
                 <th colspan="1" class="td3">银行卡图片</th>
                 <td colspan="1">
                     <a class="a_looked" name="YinHangKa" id="a_looked_YinHangKa"><?php if(empty($list['bank_number_image'])){echo "";}else{echo '查看';} ?></a>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a class="a_choose" name="YinHangKa">重新选择</a>
+                    <a class="a_choose" name="YinHangKa">重新选择</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a class="a_cancel" name="YinHangKa" id="a_cancel_YinHangKa"></a>
                     <input id="YinHangKaPic" type="file" name="YinHangKa" onchange="previewImage(this)"/>
                     <input type="hidden" id="YinHangKaPic_img_is_ok" class="c_i" value="<?php if(empty($list['bank_number_image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['bank_number_image'];} ?>">
                 </td>
@@ -436,7 +445,8 @@ $this->title = '商家合同信息完善';
                 <th colspan="1" class="td4">身份证图片</th>
                 <td colspan="1">
                     <a class="a_looked" name="ShenFenZheng" id="a_looked_ShenFenZheng"><?php if(empty($list['IDcard_image'])){echo "";}else{echo '查看';} ?></a>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a class="a_choose" name="ShenFenZheng">重新选择</a>
+                    <a class="a_choose" name="ShenFenZheng">重新选择</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a class="a_cancel" name="ShenFenZheng" id="a_cancel_ShenFenZheng"></a>
                     <input id="ShenFenZhengPic" type="file" name="ShenFenZheng" onchange="previewImage(this)"/>
                     <input type="hidden" id="ShenFenZhengPic_img_is_ok" class="d_i" value="<?php if(empty($list['IDcard_image'])){echo "";}else{echo \Yii::$app->params['imgHost'].$list['IDcard_image'];} ?>">
                 </td>
@@ -847,6 +857,10 @@ $(document).ready(function(){
     //blur事件
     $("input").blur(function(){
         var Val = $(this).val();
+        //费用切换
+        if ($(this).attr("name")=='service_charge') {
+            return;
+        }
 
         //费用
         if ($(this).attr("name")=='FuWuFeiYong') {
@@ -1010,6 +1024,7 @@ $(document).ready(function(){
             //console.log('公司性质:'+company_nature_is_ok);
             return;
         }
+
         //公司性质其他信息
         if ($(this).attr("name")=='company_nature_other') {
             if ($.trim($(this).val())=='') {
@@ -1026,7 +1041,7 @@ $(document).ready(function(){
             //console.log($(this).attr("name"));
             //console.log($(this).val());
             //console.log($(this).is(':checked'));
-            $("input[type='checkbox'").each(function (index, element) {
+            $("input[type='checkbox']").each(function (index, element) {
                 //console.log(index);
                 if (element.checked) {
                     business_scope_is_ok = true;return false;
@@ -1068,7 +1083,6 @@ $(document).ready(function(){
             //注册资本
             if ($(this).attr("name")=='registered_capital') {
                 if ($.trim(Val)=='') {
-                    alert($(this).attr("name"));
                     eval($(this).attr("id")+'=true');
                     $(this).css('borderColor' ,'#ddd');
                 } else {
@@ -1127,7 +1141,7 @@ $(document).ready(function(){
                 }
             }
             //职务
-            if ($(this).attr("name")=='monthly_turnover') {
+            if ($(this).attr("name")=='common_contacts_job') {
 
             }
             return;

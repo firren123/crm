@@ -296,7 +296,7 @@ class ProductpreController extends BaseController
             } elseif (count($file['name']) != count(array_filter($file['name']))) {
                 \Yii::$app->getSession()->setFlash('attr_value', '主图 不能为空');
             } elseif (empty($product['description'])) {
-                \Yii::$app->getSession()->setFlash('error', '商品详情 不能为空');
+                \Yii::$app->getSession()->setFlash('description', '商品详情 不能为空');
             } else {
                 $list = 0;
                 foreach ($products['attr_value'] as $k => $v) {
@@ -392,7 +392,8 @@ class ProductpreController extends BaseController
             'city_list'=>$city_data,
             'bc_id'=>$bc_id,
             'branch_id'=>$branch_id,
-            'product'=>$product
+            'product'=>$product,
+            'products'=>$products
         );
         return $this->render('add', $param);
     }
@@ -484,21 +485,21 @@ class ProductpreController extends BaseController
         $product = RequestHelper::post('Product');
         $log_model = new Log();
         $img_model = new ProductImage();
+        $products = RequestHelper::post('Products');
         if (!empty($product)) {
             $file = $_FILES['image'];
-            $products = RequestHelper::post('Products');
             $attr_result = $this->attrValue($products, $id);
             $model->attributes = $product;
             if ($product['cate_first_id']=="") {
                 $model->addError('cate_first_id', '商品分类 不能为空');
             } elseif ($product['brand_name']=="") {
                 \Yii::$app->getSession()->setFlash('brand_name', '商品品牌 不能为空');
-            } elseif (empty($product['description'])) {
-                 \Yii::$app->getSession()->setFlash('error', '商品详情 不能为空');
             } elseif ($attr_result['code']!=200) {
                 \Yii::$app->getSession()->setFlash('attr_value', $attr_result['msg']);
             } elseif (count($file['name']) - count(array_filter($file['name'])) > 1) {
                 \Yii::$app->getSession()->setFlash('attr_value', '主图 不能为空');
+            } elseif (empty($product['description'])) {
+                \Yii::$app->getSession()->setFlash('description', '商品详情 不能为空');
             } else {
                 $cond_brand['name'] = $product['brand_name'];
                 foreach ($products['attr_value'] as $k => $v) {
@@ -722,7 +723,8 @@ class ProductpreController extends BaseController
             'city_list'=>$city_data,
             'bc_id' =>$bc_id,
             'branch_id'=>$branch_id,
-            'cate_second_list' => $cate_second_data
+            'cate_second_list' => $cate_second_data,
+            'products' => $products
         );
         return $this->render('edit', $list);
     }
@@ -1166,7 +1168,12 @@ class ProductpreController extends BaseController
         $origin_price = array_filter($data['origin_price']);
         $sale_price = array_filter($data['sale_price']);
         $shop_price  = array_filter($data['shop_price']);
-        $total = array_filter($data['total']);
+        $total = [];
+        foreach ($data['total'] as $value) {
+            if ($value!="") {
+                $total[] = $value;
+            }
+        }
         $bar_code = array_filter($data['bar_code']);
         if (empty($attr_value) or count($data['attr_value'])!=count($attr_value)) {
             $result = ['code'=>101, 'msg'=>'属性 不能为空'];
@@ -1176,8 +1183,11 @@ class ProductpreController extends BaseController
             $result = ['code'=>101, 'msg'=>'进货价 不能为空'];
         } elseif (empty($shop_price) or count($data['shop_price'])!=count($shop_price)) {
             $result = ['code'=>101, 'msg'=>'铺货价 不能为空'];
-        } elseif (!isset($total) or count($data['total'])!=count($total)) {
-            $result = ['code'=>101, 'msg'=>'库存 不能为空或者等于0'];
+        } elseif (count($data['total'])!=count($total)) {
+            echo count($data['total']);
+            echo 123;
+            echo count($total);
+            $result = ['code'=>101, 'msg'=>'库存 不能为空'];
         } elseif (empty($attr_value) or count($data['bar_code'])!=count($bar_code)) {
             $result = ['code'=>101, 'msg'=>'条形码 不能为空'];
         } else {
