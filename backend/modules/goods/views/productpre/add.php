@@ -129,6 +129,7 @@ $form = ActiveForm::begin([
                 function(str_json)
                 {
                     data=JSON.parse(str_json);
+                    console.log(data);
 
                 }
             );

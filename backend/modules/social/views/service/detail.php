@@ -31,7 +31,7 @@ $this->title = '服务详情';
 <table class="table table-bordered table-hover">
     <tr>
         <th width="100px">用户ID：</th>
-        <td><?=$list['uid'];?></td>
+        <td><a href="/social/user/<?=$list['uid'];?>"><?=$list['realname']?$list['realname']:'无';?></a></td>
     </tr>
     <tr>
         <th>手机号：</th>
@@ -39,11 +39,11 @@ $this->title = '服务详情';
     </tr>
     <tr>
         <th>分类ID：</th>
-        <td><?=$list['category_id'];?></td>
+        <td><?=$list['category_name'];?></td>
     </tr>
     <tr>
         <th>子分类ID：</th>
-        <td><?=$list['son_category_id'];?></td>
+        <td><?=$list['son_category_name'];?></td>
     </tr>
     <tr>
         <th>标题：</th>

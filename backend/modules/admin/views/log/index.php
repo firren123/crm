@@ -25,6 +25,7 @@ use yii\widgets\LinkPager;
             <option value="9" style="width: 150px;" <?php if($log_type == 9){echo 'selected';}?>>财务</option>
             <option value="10" style="width: 150px;" <?php if($log_type == 10){echo 'selected';}?>>权限</option>
             <option value="11" style="width: 150px;" <?php if($log_type == 11){echo 'selected';}?>>网站配置</option>
+            <option value="12" style="width: 150px;" <?php if($log_type == 12){echo 'selected';}?>>论坛店铺</option>
         </select>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit"  class="btn btn-primary" value="搜索">
         <input type="hidden"  name="_csrf" value="<?= \Yii::$app->getRequest()->getCsrfToken(); ?>" />

@@ -19,14 +19,19 @@
 namespace backend\modules\social\controllers;
 
 use backend\controllers\BaseController;
+use backend\models\i500m\Log;
+use backend\models\i500m\Province;
 use backend\models\social\OpLog;
 use backend\models\social\Service;
+use backend\models\social\ServiceCategory;
 use backend\models\social\ServiceOrder;
 use backend\models\social\ServiceOrderEvaluation;
 use backend\models\social\ServiceSetting;
 use backend\models\social\ServiceUnit;
+use backend\models\social\User;
 use backend\models\social\UserBasicInfo;
 use backend\models\social\UserPushId;
+use common\helpers\CommonHelper;
 use common\helpers\CurlHelper;
 use common\helpers\RequestHelper;
 use backend\models\SSDB;
@@ -146,11 +151,19 @@ class ServiceController extends BaseController
     public function actionDetail()
     {
         $model = new Service();
+        $category = new ServiceCategory();
+        $userModel = new UserBasicInfo();
         $id = RequestHelper::get('id', 0, 'intval');
         $list = $model->getInfo(['id'=>$id]);
         if (!$list) {
             return $this->error('信息不存在');
         }
+        $category_name = $category->getInfo(['id' => $list['category_id']], true, 'name');
+        $list['category_name'] =$category_name['name'];
+        $son_category_name = $category->getInfo(['id' => $list['son_category_id']], true, 'name');
+        $list['son_category_name'] =$son_category_name['name'];
+        $username = $userModel->getInfo(['uid' => $list['uid']], true, 'realname');
+        $list['realname'] =$username['realname'];
         return $this->render(
             'detail',
             [
@@ -239,6 +252,110 @@ class ServiceController extends BaseController
             ]
         );
 
+    }
+
+    /**
+     * 简介：添加店铺
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionAddSet()
+    {
+        $model = new ServiceSetting();
+        $userModel = new User();
+        $post = RequestHelper::post('ServiceSetting');
+        if ($post) {
+            $model->attributes = $post;
+            $userInfo = $userModel->getInfo(['mobile'=>$post['mobile']]);
+            if (!empty($userInfo)) {
+                $where = array('mobile' => $post['mobile']);
+                $count = $model->getCount($where);
+                if ($count == 0) {
+                    $post['is_deleted'] = 2;
+                    $post['uid'] = $userInfo['id'];
+                    $result = $model->insertInfo($post);
+                    if ($result == true) {
+                        $log = new Log();
+                        $log_info = '管理员 ' . \Yii::$app->user->identity->username . '添加店铺' . $post['name'];
+                        $log->recordLog($log_info, 12);
+                        return $this->success('添加成功', '/social/service/setting');
+                    }
+                } else {
+                    $model->addError('mobile', '该用户已经有店铺');
+                }
+            } else {
+                $model->addError('mobile', '该手机号用户不存在');
+            }
+        }
+        $province_list = CommonHelper::province(true);
+        return $this->render(
+            'add_set',
+            [
+                'province_list' => $province_list,
+                'model' => $model
+            ]
+        );
+    }
+    /**
+     * 简介：修改店铺
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionEditSet()
+    {
+        $model = new ServiceSetting();
+        $id = RequestHelper::get('id', 0, 'intval');
+        $userModel = new User();
+        $model = $model->getInfo(['id' => $id], false);
+        $post = RequestHelper::post('ServiceSetting');
+        if ($post) {
+            $num = $userModel->getCount(['mobile' => $post['mobile']]);
+            if ($num != 0) {
+                $model->attributes = $post;
+                $where = array('mobile' => $post['mobile']);
+                $count = $model->getCount($where);
+                if ($count == 1) {
+                    $post['is_deleted'] = 2;
+                    $result = $model->save($post);
+                    if ($result == true) {
+                        $log = new Log();
+                        $log_info = '管理员 ' . \Yii::$app->user->identity->username . '添加店铺' . $post['name'];
+                        $log->recordLog($log_info, 12);
+                        return $this->success('修改成功', '/social/service/setting');
+                    }
+                } else {
+                    $model->addError('mobile', '该用户已经有店铺');
+                }
+            } else {
+                $model->addError('mobile', '该手机号用户不存在');
+            }
+        }
+        $province_list = CommonHelper::province(true);
+        return $this->render(
+            'add_set',
+            [
+                'province_list' => $province_list,
+                'model' => $model
+            ]
+        );
+    }
+    /**
+     * 简介：搜索地址
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionSearchAdd()
+    {
+        $keyword = RequestHelper::get('keyword');
+        $province = RequestHelper::get('province');
+        if (empty($keyword) || $province == '') {
+            echo json_encode(['code' => 101, 'msg' => '数据不完整']);
+            exit;
+        }
+        $url = \Yii::$app->params['channelUrl'] . 'lbs/get-suggest?keywords=' . $keyword . '&province=' . $province;
+        $curl = new CurlHelper();
+        $ret = $curl->get($url);
+        echo json_encode($ret);
     }
 
     /**
