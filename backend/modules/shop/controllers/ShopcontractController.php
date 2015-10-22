@@ -246,7 +246,7 @@ class ShopcontractController extends BaseController
         //经营信息表
         $ShopManageMsg = [
             'contract_id' => $result,
-            'business_name' => RequestHelper::post('store_registration_name'), //店面注册名称
+            'business_name' => RequestHelper::post('business_name'),           //店面注册名称
             'business_address' => RequestHelper::post('business_address'),     //经营地址
             'create_time' => date('Y-m-d H:i:s', time()),                      //备注信息
             'htnumber' => $ShopContractMsg['htnumber']                         //合同号
@@ -302,6 +302,7 @@ class ShopcontractController extends BaseController
             $ShopContract_model_result['business_hours'] = explode(',', $ShopContract_model_result['business_hours']); //营业时间
             $ShopContract_model_result['start_time']     = substr($ShopContract_model_result['start_time'], 0, 10);//合同开始时间
             $ShopContract_model_result['end_time']       = substr($ShopContract_model_result['end_time'], 0, 10);  //合同结束时间
+            $ShopContract_model_result['service_commission']       = $ShopContract_model_result['service_commission']*100;  //服务佣金
         }
         unset($cond['id']);
         $ShopManage_model = new ShopManage();         //经营信息表
@@ -517,6 +518,7 @@ class ShopcontractController extends BaseController
         if (!empty($ShopContract_model_result)) {
             $ShopContract_model_result['company_nature'] = explode(',', $ShopContract_model_result['company_nature']);//公司性质
             $ShopContract_model_result['business_hours'] = explode(',', $ShopContract_model_result['business_hours']);//营业时间
+            $ShopContract_model_result['service_commission']       = $ShopContract_model_result['service_commission']*100;  //服务佣金
         }
         unset($cond['id']);
         $ShopManage_model = new ShopManage();         //经营信息表
