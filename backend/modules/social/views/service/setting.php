@@ -71,11 +71,9 @@ $this->title = "店铺设置列表";
                             <td colspan="2"><?= $item['name'];?></td>
                             <td colspan="2"><?= $item['status']==1?'禁用':'可用';?></td>
                             <td colspan="2"><?= $item['create_time'];?></td>
-
-
-
                             <td colspan="4">
                                 <a href="<?= '/social/service/setting-detail?id='.$item['id'];?>">详情</a>
+                                <a href="<?= '/social/service/edit-set?id='.$item['id'];?>">修改</a>
                             </td>
                         </tr>
                     <?php } }?>

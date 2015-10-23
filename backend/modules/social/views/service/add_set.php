@@ -16,7 +16,7 @@
  */
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
-$this->title = '修改店铺';
+$this->title = '添加/修改店铺';
 ?>
 <style type="text/css">
     .item{

@@ -39,4 +39,39 @@ class Service extends SocialBase
     {
         return "{{%i500_service}}";
     }
+
+    /**
+     * 简介：定义过滤规则
+     * @author  lichenjun@iyangpin.com。
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            //不可为空的字段
+            [['mobile','category_id','son_category_id','image','title','price','unit','service_way','description','community_city_id','community_id'],'required'],
+            ['mobile','match','pattern'=>'/^1\d{10}/']
+        ];
+    }
+    /**
+     * 简介：
+     * @author  lichenjun@iyangpin.com。
+     * @return array
+     */
+    public function attributeLabels()
+    {
+        return array(
+            'mobile' => '手机号',
+            'category_id' =>'分类',
+            'son_category_id'=>'子分类',
+            'image' => '服务图片',
+            'title' =>'标题',
+            'price' =>'价格',
+            'unit' => '单位',
+            'service_way' =>'服务方式',
+            'description' =>'服务描述',
+            'community_city_id' =>'小区城市',
+            'community_id' =>'小区',
+        );
+    }
 }

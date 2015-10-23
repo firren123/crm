@@ -284,7 +284,7 @@ class ServiceController extends BaseController
                     $model->addError('mobile', '该用户已经有店铺');
                 }
             } else {
-                $model->addError('mobile', '该手机号用户不存在');
+                $model->addError('mobile', '该手机号用户不存在,请先创建用户');
             }
         }
         $province_list = CommonHelper::province(true);
@@ -359,7 +359,119 @@ class ServiceController extends BaseController
     }
 
     /**
-     * 简介：服务设置详情
+     * 简介：添加服务
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionAddService()
+    {
+        $model = new Service();
+        $userModel = new User();
+        $categoryModel = new ServiceCategory();
+        $post = RequestHelper::post('Service');
+        if ($post) {
+            $model->attributes = $post;
+            $userInfo = $userModel->getInfo(['mobile' => $post['mobile']]);
+            if (!empty($userInfo)) {
+                $model->uid = $userInfo['id'];
+                $model->is_deleted = 2;
+                $result = $model->save();
+                if ($result == true) {
+                    $log = new Log();
+                    $log_info = '管理员 ' . \Yii::$app->user->identity->username . '添加服务' . $post['title'];
+                    $log->recordLog($log_info, 13);
+                    return $this->success('添加成功', '/social/service/index');
+                } else {
+                    return $this->error('添加失败');
+                }
+            } else {
+                $model->addError('mobile', '该手机号用户不存在,请先创建用户');
+            }
+        }
+        $category_name = $categoryModel->getList(['pid' => 0], 'id,name');
+        $category_id_data = [];
+        foreach ($category_name as $k => $v) {
+            $category_id_data[$v['id']] = $v['name'];
+        }
+        return $this->render(
+            'add_service',
+            [
+                'category_id_data'=>$category_id_data,
+                'unit_data' => $this->unit_data,
+                'service_way_data' => $this->service_way_data,
+                'model' => $model
+            ]
+        );
+    }
+
+    /**
+     * 简介：修改服务
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionEditService()
+    {
+        $model = new Service();
+        $categoryModel = new ServiceCategory();
+        $id = RequestHelper::get('id', 0, 'intval');
+        $userModel = new User();
+        $model = $model->getInfo(['id' => $id], false);
+        $post = RequestHelper::post('Service');
+        if ($post) {
+            $model->attributes = $post;
+            $userInfo = $userModel->getInfo(['mobile' => $post['mobile']]);
+            if (!empty($userInfo)) {
+                $model->uid = $userInfo['id'];
+                $model->is_deleted = 2;
+                $result = $model->save();
+                if ($result == true) {
+                    $log = new Log();
+                    $log_info = '管理员 ' . \Yii::$app->user->identity->username . '修改服务' . $post['title'];
+                    $log->recordLog($log_info, 13);
+                    return $this->success('修改成功', '/social/service/index');
+                } else {
+                    return $this->error('修改失败');
+                }
+            } else {
+                $model->addError('mobile', '该手机号用户不存在,请先创建用户');
+            }
+        }
+        $category_name = $categoryModel->getList(['pid' => 0], 'id,name');
+        $category_id_data = [];
+        foreach ($category_name as $k => $v) {
+            $category_id_data[$v['id']] = $v['name'];
+        }
+        return $this->render(
+            'add_service',
+            [
+                'category_id_data'=>$category_id_data,
+                'unit_data' => $this->unit_data,
+                'service_way_data' => $this->service_way_data,
+                'model' => $model
+            ]
+        );
+    }
+
+    /**
+     * 简介：获取分类
+     * @author  lichenjun@iyangpin.com
+     * @return string
+     */
+    public function actionGetSonCate()
+    {
+        $categoryModel = new ServiceCategory();
+        $id = RequestHelper::get('id', 0, 'intval');
+        $category_name = $categoryModel->getList(['pid' => $id], 'id,name');
+        $category_id_data = [];
+        foreach ($category_name as $k => $v) {
+            $category_id_data[$v['id']] = $v['name'];
+        }
+        echo json_encode($category_id_data);
+        exit;
+
+    }
+    /**
+     * 简介：店铺设置详情
      * @author  lichenjun@iyangpin.com。
      * @return string
      */

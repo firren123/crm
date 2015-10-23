@@ -456,6 +456,7 @@ class UserorderController extends BaseController
                         return $code = 104;   //请先发货
                     }
                     $order->pay_status = 1;
+                    $order->status = 5;
                 }
                 $order->delivery_time = $time;
                 $order->ship_status = $status;
