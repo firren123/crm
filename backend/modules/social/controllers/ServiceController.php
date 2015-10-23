@@ -20,7 +20,6 @@ namespace backend\modules\social\controllers;
 
 use backend\controllers\BaseController;
 use backend\models\i500m\Log;
-use backend\models\i500m\Province;
 use backend\models\social\OpLog;
 use backend\models\social\Service;
 use backend\models\social\ServiceCategory;

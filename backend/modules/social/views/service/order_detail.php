@@ -53,7 +53,7 @@ $this->title = '服务订单详情';
         <th>体验方名称：</th>
         <td><?= $list['uid_name'];?></td>
         <th>手机：</th>
-        <td><?= $list['service_mobile'];?></td>
+        <td><?= $list['mobile'];?></td>
         <th>服务方名称：</th>
         <td><?= $list['service_name'];?></td>
         <th>手机：</th>
