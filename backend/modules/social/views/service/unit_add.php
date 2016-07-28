@@ -19,6 +19,9 @@ use yii\bootstrap\ActiveForm;
 $this->title = '添加服务单位';
 ?>
 <legends  style="fond-size:12px;">
+    <legend>添加服务单位</legend>
+</legends>
+<legends  style="fond-size:12px;">
     <ul class="breadcrumb">
         <li>
             <a href="/">首页</a>

@@ -20,6 +20,9 @@ use yii\widgets\LinkPager;
 $this->title = "服务列表";
 
 ?>
+<legends  style="fond-size:12px;">
+    <legend>服务列表</legend>
+</legends>
 <script type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 
 
@@ -36,12 +39,8 @@ $this->title = "服务列表";
             <?php } ?>
 
         </select>
-        <!---->
-        <!--        <label for="start_time">开始时间：</label>-->
-        <!--        <input id="start_time" type="text" id="start_time" name="start_time" onFocus="WdatePicker({isShowClear:true,readOnly:false})" value="--><?php //if(isset($start_time)){echo $start_time; };?><!--" class="form-control">-->
-        <!--        <label for="end_time">结束时间：</label>-->
-        <!--        <input id="end_time" type="text" name="end_time" onFocus="WdatePicker({isShowClear:true,readOnly:false})" value="--><?php //if(isset($end_time)){echo $end_time; };?><!--" class="form-control">-->
         <button id="sub" class="btn btn-primary" name="yt0" type="submit">搜索</button>
+        <a href="/social/service/add-service" class="btn btn-primary">添加服务</a>
     </form>
 </div>
 
@@ -76,6 +75,7 @@ $this->title = "服务列表";
 
                             <td colspan="4">
                                 <a href="<?= '/social/service/detail?id='.$item['id'];?>">详情</a>
+                                <a href="<?= '/social/service/edit-service?id='.$item['id'];?>">修改</a>
                             </td>
                         </tr>
                     <?php } }?>

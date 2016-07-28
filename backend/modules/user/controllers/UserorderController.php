@@ -605,6 +605,7 @@ class UserorderController extends BaseController
                         return $code = 103;
                     }
                     $order->pay_status = 2;
+                    $order->status = 5;
                 }
                 $order->ship_status_time = $time;
                 $order->ship_status = $status;

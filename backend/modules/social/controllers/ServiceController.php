@@ -19,12 +19,18 @@
 namespace backend\modules\social\controllers;
 
 use backend\controllers\BaseController;
+use backend\models\i500m\Log;
 use backend\models\social\OpLog;
 use backend\models\social\Service;
+use backend\models\social\ServiceCategory;
 use backend\models\social\ServiceOrder;
+use backend\models\social\ServiceOrderEvaluation;
 use backend\models\social\ServiceSetting;
 use backend\models\social\ServiceUnit;
+use backend\models\social\User;
 use backend\models\social\UserBasicInfo;
+use backend\models\social\UserPushId;
+use common\helpers\CommonHelper;
 use common\helpers\CurlHelper;
 use common\helpers\RequestHelper;
 use backend\models\SSDB;
@@ -144,18 +150,27 @@ class ServiceController extends BaseController
     public function actionDetail()
     {
         $model = new Service();
+        $category = new ServiceCategory();
+        $userModel = new UserBasicInfo();
         $id = RequestHelper::get('id', 0, 'intval');
         $list = $model->getInfo(['id'=>$id]);
         if (!$list) {
             return $this->error('信息不存在');
         }
+        $category_name = $category->getInfo(['id' => $list['category_id']], true, 'name');
+        $list['category_name'] =$category_name['name'];
+        $son_category_name = $category->getInfo(['id' => $list['son_category_id']], true, 'name');
+        $list['son_category_name'] =$son_category_name['name'];
+        $username = $userModel->getInfo(['uid' => $list['uid']], true, 'realname');
+        $list['realname'] =$username['realname'];
         return $this->render(
             'detail',
             [
                 'unit_data' => $this->unit_data,
                 'service_way_data' => $this->service_way_data,
                 'list' => $list,
-                'audit_status_data' => $this->audit_status_data
+                'audit_status_data' => $this->audit_status_data,
+                'user_auth_status_data' => $this->user_auth_status_data
             ]
         );
     }
@@ -239,7 +254,223 @@ class ServiceController extends BaseController
     }
 
     /**
-     * 简介：服务设置详情
+     * 简介：添加店铺
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionAddSet()
+    {
+        $model = new ServiceSetting();
+        $userModel = new User();
+        $post = RequestHelper::post('ServiceSetting');
+        if ($post) {
+            $model->attributes = $post;
+            $userInfo = $userModel->getInfo(['mobile'=>$post['mobile']]);
+            if (!empty($userInfo)) {
+                $where = array('mobile' => $post['mobile']);
+                $count = $model->getCount($where);
+                if ($count == 0) {
+                    $post['is_deleted'] = 2;
+                    $post['uid'] = $userInfo['id'];
+                    $result = $model->insertInfo($post);
+                    if ($result == true) {
+                        $log = new Log();
+                        $log_info = '管理员 ' . \Yii::$app->user->identity->username . '添加店铺' . $post['name'];
+                        $log->recordLog($log_info, 12);
+                        return $this->success('添加成功', '/social/service/setting');
+                    }
+                } else {
+                    $model->addError('mobile', '该用户已经有店铺');
+                }
+            } else {
+                $model->addError('mobile', '该手机号用户不存在,请先创建用户');
+            }
+        }
+        $province_list = CommonHelper::province(true);
+        return $this->render(
+            'add_set',
+            [
+                'province_list' => $province_list,
+                'model' => $model
+            ]
+        );
+    }
+    /**
+     * 简介：修改店铺
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionEditSet()
+    {
+        $model = new ServiceSetting();
+        $id = RequestHelper::get('id', 0, 'intval');
+        $userModel = new User();
+        $model = $model->getInfo(['id' => $id], false);
+        $post = RequestHelper::post('ServiceSetting');
+        if ($post) {
+            $num = $userModel->getCount(['mobile' => $post['mobile']]);
+            if ($num != 0) {
+                $model->attributes = $post;
+                $where = array('mobile' => $post['mobile']);
+                $count = $model->getCount($where);
+                if ($count == 1) {
+                    $post['is_deleted'] = 2;
+                    $result = $model->save($post);
+                    if ($result == true) {
+                        $log = new Log();
+                        $log_info = '管理员 ' . \Yii::$app->user->identity->username . '添加店铺' . $post['name'];
+                        $log->recordLog($log_info, 12);
+                        return $this->success('修改成功', '/social/service/setting');
+                    }
+                } else {
+                    $model->addError('mobile', '该用户已经有店铺');
+                }
+            } else {
+                $model->addError('mobile', '该手机号用户不存在');
+            }
+        }
+        $province_list = CommonHelper::province(true);
+        return $this->render(
+            'add_set',
+            [
+                'province_list' => $province_list,
+                'model' => $model
+            ]
+        );
+    }
+    /**
+     * 简介：搜索地址
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionSearchAdd()
+    {
+        $keyword = RequestHelper::get('keyword');
+        $province = RequestHelper::get('province');
+        if (empty($keyword) || $province == '') {
+            echo json_encode(['code' => 101, 'msg' => '数据不完整']);
+            exit;
+        }
+        $url = \Yii::$app->params['channelUrl'] . 'lbs/get-suggest?keywords=' . $keyword . '&province=' . $province;
+        $curl = new CurlHelper();
+        $ret = $curl->get($url);
+        echo json_encode($ret);
+    }
+
+    /**
+     * 简介：添加服务
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionAddService()
+    {
+        $model = new Service();
+        $userModel = new User();
+        $categoryModel = new ServiceCategory();
+        $post = RequestHelper::post('Service');
+        if ($post) {
+            $model->attributes = $post;
+            $userInfo = $userModel->getInfo(['mobile' => $post['mobile']]);
+            if (!empty($userInfo)) {
+                $model->uid = $userInfo['id'];
+                $model->is_deleted = 2;
+                $result = $model->save();
+                if ($result == true) {
+                    $log = new Log();
+                    $log_info = '管理员 ' . \Yii::$app->user->identity->username . '添加服务' . $post['title'];
+                    $log->recordLog($log_info, 13);
+                    return $this->success('添加成功', '/social/service/index');
+                } else {
+                    return $this->error('添加失败');
+                }
+            } else {
+                $model->addError('mobile', '该手机号用户不存在,请先创建用户');
+            }
+        }
+        $category_name = $categoryModel->getList(['pid' => 0], 'id,name');
+        $category_id_data = [];
+        foreach ($category_name as $k => $v) {
+            $category_id_data[$v['id']] = $v['name'];
+        }
+        return $this->render(
+            'add_service',
+            [
+                'category_id_data'=>$category_id_data,
+                'unit_data' => $this->unit_data,
+                'service_way_data' => $this->service_way_data,
+                'model' => $model
+            ]
+        );
+    }
+
+    /**
+     * 简介：修改服务
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionEditService()
+    {
+        $model = new Service();
+        $categoryModel = new ServiceCategory();
+        $id = RequestHelper::get('id', 0, 'intval');
+        $userModel = new User();
+        $model = $model->getInfo(['id' => $id], false);
+        $post = RequestHelper::post('Service');
+        if ($post) {
+            $model->attributes = $post;
+            $userInfo = $userModel->getInfo(['mobile' => $post['mobile']]);
+            if (!empty($userInfo)) {
+                $model->uid = $userInfo['id'];
+                $model->is_deleted = 2;
+                $result = $model->save();
+                if ($result == true) {
+                    $log = new Log();
+                    $log_info = '管理员 ' . \Yii::$app->user->identity->username . '修改服务' . $post['title'];
+                    $log->recordLog($log_info, 13);
+                    return $this->success('修改成功', '/social/service/index');
+                } else {
+                    return $this->error('修改失败');
+                }
+            } else {
+                $model->addError('mobile', '该手机号用户不存在,请先创建用户');
+            }
+        }
+        $category_name = $categoryModel->getList(['pid' => 0], 'id,name');
+        $category_id_data = [];
+        foreach ($category_name as $k => $v) {
+            $category_id_data[$v['id']] = $v['name'];
+        }
+        return $this->render(
+            'add_service',
+            [
+                'category_id_data'=>$category_id_data,
+                'unit_data' => $this->unit_data,
+                'service_way_data' => $this->service_way_data,
+                'model' => $model
+            ]
+        );
+    }
+
+    /**
+     * 简介：获取分类
+     * @author  lichenjun@iyangpin.com
+     * @return string
+     */
+    public function actionGetSonCate()
+    {
+        $categoryModel = new ServiceCategory();
+        $id = RequestHelper::get('id', 0, 'intval');
+        $category_name = $categoryModel->getList(['pid' => $id], 'id,name');
+        $category_id_data = [];
+        foreach ($category_name as $k => $v) {
+            $category_id_data[$v['id']] = $v['name'];
+        }
+        echo json_encode($category_id_data);
+        exit;
+
+    }
+    /**
+     * 简介：店铺设置详情
      * @author  lichenjun@iyangpin.com。
      * @return string
      */
@@ -310,8 +541,10 @@ class ServiceController extends BaseController
                 $log = new OpLog();
                 $log->writeLog('服务设置修改id='.$id.'状态,'.$log_info.'|备注：'.$remark);
                 //百度推送
-                $custom_content = ['title'=>234,'id'=>2];
-                CurlHelper::pushPost('4517190743112883170', $log_info, $remark, $custom_content, 30);
+                $pushModel = new UserPushId();
+                $pushInfo = $pushModel->getInfo(['uid'=>$setting->uid]);
+                $custom_content = ['title'=>'服务已经审核','id'=>$id];
+                CurlHelper::pushPost($pushInfo['push_id'], $log_info, $remark, $custom_content, 30);
                 return $this->success('操作成功', 'setting');
             }
         }
@@ -484,17 +717,96 @@ class ServiceController extends BaseController
         $list['uid_name'] = $uidName['nickname'];
         $ServiceName = $userInfoMpdel->getInfo(['uid'=>$list['service_uid']]);
         $list['service_name'] = $ServiceName['nickname'];
+        //订单评论
+        $service_order_evaluation_model = new ServiceOrderEvaluation();
+        $eva_list = $service_order_evaluation_model->getList(['order_sn'=>$order_sn]);
         return $this->render(
             'order_detail',
             [
                 'list' => $list,
                 'sex' => $this->sex,
+                'eva_list'=>$eva_list,
                 'order_pay_status_data'=>$this->order_pay_status_data,
                 'order_status_data'=>$this->order_status_data
             ]
         );
     }
 
+    /**
+     * 简介：评论列表
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionEvaList()
+    {
+        $page = RequestHelper::get('page', 1, 'intval');
+        $mobile = RequestHelper::get('mobile');
+        $where = [];
+        if ($mobile) {
+            $where['mobile'] = $mobile;
+        }
+        if (empty($where)) {
+            $where = 1;
+        }
+        $evaModel = new ServiceOrderEvaluation();
+        $count = $evaModel->getCount($where);
+        $list = $evaModel->getPageList($where, "*", "id desc", $page, $this->size);
+        $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->size]);
+        return $this->render(
+            'eva_list',
+            [
+                'mobile'=>$mobile,
+                'list'=>$list,
+                'pages'=>$pages,
+            ]
+        );
+    }
+
+    /**
+     * 简介：评论删除
+     * @author  lichenjun@iyangpin.com。
+     * @return null
+     */
+    public function actionEvaDel()
+    {
+        $model = new ServiceOrderEvaluation();
+        $id = RequestHelper::get('id', 0, 'intval');
+        $info = $model->findOne(['id' => $id]);
+        if ($info) {
+            if ($model->deleteAll(['id'=>$id])) {
+                echo 1;
+            } else {
+                echo '删除失败';
+            }
+
+        }
+    }
+
+    /**
+     * 简介：评论详情
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionEvaDetail()
+    {
+        $id = RequestHelper::get('id');
+        $where = [];
+        if ($id) {
+            $where['id'] = $id;
+        }
+
+        $evaModel = new ServiceOrderEvaluation();
+        $info = $evaModel->getInfo($where);
+        if ($info == false) {
+            return $this->error('评论不存在');
+        }
+        return $this->render(
+            'eva_detail',
+            [
+                'list'=>$info,
+            ]
+        );
+    }
     /**
      * 简介：测试ssdb是否通
      * @author  lichenjun@iyangpin.com。
@@ -531,12 +843,13 @@ class ServiceController extends BaseController
      */
     public function actionTestPush()
     {
-        $channel_id =RequestHelper::get('channel_id')?RequestHelper::get('channel_id'):'4517190743112883170';
+        $channel_id =RequestHelper::get('channel_id')?RequestHelper::get('channel_id'):'3862737169522734802';
         $log_info =RequestHelper::get('title')?RequestHelper::get('title'):'我是消息标题';
         $remark = RequestHelper::get('content')?RequestHelper::get('content'):'我是消息测试';
+        $channel_type = RequestHelper::get('channel_type')?RequestHelper::get('channel_type'):'4';
         $custom_content = RequestHelper::get('custom_content');
         $type = RequestHelper::get('type');
-        $ret = CurlHelper::pushPost($channel_id, $log_info, $remark, $custom_content, $type);
+        $ret = CurlHelper::pushPost($channel_id, $log_info, $remark, $custom_content, $channel_type, $type);
         var_dump($ret);
     }
 }

@@ -30,6 +30,8 @@ use backend\models\shop\ShopProduct;
 use backend\models\social\Order;
 use backend\models\social\OrderDetail;
 use backend\models\social\OrderLog;
+use backend\models\social\ShopGrade;
+use common\helpers\CurlHelper;
 use common\helpers\RequestHelper;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
@@ -349,54 +351,62 @@ class UserorderController extends BaseController
             //取消之后要判断是否用过优惠券  并将其券恢复使用
             $info = $model->getInfo(['order_sn' => $order_sn]);
             $coupons_model = new Coupons();
-            if ('' != $status) {
-                if ($status == 2) {//  //1确认 2取消
-                    if ($info['coupon_id']) {
-                        $coupons_model->getCoupons($info['coupon_id'], $order_sn, 0);
-                    }
-                    //加回库存
-                    if ($info['pay_method_id'] != 1) {
-                        $order_detail_model = new OrderDetail();
-                        //查询出购买的商品
-                        $order_arr = $order_detail_model->getList(['order_sn' => $order_sn]);
-                        $shop_product_model = new ShopProduct();
-                        foreach ($order_arr as $k => $v) {
-                            $shop_product_model->addProductStock($v['shop_id'], $v['product_id'], $v['num']);
-                        }
+            if ($status == 2) {//  //1确认 2取消
+                if ($info['coupon_id']) {
+                    $coupons_model->getCoupons($info['coupon_id'], $order_sn, 0);
+                }
+                //加回库存
+                if ($info['pay_method_id'] != 1) {
+                    $order_detail_model = new OrderDetail();
+                    //查询出购买的商品
+                    $order_arr = $order_detail_model->getList(['order_sn' => $order_sn]);
+                    $shop_product_model = new ShopProduct();
+                    foreach ($order_arr as $k => $v) {
+                        $shop_product_model->addProductStock($v['shop_id'], $v['product_id'], $v['num']);
                     }
                 }
+                if ($status == 1) { //确认订单  发送百度推送
+                    $custom_content = ['order_sn'=>$order_sn];
+                    $title = '新订单';
+                    $content = '您有个新订单';
+                    $user_type = 'shop';
+                    $type = 20;
+                    CurlHelper::pushPost($info['shop_id'], $user_type, $title, $content, $custom_content, $type);
+                }
+
                 //已支付的走退款流程
                 //code....
-            }
-            //下单减库存 取消加回库存
-            //pay_site_id=1为货到付款 ，线上支付的是支付减库存 2015-04-29
+                //下单减库存 取消加回库存
+                //pay_site_id=1为货到付款 ，线上支付的是支付减库存 2015-04-29
 
-            //ship_status = 2添加销售量
-            if ($ship_status == 2) {
-                $order_detail_model = new OrderDetail();
-                $order_arr = $order_detail_model->find()->where(['order_sn' => $order_sn])->asArray()->all();
-                $shop_product_model = new ShopProduct();
-                foreach ($order_arr as $k => $v) {
-                    $shop_product_model->Up_sales_volume($v['shop_id'], $v['product_id'], $v['num']);
+                //ship_status = 2添加销售量
+                if ($ship_status == 2) {
+                    $order_detail_model = new OrderDetail();
+                    $order_arr = $order_detail_model->find()->where(['order_sn' => $order_sn])->asArray()->all();
+                    $shop_product_model = new ShopProduct();
+                    foreach ($order_arr as $k => $v) {
+                        $shop_product_model->Up_sales_volume($v['shop_id'], $v['product_id'], $v['num']);
+                    }
+
                 }
+                //给商家发送短信
+                //if ($status == 1) {
+                //    $queueSms_m = new QueueSms();
+                //    $shop_m = new Shop();
+                //    $shopinfo = $shop_m->getInfo(['id' => $info['shop_id']]);
+                //    $data = array(
+                //        'mobile' => $shopinfo['mobile'],
+                //        'content' => '【i500】亲，您的店铺有新的订单，请登录i500商家后台查看',
+                //        'create_time' => date('Y-m-d H:i:s')
+                //    );
+                //    $queueSms_m->insertInfo($data);
+                //}
 
+                return $this->success('订单操作成功', '/social/userorder/detail?order_sn=' . $order_sn);
             }
-            //给商家发送短信
-            //if ($status == 1) {
-            //    $queueSms_m = new QueueSms();
-            //    $shop_m = new Shop();
-            //    $shopinfo = $shop_m->getInfo(['id' => $info['shop_id']]);
-            //    $data = array(
-            //        'mobile' => $shopinfo['mobile'],
-            //        'content' => '【i500】亲，您的店铺有新的订单，请登录i500商家后台查看',
-            //        'create_time' => date('Y-m-d H:i:s')
-            //    );
-            //    $queueSms_m->insertInfo($data);
-            //}
-
-            return $this->success('订单操作成功', '/social/userorder/detail?order_sn=' . $order_sn);
         }
-        return $this->error('订单操作失败,'.$this->error_code[$ret], '/social/userorder/detail?order_sn=' . $order_sn);
+        return $this->error('订单操作失败,' . $this->error_code[$ret], '/social/userorder/detail?order_sn=' . $order_sn);
+
     }
 
     /**
@@ -445,6 +455,7 @@ class UserorderController extends BaseController
                         return $code = 104;   //请先发货
                     }
                     $order->pay_status = 1;
+                    $order->status = 5;
                 }
                 $order->delivery_time = $time;
                 $order->ship_status = $status;
@@ -454,5 +465,81 @@ class UserorderController extends BaseController
             }
         }
         return $code;
+    }
+    /**
+     * 简介：ShopGrade店铺评论列表
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionGradeList()
+    {
+        $page = RequestHelper::get('page', 1, 'intval');
+        $mobile = RequestHelper::get('mobile');
+        $where = [];
+        if ($mobile) {
+            $where['mobile'] = $mobile;
+        }
+        if (empty($where)) {
+            $where = 1;
+        }
+        $shopGradeModel = new ShopGrade();
+        $count = $shopGradeModel->getCount($where);
+        $list = $shopGradeModel->getPageList($where, "*", "id desc", $page, $this->size);
+        $pages = new Pagination(['totalCount' => $count, 'pageSize' => $this->size]);
+        return $this->render(
+            'eva_list',
+            [
+                'mobile'=>$mobile,
+                'list'=>$list,
+                'pages'=>$pages,
+            ]
+        );
+
+    }
+
+    /**
+     * 简介：ShopGrade店铺评论删除
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionGradeDel()
+    {
+        $model = new ShopGrade();
+        $id = RequestHelper::get('id', 0, 'intval');
+        $info = $model->findOne(['id' => $id]);
+        if ($info) {
+            if ($model->deleteAll(['id'=>$id])) {
+                echo 1;
+            } else {
+                echo '删除失败';
+            }
+
+        }
+    }
+
+    /**
+     * 简介：ShopGrade店铺评论详情
+     * @author  lichenjun@iyangpin.com。
+     * @return string
+     */
+    public function actionGradeDetail()
+    {
+        $id = RequestHelper::get('id');
+        $where = [];
+        if ($id) {
+            $where['id'] = $id;
+        }
+
+        $evaModel = new ShopGrade();
+        $info = $evaModel->getInfo($where);
+        if ($info == false) {
+            return $this->error('评论不存在');
+        }
+        return $this->render(
+            'eva_detail',
+            [
+                'list'=>$info,
+            ]
+        );
     }
 }

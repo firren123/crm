@@ -20,6 +20,9 @@ use yii\widgets\LinkPager;
 $this->title = "用户订单列表";
 
 ?>
+<legends  style="fond-size:12px;">
+    <legend>用户订单列表</legend>
+</legends>
 <script type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 <?= $this->registerJsFile("@web/js/shoporder.js");?>
 

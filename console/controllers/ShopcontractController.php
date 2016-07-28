@@ -102,7 +102,7 @@ class ShopcontractController extends Controller
                 }
             }
         } else {
-            echo "empty";
+            echo "empty\n";
         }
     }
 

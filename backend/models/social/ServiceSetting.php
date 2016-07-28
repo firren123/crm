@@ -40,4 +40,38 @@ class ServiceSetting extends SocialBase
         return "{{%i500_service_setting}}";
     }
 
+    /**
+     * 简介：定义过滤规则
+     * @author  lichenjun@iyangpin.com。
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            //不可为空的字段
+            [['mobile','name','description','province_id','search_address','details_address','lng','lat','status'],'required'],
+            ['mobile','match','pattern'=>'/^1\d{10}/']
+        ];
+    }
+    /**
+     * 简介：
+     * @author  lichenjun@iyangpin.com。
+     * @return array
+     */
+    public function attributeLabels()
+    {
+        return array(
+            'mobile' => '手机号',
+            'name' =>'店铺名称',
+            'description'=>'店铺描述',
+            'province_id' => '省份',
+            'search_address' =>'检索出的详细地址',
+            'details_address' =>'详细地址',
+            'lng' => '经度',
+            'lat' =>'纬度',
+            'status' =>'是否禁用',
+            'create_time' =>'创建时间',
+        );
+    }
+
 }

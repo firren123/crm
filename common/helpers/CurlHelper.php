@@ -15,6 +15,8 @@
  */
 
 namespace common\helpers;
+use backend\models\social\User;
+use backend\models\shop\ShopPushId;
 
 /**
  * Class CurlHelper
@@ -37,13 +39,45 @@ class CurlHelper extends BaseCurlHelps
      * @param int    $type           10=审核，20=服务，30帖子
      * @return array|mixed
      */
-    public static function pushPost($channel_id,$title,$description,$custom_content=array(), $type = 10)
+    /**
+     * 简介：
+     * @author  lichenjun@iyangpin.com。
+     * @param int    $uid            用户ID
+     * @param int    $user_type      用户ID类型 1商家，2用户 ，3供应商
+     * @param string $title          标题：ios 不用
+     * @param string $description    内容
+     * @param array  $custom_content 其他参数
+     * @param int    $type           类型
+     * @return array|mixed
+     */
+    public static function pushPost($uid,$user_type,$title,$description,$custom_content=array(), $type = 10)
     {
         $data = [];
+        //初始值
+        $channel_type = 4;
+        $channel_id = '';
+
+        if ($user_type == 1) {
+            $userModel = new User();
+            $userInfo = $userModel->getInfo(['id'=>$uid]);
+            $channel_id = $userInfo['last_login_channel'];
+            $device = $userInfo['last_login_source'];
+            if ($device == 2) {  //1=wap2=android3=ios',
+                $channel_type = 4;
+            } elseif ($device == 3) {
+                $channel_type = 5;
+            }
+        } elseif ($user_type == 2) {
+            $shopPushModel = new ShopPushId();
+            $shopPushModel->getInfo([]);
+        } elseif ($user_type == 3) {
+
+        }
         $data['channel_id'] = $channel_id;
         $data['title'] = $title;
         $data['description'] = $description;
         $data['custom_content'] = $custom_content;
+        $data['channel_type'] = $channel_type;
         $url = \Yii::$app->params['channelUrl'].'push/push-msg-to-single-device';
         switch ($type) {
         case 10:   //审核
@@ -63,6 +97,12 @@ class CurlHelper extends BaseCurlHelps
             break;
         case 40:   //消息
             $data['custom_content']['type'] = 40;
+            if (false == $data['custom_content']['title'] || false == $data['custom_content']['id']) {
+                return array('code'=>102, 'msg'=>'帖子参数错误');
+            }
+            break;
+        case 50:   //店铺
+            $data['custom_content']['type'] = 50;
             if (false == $data['custom_content']['title'] || false == $data['custom_content']['id']) {
                 return array('code'=>102, 'msg'=>'帖子参数错误');
             }

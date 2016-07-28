@@ -17,15 +17,18 @@
 
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
-$this->title = "服务器设置列表";
+$this->title = "店铺设置列表";
 
 ?>
+<legends  style="fond-size:12px;">
+    <legend>店铺设置列表</legend>
+</legends>
 <script type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 
 
 <div class="wide form">
     <form id="search-form" class="well form-inline" action="/social/service/setting" method="get">
-        <label for="name">服务名称：</label>
+        <label for="name">店铺名称：</label>
         <input id="name" type="text" name="name" value="<?= $name;?>" class="form-control">
 
         <label for="status">状态：</label>
@@ -36,13 +39,12 @@ $this->title = "服务器设置列表";
 
 
         </select>
-<!---->
-<!--        <label for="start_time">开始时间：</label>-->
-<!--        <input id="start_time" type="text" id="start_time" name="start_time" onFocus="WdatePicker({isShowClear:true,readOnly:false})" value="--><?php //if(isset($start_time)){echo $start_time; };?><!--" class="form-control">-->
-<!--        <label for="end_time">结束时间：</label>-->
-<!--        <input id="end_time" type="text" name="end_time" onFocus="WdatePicker({isShowClear:true,readOnly:false})" value="--><?php //if(isset($end_time)){echo $end_time; };?><!--" class="form-control">-->
+
         <button id="sub" class="btn btn-primary" name="yt0" type="submit">搜索</button>
+        <a href="/social/service/add-set" class="btn btn-primary">添加店铺</a>
     </form>
+
+
 </div>
 
 <legends  style="fond-size:12px;">
@@ -69,11 +71,9 @@ $this->title = "服务器设置列表";
                             <td colspan="2"><?= $item['name'];?></td>
                             <td colspan="2"><?= $item['status']==1?'禁用':'可用';?></td>
                             <td colspan="2"><?= $item['create_time'];?></td>
-
-
-
                             <td colspan="4">
                                 <a href="<?= '/social/service/setting-detail?id='.$item['id'];?>">详情</a>
+                                <a href="<?= '/social/service/edit-set?id='.$item['id'];?>">修改</a>
                             </td>
                         </tr>
                     <?php } }?>
