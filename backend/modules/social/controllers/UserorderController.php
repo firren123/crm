@@ -31,8 +31,6 @@ use backend\models\social\Order;
 use backend\models\social\OrderDetail;
 use backend\models\social\OrderLog;
 use backend\models\social\ShopGrade;
-use backend\models\social\User;
-use backend\models\social\UserPushId;
 use common\helpers\CurlHelper;
 use common\helpers\RequestHelper;
 use yii\data\Pagination;
@@ -372,7 +370,8 @@ class UserorderController extends BaseController
                     $title = '新订单';
                     $content = '您有个新订单';
                     $user_type = 'shop';
-                    $ret = CurlHelper::pushPost($info['shop_id'],$user_type, $title, $content, $custom_content);
+                    $type = 20;
+                    CurlHelper::pushPost($info['shop_id'], $user_type, $title, $content, $custom_content, $type);
                 }
 
                 //已支付的走退款流程

@@ -15,7 +15,6 @@
  */
 
 namespace common\helpers;
-use backend\models\social\UserPushId;
 use backend\models\social\User;
 use backend\models\shop\ShopPushId;
 
@@ -53,16 +52,6 @@ class CurlHelper extends BaseCurlHelps
      */
     public static function pushPost($uid,$user_type,$title,$description,$custom_content=array(), $type = 10)
     {
-//        //商家APP
-//        '7042569' => ['apiKey'=>'sURfZe54cEOmfGiyGB9gooGe','secretKey'=>'asuaacvrz1MnRUeGkacb1qtaono0syKG'],
-//        //i500shop
-//        '6582163'=>['apiKey'=>'FHtpcdKfOL1wTFbrZqVygusH','secretKey'=>'00lZHCmRtWxekkzMbR6CcDoNHPr88LXe'],
-//        //Love500m
-//        '6948103'=>['apiKey'=>'tGX2RVIi6gBTcSZreGjeswQC','secretKey'=>'cF1wkx9NEfyME0NfWpwSxM3aKG8aaU85'],
-//        //i500m
-//        '6555147'=>['apiKey'=>'7T8UiC2lro78mDnqkQlTSCfS','secretKey'=>'BXVtQMUqmZqrIZCHGCOiyLR9IlAWyW7L'],
-//        //iOS_Shop_Alpha
-//        '7085276'=>['apiKey'=>'qWYGnwdcE79Fm1YDr7XpUD2C','secretKey'=>'MUdxStXBZvUkWa0vhr2ENhbGbKTzS8mS'],
         $data = [];
         //初始值
         $channel_type = 4;
@@ -80,6 +69,7 @@ class CurlHelper extends BaseCurlHelps
             }
         } elseif ($user_type == 2) {
             $shopPushModel = new ShopPushId();
+            $shopPushModel->getInfo([]);
         } elseif ($user_type == 3) {
 
         }
